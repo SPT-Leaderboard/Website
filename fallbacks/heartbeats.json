@@ -1,0 +1,50 @@
+{
+    "6888d1dd000188376211c7d1": {
+        "id": "6888d1dd000188376211c7d1",
+        "timestamp": 1766457968,
+        "type": "online",
+        "map": null,
+        "side": null,
+        "gameTime": null
+    },
+    "68ab67c10000d2ca7821684d": {
+        "id": "68ab67c10000d2ca7821684d",
+        "timestamp": 1766458618,
+        "type": "in_raid",
+        "map": "bigmap",
+        "side": "Bear",
+        "gameTime": "19:12:01"
+    },
+    "68a08519000471eb66f0a127": {
+        "id": "68a08519000471eb66f0a127",
+        "timestamp": 1766457639,
+        "type": "in_stash",
+        "map": null,
+        "side": null,
+        "gameTime": null
+    },
+    "68a6f1020003b4851d21158a": {
+        "id": "68a6f1020003b4851d21158a",
+        "timestamp": 1766458634,
+        "type": "in_raid",
+        "map": "RezervBase",
+        "side": "Bear",
+        "gameTime": "19:13:56"
+    },
+    "683f05e700037c2f510dcdfa": {
+        "id": "683f05e700037c2f510dcdfa",
+        "timestamp": 1766458577,
+        "type": "online",
+        "map": null,
+        "side": null,
+        "gameTime": null
+    },
+    "68b0505e00024b0707e5d788": {
+        "id": "68b0505e00024b0707e5d788",
+        "timestamp": 1767458609,
+        "type": "in_stash",
+        "map": "Sandbox",
+        "side": "Usec",
+        "gameTime": "12:10:09"
+    }
+}
