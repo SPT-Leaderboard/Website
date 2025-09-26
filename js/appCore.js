@@ -35,7 +35,7 @@ let lastRaidsPath = `/api/data/player_raids/`;
 let profileSettingsPath = `/api/data/profile_settings.json?t=${Date.now()}`;
 let weaponStatsPath = `/api/data/shared/weapon_counters.json?t=${Date.now()}`;
 let profileUrlPath = `https://sptlb.yuyui.moe/#id=`;
-let heartbeatsPath = `/api/api/heartbeat/heartbeats.json?t=${Date.now()}`;
+let heartbeatsPath = `/api/main/heartbeat/heartbeats.json?t=${Date.now()}`;
 let achievementsPath = `/api/data/shared/achievement_counters.json`;
 let pmcPfpsPath = `/api/data/pmc_avatars/`;
 let globalCounters = `/api/data/shared/global_counters.json`;

@@ -146,7 +146,7 @@ async function initAchievements() {
         // Load both JSON files in parallel
         [achievementsData, playerAchievements] = await Promise.all([
             loadJSON('../global-achieve/js/compiledAchData.json'),
-            loadJSON('https://visuals.nullcore.net/SPT/data/shared/achievement_counters.json')
+            loadJSON('../api/data/shared/achievement_counters.json')
         ]);
 
         // Get total number of players with achievements

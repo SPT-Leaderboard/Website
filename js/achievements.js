@@ -11,14 +11,19 @@ let achievementStats = {};
 
 async function loadAchievementsData() {
     try {
-        [achievementsData, playerAchievements] = await Promise.all([
+        const [achievementsResponse, playersResponse] = await Promise.all([
             fetch('global-achieve/js/compiledAchData.json'),
             fetch(`${achievementsPath}`)
         ]);
 
         if (!achievementsResponse.ok || !playersResponse.ok) {
-            throw new Error('Failed to load one achievements');
+            throw new Error('Failed to load achievements data');
         }
+
+        [achievementsData, playerAchievements] = await Promise.all([
+            achievementsResponse.json(),
+            playersResponse.json()
+        ]);
 
         totalPlayers = Object.keys(playerAchievements.achievements).length;
         achievementStats = calculateAchievementStats();
