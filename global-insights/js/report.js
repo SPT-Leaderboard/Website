@@ -228,12 +228,12 @@ async function fetchData() {
 
         // Fetch data from all
         const [season1Response, season2Response, season3Response, season4Response, season5Response, mapsResponse] = await Promise.all([
-            fetch('../fallbacks/season1.json'),
-            fetch('../fallbacks/season2.json'),
-            fetch('../fallbacks/season3.json'),
-            fetch('../fallbacks/season4.json'),
-            fetch('https://visuals.nullcore.net/SPT/data/seasons/season5.json'),
-            fetch('https://visuals.nullcore.net/SPT/data/shared/global_counters.json')
+            fetch('../api/data/seasons/season1.json'),
+            fetch('../api/data/seasons/season2.json'),
+            fetch('../api/data/seasons/season3.json'),
+            fetch('../api/data/seasons/season4.json'),
+            fetch('../api/data/seasons/season5.json'),
+            fetch('../api/data/shared/global_counters.json')
         ]);
 
         const season1Data = await season1Response.json();
