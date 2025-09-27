@@ -388,7 +388,7 @@ async function displayLeaderboard(data) {
 
         // Player was online for more 15 days, skip to render less jank
         // Will not work when autoUpdater is off
-        if (player.absoluteLastTime < nowInSeconds - fifteenDaysInSeconds && AutoUpdater.getStatus()) {
+        if (player.rank > 10 && player.absoluteLastTime < nowInSeconds - fifteenDaysInSeconds && AutoUpdater.getStatus()) {
             return;
         }
 
@@ -660,7 +660,7 @@ async function displaySimpleLeaderboard(data) {
             <td class="rank">${player.rank}</td>
             <td class="teamtag" data-team="${player.teamTag ? player.teamTag : ``}">${player.teamTag ? `[${player.teamTag}]` : ``}</td>
             <td class="player-name" style="height: 33px;" data-player-id="${player.id || '0'}">
-                ${player.name}
+                <span">${player.name}</span>
             </td>
             <td>${lastGame || 'N/A'}</td>
             <td>${player.publicProfile ? `<button style="share-button" onclick="copyProfile('${player.id}')">${profileOpenIcon} <i class='bx  bxs-share'></i> </button>`

@@ -61,10 +61,8 @@ function searchPlayers() {
         const playerNameCell = row.querySelector('.player-name');
         if (!playerNameCell) return;
 
-        const playerName = normalizeText(Array.from(playerNameCell.childNodes)
-            .filter(node => node.nodeType === Node.TEXT_NODE)
-            .map(node => node.textContent)
-            .join(' '));
+        const nameSpan = playerNameCell.querySelector('span');
+        const playerName = nameSpan ? normalizeText(nameSpan.textContent) : '';
 
         const shouldShow = searchTerm === '' || playerName.includes(searchTerm);
         row.style.display = shouldShow ? '' : 'none';
