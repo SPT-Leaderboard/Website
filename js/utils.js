@@ -90,25 +90,25 @@ window.addEventListener('resize', updateNavbarOffset);
 function getRank(rating, maxRating = 1000) {
     const totalRanks = 30;
     const rankIndex = Math.min(totalRanks - 1, Math.floor((rating / maxRating) * totalRanks));
-    
+
     const level = Math.floor(rankIndex / 6) + 1;
     const rankInLevel = (rankIndex % 6) + 1;
-    
+
     const rankNames = [
         // Level 1
-        ['Recruit', 'Private', 'Militia', 'Scavenger', 'Survivor', 'Trainee'],
+        ['Recruit', 'Private', 'Private First Class', 'Specialist', 'Trooper', 'Agent'],
         // Level 2
-        ['Operative', 'Guard', 'Mercenary', 'Veteran', 'Enforcer', 'Ranger'],
+        ['Corporal', 'Sergeant', 'Staff Sergeant', 'Petty Officer', 'Detective', 'Operator'],
         // Level 3
-        ['Specialist', 'Commando', 'Assassin', 'Infiltrator', 'Saboteur', 'Tactician'],
+        ['Gunnery Sergeant', 'Master Sergeant', 'Lieutenant', 'Warrant Officer', 'Specialist Elite', 'Tactician'],
         // Level 4
-        ['Elite', 'Ghost', 'Reaper', 'Sentinel', 'Warden', 'Executioner'],
+        ['Captain', 'Major', 'Commander', 'Lieutenant Commander', 'Elite Operative', 'Vanguard'],
         // Level 5
-        ['Legend', 'Warlord', 'Titan', 'Overlord', 'Nemesis', 'Apex']
+        ['Colonel', 'Brigadier General', 'General', 'Marshal', 'Commander Elite', 'Legend']
     ];
-    
+
     const rankName = rankNames[level - 1][rankInLevel - 1];
-    
+
     return {
         image: `media/player_ranks/Rank${level}/${rankInLevel}@32px.png`,
         name: rankName,
@@ -118,3 +118,22 @@ function getRank(rating, maxRating = 1000) {
         progress: Math.round((rating / maxRating) * 100)
     };
 }
+
+// Simple keepalive
+function startKeepAlive() {
+    sendKeepAlive();
+    const keepAliveInterval = setInterval(sendKeepAlive, 5000);
+}
+
+function sendKeepAlive() {
+    fetch('../js/keepalive.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            
+        },
+        credentials: 'same-origin'
+    }).catch(error => console.error('Keepalive error:', error));
+}
+
+document.addEventListener('DOMContentLoaded', startKeepAlive())
