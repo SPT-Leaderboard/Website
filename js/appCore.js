@@ -518,16 +518,15 @@ async function displayLeaderboard(data) {
             finalNameClass = accountClass; // TP
         }
 
-        let playerGameMode = '';
-        if (!player.banned) {
-            if (player.isUsingRealism) {
-                playerGameMode = `REALISM`;
-            } else if (player.isUsingWTT) {
-                playerGameMode = `WTT`;
-            } else if (player.isUsingFika) {
-                playerGameMode = `FIKA`;
-            }
-        }
+        // get rank
+        const playerRating = player.rating ? player.rating : 0;
+        const rank = getRank(playerRating);
+        const rankHTML = `
+            <div class="badge-lb tooltip">
+                <img src="${rank.image}" height="20"> 
+                <span class="tooltiptext">${rank.fullName}</span>
+            </div>
+        `
 
         // Prestige icon
         const prestigeImg = [1, 2].includes(player.prestige)
@@ -540,9 +539,9 @@ async function displayLeaderboard(data) {
         row.innerHTML = `
             <td class="rank ${rankClass}">${player.rank} ${player.medal}</td>
             <td class="teamtag" data-team="${player.teamTag ? player.teamTag : ``}">${player.teamTag ? `[${player.teamTag}]` : ``}</td>
-            <td class="player-name ${finalNameClass}" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''} data-player-id="${player.id || '0'}">
+            <td class="player-name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''} data-player-id="${player.id || '0'}">
                 ${`<img class="lb-profile-picture" src="${player.profilePicture || 'media/default_avatar.png'}">`}
-                ${accountIcon} ${player.name} ${prestigeImg} ${playerGameMode ? `<div class="player-mode ${playerGameMode}">${playerGameMode}</div>` : ``}
+                ${accountIcon} <span class="${finalNameClass}">${player.name}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div>
             </td>
             <td>${lastGame || 'N/A'}</td>
             <td>${player.publicProfile ? `<button style="share-button" onclick="copyProfile('${player.id}')">${profileOpenIcon} <i class='bx  bxs-share'></i> </button>`

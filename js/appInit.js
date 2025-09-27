@@ -35,9 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: "Utils", url: "js/utils.js", weight: 10 }
     ];
 
+    const filteredResources = isLocalhost ? resources.slice(2) : resources;
+
     // Track loading progress
     let loadedResources = 0;
-    let totalWeight = resources.reduce((sum, resource) => sum + resource.weight, 0);
+    let totalWeight = filteredResources.reduce((sum, resource) => sum + resource.weight, 0);
     let loadingMessages = [
         "Duping free Leaderboard Coins...",
         "Syncing with SPTLB network...",
@@ -114,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateResourceCounter() {
-        const total = resources.length;
+        const total = filteredResources.length;
         const loaded = document.querySelectorAll('.resource-item-pre.loaded').length;
         const failed = document.querySelectorAll('.resource-item-pre.failed').length;
         const completed = loaded + failed;
@@ -169,8 +171,8 @@ document.addEventListener('DOMContentLoaded', () => {
             statusText.textContent = "Establishing connection...";
 
             const MAX_CONCURRENT = 20;
-            for (let i = 0; i < resources.length; i += MAX_CONCURRENT) {
-                const chunk = resources.slice(i, i + MAX_CONCURRENT);
+            for (let i = 0; i < filteredResources.length; i += MAX_CONCURRENT) {
+                const chunk = filteredResources.slice(i, i + MAX_CONCURRENT);
                 await Promise.all(chunk.map((resource, idx) =>
                     loadResource(resource, i + idx).catch(error => {
                         throw error;

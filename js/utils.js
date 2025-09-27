@@ -85,3 +85,36 @@ function updateNavbarOffset() {
 
 window.addEventListener('load', updateNavbarOffset);
 window.addEventListener('resize', updateNavbarOffset);
+
+// Ranks
+function getRank(rating, maxRating = 1000) {
+    const totalRanks = 30;
+    const rankIndex = Math.min(totalRanks - 1, Math.floor((rating / maxRating) * totalRanks));
+    
+    const level = Math.floor(rankIndex / 6) + 1;
+    const rankInLevel = (rankIndex % 6) + 1;
+    
+    const rankNames = [
+        // Level 1
+        ['Recruit', 'Private', 'Militia', 'Scavenger', 'Survivor', 'Trainee'],
+        // Level 2
+        ['Operative', 'Guard', 'Mercenary', 'Veteran', 'Enforcer', 'Ranger'],
+        // Level 3
+        ['Specialist', 'Commando', 'Assassin', 'Infiltrator', 'Saboteur', 'Tactician'],
+        // Level 4
+        ['Elite', 'Ghost', 'Reaper', 'Sentinel', 'Warden', 'Executioner'],
+        // Level 5
+        ['Legend', 'Warlord', 'Titan', 'Overlord', 'Nemesis', 'Apex']
+    ];
+    
+    const rankName = rankNames[level - 1][rankInLevel - 1];
+    
+    return {
+        image: `media/player_ranks/Rank${level}/${rankInLevel}@32px.png`,
+        name: rankName,
+        fullName: `${rankName} (Level ${level})`,
+        level: level,
+        rankInLevel: rankInLevel,
+        progress: Math.round((rating / maxRating) * 100)
+    };
+}
