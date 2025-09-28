@@ -389,7 +389,7 @@ async function displayLeaderboard(data) {
         // Player was online for more 15 days, skip to render less jank
         // Top 50 will always be shown
         // Will not work when autoUpdater is off
-        if (player.rank < 50 && player.absoluteLastTime < nowInSeconds - fifteenDaysInSeconds && AutoUpdater.getStatus()) {
+        if (player.rank < 50 || player.rank == 0 && player.absoluteLastTime < nowInSeconds - fifteenDaysInSeconds && AutoUpdater.getStatus()) {
             return;
         }
 
@@ -553,7 +553,7 @@ async function displayLeaderboard(data) {
             <td class="${player.survivedToDiedRatioClass}">${player.survivalRate}%</td>
             <td class="${player.killToDeathRatioClass}">${player.killToDeathRatio}</td>
             <td class="${player.averageLifeTimeClass}">${formatSeconds(player.averageLifeTime)}</td>
-            <td>${player.totalScore <= 0 ? 'Calibrating...' : player.totalScore.toFixed(2)} ${player.totalScore <= 0 ? '' : `(${rankLabel})`}</td>
+            <td>${player.totalScore <= 0 ? 'Calibrating...' : player.totalScore.toFixed(3)} ${player.totalScore <= 0 ? '' : `(${rankLabel})`}</td>
             <td>${player.sptVer}</td>
         `
 
@@ -601,7 +601,7 @@ async function displaySimpleLeaderboard(data) {
         // Player was online for more 15 days, skip to render less jank
         // Top 50 will always be shown
         // Will not work when autoUpdater is off
-        if (player.rank < 50 && player.absoluteLastTime < nowInSeconds - fifteenDaysInSeconds && AutoUpdater.getStatus()) {
+        if (player.rank < 50 || player.rank == 0 && player.absoluteLastTime < nowInSeconds - fifteenDaysInSeconds && AutoUpdater.getStatus()) {
             return;
         }
 
@@ -673,7 +673,7 @@ async function displaySimpleLeaderboard(data) {
             <td>${player.survivalRate}%</td>
             <td>${player.killToDeathRatio}</td>
             <td>${formatSeconds(player.averageLifeTime)}</td>
-            <td>${player.totalScore <= 0 ? 'Calibrating...' : player.totalScore.toFixed(2)} ${player.totalScore <= 0 ? '' : `(${rankLabel})`}</td>
+            <td>${player.totalScore <= 0 ? 'Calibrating...' : player.totalScore.toFixed(3)} ${player.totalScore <= 0 ? '' : `(${rankLabel})`}</td>
             <td>${player.sptVer}</td>
         `
 
@@ -843,7 +843,7 @@ async function calculateRanks(data) {
         }
 
         if (player.averageLifeTime / 60 < MIN_LIFE_TIME) {
-            score *= 0.1; // -90% penalty
+            score *= 0.2; // -80% penalty
         }
 
         if (player.boostPerc) {
