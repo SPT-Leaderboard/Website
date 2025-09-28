@@ -389,7 +389,7 @@ async function displayLeaderboard(data) {
         // Player was online for more 15 days, skip to render less jank
         // Top 50 will always be shown
         // Will not work when autoUpdater is off
-        if ((player.rank > 50 || player.rank == 1) && player.absoluteLastTime < nowInSeconds - fifteenDaysInSeconds && AutoUpdater.getStatus()) {
+        if (player.rank > 50 && player.absoluteLastTime < nowInSeconds - fifteenDaysInSeconds && AutoUpdater.getStatus()) {
             return;
         }
 
@@ -601,7 +601,7 @@ async function displaySimpleLeaderboard(data) {
         // Player was online for more 15 days, skip to render less jank
         // Top 50 will always be shown
         // Will not work when autoUpdater is off
-        if ((player.rank > 50 || player.rank == 1) && player.absoluteLastTime < nowInSeconds - fifteenDaysInSeconds && AutoUpdater.getStatus()) {
+        if (player.rank > 50 && player.absoluteLastTime < nowInSeconds - fifteenDaysInSeconds && AutoUpdater.getStatus()) {
             return;
         }
 
