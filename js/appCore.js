@@ -387,8 +387,9 @@ async function displayLeaderboard(data) {
         const fifteenDaysInSeconds = 15 * 24 * 60 * 60;
 
         // Player was online for more 15 days, skip to render less jank
+        // Top 50 will always be shown
         // Will not work when autoUpdater is off
-        if (player.rank > 10 && player.absoluteLastTime < nowInSeconds - fifteenDaysInSeconds && AutoUpdater.getStatus()) {
+        if (player.rank < 50 && player.absoluteLastTime < nowInSeconds - fifteenDaysInSeconds && AutoUpdater.getStatus()) {
             return;
         }
 
@@ -598,8 +599,9 @@ async function displaySimpleLeaderboard(data) {
         const fifteenDaysInSeconds = 15 * 24 * 60 * 60;
 
         // Player was online for more 15 days, skip to render less jank
+        // Top 50 will always be shown
         // Will not work when autoUpdater is off
-        if (player.absoluteLastTime < nowInSeconds - fifteenDaysInSeconds && AutoUpdater.getStatus()) {
+        if (player.rank < 50 && player.absoluteLastTime < nowInSeconds - fifteenDaysInSeconds && AutoUpdater.getStatus()) {
             return;
         }
 

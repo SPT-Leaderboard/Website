@@ -4817,15 +4817,15 @@ input[type="checkbox"] {
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
 .comment-submit:hover {
-    transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(93, 147, 255, 0.3);
+    background: linear-gradient(90deg, #7b68ee 0%, #5d93ff 100%);
 }
 
 .comments-list {

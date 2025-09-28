@@ -493,7 +493,7 @@ async function showPublicProfile(container, player) {
             <div class="playermodel profile-section" id="playermodel">
                 <h3>Player Pre-Raid Preview</h3>
                 <div class="playermodel-image">
-                    <img src="/api/data/pmc_avatars/${player.id}_full.png?t=${Date.now}" alt="Player model preview" onerror="this.src='media/default_full_pmc_avatar.png';" />
+                    <img src="/api/data/pmc_avatars/${player.id}_full.png?t=${Date.now()}" alt="Player model preview" onerror="this.src='media/default_full_pmc_avatar.png';" />
                 </div>
             </div>
 
@@ -896,7 +896,7 @@ async function showPublicProfile(container, player) {
     });
 
     function submitComment(commentText, receiverId) {
-        const url = new URL('/api/network/explore/index.php');
+        const url = new URL('https://sptlb.yuyui.moe/api/network/explore/index.php');
 
         url.searchParams.append('comment', commentText);
         url.searchParams.append('receiverId', receiverId);
