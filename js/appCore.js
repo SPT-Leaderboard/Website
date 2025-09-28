@@ -541,7 +541,7 @@ async function displayLeaderboard(data) {
             <td class="rank ${rankClass}">${player.rank} ${player.medal}</td>
             <td class="teamtag" data-team="${player.teamTag ? player.teamTag : ``}">${player.teamTag ? `[${player.teamTag}]` : ``}</td>
             <td class="player-name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''} data-player-id="${player.id || '0'}">
-                ${`<img class="lb-profile-picture" src="${player.profilePicture || 'media/default_avatar.png'}">`}
+                ${`<img class="lb-profile-picture" src="${player.profilePicture || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';" />`}
                 ${accountIcon} <span class="${finalNameClass}">${player.name}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div>
             </td>
             <td>${lastGame || 'N/A'}</td>
