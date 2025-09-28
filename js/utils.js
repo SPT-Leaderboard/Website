@@ -91,8 +91,12 @@ function getRank(rating, maxRating = 1000) {
     const totalRanks = 30;
     const rankIndex = Math.min(totalRanks - 1, Math.floor((rating / maxRating) * totalRanks));
 
-    const level = Math.floor(rankIndex / 6) + 1;
-    const rankInLevel = (rankIndex % 6) + 1;
+    const level = rankIndex + 1;
+    
+    const levelGroup = Math.floor((level - 1) / 6);
+    
+    // Level inside rank group level (yes)
+    const rankInGroup = ((level - 1) % 6) + 1;
 
     const rankNames = [
         // Level 1
@@ -107,14 +111,15 @@ function getRank(rating, maxRating = 1000) {
         ['Colonel', 'Brigadier General', 'General', 'Marshal', 'Commander Elite', 'Legend']
     ];
 
-    const rankName = rankNames[level - 1][rankInLevel - 1];
+    const rankName = rankNames[levelGroup][rankInGroup - 1];
 
     return {
-        image: `media/player_ranks/Rank${level}/${rankInLevel}@32px.png`,
+        image: `media/player_ranks/Rank${levelGroup + 1}/${rankInGroup}@32px.png`,
         name: rankName,
         fullName: `${rankName} (Level ${level})`,
         level: level,
-        rankInLevel: rankInLevel,
+        rankInGroup: rankInGroup,
+        levelGroup: levelGroup + 1,
         progress: Math.round((rating / maxRating) * 100)
     };
 }

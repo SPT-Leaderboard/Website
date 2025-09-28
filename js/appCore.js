@@ -520,7 +520,8 @@ async function displayLeaderboard(data) {
         }
 
         // get rank
-        const playerRating = player.rating ? player.rating : 0;
+        // Temporary solution
+        const playerRating = player.pmcRaids;
         const rank = getRank(playerRating);
         const rankHTML = `
             <div class="badge-lb tooltip">
