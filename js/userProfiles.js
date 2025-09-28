@@ -901,7 +901,6 @@ async function showPublicProfile(container, player) {
         url.searchParams.append('comment', commentText);
         url.searchParams.append('receiverId', receiverId);
         url.searchParams.append('timestamp', Date.now());
-        url.searchParams.append('source', 'gh_pages');
 
         // Оpen in new thing
         window.open(url.toString(), '_blank');

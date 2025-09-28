@@ -956,22 +956,10 @@ button:hover,
 .player-stats {
     display: flex;
     gap: 16px;
-    /* margin-left: 20px; */
     padding-left: 5px;
     position: relative;
     justify-content: left;
     flex-wrap: wrap;
-}
-
-.player-stats::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 60%;
-    width: 1px;
-    background: rgba(255, 255, 255, 0.1);
 }
 
 .player-count strong {
@@ -4068,6 +4056,23 @@ input[type="checkbox"] {
 }
 
 .video-background video {
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+}
+
+.video-background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    transition: opacity 2s ease-in-out;
+    opacity: 0;
+}
+
+.video-background-overlay video {
     min-width: 100%;
     min-height: 100%;
     object-fit: cover;

@@ -141,7 +141,7 @@ class KeepAliveService {
 
         this.keepAliveInterval = setInterval(() => {
             this.sendKeepAlive();
-        }, 30000);
+        }, 60000);
     }
 
     stop() {

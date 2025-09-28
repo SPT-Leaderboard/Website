@@ -174,6 +174,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 </video>
             </div>
 
+            <div class="video-background-overlay">
+                <video autoplay muted loop playsinline>
+                    <source src="media/season_end/season_end_overlay.mp4" type="video/mp4">
+                </video>
+            </div>
+
             <div class="season-header">
                 <h1>SEASON ${seasons[0]} FINALE</h1>
                 <p class="subtitle">The battle is over... for now.</p>
@@ -284,6 +290,9 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
         document.body.appendChild(overlay);
+
+        const videoBackgroundOverlay = document.querySelector('.video-background-overlay');
+        videoBackgroundOverlay.style.opacity = '0.09';
     }
 
     function calculateGlobalStats(players) {
