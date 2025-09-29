@@ -27,21 +27,10 @@ function getPrettyMapName(entry) {
 
 // Get boost descriptions and details for tooltips
 function getBoostDescription(boost) {
-    if (boost >= 15) return 'Unreal Boost!';
-    if (boost >= 10) return 'Extreme Boost.';
     if (boost >= 5) return 'Great Boost.';
     if (boost > 0) return 'Small Boost.';
     if (boost === 0) return 'Neutral.';
     return 'Penalty Applied.';
-}
-
-function getBoostDetails(boost) {
-    const modsCount = Math.abs(boost);
-    return boost > 0
-        ? `From ~${modsCount} approved mod(s)`
-        : boost < 0
-            ? `From ~${modsCount} restricted mod(s)`
-            : 'No mod effects';
 }
 
 // Welcome image moving on the background

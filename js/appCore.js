@@ -432,8 +432,8 @@ async function displayLeaderboard(data) {
             </div>`;
         } else {
             const boostValue = player.boostPerc || 0;
-            const boostColor = boostValue >= 5 && boostValue <= 10 ? 'rgba(142, 255, 189, 1)' :
-                boostValue > 10 ? 'rgba(100, 200, 255, 1)' :
+            const boostColor = boostValue >= 1 && boostValue <= 3 ? 'rgba(142, 255, 189, 1)' :
+                boostValue > 3 ? 'rgba(100, 200, 255, 1)' :
                     boostValue < 0 ? 'rgba(255, 110, 100, 1)' : 'rgba(255, 255, 255, 1)';
 
             const boostIcon = boostValue > 0 ? 'bx-arrow-up-stroke' :
@@ -450,7 +450,6 @@ async function displayLeaderboard(data) {
                 <em class='bx bxs-bolt' style="color:${boostColor}"></em>
                 <span class="tooltiptext">
                     ${getBoostDescription(boostValue)}
-                    ${getBoostDetails(boostValue)}
                 </span>
             </div>`;
         }
