@@ -143,7 +143,7 @@
 }
 
 .theme-light {
-    background-color: rgb(61, 87, 106);
+    background-color: rgb(57, 81, 99);
 }
 
 .theme-gradient {
@@ -155,7 +155,7 @@
 }
 
 .theme-steelshade {
-    background: linear-gradient(169deg, #808991 0%, #657583 42%, #3F4952 69%);
+    background: linear-gradient(169deg, #5a6166 0%, #56636e 42%, #3F4952 69%);
 }
 
 /* Kitties/Penguins :D */

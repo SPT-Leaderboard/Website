@@ -878,13 +878,14 @@ async function showPublicProfile(container, player) {
     // Comment sending functionality
     const commentSubmit = document.getElementById('submit-comment');
     const commentInput = document.getElementById('comment-text');
+
     commentSubmit.addEventListener('click', function () {
         if (commentInput.value.trim() === '') {
             commentInput.focus();
             return;
         }
 
-        // Send comment
+        // Send Comment
         submitComment(commentInput.value.trim(), player.id);
     });
 
@@ -895,24 +896,83 @@ async function showPublicProfile(container, player) {
         }
     });
 
-    function submitComment(commentText, receiverId) {
-        const url = new URL('https://sptlb.yuyui.moe/api/network/explore/index.php');
+    async function submitComment(commentText, receiverId) {
+        const submitBtn = commentSubmit;
+        const originalText = submitBtn.innerHTML;
 
-        url.searchParams.append('comment', commentText);
-        url.searchParams.append('receiverId', receiverId);
-        url.searchParams.append('timestamp', Date.now());
+        try {
+            submitBtn.innerHTML = '<i class="bx bx-loader bx-spin"></i> Sending...';
+            submitBtn.disabled = true;
 
-        // Оpen in new thing
-        window.open(url.toString(), '_blank');
+            const response = await fetch('/api/network/explore/index.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'comment': commentText,
+                    'receiverId': receiverId,
+                    'timestamp': Date.now()
+                })
+            });
 
-        commentInput.value = '';
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to send comment');
+            }
+
+            commentInput.value = '';
+
+            // Add comment
+            addCommentToUI({
+                id: data.id,
+                text: data.text,
+                author: data.author,
+                author_id: data.author_id,
+                avatar: data.avatar,
+                date: data.date,
+                timestamp: data.timestamp
+            });
+
+        } catch (error) {
+            console.error('Error sending comment:', error);
+        } finally {
+            // Restore button state
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
     }
+}
+
+// Add comment visually
+function addCommentToUI(comment) {
+    const commentsList = document.querySelector('.comments-list');
+
+    // Remove message if it exists
+    const noComments = commentsList.querySelector('.no-comments');
+    if (noComments) {
+        noComments.remove();
+    }
+
+    const commentElement = createCommentElement(comment);
+
+    commentsList.insertBefore(commentElement, commentsList.firstChild);
+
+    commentElement.style.opacity = '0';
+    commentElement.style.transform = 'translateY(-10px)';
+    commentElement.style.transition = 'all 0.3s ease';
+
+    setTimeout(() => {
+        commentElement.style.opacity = '1';
+        commentElement.style.transform = 'translateY(0)';
+    }, 10);
 }
 
 // Comments sending 
 async function loadComments(playerId) {
     try {
-        const response = await fetch(`/api/network/explore/comments/player_${playerId}.json?t=${Date.now}`);
+        const response = await fetch(`/api/network/explore/comments/player_${playerId}.json?t=${Date.now()}`);
 
         if (!response.ok) {
             // If doesn't exist, show empty state
@@ -932,7 +992,7 @@ async function loadComments(playerId) {
     }
 }
 
-// Function to display comments in the UI
+// Display comments in the UI
 function displayComments(comments) {
     const commentsList = document.querySelector('.comments-list');
 
@@ -987,7 +1047,7 @@ function displayNoComments() {
     const commentsList = document.querySelector('.comments-list');
     commentsList.innerHTML = `
         <div class="no-comments">
-            <i class='bx bx-message-rounded'></i>
+            <i class='bx bxs-message'></i>
             <p>No comments yet</p>
             <span>Be the first to leave a comment!</span>
         </div>

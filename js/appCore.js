@@ -445,7 +445,7 @@ async function displayLeaderboard(data) {
                 <span class="tooltiptext">Profile in good standing</span>
             </div>
             <div class="boost-container tooltip" style="background: ${boostColor}15; border: 1px solid ${boostColor}50">
-                <span class="boost-value">${boostValue}%</span>
+                <span class="boost-value">${boostValue.toFixed(1)}%</span>
                 <em class='bx ${boostIcon}' style="color:${boostColor}; font-size:0.8em"></em>
                 <em class='bx bxs-bolt' style="color:${boostColor}"></em>
                 <span class="tooltiptext">
@@ -852,8 +852,8 @@ async function calculateRanks(data) {
 
             score *= boostMultiplier;
 
-            // Clamp boost to max +-25%
-            const clampedBoost = Math.min(Math.max(boostMultiplier, 0.8), 1.25);
+            // Clamp boost to max +-5%
+            const clampedBoost = Math.min(Math.max(boostMultiplier, 0.8), 1.05);
             score *= clampedBoost;
         }
 
