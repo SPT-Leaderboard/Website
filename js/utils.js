@@ -185,8 +185,8 @@ class KeepAliveService {
     }
 }
 
-const keepAliveService = new KeepAliveService();
+//const keepAliveService = new KeepAliveService();
 
-document.addEventListener('DOMContentLoaded', () => {
-    keepAliveService.start();
-});
+//document.addEventListener('DOMContentLoaded', () => {
+//    keepAliveService.start();
+//});
