@@ -441,32 +441,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return result.join(' ') || '0m';
     }
-
 });
-
-// Saver functions
-function setCookie(name, value) {
-    localStorage.setItem(name, value);
-    document.cookie = `${name}=${value}; path=/; max-age=31536000`;
-}
-
-function getCookie(name) {
-    // Try to grab setting from localstorage
-    const fromStorage = localStorage.getItem(name);
-    if (fromStorage !== null) {
-        return fromStorage;
-    }
-
-    // If not, find a cookie
-    const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-        cookie = cookie.trim();
-        if (cookie.startsWith(name + '=')) {
-            const value = cookie.substring(name.length + 1);
-            localStorage.setItem(name, value);
-            return value;
-        }
-    }
-
-    return '';
-}

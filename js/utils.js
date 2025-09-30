@@ -27,7 +27,7 @@ function getPrettyMapName(entry) {
 
 // Get boost descriptions and details for tooltips
 function getBoostDescription(boost) {
-    if (boost >= 5) return 'Great Boost.';
+    if (boost >= 4) return 'Great Boost.';
     if (boost > 0) return 'Small Boost.';
     if (boost === 0) return 'Neutral.';
     return 'Penalty Applied.';
@@ -179,3 +179,43 @@ class KeepAliveService {
 //document.addEventListener('DOMContentLoaded', () => {
 //    keepAliveService.start();
 //});
+
+/**
+ * Returns text based on player ranking for displayWinners() e.g player.rank = 1 -> '👑 First place 👑'
+ * @param {Array<Object>} rank - 3 winners determined by displayWinners() - player.rank
+ */
+function getRankText(rank) {
+    switch (rank) {
+        case 1: return '👑 First place 👑';
+        case 2: return 'Second place';
+        case 3: return 'Third place';
+        default: return '';
+    }
+}
+
+// Saver functions
+function setCookie(name, value) {
+    localStorage.setItem(name, value);
+    document.cookie = `${name}=${value}; path=/; max-age=31536000`;
+}
+
+function getCookie(name) {
+    // Try to grab setting from localstorage
+    const fromStorage = localStorage.getItem(name);
+    if (fromStorage !== null) {
+        return fromStorage;
+    }
+
+    // If not, find a cookie
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + '=')) {
+            const value = cookie.substring(name.length + 1);
+            localStorage.setItem(name, value);
+            return value;
+        }
+    }
+
+    return '';
+}

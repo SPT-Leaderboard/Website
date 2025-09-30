@@ -258,15 +258,16 @@ async function fetchData() {
 function processPlayersData() {
     const totalPlayers = playersData.length;
 
-    const trustedPlayers = playersData.filter(p => p.trusted).length;
-    const trustedPercent = (trustedPlayers / totalPlayers * 100).toFixed(1);
     const kappaPlayers = playersData.filter(p => p.hasKappa).length;
     const kappaPercent = (kappaPlayers / totalPlayers * 100).toFixed(1);
     const avgLevel = (playersData.reduce((sum, p) => sum + p.pmcLevel, 0) / totalPlayers).toFixed(1);
 
     const totalPmcRaids = playersData.reduce((sum, p) => sum + (p.pmcRaids || 0), 0);
     const totalScavRaids = playersData.reduce((sum, p) => sum + (p.scavRaids || 0), 0);
-    const totalRaids = totalPmcRaids + totalScavRaids;
+    const totalFinalRaids = playersData.reduce((sum, p) => sum + (p.totalRaids || 0), 0);
+    const totalDamage = playersData.reduce((sum, p) => sum + (p.damage || 0), 0);
+
+    const totalRaids = totalPmcRaids + totalScavRaids + totalFinalRaids;
     const totalPlayTimeSeconds = playersData.reduce((sum, p) => sum + (p.totalPlayTime || 0), 0);
     const totalPlayTimeFormatted = formatPlayTime(totalPlayTimeSeconds);
 
@@ -274,15 +275,14 @@ function processPlayersData() {
     const totalDeaths = playersData.reduce((sum, p) => sum + (p.pmcDeaths || 0) + (p.scavDeaths || 0), 0);
     const globalKDRatio = (totalKills / Math.max(totalDeaths, 1)).toFixed(2);
 
-    document.getElementById('total-players').textContent = totalPlayers;
-    document.getElementById('total-raids-recorded').textContent = totalRaids;
+    document.getElementById('total-players').textContent = totalPlayers.toLocaleString('en-US');
+    document.getElementById('total-raids-recorded').textContent = totalRaids.toLocaleString('en-US');
     document.getElementById('total-play-time').textContent = totalPlayTimeFormatted;
-    document.getElementById('trusted-players').textContent = trustedPlayers;
-    document.getElementById('trusted-percent').textContent = `${trustedPercent}%`;
+    document.getElementById('total-damage').textContent = totalDamage.toLocaleString('en-US');
     document.getElementById('kappa-players').textContent = kappaPlayers;
     document.getElementById('kappa-percent').textContent = `${kappaPercent}%`;
     document.getElementById('avg-level').textContent = avgLevel;
-    document.getElementById('total-kills').textContent = totalKills;
+    document.getElementById('total-kills').textContent = totalKills.toLocaleString('en-US');
     document.getElementById('global-kd').textContent = globalKDRatio;
 
     // PMC/SCAV raids

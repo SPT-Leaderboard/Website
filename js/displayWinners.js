@@ -38,16 +38,3 @@ function displayWinners(data) {
 
     winnersTab.appendChild(winnersContainer);
 }
-
-/**
- * Returns text based on player ranking for displayWinners() e.g player.rank = 1 -> '👑 First place 👑'
- * @param {Array<Object>} rank - 3 winners determined by displayWinners() - player.rank
- */
-function getRankText(rank) {
-    switch (rank) {
-        case 1: return '👑 First place 👑';
-        case 2: return 'Second place';
-        case 3: return 'Third place';
-        default: return '';
-    }
-}

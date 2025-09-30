@@ -15,6 +15,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
         <script src="js/appCore.js"></script>
         <script src="js/displayWinners.js"></script>
@@ -308,7 +309,11 @@
         <p id="status"></p>
         <div class="leaderboard-controls">
             <div class="search-container">
-                <input type="text" id="playerSearch" placeholder="Find player..." />
+                <div class="search-type-toggle">
+                    <button class="search-type-btn active" data-type="name">By Name</button>
+                    <button class="search-type-btn" data-type="id">By ID</button>
+                </div>
+                <input type="text" id="playerSearch" placeholder="Find player by name..." />
                 <button id="clearSearch">Clear</button>
             </div>
             <div class="controls-toolset">

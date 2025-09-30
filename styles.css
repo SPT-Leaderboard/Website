@@ -6,6 +6,38 @@
     --text-light: #ccd6f6;
     --text-muted: #8892b0;
     --darker: #0f172a;
+
+    /* Inherited from SPTLB Network */
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --primary-light: #a5b4fc;
+    --primary-ultralight: #e0e7ff;
+
+    --danger: #ef4444;
+    --danger-dark: #dc2626;
+
+    --success: #10b981;
+    --success-dark: #059669;
+
+    --dark: #1e293b;
+    --darker: #0f172a;
+    --dark-medium: #334155;
+
+    --light: #f8fafc;
+    --lighter: #ffffff;
+
+    --gray: #94a3b8;
+    --gray-light: #e2e8f0;
+    --gray-dark: #64748b;
+    --gray-ultradark: #475569;
+
+    --accent: #f59e0b;
+    --accent-dark: #d97706;
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 ::-webkit-scrollbar {
@@ -55,7 +87,7 @@ html {
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Noto Sans", sans-serif;
     background-image:
         radial-gradient(circle at top left, rgba(99, 102, 241, 0.1) 0%, transparent 20%),
         radial-gradient(circle at 90% 80%, rgba(114, 68, 239, 0.1) 0%, transparent 20%);
@@ -189,7 +221,7 @@ h1 {
 }
 
 .navbar-link {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.08));
+    background-color: rgba(255, 255, 255, 0.05);
     color: var(--text-light);
     border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 4px 8px;
@@ -206,7 +238,7 @@ h1 {
 }
 
 .navbar-link:hover {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.15));
+    background-color: rgba(255, 255, 255, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.2),
@@ -223,18 +255,14 @@ h1 {
 }
 
 .navbar-link--login {
-    background: linear-gradient(145deg,
-            rgba(100, 255, 219, 0.25),
-            rgba(100, 255, 219, 0.15));
+    background: rgba(100, 255, 219, 0.25);
     border: 1px solid rgba(100, 255, 219, 0.3);
     font-weight: 700;
     position: relative;
 }
 
 .navbar-link--login:hover {
-    background: linear-gradient(145deg,
-            rgba(100, 255, 219, 0.35),
-            rgba(100, 255, 219, 0.25));
+    background: rgba(100, 255, 219, 0.35);
     border: 1px solid rgba(100, 255, 219, 0.5);
 }
 
@@ -282,17 +310,18 @@ h1 {
 /* Leaderboard Controls */
 .leaderboard-controls {
     max-width: 1200px;
-    margin: 20px auto;
+    margin: 25px auto;
     padding: 0 20px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 }
 
 .search-container {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
+    position: relative;
 }
 
 .controls-toolset {
@@ -302,20 +331,30 @@ h1 {
     width: 100%;
     padding: 10px 0;
     border-top: 1px solid var(--text-muted);
+    position: relative;
 }
 
 .auto-update-control {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
     color: var(--text-light);
+    font-weight: 500;
 }
 
 .auto-update-control label {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 12px;
     cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.auto-update-control label:hover {
+    background: rgba(100, 255, 218, 0.05);
 }
 
 #updateInterval {
@@ -329,28 +368,132 @@ h1 {
 #timeToUpdate {
     font-size: 14px;
     color: var(--text-muted);
+    padding: 6px 12px;
+    background: rgba(136, 146, 176, 0.1);
+    border-radius: 8px;
+    border: 1px solid var(--text-muted);
+    transition: all 0.3s ease;
+    font-weight: 600;
 }
 
 #playerSearch {
     flex-grow: 1;
-    padding: 12px 16px;
+    padding: 16px 16px 16px 25px;
     font-size: 16px;
-    background-color: var(--bg-dark-secondary);
-    border: 1px solid var(--text-muted);
-    border-radius: 10px;
+    background: linear-gradient(145deg, var(--bg-dark-secondary), var(--darker));
+    border: 2px solid var(--text-muted);
+    border-radius: 16px;
     color: var(--text-light);
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    font-weight: 500;
+}
+
+#playerSearch:hover {
+    cursor: pointer;
 }
 
 #playerSearch:focus {
     outline: none;
     border-color: var(--accent-teal);
-    box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2);
+    box-shadow:
+        0 0 0 4px rgba(100, 255, 218, 0.15),
+        var(--shadow-lg);
+    background: linear-gradient(145deg, var(--bg-dark-secondary), var(--bg-dark));
 }
 
 #playerSearch::placeholder {
     color: var(--text-muted);
-    opacity: 0.7;
+    opacity: 0.8;
+    font-weight: 400;
+}
+
+.search-indicator {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    right: 10px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    transition: all 0.3s ease;
+}
+
+.search-active .search-indicator {
+    background: var(--accent-teal);
+    box-shadow: 0 0 8px var(--accent-teal);
+}
+
+.search-highlight {
+    background: linear-gradient(90deg, rgba(100, 255, 218, 0.1), transparent) !important;
+    border-left: 3px solid var(--accent-teal) !important;
+    transition: all 0.3s ease !important;
+}
+
+.searching-by-id .search-highlight {
+    border-left-color: var(--accent-blue) !important;
+    background: linear-gradient(90deg, rgba(30, 144, 255, 0.1), transparent) !important;
+}
+
+.search-type-toggle {
+    display: flex;
+    background: var(--bg-dark-secondary);
+    border-radius: 12px;
+    padding: 4px;
+    border: 1px solid var(--text-muted);
+    width: 190px;
+    gap: 5px;
+}
+
+.search-type-btn {
+    flex: 1;
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.search-type-btn.active {
+    background: var(--accent-teal);
+    color: var(--darker);
+    box-shadow: var(--shadow-sm);
+}
+
+.searching-by-id #playerSearch::placeholder {
+    color: var(--accent-blue);
+    opacity: 0.8;
+}
+
+.searching-by-id .search-indicator {
+    background: var(--accent-blue);
+    box-shadow: 0 0 8px var(--accent-blue);
+}
+
+#clearSearch {
+    padding: 12px 24px;
+    background: linear-gradient(145deg, var(--gray-ultradark), var(--dark-medium));
+    border: 2px solid var(--text-muted);
+    border-radius: 12px;
+    color: var(--text-light);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+#clearSearch:hover {
+    cursor: pointer;
+    border-color: var(--accent-teal);
+    color: var(--accent-teal);
+    box-shadow: 0 6px 20px rgba(100, 255, 218, 0.2);
 }
 
 /* Leader board */
@@ -648,7 +791,7 @@ td:nth-child(3):hover::before {
 
 button,
 .main-button {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+    background-color: rgba(255, 255, 255, 0.05);
     color: var(--text-light);
     border: 1px solid rgba(255, 255, 255, 0.25);
     padding: 4px 8px;
@@ -663,7 +806,7 @@ button,
 
 button:hover,
 .main-button:hover {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
+    background-color: rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
 }
 
@@ -1526,8 +1669,8 @@ input[type="checkbox"] {
     margin: 0;
     position: relative;
     overflow: hidden;
-    animation: cardAppear 0.6s ease forwards;
-    animation-delay: calc(var(--index) * 0.15s);
+    animation: cardAppear 0.4s ease forwards;
+    animation-delay: calc(0.1 * 0.15s);
     transform-style: preserve-3d;
 }
 
@@ -1550,24 +1693,6 @@ input[type="checkbox"] {
         inset 0 1px 1px rgba(255, 255, 255, 0.15);
     border-color: rgba(100, 255, 218, 0.5);
 }
-
-.winner-card::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    height: 10px;
-    background: linear-gradient(90deg,
-            rgba(100, 255, 218, 0.3),
-            rgba(100, 255, 218, 0.6),
-            rgba(100, 255, 218, 0.3));
-    border-radius: 50%;
-    filter: blur(4px);
-    opacity: 0.7;
-}
-
 
 @keyframes fadeIn {
     from {
@@ -1663,7 +1788,7 @@ input[type="checkbox"] {
     letter-spacing: 0.5px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    place-self: center;
     padding: 10px 15px;
     background: linear-gradient(145deg,
             rgba(10, 25, 47, 0.4),
@@ -1680,7 +1805,7 @@ input[type="checkbox"] {
             rgba(30, 58, 107, 0.5),
             rgba(30, 58, 107, 0.3));
     color: var(--text-light);
-    border-left: 4px solid gold;
+    border: 1px solid gold;
 }
 
 .winner-stats span:last-child,
@@ -3086,7 +3211,7 @@ input[type="checkbox"] {
 
 .raid-stat-block {
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
-    padding: 16px;
+    padding: 8px;
     border-radius: 12px;
     text-align: center;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -3990,6 +4115,75 @@ input[type="checkbox"] {
     }
 }
 
+/* New player notification */
+.new-player-avatar-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.new-player-avatar {
+    border: 2px solid var(--accent-teal) !important;
+    box-shadow:
+        0 0 20px rgba(100, 255, 218, 0.4),
+        inset 0 0 20px rgba(100, 255, 218, 0.1) !important;
+}
+
+.new-player-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: linear-gradient(135deg, #64ffda, #1e90ff);
+    color: var(--darker);
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(100, 255, 218, 0.5);
+}
+
+.new-player-name {
+    background: linear-gradient(135deg, #64ffda, #1e90ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+}
+
+.new-player-subtitle {
+    color: var(--text-light) !important;
+    font-weight: 500;
+    font-size: 14px !important;
+}
+
+.new-player-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.new-player-stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.new-player-stat i {
+    color: var(--accent-teal);
+    font-size: 14px;
+}
+
+.new-player-stat:hover {
+    background: rgba(100, 255, 218, 0.1);
+    transform: translateX(4px);
+}
 
 /* Season End Screen */
 #seasonOverlay {

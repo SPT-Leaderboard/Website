@@ -924,7 +924,7 @@ async function showPublicProfile(container, player) {
 
             commentInput.value = '';
 
-            // Add comment
+            // Add visually a comment
             addCommentToUI({
                 id: data.id,
                 text: data.text,

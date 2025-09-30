@@ -435,7 +435,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="stats-grid">
                 <div class="stat-item">
                     <div class="stat-label">Kills</div>
-                    <div class="stat-value">${weapon.kills.toLocaleString()} <span class="stat-extra">(${weapon.killsPercent}%)</span></div>
+                    <div class="stat-value">${weapon.kills.toLocaleString('en-US')} <span class="stat-extra">(${weapon.killsPercent}%)</span></div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-label">Headshot Rate</div>
@@ -450,7 +450,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                 <div class="stat-item">
                     <div class="stat-label">Used by (Lvl avg)</div>
-                    <div class="stat-value">${weapon.playerCount} <span class="stat-extra">(${weapon.avgLevel})</span></div>
+                    <div class="stat-value">${weapon.playerCount.toLocaleString('en-US')} <span class="stat-extra">(${weapon.avgLevel})</span></div>
                 </div>
             </div>
             <div class="map-tags-container">

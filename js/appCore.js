@@ -805,8 +805,8 @@ function convertTimeToSeconds(time) {
 async function calculateRanks(data) {
     const MIN_RAIDS = 50
     const SOFT_CAP_RAIDS = 100
-    const MIN_LIFE_TIME = 8 // Skill issue tracker
-    const MAX_LIFE_TIME = 55
+    const MIN_LIFE_TIME = 10 // Skill issue tracker
+    const MAX_LIFE_TIME = 35
 
     const maxKDR = Math.max(...data.map(p => p.killToDeathRatio))
     const maxSurvival = Math.max(...data.map(p => p.survivalRate))
@@ -820,6 +820,11 @@ async function calculateRanks(data) {
             player.totalScore = 0;
             player.damage = 0;
             player.killToDeathRatio = 0;
+            player.averageLifeTime = 0;
+            player.pmcRaids = 0;
+            player.scavRaids = 0;
+            player.survivalRate = 0;
+            player.profilePicture = "media/default_banned.png";
             player.survivedToDiedRatio = 0;
             return;
         }
@@ -832,7 +837,7 @@ async function calculateRanks(data) {
         const clampedLifeTime = Math.min(player.averageLifeTime, MAX_LIFE_TIME);
         const normAvgLifeTime = maxAvgLifeTime ? clampedLifeTime / maxAvgLifeTime : 0;
 
-        let score = normKDR * 0.1 + normSurvival * 0.1 + normRaids * 0.35 + normAvgLifeTime * 0.3;
+        let score = normKDR * 0.2 + normSurvival * 0.2 + normRaids * 0.35 + normAvgLifeTime * 0.3;
 
         // Soft Cap for raids
         if (player.pmcRaids <= MIN_RAIDS) {
@@ -843,7 +848,7 @@ async function calculateRanks(data) {
         }
 
         if (player.averageLifeTime / 60 < MIN_LIFE_TIME) {
-            score *= 0.2; // -80% penalty
+            score *= 0.7; // -30% penalty
         }
 
         if (player.boostPerc) {

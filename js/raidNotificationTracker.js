@@ -6,11 +6,10 @@
 
 const shownPlayerNotifications = new Set();
 const playerLastRaidTimes = new Map();
-const notificationStack = [];
 const playerNotificationData = new Map();
-let allowToPlayLastRaidSound = true;
+const notificationStack = [];
 let lastNotificationTime = 0;
-const NOTIFICATION_DELAY = 2000;
+const NOTIFICATION_DELAY = 1600;
 const MAX_NOTIFICATIONS = 5;
 
 async function showPlayerNotification(player) {
@@ -46,6 +45,12 @@ async function showPlayerNotification(player) {
         return;
     }
 
+    // New player
+    if (player.isNew && !player.banned) {
+        await showNewPlayerWelcome(player);
+        await new Promise(resolve => setTimeout(resolve, 1500));
+    }
+
     playerNotificationData.set(player.id, {
         lastRaidTime: lastRaidTime
     });
@@ -70,7 +75,7 @@ async function showPlayerNotification(player) {
         case 1:
             rankClass = "Legendary";
             break;
-    
+
         case 2:
             rankClass = "Rare";
             break;
@@ -82,7 +87,6 @@ async function showPlayerNotification(player) {
 
     if (player.currentWinstreak > 5 && !player.banned) {
         isOnRaidStreak = true;
-        allowToPlayLastRaidSound = false;
         const pmcRaid = new Audio('media/sounds/raidstreak/5raidstreak.wav');
         pmcRaid.volume = 0.05;
         pmcRaid.play();
@@ -92,8 +96,7 @@ async function showPlayerNotification(player) {
 
     // Killstreak
     const kills = player.lastRaidKills;
-    if (!isOnRaidStreak && player.lastRaidSurvived && player.lastRaidKills > 1 && allowToPlayLastRaidSound && !player.banned) {
-        allowToPlayLastRaidSound = false;
+    if (!isOnRaidStreak && player.lastRaidSurvived && player.lastRaidKills > 1 && !player.banned) {
         let killStreak;
         let soundFile;
         let notificationText;
@@ -140,7 +143,7 @@ async function showPlayerNotification(player) {
     }
 
     // Sounds
-    if (!player.banned && allowToPlayLastRaidSound) {
+    if (!player.banned) {
         if (player.lastRaidAs === "PMC" && player.lastRaidSurvived) {
             const pmcRaid = new Audio('media/sounds/pmc-raid-run.ogg');
             pmcRaid.volume = 0.05;
@@ -159,8 +162,6 @@ async function showPlayerNotification(player) {
             pmcRaidDied.play();
         }
     }
-
-    allowToPlayLastRaidSound = true;
 
     // Create notification element
     const notification = document.createElement('div');
@@ -336,6 +337,65 @@ function createBanNotification(player) {
             </div>
         </div>
     `;
+    const container = document.getElementById('notifications-container-r') || createNotificationsContainer();
+    container.appendChild(notification);
+    notificationStack.push(notification);
+    updateNotificationPositions();
+
+    setTimeout(() => {
+        notification.style.animation = 'fadeOut 0.3s forwards';
+    }, 27000);
+
+    setTimeout(() => {
+        notification.remove();
+        const index = notificationStack.indexOf(notification);
+        if (index > -1) {
+            notificationStack.splice(index, 1);
+        }
+        updateNotificationPositions();
+    }, 30000);
+}
+
+async function showNewPlayerWelcome(player) {
+    // Проигрываем звук firstblood
+    try {
+        const firstBloodSound = new Audio('media/sounds/killstreak/firstblood.wav');
+        firstBloodSound.volume = 0.08;
+        await firstBloodSound.play();
+    } catch (error) {
+        console.log('First blood sound play failed:', error);
+    }
+
+    const notification = document.createElement('div');
+    notification.className = `player-notification-r`;
+
+    notification.innerHTML = `
+        <div class="notification-content-r">
+            <div class="notification-header-r">
+                <div class="new-player-avatar-wrapper">
+                    <img src="${player.profilePicture}" alt="${player.name}'s avatar" class="notification-avatar-r new-player-avatar">
+                    <div class="new-player-badge">NEW</div>
+                </div>
+                <div class="notification-text">
+                    <span class="notification-name-r new-player-name">
+                        Welcome to SPT Leaderboard!
+                    </span>
+                    <span class="notification-info-r new-player-subtitle">
+                        ${player.name} just joined SPTLB
+                    </span>
+                </div>
+            </div>
+            <div class="raid-overview-notify">
+                <div class="new-player-stats">
+                    <span class="new-player-stat">
+                        <i class='bx bx-trending-up'></i>
+                        Joined us at #${player.rank} rank
+                    </span>
+                </div>
+            </div>
+        </div>
+    `;
+
     const container = document.getElementById('notifications-container-r') || createNotificationsContainer();
     container.appendChild(notification);
     notificationStack.push(notification);
