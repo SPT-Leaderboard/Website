@@ -79,11 +79,9 @@ window.addEventListener('resize', updateNavbarOffset);
 function getRank(rating, maxRating = 1000) {
     const totalRanks = 30;
     const rankIndex = Math.min(totalRanks - 1, Math.floor((rating / maxRating) * totalRanks));
-
     const level = rankIndex + 1;
-    
     const levelGroup = Math.floor((level - 1) / 6);
-    
+
     // Level inside rank group level (yes)
     const rankInGroup = ((level - 1) % 6) + 1;
 

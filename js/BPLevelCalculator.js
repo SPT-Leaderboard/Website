@@ -10,7 +10,7 @@ const MAX_LEVEL = 30;
 async function initHOF(player, bestWeapon) {
     updatePlayerProfile(player);
     updatePlayerProfileMastery(player, bestWeapon);
-    
+
     // rewardSystem.js
     refreshRewards(player);
 }
