@@ -49,7 +49,7 @@ async function updateServerStatus() {
         }
     }
 
-    if (seasonPath === "fallbacks/season") {
+    if (isLocalhost) {
         statusElement.textContent = 'Using Fallback instead API';
         statusElement.setAttribute('data-tooltip', "Using fallback instead of connecting to the API. Try refreshing the page")
         statusElement.classList.add('server-maintenance');
