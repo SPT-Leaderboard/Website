@@ -5,7 +5,7 @@
     --card-border: rgba(51, 65, 85, 0.5);
     --text-main: #f8fafc;
     --common: #b9b9b9;
-    --rare: #6515c0;
+    --rare: #5923965b;
     --legendary: #ffd900;
     --neon-glow: 0 0 10px rgba(99, 102, 241, 0.7);
     --card-glow: 0 0 15px rgba(99, 102, 241, 0.3);
@@ -22,7 +22,6 @@
     position: relative;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
-    border-left: 5px solid;
     border-radius: 8px;
     padding: 20px;
     transition: all 0.3s ease;
@@ -32,19 +31,7 @@
 }
 
 .achievement-card:hover {
-    transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
-}
-
-.achievement-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary-color), transparent);
-    opacity: 0.7;
 }
 
 .achievement-header {
@@ -84,7 +71,7 @@
 
 .achievement-meta {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     margin-top: 15px;
 }
@@ -99,14 +86,14 @@
 }
 
 .rarity-common {
-    background: rgba(46, 125, 50, 0.2);
-    color: #4caf50;
+    background: rgba(255, 255, 255, 0.2);
+    color: #d3d3d3;
     border: 1px solid var(--common);
 }
 
 .rarity-rare {
-    background: rgba(21, 101, 192, 0.2);
-    color: #42a5f5;
+    background: rgba(58, 21, 192, 0.2);
+    color: #8142f5;
     border: 1px solid var(--rare);
 }
 

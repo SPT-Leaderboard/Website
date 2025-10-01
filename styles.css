@@ -2589,7 +2589,7 @@ input[type="checkbox"] {
 
 /* Weapons List */
 .weapon-stats-container {
-    height: 460px;
+    max-height: 460px;
     overflow-y: scroll;
 }
 

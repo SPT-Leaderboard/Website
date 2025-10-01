@@ -68,16 +68,6 @@ function renderAchievements(stats, searchTerm = '') {
             return nameMatch || descMatch;
         });
 
-    // Average completion percentage
-    //const totalCompletion = filteredAchievements.reduce((sum, [id]) => {
-    //    return sum + parseFloat(stats[id]?.percent || 0);
-    //}, 0);
-
-    //const averageCompletion = filteredAchievements.length > 0
-    //    ? (totalCompletion / filteredAchievements.length).toFixed(2)
-    //    : 0;
-
-
     // Sort by rarity
     const rarityOrder = { common: 1, rare: 2, legendary: 3 };
     filteredAchievements.sort((a, b) => {
@@ -114,7 +104,7 @@ function renderAchievements(stats, searchTerm = '') {
         else if (rarity === 'rare') borderColor = '#1565c0';
         else if (rarity === 'legendary') borderColor = '#ff8f00';
 
-        card.style.borderLeftColor = borderColor;
+        card.style.borderColor = borderColor;
 
         card.innerHTML = `
             <div class="achievement-header">
@@ -124,7 +114,7 @@ function renderAchievements(stats, searchTerm = '') {
             <p class="achievement-description">${achievement.description}</p>
             <div class="achievement-progress-container">
                 <div class="achievement-progress-label">
-                    <span>Completion Rate</span>
+                    <span>Average Completion</span>
                     <span class="achievement-progress-percent">${achievementStat.percent}%</span>
                 </div>
                 <div class="achievement-progress" style="--progress-width: ${achievementStat.percent}%"></div>
@@ -146,7 +136,7 @@ async function initAchievements() {
         // Load both JSON files in parallel
         [achievementsData, playerAchievements] = await Promise.all([
             loadJSON('../global-achieve/js/compiledAchData.json'),
-            loadJSON('../api/data/shared/achievement_counters.json')
+            loadJSON(achievementsPath)
         ]);
 
         // Get total number of players with achievements

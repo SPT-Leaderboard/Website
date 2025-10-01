@@ -24,6 +24,11 @@ async function showPlayerNotification(player) {
         return;
     }
 
+    if (player.isNew && wasNewPlayerRecentlyShown(player.id)) {
+        console.debug(`[NOTIFY] Skipping new player ${player.name}, already shown.`);
+        return;
+    }
+
     // Throttle notifications
     if (notificationStack.length >= MAX_NOTIFICATIONS) {
         const oldestNotification = notificationStack.shift();
@@ -40,9 +45,12 @@ async function showPlayerNotification(player) {
     const lastRaidTime = player.absoluteLastTime;
     const currentData = playerNotificationData.get(player.id);
 
-    if (currentData && currentData.lastRaidTime === lastRaidTime) {
-        console.debug(`[NOTIFY] Player ${player.name} already shown for this raid at ${lastRaidTime}.`);
-        return;
+    if (currentData) {
+        if (currentData.lastRaidTime === lastRaidTime &&
+            (!player.isNew || currentData.isNewShown)) {
+            console.debug(`[NOTIFY] Player ${player.name} already shown for this raid at ${lastRaidTime}.`);
+            return;
+        }
     }
 
     playerNotificationData.set(player.id, {
@@ -365,6 +373,12 @@ async function showNewPlayerWelcome(player) {
         console.log('First blood sound play failed:', error);
     }
 
+    setNewPlayerCookie(player.id);
+    playerNotificationData.set(player.id, {
+        lastRaidTime: player.absoluteLastTime,
+        isNewShown: true
+    });
+
     const notification = document.createElement('div');
     notification.className = `player-notification-r`;
 
@@ -412,4 +426,17 @@ async function showNewPlayerWelcome(player) {
         }
         updateNotificationPositions();
     }, 30000);
+}
+
+function wasNewPlayerRecentlyShown(playerId) {
+    const cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith(`newPlayer_${playerId}=`));
+    return !!cookieValue;
+}
+
+function setNewPlayerCookie(playerId) {
+    const now = new Date();
+    now.setTime(now.getTime() + (24 * 60 * 60 * 1000)); // 24 часа
+    document.cookie = `newPlayer_${playerId}=1; expires=${now.toUTCString()}; path=/`;
 }
