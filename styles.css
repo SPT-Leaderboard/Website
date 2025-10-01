@@ -221,6 +221,7 @@ h1 {
 }
 
 .navbar-link {
+    font-family: 'Noto Sans';
     background-color: rgba(255, 255, 255, 0.05);
     color: var(--text-light);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -2161,27 +2162,11 @@ input[type="checkbox"] {
     box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.1),
         inset 0 1px 1px rgba(255, 255, 255, 0.1);
-    overflow: hidden;
     margin-bottom: 18px;
     backdrop-filter: blur(12px) saturate(130%);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     animation: fadeIn 0.4s ease-in-out;
-}
-
-.profile-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
-    transition: left 0.7s ease;
-}
-
-.profile-section:hover::before {
-    left: 100%;
 }
 
 .profile-section:hover {
@@ -2241,10 +2226,6 @@ input[type="checkbox"] {
     overflow: hidden;
 }
 
-.player-overview:hover {
-    transform: translateY(-2px);
-}
-
 .player-overview-side {
     align-self: center;
     font-weight: 700;
@@ -2253,7 +2234,6 @@ input[type="checkbox"] {
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     min-width: 60px;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     position: relative;
     overflow: hidden;
 }
@@ -2281,8 +2261,6 @@ input[type="checkbox"] {
 }
 
 .stat-item:hover .stat-value {
-    cursor: pointer;
-    transform: scale(1.01);
     color: #91dcff;
     text-shadow: 0 0 15px rgba(145, 220, 255, 0.6);
 }
@@ -2538,11 +2516,6 @@ input[type="checkbox"] {
     padding: 12px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.recent-stats-grid .stat-value {
-    font-size: 1.1rem;
-    color: #ffd700;
 }
 
 .recent-stats-grid .stat-label {
@@ -3481,38 +3454,6 @@ input[type="checkbox"] {
 }
 
 /* Profile Battlepass */
-.hall-of-fame-button-container {
-    margin-top: 20px;
-    padding-left: 35px;
-    padding-top: 15px;
-    display: flex;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.hall-of-fame-button {
-    background: #ffffff1a;
-    border: none;
-    padding: 10px 18px;
-    font-size: 0.95em;
-    color: rgb(205, 239, 255);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out, background 0.3s ease-in-out;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.hall-of-fame-button:hover {
-    background: #ffffff25;
-    box-shadow: 0;
-}
-
-.lastRaids-button {
-    top: 55px;
-    left: 35px;
-}
-
 .raids-modal-body {
     padding: 15px;
     overflow-y: auto;
@@ -3543,44 +3484,27 @@ input[type="checkbox"] {
     font-weight: 600;
 }
 
-#player-profile-hof {
-    display: none;
-    grid-template-columns: 1fr;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    height: fit-content;
-    align-self: flex-start;
-    font-family: Arial, sans-serif;
-    color: #fff;
-}
-
-/* Second row battlepass (I HAVE NO IDEA WHAT IS HAPPENING HERE) */
-#player-profile-hof-sec {
-    display: none;
-    grid-template-columns: 1fr;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    height: fit-content;
-    align-self: flex-start;
-    font-family: Arial, sans-serif;
-    color: #fff;
-    gap: 15px;
-}
-
-.hof-player-level {
-    padding: 15px;
-    border: 1px solid rgb(255 255 255 / 10%);
-    height: fit-content;
-    align-self: flex-start;
-    background: rgb(255 255 255 / 2%);
-    border-radius: 8px;
-}
-
+/* BattlePass Level */
 .bp-wrapper {
-    width: 340px;
-    float: left;
+    position: relative;
+    z-index: 2;
+}
+
+.rank-background {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    width: 110px;
+    height: 110px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 1;
+    opacity: 0.9;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    transition: all 0.5s 
+cubic-bezier(0.34, 1.56, 0.64, 1);
+    left: 20px;
 }
 
 .level-info {
@@ -3595,6 +3519,7 @@ input[type="checkbox"] {
     border: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     overflow: hidden;
+    margin-left: 120px;
 }
 
 .level-info::after {
@@ -3619,21 +3544,6 @@ input[type="checkbox"] {
     }
 }
 
-.rank-icon {
-    display: block;
-    width: 90px;
-    height: 90px;
-    float: left;
-    margin-right: 24px;
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-}
-
-.rank-icon:hover {
-    transform: scale(1.05) rotate(5deg);
-    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
-}
-
 .level-label {
     color: rgba(255, 255, 255, 0.7);
 }
@@ -3651,6 +3561,7 @@ input[type="checkbox"] {
 }
 
 .exp-bar-container {
+    padding-left: 120px;
     margin: 15px 0;
 }
 

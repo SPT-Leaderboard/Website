@@ -106,13 +106,10 @@ async function updatePlayerProfileMastery(player, bestWeapon) {
     ).style.width = `${expPercentage}%`;
 
     // update exp values
-    document.querySelector(".current-exp-wp").textContent =
-        levelData.currentExp.toLocaleString();
-    document.querySelector(".next-level-exp-wp").textContent =
-        levelData.expForNextLevel.toLocaleString();
+    document.querySelector(".current-exp-wp").textContent = levelData.currentExp.toLocaleString();
+    document.querySelector(".next-level-exp-wp").textContent = levelData.expForNextLevel.toLocaleString();
     const remainingExp = levelData.expForNextLevel - levelData.currentExp;
-    document.querySelector(".remaining-value-wp").textContent =
-        remainingExp.toLocaleString();
+    document.querySelector(".remaining-value-wp").textContent = remainingExp.toLocaleString();
 }
 
 // EXP for leaderboard level
@@ -148,6 +145,13 @@ async function setRankImage(playerLevel) {
     const level = Math.min(Math.max(0, playerLevel), 80);
     const rankLevel = Math.floor(level / 5) * 5;
     const finalRankLevel = rankLevel < 5 ? 5 : rankLevel;
-    const levelClass = document.querySelector(".rank-icon");
-    levelClass.src = `media/profile_ranks/rank${finalRankLevel}.png`;
+
+    let rankBackground = document.querySelector(".rank-background");
+    if (!rankBackground) {
+        rankBackground = document.createElement("div");
+        rankBackground.className = "rank-background";
+        document.querySelector(".battlepass-level").appendChild(rankBackground);
+    }
+
+    rankBackground.style.backgroundImage = `url('media/profile_ranks/rank${finalRankLevel}.png')`;
 }

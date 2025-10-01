@@ -45,15 +45,15 @@ async function showPlayerNotification(player) {
         return;
     }
 
-    // New player
-    if (player.isNew && !player.banned) {
-        await showNewPlayerWelcome(player);
-        await new Promise(resolve => setTimeout(resolve, 1500));
-    }
-
     playerNotificationData.set(player.id, {
         lastRaidTime: lastRaidTime
     });
+
+    // New player
+    if (player.isNew && !player.banned) {
+        await showNewPlayerWelcome(player);
+        return;
+    }
 
     let specialIconNotification = '';
     let accountColor = '';
@@ -357,7 +357,6 @@ function createBanNotification(player) {
 }
 
 async function showNewPlayerWelcome(player) {
-    // Проигрываем звук firstblood
     try {
         const firstBloodSound = new Audio('media/sounds/killstreak/firstblood.wav');
         firstBloodSound.volume = 0.08;
@@ -373,7 +372,7 @@ async function showNewPlayerWelcome(player) {
         <div class="notification-content-r">
             <div class="notification-header-r">
                 <div class="new-player-avatar-wrapper">
-                    <img src="${player.profilePicture}" alt="${player.name}'s avatar" class="notification-avatar-r new-player-avatar">
+                    <img src="${player.profilePicture}" alt="${player.name}'s avatar" class="notification-avatar-r new-player-avatar" onerror="this.src='media/default_avatar.png';" />
                     <div class="new-player-badge">NEW</div>
                 </div>
                 <div class="notification-text">

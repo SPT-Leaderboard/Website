@@ -346,8 +346,7 @@ async function showPublicProfile(container, player) {
                 <div class="achievement-title Common">
                     Leaderboard BattlePass Level
                 </div>
-                <img src="" class="rank-icon" id="playerRankIcon" />
-                <div class="bp-wrapper">
+                <div class="bp-wrapper" id="playerRankIcon">
                     <div class="level-info">
                         <span class="level-value">0</span>
                     </div>

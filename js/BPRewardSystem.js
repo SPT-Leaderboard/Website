@@ -16,12 +16,6 @@ function refreshRewards(player) {
         badgerPenguin: document.getElementById('badger')
     };
 
-    const achievementMap = {
-        goons: "6513f1feec10ff011f17c7ea",
-        lighthouse: "6514321bec10ff011f17ccac",
-        raider: "6513eec00dc723592b0f90cc"
-    }
-
     resetStyles(elements);
 
     applyRewards(player, elements);
@@ -51,6 +45,11 @@ function resetStyles({ mainBackground, profileCard, profileAvatar, profileBackgr
 function applyRewards(player, elements) {
     const { mainBackground, profileCard, profileAvatar, profileBackground } = elements;
     const { battlePassLevel: bpLevel, masteryLevel: masterLevel } = player;
+    const achievementMap = {
+        goons: "6513f1feec10ff011f17c7ea",
+        lighthouse: "6514321bec10ff011f17ccac",
+        raider: "6513eec00dc723592b0f90cc"
+    }
 
     // Apply profile decal
     if (!["redshade", "steelshade", "gradient"].includes(player.profileTheme.toLowerCase())) {
@@ -87,15 +86,15 @@ function applyRewards(player, elements) {
         // Achievement backgrounds
         'goons': {
             class: 'goons-background',
-            unlocked: isAchievementUnlocked(player, "6513f1feec10ff011f17c7ea")
+            unlocked: isAchievementUnlocked(player, achievementMap.goons)
         },
         'lighthouse': {
             class: 'lighthouse-background',
-            unlocked: isAchievementUnlocked(player, "6514321bec10ff011f17ccac")
+            unlocked: isAchievementUnlocked(player, achievementMap.lighthouse)
         },
         'raider': {
             class: 'raider-background',
-            unlocked: isAchievementUnlocked(player, "6513eec00dc723592b0f90cc")
+            unlocked: isAchievementUnlocked(player, achievementMap.raider)
         }
     };
 
