@@ -35,7 +35,7 @@ async function updateAdminsStatus() {
                 if (!user.username)
                     return;
 
-                const isOnline = (Date.now() / 1000 - user.last_seen < 600);
+                const isOnline = (Date.now() / 1000 - user.last_seen < 2000);
                 html += `
                     <div class="admin-status admin ${isOnline ? 'online' : 'offline'}">
                         <div class="user-info">
@@ -58,7 +58,7 @@ async function updateAdminsStatus() {
             html += '<div class="admin-divider"></div>';
 
             moderators.forEach(user => {
-                const isOnline = user.online || (Date.now() / 1000 - user.last_seen < 300);
+                const isOnline = user.online || (Date.now() / 1000 - user.last_seen < 2000);
                 html += `
                     <div class="admin-status moderator ${isOnline ? 'online' : 'offline'}">
                         <div class="user-info">

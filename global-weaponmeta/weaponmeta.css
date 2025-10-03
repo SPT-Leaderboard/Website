@@ -428,8 +428,8 @@
 }
 
 .map-tag {
-    font-size: 0.7rem;
-    padding: 5px 10px;
+    font-size: 0.65rem;
+    padding: 5px 5px;
     border-radius: 8px;
     font-weight: 600;
     transition: all 0.3s ease;

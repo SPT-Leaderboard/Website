@@ -442,7 +442,7 @@ async function showPublicProfile(container, player) {
                         </div>
                         <div class="stat-card">
                             <div class="stat-value">${player.longestShot}m</div>
-                            <div class="stat-label">Longest Killshot</div>
+                            <div class="stat-label">Longest Hit</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-value">${player.pmcKills}</div>
@@ -483,6 +483,7 @@ async function showPublicProfile(container, player) {
                 <div class="comments-list">
                 </div>
             </div>
+            
         </div>
 
         <!-- Right -->
@@ -492,7 +493,7 @@ async function showPublicProfile(container, player) {
             <div class="playermodel profile-section" id="playermodel">
                 <h3>Player Pre-Raid Preview</h3>
                 <div class="playermodel-image">
-                    <img src="/api/data/pmc_avatars/${player.id}_full.png?t=${Date.now()}" alt="Player model preview" onerror="this.src='media/default_full_pmc_avatar.png';" />
+                    <img src="/api/data/pmc_avatars/${player.id}_full.png" alt="Player model preview" onerror="this.src='media/default_full_pmc_avatar.png';" />
                 </div>
             </div>
 
@@ -518,7 +519,7 @@ async function showPublicProfile(container, player) {
                     <div class="weapon-name">${bestWeapon?.name ? bestWeapon.name : 'Unknown'}</div>
                     <div class="weapon-mastery">Mastery Level: <span class="level-value-wp">0</span></div>
 
-                    <div class="exp-bar-container">
+                    <div class="exp-bar-container-weapon">
                         <div class="exp-bar">
                             <div class="exp-progress-wp" style="width: 0%;"></div>
                         </div>
@@ -878,7 +879,20 @@ async function showPublicProfile(container, player) {
     const commentSubmit = document.getElementById('submit-comment');
     const commentInput = document.getElementById('comment-text');
 
+    // Disable form if not logged in
+    if (!isLoggedIn) {
+        commentInput.disabled = true;
+        commentInput.placeholder = "Please log in to comment...";
+        commentSubmit.disabled = true;
+        commentSubmit.innerHTML = '<i class="bx bx-lock-alt"></i> Login Required';
+    }
+
     commentSubmit.addEventListener('click', function () {
+        if (!isLoggedIn) {
+            showLoginPrompt();
+            return;
+        }
+
         if (commentInput.value.trim() === '') {
             commentInput.focus();
             return;
@@ -895,12 +909,21 @@ async function showPublicProfile(container, player) {
         }
     });
 
+    function showLoginPrompt() {
+        commentInput.style.animation = 'shake 0.5s ease-in-out';
+        setTimeout(() => {
+            commentInput.style.animation = '';
+        }, 500);
+    }
+
+
     async function submitComment(commentText, receiverId) {
         const submitBtn = commentSubmit;
         const originalText = submitBtn.innerHTML;
 
         try {
             submitBtn.innerHTML = '<i class="bx bx-loader bx-spin"></i> Sending...';
+            submitBtn.classList.add('loading');
             submitBtn.disabled = true;
 
             const response = await fetch('/api/network/explore/index.php', {
@@ -923,7 +946,7 @@ async function showPublicProfile(container, player) {
 
             commentInput.value = '';
 
-            // Add visually a comment
+            // Add comment visually with animation
             addCommentToUI({
                 id: data.id,
                 text: data.text,
@@ -934,38 +957,73 @@ async function showPublicProfile(container, player) {
                 timestamp: data.timestamp
             });
 
+            // Show success
+            showCommentSuccess();
+
         } catch (error) {
             console.error('Error sending comment:', error);
+            showCommentError();
         } finally {
             // Restore button state
             submitBtn.innerHTML = originalText;
+            submitBtn.classList.remove('loading');
             submitBtn.disabled = false;
         }
     }
-}
 
-// Add comment visually
-function addCommentToUI(comment) {
-    const commentsList = document.querySelector('.comments-list');
+    // Add comment visually
+    function addCommentToUI(comment) {
+        const commentsList = document.querySelector('.comments-list');
 
-    // Remove message if it exists
-    const noComments = commentsList.querySelector('.no-comments');
-    if (noComments) {
-        noComments.remove();
+        // Remove no comments message if it exists
+        const noComments = commentsList.querySelector('.no-comments');
+        if (noComments) {
+            noComments.remove();
+        }
+
+        const commentElement = createCommentElement(comment);
+        commentElement.classList.add('new-comment');
+
+        commentsList.insertBefore(commentElement, commentsList.firstChild);
+
+        // Remove the new comment class
+        setTimeout(() => {
+            commentElement.classList.remove('new-comment');
+        }, 400);
     }
 
-    const commentElement = createCommentElement(comment);
+    // Display if comment was send
+    function showCommentSuccess() {
+        const submitBtn = commentSubmit;
+        const originalHtml = submitBtn.innerHTML;
 
-    commentsList.insertBefore(commentElement, commentsList.firstChild);
+        submitBtn.innerHTML = '<i class="bx bx-check"></i> Sent!';
+        submitBtn.style.background = 'linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1))';
+        submitBtn.style.borderColor = 'rgba(16, 185, 129, 0.3)';
 
-    commentElement.style.opacity = '0';
-    commentElement.style.transform = 'translateY(-10px)';
-    commentElement.style.transition = 'all 0.3s ease';
+        setTimeout(() => {
+            submitBtn.innerHTML = originalHtml;
+            submitBtn.style.background = '';
+            submitBtn.style.borderColor = '';
+        }, 2000);
+    }
 
-    setTimeout(() => {
-        commentElement.style.opacity = '1';
-        commentElement.style.transform = 'translateY(0)';
-    }, 10);
+    function showCommentError() {
+        const submitBtn = commentSubmit;
+        const originalHtml = submitBtn.innerHTML;
+
+        submitBtn.innerHTML = '<i class="bx bx-error"></i> Failed';
+        submitBtn.style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1))';
+        submitBtn.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+
+        setTimeout(() => {
+            submitBtn.innerHTML = originalHtml;
+            submitBtn.style.background = '';
+            submitBtn.style.borderColor = '';
+        }, 3000);
+    }
+
+    // End of public profile function
 }
 
 // Comments sending 
@@ -1027,7 +1085,8 @@ function createCommentElement(comment) {
     commentDiv.innerHTML = `
         <div class="comment-header">
             <img src="${comment.avatar || 'media/default_avatar.png'}" 
-                 alt="User Avatar" class="user-avatar">
+                 alt="User Avatar" class="user-avatar"
+                 onerror="this.src='media/default_avatar.png'">
             <div class="user-info">
                 <div class="user-name">${comment.author || 'Anonymous'}</div>
                 <div class="comment-date">${formattedDate}</div>
@@ -1318,11 +1377,6 @@ function generateBadgesHTML(player) {
         }
     ];
 
-    // Find player in all seasons
-    const playerData = allSeasonsCombinedData.find(
-        (p) => p.id === player.id || p.name === player.name
-    );
-
     // Prestige badge
     if (player.prestige && player.prestige > 0) {
         badges += `<div class="badge tooltip">
@@ -1354,8 +1408,8 @@ function generateBadgesHTML(player) {
         </div>`;
     }
 
-    if (playerData && playerData.seasonsCount > 1) {
-        const seasons = playerData.seasonsCount;
+    if (player.seasonsPlayed && player.seasonsPlayed > 1) {
+        const seasons = player.seasonsPlayed;
         const tier = seasonTiers.find(t => t.condition(seasons));
 
         if (tier) {

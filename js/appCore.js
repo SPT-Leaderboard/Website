@@ -6,10 +6,10 @@
 
 let leaderboardData = []; // For keeping current season data
 let heartbeatData = {}; // Remember heartbeats
-let allSeasonsCombinedData = []; // For keeping combined data from all seasons
 let seasons = []; // Storing available seasons
 let ranOnlyOnce = false; // Run only once (ie winners)
 let isDataReady = false; // To tell whenever the live update was done
+let isLoggedIn = false; // Check if user is logged in
 
 // For debugging purposes
 // Will use local paths for some files/fallbacks
@@ -136,7 +136,6 @@ async function prepareSeasonData() {
         if (!ranOnlyOnce) {
             ranOnlyOnce = true;
             loadPreviousSeasonWinners();
-            loadAllSeasonsData()
         }
 
         saveCurrentStats();
@@ -234,7 +233,10 @@ async function loadSeasonData(season) {
         }
 
         // Calculate ranks before initializing the leaderboard
+        // DEPRECATING: USE calculatePlaces() next season! - harmony
         calculateRanks(leaderboardData);
+
+        //calculatePlaces(leaderboardData);
 
         // Run through this real quick before displaying
         addColorIndicators(leaderboardData);
@@ -252,76 +254,9 @@ async function loadSeasonData(season) {
         } else {
             displayLeaderboard(leaderboardData);
         }
+
+        // Mark data is ready for our callback
         isDataReady = true;
-    }
-}
-
-/**
- * Loads all of the seasons and determines who played in previous seasons
- * @returns {Promise<void>}
- */
-async function loadAllSeasonsData() {
-    try {
-        const uniquePlayers = {};
-
-        for (const season of seasons) {
-            try {
-                let response;
-
-                // First try loading from server
-                response = await fetch(`${seasonPath}${season}${seasonPathEnd}`);
-
-                // If not - load locally
-                if (!response.ok && response.status === 404) {
-                    response = await fetch(`${seasonLocalPath}${season}.json`);
-                    if (!response.ok) continue;
-                } else if (!response.ok) {
-                    continue;
-                }
-
-                const data = await response.json()
-                if (!data.leaderboard || data.leaderboard.length === 0) continue
-
-                data.leaderboard.forEach(player => {
-                    const playerKey = player.id;
-
-                    if (!uniquePlayers[playerKey]) {
-                        // New player - initialize with current season data
-                        uniquePlayers[playerKey] = {
-                            ...player,
-                            seasonsPlayed: [season],
-                            seasonsCount: 1
-                        };
-                    } else {
-                        // Existing player - update if this season is more recent
-                        if (compareLastPlayed(player.lastPlayed, uniquePlayers[playerKey].lastPlayed) > 0) {
-                            const { seasonsPlayed, seasonsCount, ...rest } = uniquePlayers[playerKey];
-
-                            uniquePlayers[playerKey] = {
-                                ...player,
-                                seasonsPlayed: seasonsPlayed.includes(season)
-                                    ? seasonsPlayed
-                                    : [...seasonsPlayed, season],
-                                seasonsCount: seasonsPlayed.includes(season)
-                                    ? seasonsCount
-                                    : seasonsCount + 1
-                            };
-                        } else if (!uniquePlayers[playerKey].seasonsPlayed.includes(season)) {
-                            // Add seasons to player's record
-                            uniquePlayers[playerKey].seasonsPlayed.push(season);
-                            uniquePlayers[playerKey].seasonsCount += 1;
-                        }
-                    }
-                })
-            } catch (error) {
-                console.error(`Error processing season ${season}:`, error);
-                continue;
-            }
-        }
-
-        allSeasonsCombinedData = Object.values(uniquePlayers);
-    } catch (error) {
-        console.error('Error loading all seasons data:', error);
     }
 }
 
@@ -553,7 +488,7 @@ async function displayLeaderboard(data) {
             <td class="${player.survivedToDiedRatioClass}">${player.survivalRate}%</td>
             <td class="${player.killToDeathRatioClass}">${player.killToDeathRatio}</td>
             <td class="${player.averageLifeTimeClass}">${formatSeconds(player.averageLifeTime)}</td>
-            <td>${player.totalScore <= 0 ? 'Calibrating...' : player.totalScore.toFixed(3)} ${player.totalScore <= 0 ? '' : `(${rankLabel})`}</td>
+            <td>${!player.totalScore || player.totalScore <= 0 ? 'Calibrating...' : player.totalScore.toFixed(3)} ${!player.totalScore || player.totalScore <= 0 ? '' : `(${rankLabel})`}</td>
             <td>${player.sptVer}</td>
         `
 
@@ -673,7 +608,7 @@ async function displaySimpleLeaderboard(data) {
             <td>${player.survivalRate}%</td>
             <td>${player.killToDeathRatio}</td>
             <td>${formatSeconds(player.averageLifeTime)}</td>
-            <td>${player.totalScore <= 0 ? 'Calibrating...' : player.totalScore.toFixed(3)} ${player.totalScore <= 0 ? '' : `(${rankLabel})`}</td>
+            <td>${!player.totalScore || player.totalScore <= 0 ? 'Calibrating...' : player.totalScore.toFixed(3)} ${!player.totalScore || player.totalScore <= 0 ? '' : `(${rankLabel})`}</td>
             <td>${player.sptVer}</td>
         `
 
@@ -829,6 +764,11 @@ async function calculateRanks(data) {
             return;
         }
 
+        // If totalScore exists
+        //if (player.totalScore !== undefined && player.totalScore !== null) {
+        //    return;
+        //}
+
         const normKDR = maxKDR ? player.killToDeathRatio / maxKDR : 0;
         const normSurvival = maxSurvival ? player.survivalRate / maxSurvival : 0;
         const normRaids = maxRaids ? player.pmcRaids / maxRaids : 0;
@@ -880,7 +820,29 @@ async function calculateRanks(data) {
 
         player.rank = index + 1;
         player.medal = ['🥇', '🥈', '🥉'][index] || '';
+    })
 
+    //calculatePlaces(data);
+}
+
+async function calculatePlaces(data) {
+    data.sort((a, b) => b.totalScore - a.totalScore)
+
+    data.forEach((player, index) => {
+        if (player.banned) {
+            player.rank = "Banned";
+            player.medal = '';
+            return;
+        }
+
+        if (player.isCasual) {
+            player.rank = "Casual";
+            player.medal = '';
+            return;
+        }
+
+        player.rank = index + 1;
+        player.medal = ['🥇', '🥈', '🥉'][index] || '';
     })
 }
 

@@ -18,6 +18,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
         <script src="js/appCore.js"></script>
+        <script src="js/apiCheckAuth.js"></script>
         <script src="js/displayWinners.js"></script>
         <script src="js/raidNotificationTracker.js"></script>
         <script src="js/heartbeatMonitor.js"></script>
@@ -300,8 +301,8 @@
         <div class="announcement-wrapper animate animate__animated animate__fadeIn">
             <div class="announcement-icon"><img src="https://img.icons8.com/?size=256&id=61604&format=png" style="height: 70px;"></div>
             <div class="announcement-content">
-                <div class="announcement-title"> While you play - We improve. </div>
-                <div class="announcement-text"> We supply website and server with daily patches and overhauls so that you get to enjoy all the new features ASAP. <a href="https://discord.gg/psV2PY8brW" target="_blank" class="announcement-link">Join Discord Server stay up-to-date</a>
+                <div class="announcement-title"> Recent API Update. </div>
+                <div class="announcement-text"> We updated API to support more features while sacrificing calculations on the page for more performance. Amount of seasons played will no longer be calculated on the page, but server instead. You can join our discord server and we'll fix it for you, if you don't want to lose the badge! <a href="https://discord.gg/psV2PY8brW" target="_blank" class="announcement-link">Join Discord Server</a>
                 </div>
                 <div class="announcement-signature"> — SPTLB Team </div>
             </div>
@@ -352,6 +353,12 @@
         <div id="playerProfileModal" class="profile-modal">
             <div id="modalPlayerInfo" class="profile-modal-content">
                 <!-- JS Profile -->
+            </div>
+        </div>
+        <div id="authStatus" class="auth-status">
+            <div class="auth-indicator">
+                <span class="auth-dot"></span>
+                <span class="auth-text">Checking...</span>
             </div>
         </div>
         <footer class="modern-footer">

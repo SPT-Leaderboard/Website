@@ -47,17 +47,12 @@ function checkUrlHash() {
     if (match && match[1]) {
         const playerId = match[1];
 
-        // If season data is ready just open profile
-        if (isDataReady) {
-            openProfile(playerId);
-        } else {
-            // Waiting for data to be ready to open profile
-            waitForDataReady(() => openProfile(playerId));
-        }
+        // Waiting for data to be ready to open profile
+        waitForDataReady(() => openProfile(playerId));
     }
 }
 
-function waitForDataReady(callback, timeout = 10000) {
+function waitForDataReady(callback, timeout = 15000) {
     const startTime = Date.now();
     const checkInterval = 300;
 
