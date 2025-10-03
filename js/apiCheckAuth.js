@@ -10,7 +10,10 @@ async function checkAuth() {
         updateAuthStatus('checking', 'Checking...');
 
         const response = await fetch('/api/network/login/check_auth.php', {
-            credentials: 'include'
+            credentials: 'include',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
         });
 
         if (!response.ok) {
@@ -23,22 +26,27 @@ async function checkAuth() {
             updateAuthStatus('authenticated', data.username);
             isLoggedIn = true;
         } else {
-            updateAuthStatus('not-authenticated', 'Unauthtorized');
+            updateAuthStatus('not-authenticated', 'Unauthorized');
+            isLoggedIn = false;
         }
 
     } catch (error) {
-        isLoggedIn = false;
         console.error('Auth check failed:', error);
-        updateAuthStatus('error', 'Auth error');
+        updateAuthStatus('error', 'Authentication error');
+        isLoggedIn = false;
     }
 }
 
 function updateAuthStatus(status, message) {
     const authElement = document.getElementById('authStatus');
+    if (!authElement) return;
+
     const authText = authElement.querySelector('.auth-text');
+    if (authText) {
+        authText.textContent = message;
+    }
 
     authElement.className = `auth-status ${status}`;
-    authText.textContent = message;
 
     setTimeout(() => {
         authElement.classList.add('show');
@@ -46,5 +54,5 @@ function updateAuthStatus(status, message) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    setTimeout(checkAuth(), 3000);
+    setTimeout(checkAuth, 3000);
 });

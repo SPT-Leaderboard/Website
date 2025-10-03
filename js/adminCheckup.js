@@ -21,19 +21,12 @@ async function updateAdminsStatus() {
             throw new Error('No users data');
         }
 
-        // Build HTML always clean
-        let html = '<h3><i class="bx bx-shield-alt"></i> Staff</h3>';
+        let html = '<h3><i class="bx bx-shield-alt"></i> Staff Online</h3>';
 
-        // Separate admins and moderators
-        const adminUsernames = ['harmony', 'LeKita', 'Kat','YukkiPookie'];
-        const admins = users.filter(u => adminUsernames.includes(u.username));
-        const moderators = users.filter(u => !adminUsernames.includes(u.username));
-
-        // Display admins
-        if (admins.length > 0) {
-            admins.forEach(user => {
-                if (!user.username)
-                    return;
+        // Display
+        if (users.length > 0) {
+            users.forEach(user => {
+                if (!user.username) return;
 
                 const isOnline = (Date.now() / 1000 - user.last_seen < 2000);
                 html += `
@@ -50,28 +43,7 @@ async function updateAdminsStatus() {
                 `;
             });
         } else {
-            html += '<div class="admin-status offline"><span>No admins online</span></div>';
-        }
-
-        // Display moderators if they exist
-        if (moderators.length > 0) {
-            html += '<div class="admin-divider"></div>';
-
-            moderators.forEach(user => {
-                const isOnline = user.online || (Date.now() / 1000 - user.last_seen < 2000);
-                html += `
-                    <div class="admin-status moderator ${isOnline ? 'online' : 'offline'}">
-                        <div class="user-info">
-                            <span class="username">${user.username}</span>
-                            <span class="role-badge">MOD</span>
-                        </div>
-                        <div class="status-info">
-                            <span class="status-dot"></span>
-                            <span>${isOnline ? 'Online' : formatLastSeen(user.last_seen)}</span>
-                        </div>
-                    </div>
-                `;
-            });
+            html += '<div class="admin-status offline"><span>No staff online</span></div>';
         }
 
         // Update content
