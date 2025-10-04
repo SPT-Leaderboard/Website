@@ -9,12 +9,6 @@
 </p>
 
 ---
-## How does it work?
-
-To minimize costs, we use a static website (GitHub Pages) that pulls dynamic data in JSON format made by proxy API hosted on our server.
-SPtarkov mod sends a request to the API, and it turns your request into JSON - exactly what this system was designed to deliver. Straightforward.
-
----
 
 ## Contribution
 Pull requests and issue reports are welcome!
@@ -53,6 +47,8 @@ Change them accordingly where your PHP files will be hosted.
 ⚠️ AGAIN - Do not include a season number if you wanna have multiple seasons!
 
 ⚠️ Note that there's no ready back-end to proccess the data. You HAVE to write your own endpoint for leaderboard that'd accept POST requests and store players (in JSON, SQL or PHP, it doesn't matter how you want it to be later on)
+
+⚠️ All the variables or JSON keys the mod sends can be found at [SPT Leaderboard Client Mod](https://github.com/harmonyzt/SPT-Leaderboard) - just choose what you want to accept on the back end. They're all self-explanatory!
 
 ### You're good to go!
 Now you can play and rank up just like in present leaderboard with all of its features!
