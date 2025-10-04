@@ -38,6 +38,7 @@ Don't like how the leaderboard is open for everyone else and want to set it up j
 5. You'll see two similar settings in the dropdown menu of SPT Leaderboard mod:
 
 `PHP_ENDPOINT: "your.domain.com", // Your server domain`
+
 `PHP_PATH: "/backend/SPT_Profiles_Backend.php" // Relative PHP path`
 
 Change them accordingly where your PHP files will be hosted.
