@@ -133,27 +133,27 @@ function renderRaidsStats(raids) {
                 `<div class="raid-stats-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
                         <div class="raid-stat-block">
                             <span class="profile-stat-label">PMC Kills:</span>
-                            <span class="profile-stat-value">${raid.raidKills ?? 0}</span>
+                            <span class="profile-stat-value">${raid.raidKills.toLocaleString() ?? 0}</span>
                         </div>
                         <div class="raid-stat-block">
                             <span class="profile-stat-label">SCAV Kills:</span>
-                            <span class="profile-stat-value">${raid.scavsKilled ?? 0}</span>
+                            <span class="profile-stat-value">${raid.scavsKilled.toLocaleString() ?? 0}</span>
                         </div>
                         <div class="raid-stat-block">
                             <span class="profile-stat-label">Boss Kills:</span>
-                            <span class="profile-stat-value">${raid.bossesKilled ?? 0}</span>
+                            <span class="profile-stat-value">${raid.bossesKilled.toLocaleString() ?? 0}</span>
                         </div>
                         <div class="raid-stat-block">
                             <span class="profile-stat-label">Damage:</span>
-                            <span class="profile-stat-value">${raid.raidDamage ?? 0}</span>
+                            <span class="profile-stat-value">${raid.raidDamage.toLocaleString() ?? 0}</span>
                         </div>
                         <div class="raid-stat-block">
                             <span class="profile-stat-label">Player Hits:</span>
-                            <span class="profile-stat-value">${raid.lastRaidHits ?? 0}</span>
+                            <span class="profile-stat-value">${raid.lastRaidHits.toLocaleString() ?? 0}</span>
                         </div>
                         <div class="raid-stat-block">
                             <span class="profile-stat-label">Loot EXP:</span>
-                            <span class="profile-stat-value">${raid.lastRaidEXP ?? 0}</span>
+                            <span class="profile-stat-value">${raid.lastRaidEXP.toLocaleString() ?? 0}</span>
                         </div>
                     </div>`
                 : ``}

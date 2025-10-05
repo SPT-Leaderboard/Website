@@ -48,7 +48,9 @@ function checkUrlHash() {
         const playerId = match[1];
 
         // Waiting for data to be ready to open profile
-        waitForDataReady(() => openProfile(playerId));
+        setTimeout(() => {
+            waitForDataReady(() => openProfile(playerId));
+        }, 500);
     }
 }
 
@@ -59,7 +61,7 @@ function waitForDataReady(callback, timeout = 15000) {
     const intervalId = setInterval(() => {
         if (isDataReady) {
             clearInterval(intervalId);
-            callback();
+            setTimeout(callback, 100);
         }
 
         else if (Date.now() - startTime > timeout) {

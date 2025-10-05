@@ -64,6 +64,7 @@ async function openProfile(playerId, bypass = false) {
     showPublicProfile(modalContent, player);
     window.location.hash = `id=${encodeURIComponent(player.id)}`;
     modal.style.display = "flex";
+    modal.classList.add('active');
 
     return;
 }
@@ -101,11 +102,7 @@ function showDisqualProfile(container, player) {
             <div class="ban-details">
                 <p><strong>Profile ID:</strong> ${player.id}</p>
                 <p><strong>Reason:</strong> ${player.banReason}</p>
-                ${player.permBanned ?
-                    `<p><strong>Banned until:</strong> Permanent</p>`
-                    :
-                    `<p><strong>Banned until:</strong> ${formatDate(player.banExpires)}</p>`
-                }
+                ${player.permBanned ? `<p><strong>Banned until:</strong> Permanent</p>` : `<p><strong>Banned until:</strong> ${formatDate(player.banExpires)}</p>`}
                 <p><strong>${player.tookAction === "harmony" ? `Admin:` : `Moderator:`}</strong> ${player.tookAction}</p>
             </div>
         </div>
@@ -280,7 +277,7 @@ async function showPublicProfile(container, player) {
 
         <button id="closeButton" class="close-profile-button">×</button>
 
-        <div class="left-column">
+        <div class="left-column animate__animated animate__fadeInLeft">
 
             <div class="user-main-card profile-section" id="main-profile-card">
                 <div class="pfp"><img src="${player.profilePicture}" class="player-avatar" id="profile-avatar" alt="${player.name}" onerror="this.src='media/default_avatar.png';" /></div>
@@ -426,7 +423,7 @@ async function showPublicProfile(container, player) {
         </div>
 
         <!-- Central -->
-        <div class="center-column">
+        <div class="center-column animate__animated animate__fadeInUp">
 
             <!-- Raid History -->
             <div class="raid-block">
@@ -445,27 +442,27 @@ async function showPublicProfile(container, player) {
                 <div class="raid-summary profile-section">
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <div class="stat-value">${player.currentWinstreak}</div>
+                            <div class="stat-value">${player.currentWinstreak.toLocaleString()}</div>
                             <div class="stat-label">Current Raid Streak</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">${player.longestShot}m</div>
+                            <div class="stat-value">${player.longestShot.toLocaleString()}m</div>
                             <div class="stat-label">Longest Hit</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">${player.pmcKills}</div>
+                            <div class="stat-value">${player.pmcKills.toLocaleString()}</div>
                             <div class="stat-label">PMC Kills</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">${player.scavsKilled}</div>
+                            <div class="stat-value">${player.scavsKilled.toLocaleString()}</div>
                             <div class="stat-label">SCAV Kills</div>
                         </div>
                         <div class="stat-card">
-                          <div class="stat-value">${player.bossesKilled}</div>
+                          <div class="stat-value">${player.bossesKilled.toLocaleString()}</div>
                           <div class="stat-label">Bosses Killed</div>
                         </div>
                         <div class="stat-card">
-                          <div class="stat-value">${player.damage}</div>
+                          <div class="stat-value">${player.damage.toLocaleString()}</div>
                           <div class="stat-label">Damage Dealt</div>
                         </div>
                     </div>
@@ -495,7 +492,7 @@ async function showPublicProfile(container, player) {
         </div>
 
         <!-- Right -->
-        <div class="right-column">
+        <div class="right-column animate__animated animate__fadeInRight">
 
             <!-- Player image -->
             <div class="playermodel profile-section" id="playermodel">
@@ -1355,19 +1352,19 @@ function generateBadgesHTML(player) {
             condition: (seasons) => seasons > 2 && seasons <= 3,
             icon: "bx bxs-medal-star",
             style: "color: #CD7F32",
-            tooltip: (seasons) => `${seasons} seasons of service. Veteran player.`
+            tooltip: (seasons) => `${seasons} seasons of service. Veteran.`
         },
         {
             condition: (seasons) => seasons > 3 && seasons <= 4,
             icon: "bx bxs-bullseye",
             style: "color: #81ffdfff",
-            tooltip: (seasons) => `${seasons} seasons! A true champion.`
+            tooltip: (seasons) => `${seasons} seasons! Champion.`
         },
         {
             condition: (seasons) => seasons > 4,
             icon: "bx bxs-crown",
             style: "color: #FFD700; text-shadow: 0 0 5px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFD700;",
-            tooltip: (seasons) => `${seasons} seasons of service. Truly a legend.`
+            tooltip: (seasons) => `${seasons} seasons of service. Meet a legend!`
         }
     ];
 
@@ -1621,21 +1618,28 @@ function setupModalCloseHandlers() {
 
     if (closeBtn) {
         closeBtn.addEventListener("click", () => {
-            AutoUpdater.setEnabled(true);
-            modal.style.display = "none";
-            isProfileOpened = false;
-            window.location.hash = ``;
+            closeProfile();
         });
     }
 
     window.addEventListener("keydown", function closeModalOnEsc(e) {
         if (e.key === "Escape") {
-            AutoUpdater.setEnabled(true);
-            modal.style.display = "none";
-            isProfileOpened = false;
-            window.location.hash = ``;
+            closeProfile();
         }
     });
+
+    function closeProfile() {
+        modal.classList.remove('active');
+        modal.classList.add('closing');
+
+        setTimeout(() => {
+            AutoUpdater.setEnabled(true);
+            modal.classList.remove('closing');
+            isProfileOpened = false;
+            history.replaceState(null, null, ' ');
+            document.body.style.overflow = 'auto';
+        }, 400);
+    }
 }
 
 function formatLastPlayedRaid(unixTimestamp) {
