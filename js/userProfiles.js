@@ -102,7 +102,7 @@ function showDisqualProfile(container, player) {
             <div class="ban-details">
                 <p><strong>Profile ID:</strong> ${player.id}</p>
                 <p><strong>Reason:</strong> ${player.banReason}</p>
-                ${player.permBanned ? `<p><strong>Banned until:</strong> Permanent</p>` : `<p><strong>Banned until:</strong> ${formatDate(player.banExpires)}</p>`}
+                ${player.permBanned ? `<p><strong>Banned until:</strong> Permanent</p>` : `<p><strong>Banned until:</strong> ${formatDate(new Date(player.banExpires))}</p>`}
                 <p><strong>${player.tookAction === "harmony" ? `Admin:` : `Moderator:`}</strong> ${player.tookAction}</p>
             </div>
         </div>
