@@ -101,6 +101,11 @@ function showDisqualProfile(container, player) {
             <div class="ban-details">
                 <p><strong>Profile ID:</strong> ${player.id}</p>
                 <p><strong>Reason:</strong> ${player.banReason}</p>
+                ${player.permBanned ?
+                    `<p><strong>Banned until:</strong> Permanent</p>`
+                    :
+                    `<p><strong>Banned until:</strong> ${formatDate(player.banExpires)}</p>`
+                }
                 <p><strong>${player.tookAction === "harmony" ? `Admin:` : `Moderator:`}</strong> ${player.tookAction}</p>
             </div>
         </div>
@@ -111,10 +116,13 @@ function showDisqualProfile(container, player) {
 async function getCustomProfileSettings(playerId) {
     try {
         const response = await fetch(`/api/network/profile/profiles/${playerId}.json?t=${Date.now()}`);
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+
         const data = await response.json();
+
         return data[playerId] || null;
     } catch (error) {
         console.error('Failed to load profile settings:', error);
@@ -884,7 +892,7 @@ async function showPublicProfile(container, player) {
         commentInput.disabled = true;
         commentInput.placeholder = "Please log in to comment...";
         commentSubmit.disabled = true;
-        commentSubmit.innerHTML = '<i class="bx bx-lock-alt"></i> Login Required';
+        commentSubmit.innerHTML = '<i class="bx bx-key-alt"></i> Login Required';
     }
 
     commentSubmit.addEventListener('click', function () {
@@ -962,7 +970,7 @@ async function showPublicProfile(container, player) {
 
         } catch (error) {
             console.error('Error sending comment:', error);
-            showCommentError();
+            showCommentError(error);
         } finally {
             // Restore button state
             submitBtn.innerHTML = originalText;
@@ -1008,11 +1016,11 @@ async function showPublicProfile(container, player) {
         }, 2000);
     }
 
-    function showCommentError() {
+    function showCommentError(error) {
         const submitBtn = commentSubmit;
         const originalHtml = submitBtn.innerHTML;
 
-        submitBtn.innerHTML = '<i class="bx bx-error"></i> Failed';
+        submitBtn.innerHTML = `<i class="bx bx-error"></i> ${error}`;
         submitBtn.style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1))';
         submitBtn.style.borderColor = 'rgba(239, 68, 68, 0.3)';
 
@@ -1112,21 +1120,7 @@ function displayNoComments() {
     `;
 }
 
-// format date
-function formatDate(date) {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'];
-
-    const month = months[date.getMonth()];
-    const day = date.getDate();
-    const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-
-    return `${month} ${day} ${year}, ${hours}:${minutes}`;
-}
-
-// Decode comments we got from file
+// Decode comments we got from comments file
 function decodeHtmlEntities(text) {
     const entities = {
         '&#39;': "'",

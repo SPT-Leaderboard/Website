@@ -10,9 +10,11 @@ async function checkAuth() {
         updateAuthStatus('checking', 'Checking...');
 
         const response = await fetch('/api/network/login/check_auth.php', {
+            method: 'GET',
             credentials: 'include',
             headers: {
-                'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest',
+                'Cache-Control': 'no-cache'
             }
         });
 

@@ -129,6 +129,8 @@ async function updatePlayerProfile(player) {
     // update exp values
     document.querySelector(".current-exp").textContent =
         levelData.currentExp.toLocaleString();
+
+        
     document.querySelector(".next-level-exp").textContent =
         levelData.level >= MAX_LEVEL
             ? "MAX"

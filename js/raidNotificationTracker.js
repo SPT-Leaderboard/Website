@@ -203,7 +203,7 @@ async function showPlayerNotification(player) {
         <div class="notification-content-r">
             <div class="notification-header-r">
                 <img src="${player.profilePicture}" alt="${player.name}'s avatar" class="notification-avatar-r" onerror="this.src='media/default_avatar.png';">
-                <div class="notification-text">
+                <div class="notification-text-r">
                     <span class="notification-name-r" style="color:${accountColor}">
                         ${specialIconNotification}${player.teamTag ? `[${player.teamTag}]` : ``} ${player.name}
                     </span>
@@ -214,15 +214,15 @@ async function showPlayerNotification(player) {
             </div>
             ${player.publicProfile ? `
             <div class="raid-overview-notify">
-                <span class="raid-result ${player.lastRaidRanThrough ? 'run-through' : player.discFromRaid ? 'disconnected' : player.isTransition ? 'transit' : player.lastRaidSurvived ? 'survived' : 'died'}">
+                <span class="raid-result-r ${player.lastRaidRanThrough ? 'run-through' : player.discFromRaid ? 'disconnected' : player.isTransition ? 'transit' : player.lastRaidSurvived ? 'survived' : 'died'}">
                     ${player.lastRaidRanThrough ? `<i class='bx  bxs-walking'></i> Runner` : player.discFromRaid ? `<i class='bx  bxs-arrow-out-left-square-half'></i> Left` : player.isTransition ? `<i class='bx bxs-refresh-cw bx-spin'></i>  In Transit (${player.lastRaidMap}
-                    <i class='bx bxs-chevrons-right'></i>  ${player.lastRaidTransitionTo || 'Unknown'})` : player.lastRaidSurvived ? `<i class='bx  bxs-walking'></i> Survived` : `
+                    <i class='fa-solid fa-person-walking-arrow-right'></i>  ${player.lastRaidTransitionTo || 'Unknown'})` : player.lastRaidSurvived ? `<i class='bx  bxs-walking'></i> Survived` : `
                     <i class="fa-solid fa-skull-crossbones"></i> Killed in Action`}
                 </span>
                 <span class="raid-meta-notify">
-                    ${player.lastRaidMap || 'Unknown'} • ${player.lastRaidAs || 'N/A'} ${player.lastRaidSurvived ? `` : `• Killed by ${player.agressorName}`}
+                    ${player.lastRaidMap || 'Unknown'} • ${player.lastRaidAs || 'N/A'} ${player.lastRaidSurvived ? `` : `• Killed by ${player.agressorName}`} • ${player.lastRaidEXP} EXP
                 </span>
-                ${kills > 3 ? `
+                ${kills > 5 ? `
                     <span class="notification-last-raid-streak">
                         ${streakNotificationKillText}
                     </span>
@@ -321,6 +321,13 @@ function setBanNotificationCookie(playerId) {
 function createBanNotification(player) {
     const notification = document.createElement('div');
     notification.className = `player-notification-r died-bg border-died`;
+
+    const banDate = new Date(player.banTime * 1000);
+    let bannedUntil = new Date(player.banExpires * 1000);
+
+    const formattedBanDate = formatDate(banDate);
+    const formattedBanExpires = player.permBanned ? 'Permanent' : formatDate(bannedUntil);
+
     notification.innerHTML = `
         <div class="notification-content-r">
             <div class="notification-header-r">
@@ -336,8 +343,9 @@ function createBanNotification(player) {
                     Was ${player.permBanned ? `permanently` : ``} banned from Leaderboard.
                 </span>
                 <span class="ban-text">
-                    Banned at: ${player.banTime}<br>
-                    Reason: ${player.banReason}
+                    Reason: ${player.banReason}<br>
+                    Banned at: ${formattedBanDate}<br>
+                    Banned until: ${formattedBanExpires}
                 </span>
                 <span class="ban-issued">
                     Banned by ${player.tookAction}
@@ -345,6 +353,7 @@ function createBanNotification(player) {
             </div>
         </div>
     `;
+
     const container = document.getElementById('notifications-container-r') || createNotificationsContainer();
     container.appendChild(notification);
     notificationStack.push(notification);
