@@ -49,6 +49,7 @@ async function openProfile(playerId, bypass = false) {
     // If disqualified
     if (player.banned) {
         modal.style.display = "flex";
+        modal.classList.add('active');
         showDisqualProfile(modalContent, player);
         setupModalCloseHandlers(modal, player);
         return;
@@ -102,7 +103,7 @@ function showDisqualProfile(container, player) {
             <div class="ban-details">
                 <p><strong>Profile ID:</strong> ${player.id}</p>
                 <p><strong>Reason:</strong> ${player.banReason}</p>
-                ${player.permBanned ? `<p><strong>Banned until:</strong> Permanent</p>` : `<p><strong>Banned until:</strong> ${formatDate(new Date(player.banExpires))}</p>`}
+                ${player.permBanned ? `<p><strong>Banned until:</strong> Permanent</p>` : `<p><strong>Banned until:</strong> ${formatDate(new Date(player.banExpires * 1000))}</p>`}
                 <p><strong>${player.tookAction === "harmony" ? `Admin:` : `Moderator:`}</strong> ${player.tookAction}</p>
             </div>
         </div>
@@ -277,7 +278,7 @@ async function showPublicProfile(container, player) {
 
         <button id="closeButton" class="close-profile-button">×</button>
 
-        <div class="left-column animate__animated animate__fadeInLeft">
+        <div class="left-column">
 
             <div class="user-main-card profile-section" id="main-profile-card">
                 <div class="pfp"><img src="${player.profilePicture}" class="player-avatar" id="profile-avatar" alt="${player.name}" onerror="this.src='media/default_avatar.png';" /></div>
@@ -423,7 +424,7 @@ async function showPublicProfile(container, player) {
         </div>
 
         <!-- Central -->
-        <div class="center-column animate__animated animate__fadeInUp">
+        <div class="center-column">
 
             <!-- Raid History -->
             <div class="raid-block">
@@ -492,7 +493,7 @@ async function showPublicProfile(container, player) {
         </div>
 
         <!-- Right -->
-        <div class="right-column animate__animated animate__fadeInRight">
+        <div class="right-column">
 
             <!-- Player image -->
             <div class="playermodel profile-section" id="playermodel">

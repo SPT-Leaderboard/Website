@@ -8,21 +8,26 @@ async function checkFriends(player) {
     return new Promise((resolve) => {
         const friends = [];
         const friendLink = player.friendLink;
+        const teamTag = player.teamTag;
 
-        if (!friendLink) {
+        if (!friendLink && !teamTag) {
             resolve([]);
             return;
         }
 
         for (const playerId in leaderboardData) {
             const p = leaderboardData[playerId];
-            if (p.friendLink === friendLink && p.id !== player.id) {
+            
+            // Don't put yourself in friendList
+            if (p.id === player.id) continue;
+
+            if ((friendLink && p.friendLink === friendLink) || 
+                (teamTag && p.teamTag === teamTag)) {
                 friends.push(p);
             }
         }
 
         resolve(friends);
-
     });
 }
 
@@ -68,6 +73,7 @@ async function renderFriendList(player) {
         // Add click handlers for player items so you can open them :D
         document.querySelectorAll('.friend-item').forEach(element => {
             element.addEventListener('click', () => {
+                // We're using a bypass here (2nd argument) to open a profile within a profile, because otherwise it wouldn't open.
                 openProfile(element.dataset.playerId, true);
             });
         });

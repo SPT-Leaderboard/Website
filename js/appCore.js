@@ -8,8 +8,11 @@ let leaderboardData = []; // For keeping current season data
 let heartbeatData = {}; // Remember heartbeats
 let seasons = []; // Storing available seasons
 let ranOnlyOnce = false; // Run only once (ie winners)
-let isDataReady = false; // To tell whenever the live update was done
-let isLoggedIn = false; // Check if user is logged in
+// DYNAMIC: Tells whenever the live update was finished and data is ready
+// Better to use in pair with waitForDataReady(() => myFunction()); - automatic call upon data load
+let isDataReady = false;
+ // DYNAMIC: Indicates when user is logged in Network or not
+let isLoggedIn = false;
 
 // For debugging purposes
 // Will use local paths for some files/fallbacks
@@ -101,7 +104,7 @@ async function checkSeasonExists(seasonNumber) {
 async function initAllSeasons() {
     // Seasons start from 1
     // Clean up before initialize
-    let seasonNumber = 1;
+    let seasonNumber = 2;
     seasons = [];
 
     try {

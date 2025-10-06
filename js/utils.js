@@ -221,7 +221,7 @@ function getCookie(name) {
 // format date
 function formatDate(date) {
     if (!date)
-        return;
+        return `Unknown`;
 
     const months = ['January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'];
