@@ -139,7 +139,7 @@ function initCharts() {
         bossKillsChart: createChart(
             'bossKillsChart',
             'bar',
-            ['0 Kills', '1-50 Kills', '50-200 Kills', '200+ Kills'],
+            ['0 Kills', '1-150 Kills', '150-500 Kills', '500+ Kills'],
             [0, 0, 0, 0],
             'Players',
             false,
@@ -474,12 +474,12 @@ function processPlayersData() {
     updateChart(charts.playstyleChart, playstyleGroups);
 
     // Boss Kills Distribution
-    const bossKillsRanges = [0, 0, 0, 0]; // 0, 1-50, 50-200, 200+
+    const bossKillsRanges = [0, 0, 0, 0]; // 0, 1-150, 150-200, 500+
     playersData.forEach(p => {
         const bossKills = p.bossesKilled || 0;
         if (bossKills === 0) bossKillsRanges[0]++;
-        else if (bossKills <= 50) bossKillsRanges[1]++;
-        else if (bossKills <= 200) bossKillsRanges[2]++;
+        else if (bossKills <= 150) bossKillsRanges[1]++;
+        else if (bossKills <= 500) bossKillsRanges[2]++;
         else bossKillsRanges[3]++;
     });
     updateChart(charts.bossKillsChart, bossKillsRanges);
