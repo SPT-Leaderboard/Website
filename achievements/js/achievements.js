@@ -135,7 +135,7 @@ async function initAchievements() {
     try {
         // Load both JSON files in parallel
         [achievementsData, playerAchievements] = await Promise.all([
-            loadJSON('../global-achieve/js/compiledAchData.json'),
+            loadJSON('../achievements/js/compiledAchData.json'),
             loadJSON(achievementsPath)
         ]);
 

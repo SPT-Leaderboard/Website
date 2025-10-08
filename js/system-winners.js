@@ -25,9 +25,14 @@ function displayWinners(data) {
         top3Players.find(p => p.rank === 3)
     ].filter(Boolean);
 
+    const max = 3;
+
     orderedPlayers.forEach(player => {
+        const randomInteger = Math.floor(Math.random() * max);
+
         winnersContainer.innerHTML += `
-            <div class="winner-card">
+            <div class="winner-card ">
+            <div class="snow-corners${randomInteger}"></div>
                 <p class="winner-name">${player.medal} ${player.name}</p>
                 <p class="winner-rank">${getRankText(player.rank)}</p>
                 <p class="winner-skill">Skill score: ${player.totalScore.toFixed(2)}</p>

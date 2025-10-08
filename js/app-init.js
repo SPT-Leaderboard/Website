@@ -17,22 +17,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const resources = [
         { name: "Connectivity with API", url: "/api/main/online.json", weight: 25 },
         { name: "Connectivity with Network", url: "/api/network/explore/messages.json", weight: 25 },
-        { name: "Core Logic", url: "js/appCore.js", weight: 30 },
-        { name: "Winners Logic", url: "js/displayWinners.js", weight: 10 },
-        { name: "Raid Notifications", url: "js/raidNotificationTracker.js", weight: 15 },
-        { name: "User Heartbeats", url: "js/heartbeatMonitor.js", weight: 15 },
-        { name: "Live Data Flow", url: "js/liveUpdaterControls.js", weight: 20 },
-        { name: "API Monitor", url: "js/apiMonitor.js", weight: 20 },
-        { name: "Raid History", url: "js/raidHistory.js", weight: 10 },
-        { name: "Achievements", url: "js/achievements.js", weight: 5 },
-        { name: "User Settings", url: "js/userSettings.js", weight: 5 },
-        { name: "Search", url: "js/userSearch.js", weight: 5 },
-        { name: "User Profiles", url: "js/userProfiles.js", weight: 30 },
-        { name: "Friend Lists", url: "js/userFriendList.js", weight: 15 },
-        { name: "Teams", url: "js/userTeams.js", weight: 5 },
-        { name: "BattlePass Features", url: "js/BPLevelCalculator.js", weight: 15 },
-        { name: "BattlePass Rewards", url: "js/BPRewardSystem.js", weight: 15 },
-        { name: "Utils", url: "js/utils.js", weight: 10 }
+        { name: "Core Logic", url: "js/app-core.js", weight: 30 },
+        { name: "Winners Logic", url: "js/system-winners.js", weight: 10 },
+        { name: "Raid Notifications", url: "js/raid-notifications.js", weight: 15 },
+        { name: "User Heartbeats", url: "js/system-heartbeat.js", weight: 15 },
+        { name: "Live Data Flow", url: "js/ui-live-data-flow.js", weight: 20 },
+        { name: "API Monitor", url: "js/api-monitor.js", weight: 20 },
+        { name: "Raid History", url: "js/user-raid-history.js", weight: 10 },
+        { name: "Achievements", url: "js/system-achievements.js", weight: 5 },
+        { name: "User Settings", url: "js/user-settings.js", weight: 5 },
+        { name: "Search", url: "js/user-search.js", weight: 5 },
+        { name: "User Profiles", url: "js/user-profiles.js", weight: 30 },
+        { name: "Friend Lists", url: "js/user-friends.js", weight: 15 },
+        { name: "Teams", url: "js/user-teams.js", weight: 5 },
+        { name: "BattlePass Features", url: "js/battlepass-calculator.js", weight: 15 },
+        { name: "BattlePass Rewards", url: "js/battlepass-rewards.js", weight: 15 },
+        { name: "Utils", url: "js/app-utils.js", weight: 10 }
     ];
 
     const filteredResources = isLocalhost ? resources.slice(2) : resources;
@@ -49,7 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
         "Preparing the competition...",
         "Setting up real-time rankings...",
         "Preparing your BattlePass rewards...",
-        "Calculating your Skill Rating..."
+        "Calculating your Skill Rating...",
+        "Downloading more website updates..."
     ];
 
     function getRandomMessage() {

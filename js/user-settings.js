@@ -162,7 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 100);
         });
 
-        const roundedBillions = Math.round(stats.totalSalesSum / 1_000_000_000);
+        const roundedBillions = Math.round(stats.totalSalesSum / 1_000_000_000_000);
+        const roundedDamage = Math.round(stats.totalDamage / 1_000_000);
 
         const overlay = document.createElement('div');
         overlay.id = 'seasonOverlay';
@@ -194,12 +195,16 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="stat-label">WARRIORS</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">${stats.totalRaids}</div>
+                            <div class="stat-value">${stats.totalRaids.toLocaleString()}</div>
                             <div class="stat-label">RAIDS</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">${stats.totalKills}</div>
+                            <div class="stat-value">${stats.totalKills.toLocaleString()}</div>
                             <div class="stat-label">KILLS</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${roundedDamage} MILLION</div>
+                            <div class="stat-label">DAMAGE</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-value">${formatTime(stats.totalPlayTime)}</div>
@@ -214,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="stat-label">HOTTEST MAP</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">${roundedBillions} Billion</div>
+                            <div class="stat-value">${roundedBillions} TRILLION</div>
                             <div class="stat-label">RUBLES TRADED</div>
                         </div>
                     </div>
@@ -228,8 +233,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="player-title">BEST K/D RATIO</div>
                         <div class="player-se-name">${stats.topKD.name}</div>
                         <div class="player-stats">
-                            <span>${stats.topKD.killToDeathRatio.toFixed(0)}:1</span>
-                            <span>${stats.topKD.pmcKills} kills</span>
+                            <span>KDR ${stats.topKD.killToDeathRatio.toFixed(0)}</span>
+                            <span>${stats.topKD.pmcKills.toLocaleString()} kills</span>
                         </div>
                         <div class="player-additional">
                             ${stats.topKD.teamTag ? `[${stats.topKD.teamTag}]` : ''}
@@ -242,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="player-se-name">${stats.topKills.name}</div>
                         <div class="player-stats">
                             <span>${stats.topKills.pmcKills} PMC kills</span>
-                            <span>${stats.topKills.scavKills || 0} SCAV kills</span>
+                            <span>${stats.topKills.scavsKills || 0} SCAV kills</span>
                         </div>
                         <div class="player-additional">
                             ${stats.topKills.weaponMastery ? `Favorite weapon: ${stats.topKills.weaponMastery}` : ''}
@@ -299,6 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let totalKills = 0;
         let totalDeaths = 0;
         let totalPlayTime = 0;
+        let totalDamage = 0;
         let totalRaids = 0;
         let totalSurvived = 0;
         let kappaOwners = 0;
@@ -324,14 +330,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const kills = player.pmcKills ?? 0;
                 const deaths = player.pmcDeaths ?? 0;
                 const playTime = player.totalPlayTime ?? 0;
-                const raids = player.pmcRaids ?? 0;
+                const raids = player.totalRaids ?? 0;
                 const survived = player.pmcSurvived ?? 0;
+                const damage = player.damage ?? 0;
 
                 totalKills += kills;
                 totalDeaths += deaths;
                 totalPlayTime += playTime;
                 totalRaids += raids;
                 totalSurvived += survived;
+                totalDamage += damage;
 
                 if (player.traderInfo) {
                     for (const trader in player.traderInfo) {
@@ -385,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (!topKD || kd > topKD.killToDeathRatio) topKD = player;
-                if (!topKills || kills > topKills.pmcKills) topKills = player;
+                if (!topKills || kills > topKills.totalKills) topKills = player;
                 if (!topPlayTime || playTime > topPlayTime.totalPlayTime) topPlayTime = player;
             }
         });
@@ -412,6 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
             totalDeaths,
             totalPlayTime,
             totalRaids,
+            totalDamage,
             averageSurvivalRate: averageSurvivalRate.toFixed(1),
             kappaOwners,
             topKD,

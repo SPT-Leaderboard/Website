@@ -11,8 +11,10 @@ let ranOnlyOnce = false; // Run only once (ie winners)
 // DYNAMIC: Tells whenever the live update was finished and data is ready
 // Better to use in pair with waitForDataReady(() => myFunction()); - automatic call upon data load
 let isDataReady = false;
- // DYNAMIC: Indicates when user is logged in Network or not
+// DYNAMIC: Indicates when user is logged in Network or not
 let isLoggedIn = false;
+// Current SPT version
+let currentRelease = "3.11.4";
 
 // For debugging purposes
 // Will use local paths for some files/fallbacks
@@ -322,7 +324,7 @@ async function displayLeaderboard(data) {
         let lastGame;
 
         const nowInSeconds = Math.floor(Date.now() / 1000);
-        const fifteenDaysInSeconds = 15 * 24 * 60 * 60;
+        const fifteenDaysInSeconds = 1296000;
 
         // Player was online for more 15 days, skip to render less jank
         // Top 50 will always be shown
@@ -492,7 +494,7 @@ async function displayLeaderboard(data) {
             <td class="${player.killToDeathRatioClass}">${player.killToDeathRatio}</td>
             <td class="${player.averageLifeTimeClass}">${formatSeconds(player.averageLifeTime)}</td>
             <td>${!player.totalScore || player.totalScore <= 0 ? 'Calibrating...' : player.totalScore.toFixed(3)} ${!player.totalScore || player.totalScore <= 0 ? '' : `(${rankLabel})`}</td>
-            <td>${player.sptVer}</td>
+            <td class="${player.versionStatus}">${player.sptVer}</td>
         `
 
         fragment.appendChild(row)
@@ -685,7 +687,24 @@ function formatLastPlayed(unixTimestamp) {
 
 // Add color indicators to player stats
 function addColorIndicators(data) {
+    const currentParts = currentRelease.split('.').map(Number);
+
     data.forEach(player => {
+        // SPT Version
+        if (player.sptVer) {
+            const playerParts = player.sptVer.split('.').map(Number);
+
+            if (playerParts[0] < currentParts[0]) {
+                player.versionStatus = 'bad'; // Outdated
+            } else if (playerParts[1] < currentParts[1]) {
+                player.versionStatus = 'average'; // Older than latest
+            } else if (playerParts[2] < currentParts[2]) {
+                player.versionStatus = 'average'; // Older than latest
+            } else {
+                player.versionStatus = 'good'; // Latest Release
+            }
+        }
+
         // Survived/Died Ratio
         if (player.survivalRate < 30) {
             player.survivedToDiedRatioClass = 'bad'

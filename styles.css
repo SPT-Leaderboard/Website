@@ -40,6 +40,117 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
+.snowflake {
+    position: fixed;
+    background-color: #ccc;
+    user-select: none;
+    z-index: 1;
+    pointer-events: none;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    left: 0px;
+    top: 0px;
+}
+
+.snow-crust {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 25px;
+    background: linear-gradient(to top, 
+        rgba(255,255,255,0.9) 0%,
+        rgba(255,255,255,0.7) 100%);
+    clip-path: polygon(
+        0% 100%, 5% 70%, 15% 90%, 25% 60%, 
+        35% 80%, 45% 50%, 55% 70%, 65% 40%, 
+        75% 60%, 85% 30%, 95% 50%, 100% 100%
+    );
+    pointer-events: none;
+    z-index: 10;
+}
+
+.snow-corners0 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 12px;
+    background: linear-gradient(to bottom, 
+        rgba(255,255,255,0.8) 0%,
+        transparent 100%);
+    clip-path: polygon(
+        0% 0%, 15% 100%, 25% 40%, 35% 80%, 
+        45% 30%, 55% 70%, 65% 20%, 75% 60%, 
+        85% 10%, 95% 50%, 100% 0%
+    );
+}
+
+.snow-corners1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 14px;
+    background: linear-gradient(to bottom, 
+        rgba(255,255,255,0.7) 0%,
+        transparent 100%);
+    clip-path: polygon(
+        0% 0%, 5% 50%, 15% 10%, 25% 60%, 
+        35% 30%, 45% 80%, 55% 40%, 65% 90%, 
+        75% 50%, 85% 100%, 100% 0%
+    );
+}
+
+.snow-corners-transparent {
+    position: absolute;
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 14px;
+    background: linear-gradient(to bottom, 
+        rgba(255,255,255,0.7) 0%,
+        transparent 100%);
+    clip-path: polygon(
+        0% 0%, 5% 50%, 15% 10%, 25% 60%, 
+        35% 30%, 45% 80%, 55% 40%, 65% 90%, 
+        75% 50%, 85% 100%, 100% 0%
+    );
+}
+
+.snow-corners2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: linear-gradient(to bottom, 
+        rgba(255,255,255,0.6) 0%,
+        transparent 100%);
+    clip-path: polygon(
+        0% 0%, 10% 100%, 20% 30%, 30% 70%, 
+        40% 20%, 60% 40%, 70% 80%, 80% 30%, 
+        90% 100%, 100% 0%
+    );
+}
+
+.snow-corners3 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(to bottom, 
+        rgba(255,255,255,0.5) 0%,
+        transparent 100%);
+    clip-path: polygon(
+        0% 0%, 20% 60%, 40% 20%, 60% 80%, 
+        80% 40%, 100% 0%
+    );
+}
+
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -322,6 +433,7 @@ h1 {
     font-weight: 600;
     z-index: 1000;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
 }
 
 .navbar:hover {
@@ -349,7 +461,7 @@ h1 {
     flex-grow: 1;
     justify-content: center;
     flex-wrap: wrap;
-    margin: 0 20px;
+    margin: 10px 0 0;
 }
 
 .navbar-link {
@@ -1482,9 +1594,11 @@ button:hover,
     top: 15px;
     right: 15px;
     z-index: 10;
+    padding: 5px 10px 5px 10px;
 }
 
 .close:hover {
+    cursor: pointer;
     color: var(--accent-blue);
     background: rgba(100, 255, 218, 0.1);
 }
@@ -4407,7 +4521,7 @@ input[type="checkbox"] {
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
 }
 
