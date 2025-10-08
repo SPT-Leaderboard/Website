@@ -16,9 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Resources to load
     const resources = [
         { name: "Connectivity with API", url: "/api/main/online.json", weight: 25 },
-        { name: "Connectivity with Network", url: "/api/network/explore/messages.json", weight: 25 },
         { name: "Core Logic", url: "js/app-core.js", weight: 30 },
-        { name: "Winners Logic", url: "js/system-winners.js", weight: 10 },
         { name: "Raid Notifications", url: "js/raid-notifications.js", weight: 15 },
         { name: "User Heartbeats", url: "js/system-heartbeat.js", weight: 15 },
         { name: "Live Data Flow", url: "js/ui-live-data-flow.js", weight: 20 },

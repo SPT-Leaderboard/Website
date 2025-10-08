@@ -13,9 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
         infoModal: document.getElementById('infoModal'),
         infoButton: document.getElementById('infoButton'),
 
-        tosModal: document.getElementById('tosModal'),
-        tosButton: document.getElementById('tosButton'),
-
         settingsModal: document.getElementById('settingsModal'),
         settingsButton: document.getElementById('settingsButton'),
 
@@ -41,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Event listeners
     elements.infoButton.addEventListener('click', () => toggleModal(elements.infoModal, true));
-    elements.tosButton.addEventListener('click', () => toggleModal(elements.tosModal, true));
 
     elements.settingsButton.addEventListener('click', () => {
         toggleModal(elements.settingsModal, true);
@@ -61,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Close modal if user clicked outside of it
     window.addEventListener('click', (event) => {
         if (event.target === elements.infoModal) toggleModal(elements.infoModal, false);
-        if (event.target === elements.tosModal) toggleModal(elements.tosModal, false);
         if (event.target === elements.settingsModal) {
             toggleModal(elements.settingsModal, false);
             if (playerWidget) playerWidget.hideIfEmpty();

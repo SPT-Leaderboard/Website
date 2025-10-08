@@ -33,35 +33,6 @@ function getBoostDescription(boost) {
     return 'Penalty Applied.';
 }
 
-// Welcome image moving on the background
-document.addEventListener('DOMContentLoaded', function () {
-    const featureCards = document.querySelectorAll('.feature-card');
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const animation = entry.target.getAttribute('data-animation');
-                entry.target.classList.add(animation);
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.1
-    });
-
-    featureCards.forEach(card => {
-        observer.observe(card);
-    });
-
-    // Wow image move 
-    window.addEventListener('mousemove', function (e) {
-        const x = e.clientX / window.innerWidth;
-        const y = e.clientY / window.innerHeight;
-        const bg = document.querySelector('.welcome-bg-image');
-        bg.style.transform = `translate(-${x * 50}px, -${y * 50}px)`;
-    });
-});
-
 // Auto offset top by top-stats-bar height
 // This is done so navbar doesn't get in the way when window is resized
 function updateNavbarOffset() {
