@@ -1,0 +1,400 @@
+{
+    "achievementCompiled": {
+        "651413e9c31fcb0e163577c9": {
+            "imageUrl": "/files/achievement/Rare_13.png",
+            "rarity": "Rare",
+            "description": "Neutralize Zryachiy 15 times while playing as a PMC",
+            "name": "Now That's a Good Shot"
+        },
+        "65141c30ec10ff011f17cc3b": {
+            "imageUrl": "/files/achievement/Standard_35_1.png",
+            "rarity": "Common",
+            "description": "Die in Tarkov for the first time",
+            "name": "Welcome to Tarkov"
+        },
+        "65141ab70dc723592b0f9482": {
+            "imageUrl": "/files/achievement/Standard_23.png",
+            "rarity": "Common",
+            "description": "Eliminate a PMC operative with a headshot while under the alcohol effect while playing as a PMC",
+            "name": "Drunken Master"
+        },
+        "6634ca69ee506a5c3e61be56": {
+            "imageUrl": "/files/achievement/S24Q2_ARRS2.png",
+            "rarity": "Legendary",
+            "description": "Pick Peacekeeper's side and complete The Tarkov Mystery event task line",
+            "name": "INVOLVED IN PEACE"
+        },
+        "6513f28cb49e3253755f47f3": {
+            "imageUrl": "/files/achievement/Standard_13.png",
+            "rarity": "Common",
+            "description": "Neutralize Zryachiy for the first time while playing as a PMC",
+            "name": "The Blind Watcher"
+        },
+        "6512f16bde333c33d5127cbc": {
+            "imageUrl": "/files/achievement/Standard_4.png",
+            "rarity": "Common",
+            "description": "Eliminate one of the hooded men with their own knife at night time while playing as a PMC",
+            "name": "Killer of Killers"
+        },
+        "65141e37cf2f1c285e606361": {
+            "imageUrl": "/files/achievement/Standard_30.png",
+            "rarity": "Common",
+            "description": "Search the office in Factory while playing as a PMC",
+            "name": "That's What She Said"
+        },
+        "6514184ec31fcb0e163577d2": {
+            "imageUrl": "/files/achievement/Rare_20.png",
+            "rarity": "Rare",
+            "description": "Eliminate 7 PMC operatives in a single raid while playing as a PMC",
+            "name": "Killer7"
+        },
+        "65141eb5c31fcb0e163577dd": {
+            "imageUrl": "/files/achievement/Standard_31.png",
+            "rarity": "Common",
+            "description": "Locate the crashed plane on Woods while playing as a PMC",
+            "name": "Lost"
+        },
+        "6514174fb1c08b0feb216d73": {
+            "imageUrl": "/files/achievement/Standard_16.png",
+            "rarity": "Common",
+            "description": "Eliminate a PMC operative with a headshot from over 500 meters away while playing as a PMC",
+            "name": "Chris's Heir"
+        },
+        "6527ee4a647c29201011defe": {
+            "imageUrl": "/files/achievement/Standard_43.png",
+            "rarity": "Common",
+            "description": "Eliminate a Scav while playing as a Scav",
+            "name": "You Are Not My Brother"
+        },
+        "676094451fec2f7426093be6": {
+            "imageUrl": "/files/achievement/676093bf2a7be2d1f706f0ec.png",
+            "rarity": "Legendary",
+            "description": "Earn the Prestige level 2",
+            "name": "More Prestigious"
+        },
+        "6634cae870af846d2868dada": {
+            "imageUrl": "/files/achievement/S24Q2_ARRS3.png",
+            "rarity": "Legendary",
+            "description": "Pick Skier's side and complete The Tarkov Mystery event task line",
+            "name": "Local Strong Man"
+        },
+        "676091c0f457869a94017a23": {
+            "imageUrl": "/files/achievement/676093b76e682163da028a28.png",
+            "rarity": "Legendary",
+            "description": "Earn the Prestige level 1",
+            "name": "Prestigious"
+        },
+        "6634c8886e083a141f4aa3f4": {
+            "imageUrl": "/files/achievement/S24Q2_ARRS1.png",
+            "rarity": "Legendary",
+            "description": "Find out who actually controls Tarkov and complete The Tarkov Mystery event task line",
+            "name": "Cardinal Richelieu"
+        },
+        "67fce0c2f18dc20eae02240b": {
+            "imageUrl": "/files/achievement/6821f5e71d89b4e49305a478.png",
+            "rarity": "Rare",
+            "description": "Obliterate a cultist while using the RShG-2 rocket launcher",
+            "name": "Star Called Sun"
+        },
+        "65141dd6303df252af1c72c9": {
+            "imageUrl": "/files/achievement/Rare_29.png",
+            "rarity": "Rare",
+            "description": "Survive 300 raids while playing as a PMC",
+            "name": "PMC"
+        },
+        "66e2a7e5919bad697104f4b3": {
+            "imageUrl": "/files/achievement/ArtShelling_Event.png",
+            "rarity": "Legendary",
+            "description": "Complete the Mortar Strike 2024 event task line",
+            "name": "Highway to the Danger Zone"
+        },
+        "6513ed89cf2f1c285e606068": {
+            "imageUrl": "/files/achievement/Standard_7.png",
+            "rarity": "Common",
+            "description": "Neutralize Shturman for the first time while playing as a PMC",
+            "name": "Silence of the Sawmill"
+        },
+        "6513f0a10dc723592b0f90cf": {
+            "imageUrl": "/files/achievement/Standard_11.png",
+            "rarity": "Common",
+            "description": "Neutralize Kaban for the first time while playing as a PMC",
+            "name": "Funny Graveyard Keeper"
+        },
+        "6512ea46f7a078264a4376e4": {
+            "imageUrl": "/files/achievement/Standard_2.png",
+            "rarity": "Common",
+            "description": "Survive and extract from Interchange through the Scav Co-Op extraction while playing as a PMC",
+            "name": "PMC's Best Friend"
+        },
+        "6512f1e3be73cc7f07358ed5": {
+            "imageUrl": "/files/achievement/Standard_5.png",
+            "rarity": "Common",
+            "description": "Neutralize Killa for the first time while playing as a PMC",
+            "name": "Art of Style"
+        },
+        "6513f1feec10ff011f17c7ea": {
+            "imageUrl": "/files/achievement/Standard_12.png",
+            "rarity": "Common",
+            "description": "Neutralize Knight, Birdeye, and Big Pipe in a single raid for the first time while playing as a PMC",
+            "name": "Now There Are Three of Them!"
+        },
+        "6512eb3ddfb0ae1ee75a0376": {
+            "imageUrl": "/files/achievement/Standard_3.png",
+            "rarity": "Common",
+            "description": "Survive and extract from every location in Tarkov while playing as a PMC ",
+            "name": "Traveler"
+        },
+        "6513efa1b49e3253755f47eb": {
+            "imageUrl": "/files/achievement/Standard_10.png",
+            "rarity": "Common",
+            "description": "Neutralize Sanitar for the first time while playing as a PMC",
+            "name": "Sanatorium Orderly"
+        },
+        "66c328aca91e7d66fa1b0b7b": {
+            "imageUrl": "/files/achievement/Standard75.png",
+            "rarity": "Common",
+            "description": "Use the transit from any location",
+            "name": "Vagabond"
+        },
+        "664f1f8768508d74604bf556": {
+            "imageUrl": "/files/achievement/Legendary_52.png",
+            "rarity": "Legendary",
+            "description": "Obtain Secure container Kappa",
+            "name": "The Kappa Path"
+        },
+        "66b493bc2d8cd3b5e90a3648": {
+            "imageUrl": "/files/achievement/Legendary77.png",
+            "rarity": "Legendary",
+            "description": "Visit all locations in one raid as a PMC",
+            "name": "Marathon"
+        },
+        "6527d2e2c656a951ad1528c3": {
+            "imageUrl": "/files/achievement/Rare23.png",
+            "rarity": "Rare",
+            "description": "Neutralize Big Pipe 15 times while playing as a PMC",
+            "name": "Smoke the Peace Pipe"
+        },
+        "655b4a576689c676ce57acb6": {
+            "imageUrl": "/files/achievement/Rare_44.png",
+            "rarity": "Rare",
+            "description": "Neutralize Kollontay 15 times while playing as a PMC",
+            "name": "True Crime"
+        },
+        "66c328de9dc78468f4040f35": {
+            "imageUrl": "/files/achievement/Standard73.png",
+            "rarity": "Common",
+            "description": "Neutralize Partisan for the first time while playing as a PMC",
+            "name": "Time To Clean My Karma"
+        },
+        "66c32996b4c0c017a3319cc3": {
+            "imageUrl": "/files/achievement/Rare73.png",
+            "rarity": "Rare",
+            "description": "Neutralize Partisan 15 times while playing as a PMC",
+            "name": "Samsara Wheel Spins Again"
+        },
+        "6514134eec10ff011f17cc26": {
+            "imageUrl": "/files/achievement/Rare21.png",
+            "rarity": "Rare",
+            "description": "Neutralize Knight 15 times while playing as a PMC",
+            "name": "I Hear the Voice of Darkness"
+        },
+        "660fe21454670811e304c045": {
+            "imageUrl": "/files/achievement/Maslenitsa2024.png",
+            "rarity": "Legendary",
+            "description": "Сomplete the Maslenitsa 2024 event task line",
+            "name": "Maslenitsa"
+        },
+        "66742c003a67b164a300fcbf": {
+            "imageUrl": "/files/achievement/KeySalvation.png",
+            "rarity": "Legendary",
+            "description": "Help Therapist save lives and complete the Key to Salvation event task line",
+            "name": "A Key to Salvation"
+        },
+        "6514143d59647d2cb3213c93": {
+            "imageUrl": "/files/achievement/Legendary_14.png",
+            "rarity": "Legendary",
+            "description": "Neutralize Killa 100 times while playing as a PMC",
+            "name": "Master of ULTRA"
+        },
+        "651411f1cf2f1c285e606423": {
+            "imageUrl": "/files/achievement/Rare_10.png",
+            "rarity": "Rare",
+            "description": "Neutralize Sanitar 15 times while playing as a PMC",
+            "name": "Who Called the Doctor?"
+        },
+        "668bf47c781d446fdc083711": {
+            "imageUrl": "/files/achievement/ArmsRaceEvent2024.png",
+            "rarity": "Legendary",
+            "description": "Choose your side and complete the Arms Race event task line",
+            "name": "High Competition"
+        },
+        "651419eea3dd9b6aa7159ee5": {
+            "imageUrl": "/files/achievement/Rare_21.png",
+            "rarity": "Rare",
+            "description": "Eliminate any enemy while suffering from the Flash effect while playing as a PMC",
+            "name": "Blind Fury"
+        },
+        "65141bdfcf2f1c285e606446": {
+            "imageUrl": "/files/achievement/Standard_25.png",
+            "rarity": "Common",
+            "description": "Eliminate 50 BEAR PMC operatives",
+            "name": "BEAR With Me"
+        },
+        "6513eb6e0dc723592b0f9095": {
+            "imageUrl": "/files/achievement/Standard_6.png",
+            "rarity": "Common",
+            "description": "Neutralize Tagilla for the first time while playing as a PMC",
+            "name": "Call Your Brother"
+        },
+        "6513eec00dc723592b0f90cc": {
+            "imageUrl": "/files/achievement/Standard_9.png",
+            "rarity": "Common",
+            "description": "Neutralize Glukhar for the first time while playing as a PMC",
+            "name": "Grouse Hunting"
+        },
+        "65140bbec31fcb0e163577b9": {
+            "imageUrl": "/files/achievement/Rare_7.png",
+            "rarity": "Rare",
+            "description": "Neutralize Shturman 15 times while playing as a PMC",
+            "name": "King of the Sawmill"
+        },
+        "65141032a3dd9b6aa7159ed3": {
+            "imageUrl": "/files/achievement/Rare_9.png",
+            "rarity": "Rare",
+            "description": "Neutralize Glukhar 15 times while playing as a PMC",
+            "name": "Another Cold Case"
+        },
+        "651415feb49e3253755f4b68": {
+            "imageUrl": "/files/achievement/Rare_15.png",
+            "rarity": "Rare",
+            "description": "Neutralize every Boss once while playing as a PMC",
+            "name": "Long Live the King!"
+        },
+        "651412b8c31fcb0e163577c5": {
+            "imageUrl": "/files/achievement/Rare_11.png",
+            "rarity": "Rare",
+            "description": "Neutralize Kaban 15 times while playing as a PMC",
+            "name": "Old Dog With Old tricks"
+        },
+        "6514321bec10ff011f17ccac": {
+            "imageUrl": "/files/achievement/Legendary_42.png",
+            "rarity": "Legendary",
+            "description": "Meet Lightkeeper for the first time while playing as a PMC",
+            "name": "Firefly"
+        },
+        "6527d3aac656a951ad1528ce": {
+            "imageUrl": "/files/achievement/Rare22.png",
+            "rarity": "Rare",
+            "description": "Neutralize Birdeye 15 times while playing as a PMC",
+            "name": "The Red Book"
+        },
+        "6513ee11a3dd9b6aa7159b4a": {
+            "imageUrl": "/files/achievement/Standard_8.png",
+            "rarity": "Common",
+            "description": "Neutralize Reshala for the first time while playing as a PMC",
+            "name": "Deal to Make"
+        },
+        "65140c00b1c08b0feb216d50": {
+            "imageUrl": "/files/achievement/Rare_8.png",
+            "rarity": "Rare",
+            "description": "Neutralize Reshala 15 times while playing as a PMC",
+            "name": "This Is a Tarkov Showdown"
+        },
+        "65141b9859647d2cb3213ca2": {
+            "imageUrl": "/files/achievement/Standard_24.png",
+            "rarity": "Common",
+            "description": "Eliminate 50 USEC PMC operatives",
+            "name": "U-SUCC"
+        },
+        "655b49bc91aa9e07687ae47c": {
+            "imageUrl": "/files/achievement/Standard_44.png",
+            "rarity": "Common",
+            "description": "Neutralize Kollontay for the first time while playing as a PMC",
+            "name": "Justice"
+        },
+        "65140ab8ec10ff011f17cc10": {
+            "imageUrl": "/files/achievement/Rare_5.png",
+            "rarity": "Rare",
+            "description": "Neutralize Killa 15 times while playing as a PMC",
+            "name": "What Not To Wear"
+        },
+        "65140b55cf2f1c285e606414": {
+            "imageUrl": "/files/achievement/Rare_6.png",
+            "rarity": "Rare",
+            "description": "Neutralize Tagilla 15 times while playing as a PMC",
+            "name": "Hammer and Scythe"
+        },
+        "65141a3059647d2cb3213c9e": {
+            "imageUrl": "/files/achievement/Standard_22.png",
+            "rarity": "Common",
+            "description": "Eliminate 30 PMC operatives with a melee weapon while playing as a PMC",
+            "name": "Make a Notch"
+        },
+        "65141cd2cf2f1c285e606449": {
+            "imageUrl": "/files/achievement/Rare_28.png",
+            "rarity": "Rare",
+            "description": "Survive 10 consecutive raids while playing as a PMC",
+            "name": "Ready for Anything"
+        },
+        "6529097eccf6aa5f8737b3d0": {
+            "imageUrl": "/files/achievement/Legendary_19.png",
+            "rarity": "Legendary",
+            "description": "Neutralize every Boss without dying while playing as a PMC",
+            "name": "Snowball"
+        },
+        "664f23e44702fd5db50ee732": {
+            "imageUrl": "/files/achievement/Rare_35.png",
+            "rarity": "Rare",
+            "description": "Complete all of Gunsmith series tasks",
+            "name": "Jack of All Trades"
+        },
+        "670feb95a4e71050310cc14b": {
+            "imageUrl": "/files/achievement/S24Q4_Halloween2.png",
+            "rarity": "Legendary",
+            "description": "Cure all the infected and complete the Halloween 2024 event task line",
+            "name": "Complete Remission"
+        },
+        "670febed5ee0fc738a0965a4": {
+            "imageUrl": "/files/achievement/S24Q4_Halloween1.png",
+            "rarity": "Legendary",
+            "description": "Destroy the virus along with all the infected and complete the Halloween 2024 event task line",
+            "name": "Fatal Outcome"
+        },
+        "675709bef4e2a2ce0f058f56": {
+            "imageUrl": "/files/achievement/Rare_78.png",
+            "rarity": "Rare",
+            "description": "Resolve the issue with the BTR driver one way or another",
+            "name": "All-Wheel Drive"
+        },
+        "675998a894008342eb04e47f": {
+            "imageUrl": "/files/achievement/S24Q4_Roundelay.png",
+            "rarity": "Legendary",
+            "description": "Celebrate Christmas and New Year and complete the Khorovod 2024 event task line",
+            "name": "Khorovod"
+        },
+        "67a0e57117e34930e50075f3": {
+            "imageUrl": "/files/achievement/67a0e5f3003a9986cb0f5b68.png",
+            "rarity": "Legendary",
+            "description": "Complete the Labyrinth 2025 event task line",
+            "name": "In Search of an Exit"
+        },
+        "67a0e57b972c11a3f50773b2": {
+            "imageUrl": "/files/achievement/67a0e5f786681d1e210705f0.png",
+            "rarity": "Legendary",
+            "description": "Complete the Labyrinth 2025 event task line and all side tasks",
+            "name": "Dungeon Master"
+        },
+        "67c838a4c566b0028f0f2d07": {
+            "imageUrl": "/files/achievement/67dad91e2af1a9900b0f06b1.png",
+            "rarity": "Rare",
+            "description": "Go all in on the BEAR squad beyond the cordon and complete Skier's Profitable Venture task line",
+            "name": "All on Red"
+        },
+        "68936a7a672ffe94a509446b": {
+            "imageUrl": "/files/achievement/6889e05eff9be6c27709785b.png",
+            "rarity": "Legendary",
+            "description": "He that steals honey, should beware of the sting.",
+            "name": "Targrad Tales"
+        }
+    }
+}

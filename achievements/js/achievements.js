@@ -11,14 +11,27 @@ let totalPlayers = 0;
 
 async function loadJSON(url) {
     const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`Failed to load ${url}: ${response.status}`);
+    }
     return await response.json();
+}
+
+// Merge old (SPT 3.11) achievements data with new data (SPT 4.0)
+function mergeAchievements(oldData, newData) {
+    return {
+        achievementCompiled: {
+            ...oldData.achievementCompiled,
+            ...newData.achievementCompiled
+        }
+    };
 }
 
 // Calculate achievement statistics
 function calculateAchievementStats() {
     const achievementStats = {};
 
-    // Initialize stats
+    // Initialize stats for all achievements
     for (const achievementId in achievementsData.achievementCompiled) {
         achievementStats[achievementId] = {
             obtained: 0,
@@ -37,7 +50,7 @@ function calculateAchievementStats() {
         }
     }
 
-    // Percentage for each achievement
+    // Calculate percentage for each achievement
     const totalPlayers = Object.keys(playerAchievements.achievements).length;
 
     for (const achievementId in achievementStats) {
@@ -85,7 +98,7 @@ function renderAchievements(stats, searchTerm = '') {
         return completionB - completionA;
     });
 
-    // Make HTML ELement first
+    // Render
     container.innerHTML = '<div class="achievements-grid"></div>';
     const grid = container.querySelector('.achievements-grid');
 
@@ -133,24 +146,33 @@ function renderAchievements(stats, searchTerm = '') {
 // Main function to load and process data
 async function initAchievements() {
     try {
-        // Load both JSON files in parallel
-        [achievementsData, playerAchievements] = await Promise.all([
+        // Load JSON files in parallel
+        const [oldAchievements, newAchievements, playersData] = await Promise.all([
             loadJSON('../achievements/js/compiledAchData.json'),
+            loadJSON('../achievements/js/compiledAchDataNew.json'),
             loadJSON(achievementsPath)
         ]);
 
-        // Get total number of players with achievements
-        totalPlayers = playerAchievements.achievements.length;
+        // Merge achievements - new data overwrites old data for same IDs (just to be sure if its changed recently)
+        achievementsData = mergeAchievements(oldAchievements, newAchievements);
+
+        // Store player achievements data
+        playerAchievements = playersData;
+        totalPlayers = Object.keys(playerAchievements.achievements || {}).length;
 
         // Calculate achievement statistics
         const achievementStats = calculateAchievementStats();
 
-        // Render
+        // Render achievements
         renderAchievements(achievementStats);
-
     } catch (error) {
-        console.error('Error loading data:', error);
+        console.error('Error loading achievements data:', error);
     }
 }
 
-initAchievements();
+// Initialize when DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAchievements);
+} else {
+    initAchievements();
+}
