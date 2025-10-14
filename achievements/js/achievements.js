@@ -113,7 +113,7 @@ function renderAchievements(stats, searchTerm = '') {
 
         // Border color based on rarity
         let borderColor = '#444';
-        if (rarity === 'common') borderColor = '#2e7d32';
+        if (rarity === 'common') borderColor = '#d1d1d1ff';
         else if (rarity === 'rare') borderColor = '#1565c0';
         else if (rarity === 'legendary') borderColor = '#ff8f00';
 
