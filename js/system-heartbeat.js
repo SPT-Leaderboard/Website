@@ -135,7 +135,7 @@ window.heartbeatMonitor = new HeartbeatMonitor();
 
 setInterval(() => {
     heartbeatMonitor.fetchHeartbeats();
-}, 5000);
+}, 10000);
 
 // Load this bad boy
 heartbeatMonitor.fetchHeartbeats();

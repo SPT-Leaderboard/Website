@@ -18,7 +18,7 @@ async function checkFriends(player) {
         for (const playerId in leaderboardData) {
             const p = leaderboardData[playerId];
             
-            // Don't put yourself in friendList
+            // Don't put yourself in friend list
             if (p.id === player.id) continue;
 
             if ((friendLink && p.friendLink === friendLink) || 

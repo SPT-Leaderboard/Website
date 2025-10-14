@@ -10,25 +10,12 @@
 // AutoUpdater.forceUpdate();
 
 const AutoUpdater = (() => {
-    let updateInterval = 5; // seconds
+    let updateInterval = 8; // seconds
     let timeLeft = updateInterval;
     let autoUpdateEnabled = true;
     let updateTimer;
     let timeToUpdateSpan;
     let autoUpdateToggle;
-
-    // Private
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        return parts.length === 2 ? parts.pop().split(';').shift() : null;
-    }
-
-    function setCookie(name, value, days = 30) {
-        const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
-    }
 
     function startUpdateTimer() {
         clearInterval(updateTimer);

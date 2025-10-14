@@ -13,9 +13,8 @@ const RARITY_ORDER = {
 // To prevent any flicker
 let isProfileOpened = false;
 
-document.addEventListener("DOMContentLoaded", async () => {
-    await loadAchievementsData();
-});
+// Temporary hide fav weapon div
+let shouldHideUnsupportedMods = false
 
 async function openProfile(playerId, bypass = false) {
     // Don't open profile again for whatever reason if profile is already open
@@ -76,6 +75,7 @@ function showDisqualProfile(container, player) {
     const mainBackground = document.getElementById("playerProfileModal");
     mainBackground.style.backgroundImage = "";
     mainBackground.style.backgroundColor = "";
+
     mainBackground.classList.remove(
         "usec-background",
         "labs-background",
@@ -84,6 +84,7 @@ function showDisqualProfile(container, player) {
         "prestige-killa",
         "prestige-both"
     );
+
     profileModal.classList.remove(
         "theme-dark",
         "theme-light",
@@ -92,7 +93,6 @@ function showDisqualProfile(container, player) {
         "theme-redshade",
         "theme-steelshade"
     );
-
 
     container.innerHTML = `
     <div class="private-profile-overlay" style="background: none;">
@@ -111,27 +111,11 @@ function showDisqualProfile(container, player) {
     `;
 }
 
-async function getCustomProfileSettings(playerId) {
-    try {
-        const response = await fetch(`/api/network/profile/profiles/${playerId}.json?t=${Date.now()}`);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        return data[playerId] || null;
-    } catch (error) {
-        console.error('Failed to load profile settings:', error);
-        return null;
-    }
-}
-
 // Public profile
 async function showPublicProfile(container, player) {
 
     isProfileOpened = true;
+    shouldHideUnsupportedMods = player.sptVer === "4.0.0";
     const playerData = await getCustomProfileSettings(player.id);
 
     if (playerData) {
@@ -166,7 +150,7 @@ async function showPublicProfile(container, player) {
 
     // Show fav weapon if is using Stattrack
     const bestWeapon = getBestWeapon(player.id, player.modWeaponStats || {});
-    if (!bestWeapon) {
+    if (!bestWeapon || shouldHideUnsupportedMods) {
         player.isUsingStattrack = false;
     }
 
@@ -314,7 +298,7 @@ async function showPublicProfile(container, player) {
                         <div class="stat-name">Raids</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value">${formatOnlineTime(player.totalPlayTime) || '0h'}</div>
+                        <div class="stat-value">${formatOnlineTime(player.pmcPlayTime) || '0h'}</div>
                         <div class="stat-name">In-Raid Time</div>
                     </div>
                 </div>
@@ -408,6 +392,13 @@ async function showPublicProfile(container, player) {
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Map Stats -->
+            <div class="weapon-stats profile-section">
+                <h3>Stats by Map</h3>
+                <div class="weapon-stats-container" id="maps-container">
                 </div>
             </div>
             
@@ -511,57 +502,59 @@ async function showPublicProfile(container, player) {
             </div>
 
             <!-- Meta gun -->
-            <div class="favorite-weapons profile-section" id="weapon-meta-section">
-                <h3>Favorite Weapon</h3>
-                <div class="favorite-weapons-container" id="weapon-container">
-                        ${!player?.isUsingStattrack ? `
-                <div class="stattrack-overlay">
-                    <div class="stattrack-message">This player is not using <a href="https://hub.sp-tarkov.com/files/file/2501-stattrack/">Stattrack Mod</a> by AcidPhantasm</div>
-                </div>
-                ` : ''}
-                
-                <div class="weapon-info ${!player?.isUsingStattrack ? 'stattrack-disabled' : ''}">
-                <img src="media/weapon_icons/${bestWeapon?.name}.webp" alt="bestWeapon?.name" class="weapon-icon-fav">
-                    <div class="weapon-name">${bestWeapon?.name ? bestWeapon.name : 'Unknown'}</div>
-                    <div class="weapon-mastery">Mastery Level: <span class="level-value-wp">0</span></div>
+            ${shouldHideUnsupportedMods? `` : `
+                <div class="favorite-weapons profile-section" id="weapon-meta-section">
+                    <h3>Favorite Weapon</h3>
+                    <div class="favorite-weapons-container" id="weapon-container">
+                            ${!player?.isUsingStattrack ? `
+                    <div class="stattrack-overlay">
+                        <div class="stattrack-message">This player is not using <a href="https://hub.sp-tarkov.com/files/file/2501-stattrack/">Stattrack Mod</a> by AcidPhantasm</div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="weapon-info ${!player?.isUsingStattrack ? 'stattrack-disabled' : ''}">
+                    <img src="media/weapon_icons/${bestWeapon?.name}.webp" alt="bestWeapon?.name" class="weapon-icon-fav">
+                        <div class="weapon-name">${bestWeapon?.name ? bestWeapon.name : 'Unknown'}</div>
+                        <div class="weapon-mastery">Mastery Level: <span class="level-value-wp">0</span></div>
 
-                    <div class="exp-bar-container-weapon">
-                        <div class="exp-bar">
-                            <div class="exp-progress-wp" style="width: 0%;"></div>
+                        <div class="exp-bar-container-weapon">
+                            <div class="exp-bar">
+                                <div class="exp-progress-wp" style="width: 0%;"></div>
+                            </div>
+                            <div class="exp-numbers">
+                                <span class="current-exp-wp">0</span>
+                                <span class="next-level-exp-wp">0</span>
+                            </div>
                         </div>
-                        <div class="exp-numbers">
-                            <span class="current-exp-wp">0</span>
-                            <span class="next-level-exp-wp">0</span>
+                        <div class="exp-remaining">Until next level: <span class="remaining-value-wp">0</span> EXP</div>
+
+                        <div class="weapon-extra-stats">
+                            <div class="raid-stats-grid">
+                                <div class="raid-stat-block">
+                                    <span class="profile-stat-label">Kills:</span>
+                                    <span class="profile-stat-value">${player?.isUsingStattrack ? (bestWeapon ? bestWeapon.stats.kills : 0) : '0'}</span>
+                                </div>
+                                <div class="raid-stat-block">
+                                    <span class="profile-stat-label">Headshots:</span>
+                                    <span class="profile-stat-value">${player?.isUsingStattrack ? (bestWeapon ? bestWeapon.stats.headshots : 0) : '0'}</span>
+                                </div>
+                                <div class="raid-stat-block">
+                                    <span class="profile-stat-label">Shots Fired:</span>
+                                    <span class="profile-stat-value">${player?.isUsingStattrack ? (bestWeapon ? bestWeapon.stats.totalShots : 0) : '0'}</span>
+                                </div>
+                                <div class="raid-stat-block">
+                                    <span class="profile-stat-label">Shots to Kill:</span>
+                                    <span class="profile-stat-value">${player?.isUsingStattrack ? (bestWeapon ? (bestWeapon.stats.kills > 0 ? Math.round(bestWeapon.stats.totalShots / bestWeapon.stats.kills) : '0') : '0') : '0'}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="exp-remaining">Until next level: <span class="remaining-value-wp">0</span> EXP</div>
-
-                    <div class="weapon-extra-stats">
-                        <div class="raid-stats-grid">
-                            <div class="raid-stat-block">
-                                <span class="profile-stat-label">Kills:</span>
-                                <span class="profile-stat-value">${player?.isUsingStattrack ? (bestWeapon ? bestWeapon.stats.kills : 0) : '0'}</span>
-                            </div>
-                            <div class="raid-stat-block">
-                                <span class="profile-stat-label">Headshots:</span>
-                                <span class="profile-stat-value">${player?.isUsingStattrack ? (bestWeapon ? bestWeapon.stats.headshots : 0) : '0'}</span>
-                            </div>
-                            <div class="raid-stat-block">
-                                <span class="profile-stat-label">Shots Fired:</span>
-                                <span class="profile-stat-value">${player?.isUsingStattrack ? (bestWeapon ? bestWeapon.stats.totalShots : 0) : '0'}</span>
-                            </div>
-                            <div class="raid-stat-block">
-                                <span class="profile-stat-label">Shots to Kill:</span>
-                                <span class="profile-stat-value">${player?.isUsingStattrack ? (bestWeapon ? (bestWeapon.stats.kills > 0 ? Math.round(bestWeapon.stats.totalShots / bestWeapon.stats.kills) : '0') : '0') : '0'}</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
-                </div>
-            </div>
+            `}
 
             <!-- All weapons list if they exist -->
-            ${!player?.isUsingStattrack ? `` :
+            ${!player?.isUsingStattrack || shouldHideUnsupportedMods ? `` :
             `<div class="weapon-stats profile-section">
                 <h3>Weapons</h3>
                 <div class="weapon-stats-container" id="weapons-container">
@@ -1434,153 +1427,6 @@ function generateBadgesHTML(player) {
     return badges;
 }
 
-async function formatAchievement(achievementId, timestamp, achievementData) {
-    const achievement = achievementData.achievementCompiled[achievementId] || {};
-
-    let imageUrl = 0;
-    try {
-        imageUrl = achievement.imageUrl?.slice(1) || "files/achievement/Standard_35_1.png";
-    } catch (error) {
-        imageUrl = "files/achievement/Standard_35_1.png";
-    }
-
-    const globalPercentage = await getAchievementPercentage(achievementId);
-
-    return {
-        id: achievementId,
-        timestamp: formatLastPlayedRaid(timestamp),
-        imageUrl: imageUrl,
-        rarity: achievement.rarity || "Common",
-        description: achievement.description || "No description",
-        name: achievement.name || "Unknown Achievement",
-        globalPercentage: globalPercentage || 0
-    };
-}
-
-async function getLatestAchievement(player, achievementData) {
-    if (!player.allAchievements || Object.keys(player.allAchievements).length === 0) {
-        return {
-            id: 0,
-            timestamp: 0,
-            imageUrl: "files/achievement/Standard_35_1.png",
-            rarity: "Common",
-            description: "Nothing here yet",
-            name: "No achievements",
-            globalPercentage: 0
-        };
-    }
-
-    const [latestId, latestTimestamp] = Object.entries(player.allAchievements).reduce(
-        (latest, [id, timestamp]) => timestamp > latest[1] ? [id, timestamp] : latest,
-        ["", 0]
-    );
-
-    if (!latestId) {
-        return {
-            id: 0,
-            timestamp: 0,
-            imageUrl: "files/achievement/Standard_35_1.png",
-            rarity: "Common",
-            description: "Nothing here yet",
-            name: "No achievements",
-            globalPercentage: 0
-        };
-    }
-
-    return await formatAchievement(latestId, latestTimestamp, achievementData);
-}
-
-async function getAllAchievements(player, achievementData) {
-    if (!player.allAchievements || Object.keys(player.allAchievements).length === 0) {
-        return [];
-    }
-
-    const achievementsPromises = Object.entries(player.allAchievements)
-        .map(async ([id, timestamp]) => await formatAchievement(id, timestamp, achievementData));
-
-    let achievements = await Promise.all(achievementsPromises);
-
-    achievements.sort((a, b) => {
-        const rarityCompare = RARITY_ORDER[a.rarity] - RARITY_ORDER[b.rarity];
-        if (rarityCompare !== 0) return rarityCompare;
-
-        return b.timestamp - a.timestamp;
-    });
-
-    return achievements;;
-}
-
-function renderSingleAchievement(achievement) {
-    return `
-            <div class="achievement-title ${achievement.rarity}">
-                Latest Achievement
-            </div>
-            <div class="achievement-content">
-                <div class="achievement-icon ${achievement.rarity}">
-                    <img src="${achievement.imageUrl}" alt="Achievement Icon"/>
-                    <div class="achievement-time">
-                        ${achievement.timestamp || "N/A"}
-                    </div>
-                </div>
-                <div class="achievement-info">
-                    <div class="achievement-title ${achievement.rarity}">
-                        ${achievement.name}
-                    </div>
-                    <div class="achievement-description">
-                        ${achievement.description}
-                    </div>
-                    ${achievement.globalPercentage > 0 ?
-            `<div class="achievement-percentage">${achievement.globalPercentage}% of players have this achievement</div>` :
-            ``}
-                </div>
-            </div>
-    `;
-}
-
-function renderAllAchievements(achievements) {
-    return achievements.map(ach => `
-        <div class="user-achievements profile-section">
-            <div class="achievement-content">
-                <div class="achievement-icon ${ach.rarity}">
-                    <img src="${ach.imageUrl}" alt="Achievement Icon"/>
-                    <div class="achievement-time">
-                        ${ach.timestamp || "N/A"}
-                    </div>
-                </div>
-                <div class="achievement-info">
-                    <div class="achievement-title ${ach.rarity}">
-                        ${ach.name}
-                    </div>
-                    <div class="achievement-description">
-                        ${ach.description}
-                    </div>
-                    ${ach.globalPercentage > 0 ?
-            `<div class="achievement-percentage ${ach.rarity}">${ach.globalPercentage}% of players have this achievement</div>` :
-            ``}
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-async function processPlayerAchievements(player, options = {}) {
-    const achievementData = await fetchAchievementData();
-
-    if (options.renderAll) {
-        const allAchievements = await getAllAchievements(player, achievementData);
-        if (options.container) {
-            options.container.innerHTML = renderAllAchievements(allAchievements);
-        }
-        return allAchievements;
-    } else {
-        const latestAchievement = await getLatestAchievement(player, achievementData);
-        if (options.container) {
-            options.container.innerHTML = renderSingleAchievement(latestAchievement);
-        }
-        return latestAchievement;
-    }
-}
-
 ////////////////
 // section: Utils
 ////////////////
@@ -1639,7 +1485,7 @@ function setupModalCloseHandlers() {
             isProfileOpened = false;
             history.replaceState(null, null, ' ');
             document.body.style.overflow = 'auto';
-        }, 400);
+        }, 10);
     }
 }
 
@@ -1696,11 +1542,28 @@ function formatLastPlayedRaid(unixTimestamp) {
 // Fetch achievements meta data
 async function fetchAchievementData() {
     try {
-        const response = await fetch("global-achieve/js/compiledAchData.json");
-        if (!response.ok) {
+        const [achievementsResponse, achievementsNewResponse] = await Promise.all([
+            fetch('achievements/js/compiledAchData.json'),
+            fetch('achievements/js/compiledAchDataNew.json'),
+        ]);
+
+        if (!achievementsResponse.ok || !achievementsNewResponse.ok) {
             throw new Error("Failed to fetch achievement data");
         }
-        return await response.json();
+
+        const [oldAchievements, newAchievements] = await Promise.all([
+            achievementsResponse.json(),
+            achievementsNewResponse.json()
+        ]);
+
+        const mergedAchievements = {
+            achievementCompiled: {
+                ...oldAchievements.achievementCompiled,
+                ...newAchievements.achievementCompiled
+            }
+        };
+
+        return mergedAchievements;
     } catch (error) {
         console.error("Error loading achievement data:", error);
         return { achievementCompiled: {} };
@@ -1756,10 +1619,4 @@ function closeLoader() {
     setTimeout(() => {
         loader.remove();
     }, 300); // 300ms - animation lenght (CSS)
-}
-
-// Capitalizes first character
-function capitalize(str, locale = 'en-EN') {
-    if (!str) return str;
-    return str[0].toLocaleUpperCase(locale) + str.slice(1).toLocaleLowerCase(locale);
 }
