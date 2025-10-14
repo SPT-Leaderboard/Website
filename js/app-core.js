@@ -60,7 +60,10 @@ if (isLocalhost) {
 }
 
 // Call main init on DOM load
-document.addEventListener('DOMContentLoaded', initAllSeasons)
+document.addEventListener("DOMContentLoaded", async () => {
+    await initAllSeasons();
+    await loadAchievementsData();
+});
 
 /**
  * Checks if a season with the given number exists on the server
@@ -118,7 +121,7 @@ async function initAllSeasons() {
             seasonNumber++;
         }
     } catch {
-        console.error('Error checking number of seasons:', error);
+        console.error('Error checking number of seasons:', Error);
     } finally {
         // Sort from newest to oldest
         seasons.sort((a, b) => b - a);
@@ -246,7 +249,6 @@ async function loadSeasonData(season) {
         // Run through this real quick before displaying
         addColorIndicators(leaderboardData);
         checkRecentPlayers(leaderboardData);
-        initProfileWatchList(leaderboardData);
         calculateOverallStats(leaderboardData);
         initProfileWatchList(leaderboardData);
     } catch (error) {
@@ -347,7 +349,7 @@ async function displayLeaderboard(data) {
                 : window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || player.lastPlayed);
 
             // For lastGame
-            if (heartbeatMonitor.isOnline(player.id)) {
+            if (window.heartbeatMonitor.isOnline(player.id)) {
                 lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">${playerStatus.statusText} <div id="blink"></div></span>`
             } else {
                 lastGame = `<span class="last-online-time">${lastOnlineTime}</span>`;
@@ -554,12 +556,12 @@ async function displaySimpleLeaderboard(data) {
         const playerStatus = window.heartbeatMonitor.getPlayerStatus(player.id);
 
         if (!player.banned) {
-            const lastOnlineTime = heartbeatMonitor.isOnline(player.id)
+            const lastOnlineTime = window.heartbeatMonitor.isOnline(player.id)
                 ? '<span class="player-status-lb-online">Online</span>'
                 : window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || player.lastPlayed);
 
             // For lastGame
-            if (heartbeatMonitor.isOnline(player.id)) {
+            if (window.heartbeatMonitor.isOnline(player.id)) {
                 lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">${playerStatus.statusText} <div id="blink"></div></span>`
             } else {
                 lastGame = `<span class="last-online-time">${lastOnlineTime}</span>`;
@@ -852,13 +854,21 @@ async function calculatePlaces(data) {
 
     data.forEach((player, index) => {
         if (player.banned) {
-            player.rank = "Banned";
-            player.medal = '';
+            player.totalScore = 0;
+            player.damage = 0;
+            player.killToDeathRatio = 0;
+            player.averageLifeTime = 0;
+            player.pmcRaids = 0;
+            player.scavRaids = 0;
+            player.survivalRate = 0;
+            player.profilePicture = "media/default_banned.png";
+            player.survivedToDiedRatio = 0;
             return;
         }
 
         if (player.isCasual) {
             player.rank = "Casual";
+            player.totalScore = 0.15;
             player.medal = '';
             return;
         }
@@ -909,7 +919,7 @@ function calculateOverallStats(data) {
     let totalKDR = 0;
     let totalSurvival = 0;
     let validPlayers = 0;
-    let onlinePlayers = heartbeatMonitor.getOnlineCount();
+    let onlinePlayers = window.heartbeatMonitor.getOnlineCount();
     let totalPlayTime = 0;
 
     data.forEach(player => {
