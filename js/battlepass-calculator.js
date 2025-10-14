@@ -9,7 +9,9 @@ const MAX_LEVEL = 30;
 
 async function initHOF(player, bestWeapon) {
     updatePlayerProfile(player);
-    updatePlayerProfileMastery(player, bestWeapon);
+
+    if(shouldHideUnsupportedMods)
+        updatePlayerProfileMastery(player, bestWeapon);
 
     // rewardSystem.js
     refreshRewards(player);
@@ -93,6 +95,9 @@ function calculateMasteryLevel(player, bestWeapon) {
 
 // EXP for weapon mastery
 async function updatePlayerProfileMastery(player, bestWeapon) {
+    if(shouldHideUnsupportedMods)
+        return;
+    
     const levelData = calculateMasteryLevel(player, bestWeapon);
 
     // update level
@@ -108,6 +113,7 @@ async function updatePlayerProfileMastery(player, bestWeapon) {
     // update exp values
     document.querySelector(".current-exp-wp").textContent = levelData.currentExp.toLocaleString();
     document.querySelector(".next-level-exp-wp").textContent = levelData.expForNextLevel.toLocaleString();
+
     const remainingExp = levelData.expForNextLevel - levelData.currentExp;
     document.querySelector(".remaining-value-wp").textContent = remainingExp.toLocaleString();
 }
@@ -120,27 +126,29 @@ async function updatePlayerProfile(player) {
     document.querySelector(".level-value").textContent = levelData.level;
 
     // update exp bar
-    const expPercentage =
-        levelData.level >= MAX_LEVEL
-            ? 100
-            : (levelData.currentExp / BASE_EXP_PER_LEVEL) * 100;
-    document.querySelector(".exp-progress").style.width = `${expPercentage}%`;
+    const expPercentage = levelData.level >= MAX_LEVEL ? 100 : (levelData.currentExp / BASE_EXP_PER_LEVEL) * 100;
+
+    const expProgress = document.querySelector(".exp-progress");
+    expProgress.style.width = `${expPercentage}%`;
+
+    if (levelData.level >= MAX_LEVEL) {
+        expProgress.classList.add('max-level');
+    } else {
+        expProgress.classList.remove('max-level');
+    }
 
     // update exp values
     document.querySelector(".current-exp").textContent =
-        levelData.currentExp.toLocaleString();
+        levelData.level >= MAX_LEVEL ? "MAX" : levelData.currentExp.toLocaleString();
 
-        
     document.querySelector(".next-level-exp").textContent =
-        levelData.level >= MAX_LEVEL
-            ? "MAX"
-            : levelData.expForNextLevel.toLocaleString();
+        levelData.level >= MAX_LEVEL ? "MAX" : levelData.expForNextLevel.toLocaleString();
 
     const remainingExp =
         levelData.level >= MAX_LEVEL ? 0 : levelData.expForNextLevel;
 
     document.querySelector(".remaining-value").textContent =
-        remainingExp.toLocaleString();
+        levelData.level >= MAX_LEVEL ? "MAX" : remainingExp.toLocaleString();
 }
 
 async function setRankImage(playerLevel) {
