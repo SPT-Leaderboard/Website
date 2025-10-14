@@ -62,24 +62,8 @@ async function updateAdminsStatus() {
     }
 }
 
-function formatLastSeen(timestamp) {
-    if (!timestamp) return 'Long time ago';
-
-    const seconds = Math.floor(Date.now() / 1000 - timestamp);
-    if (seconds < 60) return 'Just now';
-
-    const minutes = Math.floor(seconds / 60);
-    if (minutes < 60) return `${minutes}m ago`;
-
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours}h ago`;
-
-    const days = Math.floor(hours / 24);
-    return `${days}d ago`;
-}
-
 // Initial load
 document.addEventListener('DOMContentLoaded', updateAdminsStatus);
 
-// Update every 60 seconds
-setInterval(updateAdminsStatus, 60000);
+// Update every 120 seconds
+setInterval(updateAdminsStatus, 120000);
