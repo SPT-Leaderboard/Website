@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" type="text/css" href="styles.css">
         <link rel="stylesheet" type="text/css" href="rewards.css">
-        <link rel="icon" href="media/newlogo_transparent.png">
+        <link rel="icon" href="media/newlogo_transparent_snow.png">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
         <script src="https://betterdiscord.app/js/vendor/countUp.min.js?v=DBxeQBHNMaYkRvB8uPOLm07cbQj54TDexlykb-Dcg28"></script>
@@ -20,13 +20,13 @@
         <script src="js/app-core.js"></script>
         <script src="js/api-auth.js"></script>
         <script src="js/system-winners.js"></script>
-        <script src="js/raid-notifications.js"></script>
         <script src="js/system-heartbeat.js"></script>
-        <script src="js/ui-live-data-flow.js"></script>
+        <script src="js/system-season-end.js"></script>
+        <script src="js/system-timer.js"></script>
+        <script src="js/raid-notifications.js"></script>
         <script src="js/api-monitor.js"></script>
+        <script src="js/user-achievements.js"></script>
         <script src="js/user-raid-history.js"></script>
-        <script src="js/system-achievements.js"></script>
-        <script src="js/user-settings.js"></script>
         <script src="js/user-search.js"></script>
         <script src="js/user-profiles.js"></script>
         <script src="js/user-friends.js"></script>
@@ -34,6 +34,7 @@
         <script src="js/user-teams.js"></script>
         <script src="js/battlepass-calculator.js"></script>
         <script src="js/battlepass-rewards.js"></script>
+        <script src="js/ui-live-data-flow.js"></script>
         <script src="js/ui-navigation.js"></script>
         <script src="js/ui-toasts.js"></script>
         <script src="js/api-admins.js"></script>
@@ -70,7 +71,7 @@
         <header>
             <nav class="navbar" role="navigation">
                 <a href="#" aria-label="Home">
-                    <img src="media/newlogo_transparent.png" alt="SPT Leaderboard Logo" class="navbar-logo">
+                    <img src="media/newlogo_transparent_snow.png" alt="SPT Leaderboard Logo" class="navbar-logo">
                 </a>
                 <div class="navbar-links-container">
                     <a href="meta/" class="navbar-link">Weapon Meta</a>
@@ -310,11 +311,11 @@
         </div>
         <div class="announcement-wrapper animate animate__animated animate__fadeIn">
             <div class="snow-crust"></div>
-            <div class="announcement-icon"><img src="https://img.icons8.com/?size=256&id=61604&format=png" style="height: 70px;"></div>
+            <div class="announcement-icon"><img src="files/achievement/S24Q4_Roundelay.png" style="height: 100px;"></div>
             <div class="announcement-content">
-                <div class="announcement-title"> Tarkov Market was refreshed! </div>
-                <div class="announcement-text"> We added new high-end gear and ammo packs, also reduced common item drops in some cases! Get items at <a href="https://sptlb.yuyui.moe/api/network/tarkov-market/" class="announcement-link">SPTLB Tarkov Market!</a> Don't forget, you can always <a href="https://discord.gg/psV2PY8brW" target="_blank" class="announcement-link">Join Discord Server</a> to always stay updated! </div>
-                <div class="announcement-signature"> — SPTLB Team </div>
+                <div class="announcement-title"> Spot the new snowy theme? </div>
+                <div class="announcement-text"> Because that's not the only cool thing coming. Beta Testing of SPT Leaderboard for SPT 4.0 is open and we want <strong>you</strong> to help us shape it. <a href="https://discord.gg/psV2PY8brW" target="_blank" class="announcement-link">Join Discord Server</a> to participate! </div>
+                <div class="announcement-signature"> — With love to all of you. SPTLB Team </div>
             </div>
         </div>
         <p id="status"></p>
@@ -358,7 +359,7 @@
         <div id="seasonTimer"> Season ends in: <span id="timerDisplay"></span>
         </div>
         <div class="notification-container">
-            <div id="emptyLeaderboardNotification" class="animate animate__animated animate__fadeInUp" style="display: none;">Something went wrong while we were loading leaderboard. Try reloading page.</div>
+            <div id="emptyLeaderboardNotification" class="animate animate__animated animate__fadeInUp" style="display: none;">Connection lost. We'll retry in a second...</div>
         </div>
         <div id="playerProfileModal" class="profile-modal">
             <div id="modalPlayerInfo" class="profile-modal-content">
@@ -375,20 +376,21 @@
             <div class="footer-content">
                 <div class="footer-brand">
                     <div class="logo-slogan">
-                        <img src="media/newlogo_transparent.png" class="footer-logo">
+                        <img src="media/newlogo_transparent_snow.png" class="footer-logo">
                         <p class="slogan">Community driven project. With dedication and love.</p>
                     </div>
                     <div class="license-info">
-                        <p>© 2025 SPT Leaderboard. This service is not maintained by or associated with the SPT project or Battlestate Games.</p>
+                        <p>© 2025 SPT Leaderboard. All rights reserved.</p>
+                        <p> This service is not maintained by or associated with the SPT project or Battlestate Games Limited.</p>
                         <p>Released under <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a></p>
                     </div>
                 </div>
                 <div class="footer-links">
                     <ul>
-                        <li><a href="https://github.com/harmonyzt/SPT-Leaderboard.github.io/issues" target="_blank" rel="noopener">Contribute</a></li>
-                        <li><a href="https://github.com/harmonyzt/SPT-Leaderboard.github.io" target="_blank" rel="noopener">GitHub Page</a></li>
-                        <li><a href="https://hub.sp-tarkov.com/files/file/2787-spt-leaderboard/" target="_blank" rel="noopener">SPTarkov Mod</a></li>
-                        <li><a href="/api-documentation">API Documentation</a></li>
+                        <li><a href="https://github.com/SPT-Leaderboard/Website/issues" target="_blank" rel="noopener">Contribute</a></li>
+                        <li><a href="https://github.com/SPT-Leaderboard/Website" target="_blank" rel="noopener">GitHub Page</a></li>
+                        <li><a href="https://forge.sp-tarkov.com/mod/2101/spt-leaderboard" target="_blank" rel="noopener">SPTarkov Mod</a></li>
+                        <li><a href="/api-docs">API Documentation</a></li>
                     </ul>
                 </div>
             </div>
