@@ -8,7 +8,44 @@ let playerWidget;
 let playerOneInput;
 let widgetContainer;
 
+function updateVisibility(toggle, element, cookieName) {
+    const isVisible = toggle.checked;
+    if (element) {
+        element.style.display = isVisible ? 'block' : 'none';
+    }
+
+    setCookie(cookieName, isVisible);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    const timerToggle = document.getElementById('timerToggle');
+    const seasonTimer = document.getElementById('seasonTimer');
+    const winnersToggle = document.getElementById('winnersToggle');
+    const winnersElement = document.getElementById('winners');
+    const staffToggle = document.getElementById('staffToggle');
+    const staffElement = document.getElementById('admins-container');
+    const lbToggle = document.getElementById('lbToggle');
+    const casualToggle = document.getElementById('casualToggle');
+
+    // If no cookies are found, enable everything
+    timerToggle.checked = getCookie('showTimer') !== 'false';
+    winnersToggle.checked = getCookie('showWinners') !== 'false';
+    staffToggle.checked = getCookie('showStaff') !== 'false';
+    lbToggle.checked = getCookie('lbToggle') !== 'false';
+    casualToggle.checked = getCookie('casualToggle') !== 'false';
+
+    // Should we display or hide elements
+    seasonTimer.style.display = timerToggle.checked ? 'block' : 'none';
+    winnersElement.style.display = winnersToggle.checked ? 'block' : 'none';
+    staffElement.style.display = staffToggle.checked ? 'block' : 'none';
+
+    // Then update visibility
+    timerToggle.addEventListener('change', () => updateVisibility(timerToggle, seasonTimer, 'showTimer'));
+    winnersToggle.addEventListener('change', () => updateVisibility(winnersToggle, winnersElement, 'showWinners'));
+    staffToggle.addEventListener('change', () => updateVisibility(staffToggle, staffElement, 'showStaff'));
+    lbToggle.addEventListener('change', () => updateVisibility(lbToggle, null, 'lbToggle'));
+    casualToggle.addEventListener('change', () => updateVisibility(casualToggle, null, 'casualToggle'));
+
     const elements = {
         infoModal: document.getElementById('infoModal'),
         infoButton: document.getElementById('infoButton'),
