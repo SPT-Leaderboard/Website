@@ -6,6 +6,8 @@
 
 async function initLastRaids(playerId) {
     const statsContainer = document.getElementById('raids-stats-container');
+    const mapStatsContainer = document.getElementById('maps-container');
+
     if (!statsContainer) {
         console.error('Container element not found');
         return;
@@ -47,6 +49,12 @@ async function initLastRaids(playerId) {
     } catch (error) {
         closeLoader();
         statsContainer.innerHTML = '<p class="error-raid-load">Error loading raid data :(</p>';
+        mapStatsContainer.innerHTML = `
+            <div class="no-stats-message">
+                <h3>No Map Statistics Available</h3>
+                <p>This player hasn't played any map yet, or it wasn't recorded.</p>
+            </div>
+        `
     }
 }
 
@@ -59,6 +67,8 @@ function renderRaidsStats(raids) {
 
     const statsContainer = document.getElementById('raids-stats-container');
     const recentStatsContainer = document.getElementById('recent-raids-stats');
+    const mapStatsContainer = document.getElementById('maps-container');
+    const mapStats = calculateMapStats(raids);
     const recentStats = calculateRecentStats(raids);
 
     let html = '';
@@ -93,6 +103,93 @@ function renderRaidsStats(raids) {
             </div>
         </div>
     `;
+
+    let mapStatsHtml = '';
+    if (mapStats.length > 0) {
+        mapStatsHtml = `
+                <div class="maps-stats-grid">
+                    ${mapStats.map(map => `
+                    <div class="map-stat-card">
+                        <div class="map-header">
+                            <div class="map-image">
+                                <img src="media/leaderboard_icons/maps/${map.map}.png" alt="${map.map}" 
+                                    onerror="this.src='media/leaderboard_icons/maps/Default.png'">
+                            </div>
+                            <div class="map-info">
+                                <h4 class="map-name">${map.map}</h4>
+                                <div class="map-raids-count">${map.totalRaids} raids</div>
+                            </div>
+                        </div>
+                        
+                        <div class="map-stats-grid">
+                            <div class="map-stat-item progress-stat">
+                                <div class="stat-header">
+                                    <div class="map-stat-label">Raid Duration</div>
+                                    <div class="map-stat-value">${map.formattedTime}</div>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill time-progress ${getTimeQuality(map.avgTime)}" 
+                                            style="width: ${getTimeProgress(map.avgTime)}%">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="map-stat-item progress-stat">
+                                <div class="stat-header">
+                                    <div class="map-stat-label">Survival Rate</div>
+                                    <div class="map-stat-value ${map.survivalRate >= 40 ? 'stat-positive' : 'stat-negative'}">
+                                        ${map.survivalRate}%
+                                    </div>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill survival-progress ${map.survivalRate >= 50 ? 'high' : map.survivalRate >= 30 ? 'medium' : 'low'}" 
+                                            style="width: ${map.survivalRate}%">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="map-stat-item progress-stat">
+                                <div class="stat-header">
+                                    <div class="map-stat-label">Kills per Raid</div>
+                                    <div class="map-stat-value">${map.avgKills}</div>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill kills-progress ${map.avgKills >= 10 ? 'high' : map.avgKills >= 3 ? 'medium' : 'low'}" 
+                                            style="width: ${Math.min(map.avgKills * 20, 100)}%">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="map-stat-item">
+                                <div class="map-stat-label">Avg. EXP</div>
+                                <div class="map-stat-value">${map.avgEXP.toLocaleString()}</div>
+                            </div>
+
+                            <div class="map-stat-item">
+                                <div class="map-stat-label">Avg. Profit</div>
+                                <div class="map-stat-value ${map.avgProfit >= 30000 ? 'stat-positive' : 'stat-negative'}">
+                                    ${map.avgProfit >= 0 ? '+' : ''}${map.formattedProfit} ₽
+                                </div>
+                            </div>
+                            
+                            <div class="map-stat-item">
+                                <div class="map-stat-label">Total Profit</div>
+                                <div class="map-stat-value ${map.totalProfit >= 0 ? 'stat-positive' : 'stat-negative'}">
+                                    ${map.totalProfit >= 0 ? '+' : ''}${formatProfit(map.totalProfit)} ₽
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `).join('')}
+                </div>
+            `;
+    }
 
     raids.forEach(raid => {
         const lastRaidDuration = formatSeconds(raid.raidTime);
@@ -163,6 +260,7 @@ function renderRaidsStats(raids) {
 
     statsContainer.innerHTML = html;
     recentStatsContainer.innerHTML = recentStatsHtml;
+    mapStatsContainer.innerHTML = mapStatsHtml;
 }
 
 function calculateRecentStats(raids) {
@@ -194,4 +292,76 @@ function calculateRecentStats(raids) {
         totalEXP: stats.totalEXP.toLocaleString(),
         totalLC: stats.totalLC.toLocaleString()
     };
+}
+
+function calculateMapStats(raids) {
+    const mapStats = {};
+
+    raids.forEach(raid => {
+        const map = raid.lastRaidMap || 'Unknown';
+
+        if (!mapStats[map]) {
+            mapStats[map] = {
+                map: map,
+                totalRaids: 0,
+                totalTime: 0,
+                totalProfit: 0,
+                survived: 0,
+                totalKills: 0,
+                totalEXP: 0
+            };
+        }
+
+        const stats = mapStats[map];
+        stats.totalRaids++;
+        stats.totalTime += raid.raidTime || 0;
+        stats.totalProfit += raid.profitRUB || 0;
+        stats.totalKills += (raid.raidKills || 0) + (raid.scavsKilled || 0) + (raid.bossesKilled || 0);
+        stats.totalEXP += raid.lastRaidEXP || 0;
+
+        if (raid.lastRaidSurvived || raid.lastRaidRanThrough || raid.discFromRaid || raid.isTransition) {
+            stats.survived++;
+        }
+    });
+
+    // Calculate averages
+    return Object.values(mapStats).map(stats => {
+        const avgTime = stats.totalRaids > 0 ? Math.round(stats.totalTime / stats.totalRaids) : 0;
+        const avgProfit = stats.totalRaids > 0 ? Math.round(stats.totalProfit / stats.totalRaids) : 0;
+        const avgKills = stats.totalRaids > 0 ? (stats.totalKills / stats.totalRaids).toFixed(1) : 0;
+        const survivalRate = stats.totalRaids > 0 ? Math.round((stats.survived / stats.totalRaids) * 100) : 0;
+        const avgEXP = stats.totalRaids > 0 ? Math.round(stats.totalEXP / stats.totalRaids) : 0;
+
+        return {
+            ...stats,
+            avgTime,
+            avgProfit,
+            avgKills,
+            survivalRate,
+            avgEXP,
+            formattedTime: formatSeconds(avgTime),
+            formattedProfit: formatProfit(avgProfit)
+        };
+    });
+}
+
+function formatProfit(profit) {
+    if (profit >= 1000000) {
+        return (profit / 1000000).toFixed(1) + 'M';
+    } else if (profit >= 1000) {
+        return (profit / 1000).toFixed(0) + 'K';
+    }
+    return profit.toLocaleString('ru-RU');
+}
+
+function getTimeProgress(currentTime, minTime = 1, maxTime = 1800) {
+    const clamped = Math.max(minTime, Math.min(currentTime, maxTime));
+    return ((clamped - minTime) / (maxTime - minTime)) * 100;
+}
+
+function getTimeQuality(time) {
+    if (time < 600) return 'low';
+    if (time < 800) return 'medium';
+    if (time < 1200) return 'good';
+    return 'excellent';
 }
