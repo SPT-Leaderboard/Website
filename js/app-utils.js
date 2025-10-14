@@ -76,7 +76,7 @@ window.addEventListener('load', updateNavbarOffset);
 window.addEventListener('resize', updateNavbarOffset);
 
 // Ranks
-function getRank(rating, maxRating = 1000) {
+function getRank(rating, maxRating = 1000, res = 32) {
     const totalRanks = 30;
     const rankIndex = Math.min(totalRanks - 1, Math.floor((rating / maxRating) * totalRanks));
     const level = rankIndex + 1;
@@ -101,7 +101,7 @@ function getRank(rating, maxRating = 1000) {
     const rankName = rankNames[levelGroup][rankInGroup - 1];
 
     return {
-        image: `media/player_ranks/Rank${levelGroup + 1}/${rankInGroup}@32px.png`,
+        image: `media/player_ranks/Rank${levelGroup + 1}/${rankInGroup}@${res}px.png`,
         name: rankName,
         fullName: `${rankName} (Level ${level})`,
         level: level,
@@ -233,4 +233,58 @@ function formatDate(date) {
     const minutes = date.getMinutes().toString().padStart(2, '0');
 
     return `${month} ${day} ${year}, ${hours}:${minutes}`;
+}
+
+function formatLastSeen(timestamp) {
+    if (!timestamp) return 'Long time ago';
+
+    const seconds = Math.floor(Date.now() / 1000 - timestamp);
+    if (seconds < 60) return 'Just now';
+
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
+}
+
+function formatTime(seconds) {
+    const months = Math.floor(seconds / (3600 * 24 * 30));
+    const days = Math.floor((seconds % (3600 * 24 * 30)) / (3600 * 24));
+    const hours = Math.floor((seconds % (3600 * 24)) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+
+    let result = [];
+    if (months > 0) result.push(`${months}mo`);
+    if (days > 0) result.push(`${days}d`);
+    if (hours > 0) result.push(`${hours}h`);
+    if (minutes > 0 && months === 0) result.push(`${minutes}m`);
+
+    return result.join(' ') || '0m';
+}
+
+// Capitalize first character
+function capitalize(str, locale = 'en-EN') {
+    if (!str) return str;
+    return str[0].toLocaleUpperCase(locale) + str.slice(1).toLocaleLowerCase(locale);
+}
+
+async function getCustomProfileSettings(playerId) {
+    try {
+        const response = await fetch(`/api/network/profile/profiles/${playerId}.json?t=${Date.now()}`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        return data[playerId] || null;
+    } catch (error) {
+        console.error('Failed to load profile settings:', error);
+        return null;
+    }
 }
