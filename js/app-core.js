@@ -396,11 +396,6 @@ async function displayLeaderboard(data) {
             </div>`;
         }
 
-        let profileOpenIcon = `Private <em class='bx bxs-lock' style="font-size: 23px"></em>`;
-        if (player.publicProfile) {
-            profileOpenIcon = `Share`;
-        }
-
         // Account type handling
         let accountIcon = '';
         let accountColor = '';
@@ -487,11 +482,9 @@ async function displayLeaderboard(data) {
                 ${accountIcon} <span class="${finalNameClass}">${player.name}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div>
             </td>
             <td>${lastGame || 'N/A'}</td>
-            <td>${player.publicProfile ? `<button style="share-button" onclick="copyProfile('${player.id}')">${profileOpenIcon} <i class='bx  bxs-share'></i> </button>`
-                : `${profileOpenIcon}`
-            }</td>
+            <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class='bx  bxs-share'></i> </button></td>
             <td>${badge}</td>
-            <td>${player.publicProfile ? `${player.pmcRaids} / ${player.scavRaids} (${player.pmcRaids + player.scavRaids})` : `${player.pmcRaids}`}</td>
+            <td>${`${player.pmcRaids} / ${player.scavRaids ?? 0} (${player.pmcRaids + player.scavRaids ?? 0})`}</td>
             <td class="${player.survivedToDiedRatioClass}">${player.survivalRate}%</td>
             <td class="${player.killToDeathRatioClass}">${player.killToDeathRatio}</td>
             <td class="${player.averageLifeTimeClass}">${formatSeconds(player.averageLifeTime)}</td>
@@ -593,11 +586,6 @@ async function displaySimpleLeaderboard(data) {
             `;
         }
 
-        let profileOpenIcon = `Private <em class='bx bxs-lock' style="font-size: 23px"></em>`;
-        if (player.publicProfile) {
-            profileOpenIcon = `Share`;
-        }
-
         // Skill rank label
         const rankLabel = player.isCasual ? 'Casual' : getRankLabel(player.totalScore);
         row.innerHTML = `
@@ -607,11 +595,9 @@ async function displaySimpleLeaderboard(data) {
                 <span">${player.name}</span>
             </td>
             <td>${lastGame || 'N/A'}</td>
-            <td>${player.publicProfile ? `<button style="share-button" onclick="copyProfile('${player.id}')">${profileOpenIcon} <i class='bx  bxs-share'></i> </button>`
-                : `${profileOpenIcon}`
-            }</td>
+            <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class='bx  bxs-share'></i> </button></td>
             <td>${badge}</td>
-            <td>${player.publicProfile ? `${player.pmcRaids} / ${player.scavRaids} (${player.pmcRaids + player.scavRaids})` : `${player.pmcRaids}`}</td>
+            <td>${`${player.pmcRaids} / ${player.scavRaids ?? 0} (${player.pmcRaids + player.scavRaids ?? 0})`}</td>
             <td>${player.survivalRate}%</td>
             <td>${player.killToDeathRatio}</td>
             <td>${formatSeconds(player.averageLifeTime)}</td>
@@ -936,14 +922,11 @@ function calculateOverallStats(data) {
                 totalRaids += pmcRaids;
                 totalKills += rawKills;
                 totalDeaths += deaths;
+                totalDamage += parseFloat(player.damage) || 0;
 
                 totalKDR += kdr;
                 totalSurvival += survivalRate;
                 validPlayers++;
-
-                if (player.publicProfile) {
-                    totalDamage += parseFloat(player.damage) || 0;
-                }
             }
         }
 

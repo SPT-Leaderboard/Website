@@ -5,7 +5,7 @@
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
 // Date
-const seasonEndDate = new Date(2025, 11, 13, 14, 1, 1);
+const seasonEndDate = new Date(2024, 11, 13, 14, 1, 1);
 let timerInterval;
 
 document.addEventListener('DOMContentLoaded', () => {

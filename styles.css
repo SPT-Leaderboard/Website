@@ -40,6 +40,20 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
+@font-face {
+    font-family: 'Bender Regular';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Bender Regular'), url('/media/font/Bender/Jovanny Lemonad - Bender.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Bender Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Bender Regular'), url('/media/font/Bender/Jovanny Lemonad - Bender-Bold.woff') format('woff');
+}
+
 .snowflake {
     position: fixed;
     background-color: #ccc;
@@ -1545,9 +1559,9 @@ button:hover,
 }
 
 .modal-content {
-    background: linear-gradient(135deg, 
-        rgba(10, 25, 47, 0.98), 
-        rgba(15, 30, 55, 0.98));
+    background: linear-gradient(135deg,
+            rgba(10, 25, 47, 0.98),
+            rgba(15, 30, 55, 0.98));
     margin: 5% auto;
     padding: 30px;
     border: 1px solid var(--accent-teal);
@@ -1719,6 +1733,7 @@ input[type="checkbox"]:checked:hover {
         opacity: 0;
         transform: translateY(-50px) scale(0.9);
     }
+
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -2465,8 +2480,9 @@ input[type="checkbox"]:checked:hover {
 }
 
 .profile-section h3 {
+    color: #ffffffa6;
     font-size: 17px;
-    margin-top: 10px;
+    margin: 5px 0 15px 0;
 }
 
 .user-main-card {
@@ -2650,6 +2666,56 @@ input[type="checkbox"]:checked:hover {
     text-align: center;
 }
 
+.playermodel-stats {
+    display: flex;
+    gap: 25px;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+.playermodel-stats div {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.player-hydration i {
+    color: #7ec8ff;
+    font-size: 20px;
+    opacity: 0.9;
+}
+
+.player-energy i {
+    color: #f4e6b3;
+    font-size: 20px;
+    opacity: 0.9;
+}
+
+.player-hydration,
+.player-energy {
+    font-family: 'Bender Regular', sans-serif;
+    font-size: 18px;
+}
+
+.player-hydration .current {
+    color: #7ec8ff;
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.player-energy .current {
+    color: #f4e6b3;
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.max {
+    color: #777;
+    font-size: 18px;
+    margin-left: 2px;
+    margin-top: 9px;
+}
+
 .playermodel h3 {
     color: #fff;
     margin-bottom: 20px;
@@ -2663,7 +2729,7 @@ input[type="checkbox"]:checked:hover {
 .playermodel-image img {
     width: 100%;
     display: flex;
-    height: auto;
+    max-height: 700px;
     position: relative;
     overflow: hidden;
     border-radius: 12px;
@@ -3294,6 +3360,9 @@ input[type="checkbox"]:checked:hover {
 }
 
 .section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     color: #84d2ff;
     margin: 0 0 20px 0;
     font-size: 1.3em;
@@ -3400,6 +3469,77 @@ input[type="checkbox"]:checked:hover {
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
+}
+
+.raid-profit {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    font-size: 1.1em;
+    color: var(--gray-light);
+    font-weight: 700;
+    float: right;
+}
+
+.good {
+    margin: 5px;
+    color: #10b981;
+}
+
+.bad {
+    margin: 5px;
+    color: #ff6a6a;
+}
+
+.cross-profile-indicator {
+    margin-bottom: 10px;
+}
+
+.cross-profile-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: rgba(255, 193, 7, 0.2);
+    border: 1px solid rgba(255, 193, 7, 0.5);
+    border-radius: 20px;
+    font-size: 12px;
+    color: #ffc107;
+    font-weight: 500;
+}
+
+.cross-profile-badge.unknown {
+    background: rgba(108, 117, 125, 0.2);
+    border-color: rgba(108, 117, 125, 0.5);
+    color: #6c757d;
+}
+
+.cross-profile-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #ffc107;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cross-profile-link:hover {
+    color: #ffd54f;
+    text-decoration: underline;
+}
+
+.cross-profile-avatar {
+    border: 1px solid #ffffff27;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.last-raid-feed.cross-profile {
+    border-left: 4px solid #ffc107;
+    opacity: 0.9;
 }
 
 .raid-killer {
@@ -4254,6 +4394,8 @@ input[type="checkbox"]:checked:hover {
     width: 80px;
     height: 80px;
     margin: 0 auto 8px;
+    border: 3px solid #7f7f7f44;
+    border-radius: 10px;
 }
 
 .trader-image {
@@ -4759,10 +4901,7 @@ input[type="checkbox"]:checked:hover {
     margin-bottom: 20px;
     text-transform: uppercase;
     letter-spacing: 4px;
-    background: linear-gradient(45deg, var(--accent-blue), var(--accent-teal));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--accent-teal);
     animation: fadeInDown 2s ease-in-out forwards,
         glowPulseText 5s ease-in-out forwards 7.5s,
         glowPulseTextRepeat 2s ease-in-out forwards 8.5s,

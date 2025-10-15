@@ -4,7 +4,7 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ / 
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
-async function initLastRaids(playerId) {
+async function initLastRaids(playerId, permaLink) {
     const statsContainer = document.getElementById('raids-stats-container');
     const mapStatsContainer = document.getElementById('maps-container');
 
@@ -26,7 +26,7 @@ async function initLastRaids(playerId) {
                     </div>`;
 
     try {
-        const playerRaidsPath = `${lastRaidsPath}${playerId}.json?t=${Date.now()}`;
+        const playerRaidsPath = `${lastRaidsPath}${permaLink}.json?t=${Date.now()}`;
         const response = await fetch(playerRaidsPath);
 
         if (!response.ok) {
@@ -45,7 +45,7 @@ async function initLastRaids(playerId) {
             b.absoluteLastTime - a.absoluteLastTime
         );
 
-        renderRaidsStats(sortedRaids);
+        renderRaidsStats(sortedRaids, playerId, leaderboardData);
     } catch (error) {
         closeLoader();
         statsContainer.innerHTML = '<p class="error-raid-load">Error loading raid data :(</p>';
@@ -59,7 +59,7 @@ async function initLastRaids(playerId) {
 }
 
 // Render raids
-function renderRaidsStats(raids) {
+function renderRaidsStats(raids, currentPlayerId, leaderboardData) {
     if (!raids?.length) {
         statsContainer.innerHTML = '<p class="error-raid-load">No raid data available</p>';
         return;
@@ -196,8 +196,40 @@ function renderRaidsStats(raids) {
         const lastRaidAgo = formatLastPlayedRaid(raid.absoluteLastTime);
         let shouldShowStats = true;
 
-        if (raid.raidKills == 0 && raid.scavsKilled == 0 && raid.bossesKilled == 0 && raid.raidDamage < 100 && raid.lastRaidHits == 0 && raid.lastRaidEXP < 100) {
+        if (raid.raidKills == 0 && raid.scavsKilled == 0 && raid.bossesKilled == 0 && raid.raidDamage < 300 && raid.lastRaidHits < 10 && raid.lastRaidEXP < 500) {
             shouldShowStats = false;
+        }
+
+        const isCrossProfileRaid = raid.lastRaidSessionID && raid.lastRaidSessionID !== currentPlayerId;
+        let crossProfileIndicator = '';
+        let otherPlayerInfo = null;
+
+        if (isCrossProfileRaid && leaderboardData) {
+            otherPlayerInfo = leaderboardData.find(player => player.id === raid.lastRaidSessionID);
+
+            if (otherPlayerInfo) {
+                crossProfileIndicator = `
+                    <div class="cross-profile-indicator">
+                        <div class="cross-profile-badge">
+                            <i class='bx bxs-user-badge'></i>
+                            Played on: 
+                            <button onclick="openProfile(${otherPlayerInfo.id}, true)" class="cross-profile-link">
+                                <img src="${otherPlayerInfo.profilePicture || 'media/default_avatar.png'}" alt="${otherPlayerInfo.name}" class="cross-profile-avatar">
+                                ${otherPlayerInfo.name}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                crossProfileIndicator = `
+                    <div class="cross-profile-indicator">
+                        <div class="cross-profile-badge unknown">
+                            <i class='bx bxs-user-x'></i>
+                            Played on another profile
+                        </div>
+                    </div>
+                `;
+            }
         }
 
         html += `
@@ -208,25 +240,28 @@ function renderRaidsStats(raids) {
                     </div>
 
                     <h3 class="section-title ${raid.lastRaidRanThrough ? 'run-through' : raid.discFromRaid ? 'disconnected' : raid.isTransition ? 'transit' : raid.lastRaidSurvived ? 'survived' : 'died'}" style="margin-top: 0;">
-                        Raid on ${new Date(raid.absoluteLastTime * 1000).toLocaleString()}
+                        Raid on ${new Date(raid.absoluteLastTime * 1000).toLocaleString()} ${crossProfileIndicator}
                     </h3>
 
                     <div style="margin-bottom: 10px;">
-                    <div class="last-raid-map ${raid.lastRaidRanThrough ? 'run-through-border' : raid.discFromRaid ? 'disconnected-border' : raid.isTransition ? 'transit-border' : raid.lastRaidSurvived ? 'survived-border' : 'died-border'}">
-                        <img src="media/leaderboard_icons/maps/${raid.lastRaidMap}.png">
-                    </div>
+                        <div class="last-raid-map ${raid.lastRaidRanThrough ? 'run-through-border' : raid.discFromRaid ? 'disconnected-border' : raid.isTransition ? 'transit-border' : raid.lastRaidSurvived ? 'survived-border' : 'died-border'}">
+                            <img src="media/leaderboard_icons/maps/${raid.lastRaidMap}.png">
+                        </div>
 
                         <span class="raid-result ${raid.lastRaidRanThrough ? 'run-through' : raid.discFromRaid ? 'disconnected' : raid.isTransition ? 'transit' : raid.lastRaidSurvived ? 'survived' : 'died'}" style="font-weight: bold;">
                             ${raid.lastRaidRanThrough ? `<i class='bx bxs-walking'></i> Runner` : raid.discFromRaid ? `<i class='bx bxs-arrow-out-left-square-half'></i> Left` : raid.isTransition ? `<span> <i class='bx bxs-refresh-cw bx-spin'></i> </span> In Transit (${raid.lastRaidMap}
                             <em class="fa-solid fa-person-walking-arrow-right"></em> ${raid.lastRaidTransitionTo || 'Unknown'})` : raid.lastRaidSurvived ? `<i class='bx bxs-walking'></i> Survived` : `
                             <i class="fa-solid fa-skull-crossbones"></i> Killed in Action`}
                         </span>
+
+                        <div class="raid-profit"> Raid Profit:<span class="${raid.lastRaidProfit > 50000 ? `good` : `bad`}"> ${raid.lastRaidProfit ? raid.lastRaidProfit.toLocaleString() : 0} RUB</span></div>
+
                         <span class="raid-meta">
                             ${raid.lastRaidMap || 'Unknown'} • ${raid.lastRaidAs || 'N/A'} • ${lastRaidDuration || '00:00'} • LC Earned: <span class="lb-coins">+${raid.lcPointsEarned ? raid.lcPointsEarned : 0}</span> • ${lastRaidAgo || 'Just Now'} ${raid.lastRaidSurvived || raid.lastRaidRanThrough || raid.discFromRaid || raid.isTransition || raid.agressorName == null ? `` : `• Killed by <span class="raid-killer">${raid.agressorName}</span>`}
                         </span>
                     </div>
 
-                    ${shouldShowStats ?
+                ${shouldShowStats ?
                 `<div class="raid-stats-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
                         <div class="raid-stat-block">
                             <span class="profile-stat-label">PMC Kills:</span>
@@ -287,8 +322,8 @@ function calculateRecentStats(raids) {
     return {
         survivalRate: Math.round((stats.survived / stats.runs) * 100),
         avgKills: (stats.totalKills / stats.runs).toFixed(1),
-        totalKills: stats.totalKills,
-        avgDamage: Math.round(stats.totalDamage / stats.runs),
+        totalKills: stats.totalKills.toLocaleString(),
+        avgDamage: Math.round(stats.totalDamage / stats.runs).toLocaleString(),
         totalEXP: stats.totalEXP.toLocaleString(),
         totalLC: stats.totalLC.toLocaleString()
     };
@@ -315,7 +350,7 @@ function calculateMapStats(raids) {
         const stats = mapStats[map];
         stats.totalRaids++;
         stats.totalTime += raid.raidTime || 0;
-        stats.totalProfit += raid.profitRUB || 0;
+        stats.totalProfit += raid.lastRaidProfit || 0;
         stats.totalKills += (raid.raidKills || 0) + (raid.scavsKilled || 0) + (raid.bossesKilled || 0);
         stats.totalEXP += raid.lastRaidEXP || 0;
 

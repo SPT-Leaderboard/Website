@@ -32,7 +32,7 @@ function resetStyles({ mainBackground, profileCard, profileAvatar, profileBackgr
     mainBackground.className = mainBackground.className.replace(/(usec|bear|labs|lighthouse|goons|raider)-background|prestige-(tagilla|killa|both)/g, '');
 
     // Reset weapon 
-    if(!shouldHideUnsupportedMods)
+    if (!shouldHideUnsupportedMods)
         profileBackground.className = profileBackground.className.replace(/(scratches|cult-(signs|signs2|circle))/g, '');
 
     // Reset profile card

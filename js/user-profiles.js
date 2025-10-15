@@ -43,7 +43,7 @@ async function openProfile(playerId, bypass = false) {
         return;
     }
 
-    const isPublic = player.publicProfile;
+    const isPublic = true;
 
     // If disqualified
     if (player.banned) {
@@ -333,9 +333,9 @@ async function showPublicProfile(container, player) {
             </div>
 
             <div class="battlepass-level profile-section">
-                <div class="achievement-title Common">
+                <h3>
                     Leaderboard BattlePass Level
-                </div>
+                </h3>
                 <div class="bp-wrapper" id="playerRankIcon">
                     <div class="level-info">
                         <span class="level-value">0</span>
@@ -474,9 +474,7 @@ async function showPublicProfile(container, player) {
                         Send
                     </button>
                 </div>
-                
                 <div class="divider"></div>
-            
                 <div class="comments-list">
                 </div>
             </div>
@@ -490,7 +488,17 @@ async function showPublicProfile(container, player) {
             <div class="playermodel profile-section" id="playermodel">
                 <h3>Player Pre-Raid Preview</h3>
                 <div class="playermodel-image">
-                    <img src="/api/data/pmc_avatars/${player.id}_full.png" alt="Player model preview" onerror="this.src='media/default_full_pmc_avatar.png';" />
+                    <img src="/api/data/pmc_avatars/${player.id}_full.png" alt="Player Model Preview" onerror="this.src='media/default_full_pmc_avatar.png';" />
+                </div>
+                <div class="playermodel-stats profile-section">
+                    <div class="player-hydration">
+                        <i class="fa-solid fa-droplet"></i>
+                        <span class="current">${player.hydration ?? 100}</span><span class="max">/${player.max_hydration ?? 100}</span>
+                    </div>
+                    <div class="player-energy">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span class="current">${player.energy ?? 100}</span><span class="max">/${player.max_energy ?? 100}</span>
+                    </div>
                 </div>
             </div>
 
@@ -502,7 +510,7 @@ async function showPublicProfile(container, player) {
             </div>
 
             <!-- Meta gun -->
-            ${shouldHideUnsupportedMods? `` : `
+            ${shouldHideUnsupportedMods ? `` : `
                 <div class="favorite-weapons profile-section" id="weapon-meta-section">
                     <h3>Favorite Weapon</h3>
                     <div class="favorite-weapons-container" id="weapon-container">
@@ -699,7 +707,7 @@ async function showPublicProfile(container, player) {
         container: document.getElementById('achievements-container')
     });
 
-    initLastRaids(player.id);
+    initLastRaids(player.id, player.permaLink);
     renderFriendList(player);
     initHOF(player, bestWeapon);
     loadComments(player.id);
@@ -707,7 +715,7 @@ async function showPublicProfile(container, player) {
     //
     // Auto Status Updater
     //
-    function startStatusUpdater(playerId, statusElement) {
+    function startStatusUpdater(playerId, permaLink, statusElement) {
         let raidTimeAnimator = null;
 
         const updateStatus = async () => {
@@ -736,7 +744,7 @@ async function showPublicProfile(container, player) {
 
                 if (statusElement.innerHTML !== newStatusHTML) {
                     statusElement.innerHTML = newStatusHTML;
-                    initLastRaids(playerId);
+                    initLastRaids(player.id, permaLink);
 
                     const raidInfoElement = document.querySelector('.raid-details');
                     if (isOnline && playerStatus.raidDetails !== null && raidInfoElement) {
@@ -865,7 +873,7 @@ async function showPublicProfile(container, player) {
     // Close button stuff
     let statusUpdater;
     const statusElement = container.querySelector('.player-status span');
-    statusUpdater = startStatusUpdater(player.id, statusElement);
+    statusUpdater = startStatusUpdater(player.id, player.permaLink, statusElement);
     const closeButton = document.getElementById('closeButton');
     closeButton.addEventListener('click', () => {
         if (statusUpdater) {
@@ -1537,37 +1545,6 @@ function formatLastPlayedRaid(unixTimestamp) {
     }
 
     return `${diffInYears} years ago`;
-}
-
-// Fetch achievements meta data
-async function fetchAchievementData() {
-    try {
-        const [achievementsResponse, achievementsNewResponse] = await Promise.all([
-            fetch('achievements/js/compiledAchData.json'),
-            fetch('achievements/js/compiledAchDataNew.json'),
-        ]);
-
-        if (!achievementsResponse.ok || !achievementsNewResponse.ok) {
-            throw new Error("Failed to fetch achievement data");
-        }
-
-        const [oldAchievements, newAchievements] = await Promise.all([
-            achievementsResponse.json(),
-            achievementsNewResponse.json()
-        ]);
-
-        const mergedAchievements = {
-            achievementCompiled: {
-                ...oldAchievements.achievementCompiled,
-                ...newAchievements.achievementCompiled
-            }
-        };
-
-        return mergedAchievements;
-    } catch (error) {
-        console.error("Error loading achievement data:", error);
-        return { achievementCompiled: {} };
-    }
 }
 
 function closeLoaderAfterImagesLoad() {
