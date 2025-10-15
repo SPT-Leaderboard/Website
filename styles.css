@@ -2679,20 +2679,19 @@ input[type="checkbox"]:checked:hover {
     gap: 5px;
 }
 
-.player-hydration i {
-    color: #7ec8ff;
-    font-size: 20px;
+.player-energy img,
+.player-health img {
     opacity: 0.9;
 }
 
-.player-energy i {
-    color: #f4e6b3;
-    font-size: 20px;
+.player-hydration img {
+    width: 20px;
     opacity: 0.9;
 }
 
 .player-hydration,
-.player-energy {
+.player-energy,
+.player-health {
     font-family: 'Bender Regular', sans-serif;
     font-size: 18px;
 }
@@ -2705,6 +2704,12 @@ input[type="checkbox"]:checked:hover {
 
 .player-energy .current {
     color: #f4e6b3;
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.player-health .current {
+    color: hsla(72, 73%, 50%, 1);
     font-weight: 600;
     font-size: 2rem;
 }

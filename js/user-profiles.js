@@ -491,12 +491,16 @@ async function showPublicProfile(container, player) {
                     <img src="/api/data/pmc_avatars/${player.id}_full.png" alt="Player Model Preview" onerror="this.src='media/default_full_pmc_avatar.png';" />
                 </div>
                 <div class="playermodel-stats profile-section">
+                    <div class="player-health">
+                        <img src="media/leaderboard_icons/health_icon.png">
+                        <span class="current">${player.health ?? 450}</span>
+                    </div>
                     <div class="player-hydration">
-                        <i class="fa-solid fa-droplet"></i>
+                        <img src="media/leaderboard_icons/health_icon_hydration.png">
                         <span class="current">${player.hydration ?? 100}</span><span class="max">/${player.max_hydration ?? 100}</span>
                     </div>
                     <div class="player-energy">
-                        <i class="fa-solid fa-bolt"></i>
+                        <img src="media/leaderboard_icons/health_icon_energy.png">
                         <span class="current">${player.energy ?? 100}</span><span class="max">/${player.max_energy ?? 100}</span>
                     </div>
                 </div>
