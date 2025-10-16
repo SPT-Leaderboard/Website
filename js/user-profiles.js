@@ -467,6 +467,18 @@ async function showPublicProfile(container, player) {
             </div>
 
             <div class="profile-section">
+                <div class="quests-container" id="quests-container">
+                    <!-- JS -->
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <div class="hideout-container" id="hideout-container">
+                    <!-- JS -->
+                </div>
+            </div>
+
+            <div class="profile-section">
                 <div class="comment-form">
                     <textarea class="comment-input" id="comment-text" placeholder="Write your comment... (Must Be logged in SPTLB Network)"></textarea>
                     <button class="comment-submit" id="submit-comment">
@@ -493,15 +505,15 @@ async function showPublicProfile(container, player) {
                 <div class="playermodel-stats profile-section">
                     <div class="player-health">
                         <img src="media/leaderboard_icons/health_icon.png">
-                        <span class="current">${player.health ?? 450}</span>
+                        <span class="current">${player.health?.toFixed(0) ?? 450}</span>
                     </div>
                     <div class="player-hydration">
                         <img src="media/leaderboard_icons/health_icon_hydration.png">
-                        <span class="current">${player.hydration ?? 100}</span><span class="max">/${player.max_hydration ?? 100}</span>
+                        <span class="current">${player.hydration?.toFixed(0) ?? 100}</span><span class="max">/${player.max_hydration ?? 100}</span>
                     </div>
                     <div class="player-energy">
                         <img src="media/leaderboard_icons/health_icon_energy.png">
-                        <span class="current">${player.energy ?? 100}</span><span class="max">/${player.max_energy ?? 100}</span>
+                        <span class="current">${player.energy?.toFixed(0) ?? 100}</span><span class="max">/${player.max_energy ?? 100}</span>
                     </div>
                 </div>
             </div>
@@ -712,9 +724,11 @@ async function showPublicProfile(container, player) {
     });
 
     initLastRaids(player.id, player.permaLink);
-    renderFriendList(player);
     initHOF(player, bestWeapon);
+    loadQuestData(player.completed_quests);
+    loadHideoutData(player.hideout);
     loadComments(player.id);
+    renderFriendList(player);
 
     //
     // Auto Status Updater
