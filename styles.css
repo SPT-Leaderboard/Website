@@ -4066,7 +4066,7 @@ input[type="checkbox"]:checked:hover {
 
 .quest-card:hover .quest-image {
     transform: scale(1.05);
-    border-color: rgba(100, 255, 218, 0.3);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .quest-info {
@@ -4404,17 +4404,17 @@ input[type="checkbox"]:checked:hover {
         gap: 10px;
         padding: 5px;
     }
-    
+
     .hideout-module {
         padding: 12px;
         min-height: 60px;
     }
-    
+
     .module-image {
         width: 45px;
         height: 45px;
     }
-    
+
     .module-name {
         font-size: 0.9rem;
     }
