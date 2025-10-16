@@ -37,7 +37,12 @@ async function initLastRaids(playerId, permaLink) {
 
         if (!data?.raids?.length) {
             closeLoader();
-            statsContainer.innerHTML = '<p class="error-raid-load">No raid data available for this player :(</p>';
+            statsContainer.innerHTML = `
+            <div class="no-stats-message">
+                <h3>Failed to load last raid data</h3>
+                <p>This player doesn't have any raids recorded, or there was an error.</p>
+            </div>`;
+
             return;
         }
 
@@ -48,7 +53,11 @@ async function initLastRaids(playerId, permaLink) {
         renderRaidsStats(sortedRaids, playerId, leaderboardData);
     } catch (error) {
         closeLoader();
-        statsContainer.innerHTML = '<p class="error-raid-load">Error loading raid data :(</p>';
+        statsContainer.innerHTML = `
+        <div class="no-stats-message">
+                <h3>Failed to load last raid data</h3>
+                <p>This player doesn't have any raids recorded, or there was an error.</p>
+        </div>`;
         mapStatsContainer.innerHTML = `
             <div class="no-stats-message">
                 <h3>No Map Statistics Available</h3>
