@@ -12,7 +12,7 @@ async function initHOF(player, bestWeapon) {
     try {
         updatePlayerProfile(player);
 
-        if (shouldHideUnsupportedMods)
+        if (!shouldHideUnsupportedMods)
             updatePlayerProfileMastery(player, bestWeapon);
 
         // rewardSystem.js
