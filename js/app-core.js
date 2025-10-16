@@ -1017,7 +1017,7 @@ function animateNumber(elementId, targetValue, decimals = 0, startValue = null) 
     }, 50); // slight delay to allow Odometer to detect change
 }
 
-// Initialize when DOM is loaded
+// Initialize old stats when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Load previous stats from localStorage if can
     const savedStats = localStorage.getItem('leaderboardStats');
