@@ -66,12 +66,14 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 modal.style.opacity = '1';
                 modal.style.visibility = 'visible';
+                modal.classList.add('active');
             }, 10);
         } else {
             modal.style.opacity = '0';
             modal.style.visibility = 'hidden';
             setTimeout(() => {
                 modal.style.display = 'none';
+                modal.classList.remove('active');
             }, 300);
         }
     };
