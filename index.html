@@ -43,6 +43,7 @@
         <script src="js/app-utils.js"></script>
         <script src="js/app-init.js"></script>
         <script src="js/app-seasons.js"></script>
+        <script src="js/app-welcome-screen.js"></script>
         <title>SPT Leaderboard</title>
     </head>
 
@@ -93,68 +94,91 @@
             </nav>
         </header>
         <h1 style="margin-top: 180px;" class="animate__animated animate__fadeInDown">SPT Leaderboard</h1>
-        <div id="welcomePopup" aria-label="Welcome Screen">
-            <img class="welcome-bg-image animate__animated animate__fadeIn" src="media/TP.png" alt="Background">
-            <div class="popup-container">
-                <div class="popup-header animate__animated animate__fadeInDown">
-                    <h1>Welcome to SPT Leaderboard!</h1>
-                    <p class="animate__animated animate__fadeInUp delay-1">Track your progress, progress, compete, and compare with other players, all in Single Player Tarkov! Your journey to the top starts here.</p>
+        <div id="welcomePopup" class="welcome-modal" aria-label="Welcome Screen">
+            <div class="modal-backdrop">
+                <div class="particles-container" id="particles"></div>
+            </div>
+            <div class="modal-content-welcome">
+                <div class="modal-header-welcome">
+                    <div class="logo-section">
+                        <div class="logo-icon">
+                            <img width="65px" src="media/newlogo_transparent_snow.png" alt="Background">
+                        </div>
+                        <h1>SPT Leaderboard</h1>
+                    </div>
+                    <p class="subtitle">Welcome to the gateways of the ultimate Single Player Tarkov Leaderboard!</p>
                 </div>
-                <div class="features-container">
-                    <div class="feature-row">
-                        <div class="feature-card animate__animated" data-animation="animate__fadeInLeft">
-                            <div class="feature-icon">
+                <p class="paragraph-welcome"> While you were gone, current season accumulated...</p>
+                <div class="stats-overview">
+                    <div class="stat-card-welcome">
+                        <div class="stat-info">
+                            <span class="stat-value odometer" id="Raids">0</span>
+                            <span class="stat-label">Finished Raids</span>
+                        </div>
+                    </div>
+                    <div class="stat-card-welcome">
+                        <div class="stat-info">
+                            <span class="stat-value odometer" id="Players">0</span>
+                            <span class="stat-label">Current Players</span>
+                        </div>
+                    </div>
+                    <div class="stat-card-welcome">
+                        <div class="stat-info">
+                            <span class="stat-value odometer" id="Kills">0</span>
+                            <span class="stat-label">Kills</span>
+                        </div>
+                    </div>
+                    <div class="stat-card-welcome">
+                        <div class="stat-info">
+                            <span class="stat-value odometer" id="Deaths">0</span>
+                            <span class="stat-label">Deaths</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-column">
+                        <div class="feature-item">
+                            <div class="feature-header">
                                 <i class="fas fa-trophy"></i>
+                                <h3>Live Leaderboard</h3>
                             </div>
-                            <h3>Real-Time Leaderboard</h3>
-                            <p>See live updates of your ranking compared to the other players of SPT community. Watch your stats, others, and get rewards as you progress.</p>
+                            <p>Real-time ranking updates with detailed player statistics and progression tracking.</p>
                         </div>
-                        <div class="feature-card animate__animated" data-animation="animate__fadeInRight">
-                            <div class="feature-icon">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                            <h3>Detailed Statistics</h3>
-                            <p>Comprehensive analytics of your gameplay including K/D ratio, Survival Rate, Recent Hits, SCAV stats, and more.</p>
-                        </div>
-                    </div>
-                    <div class="feature-row">
-                        <div class="feature-card animate__animated" data-animation="animate__fadeInLeft">
-                            <div class="feature-icon">
+                        <div class="feature-item">
+                            <div class="feature-header">
                                 <i class="fa-solid fa-hexagon-nodes"></i>
+                                <h3>SPTLB Network</h3>
                             </div>
-                            <h3>SPT Leaderboard Network</h3>
-                            <p>Log-in for more than just editing your profile. Report Players, Edit your profile, Withdraw Items from your inventory and explore Tarkov Market.</p>
-                        </div>
-                        <div class="feature-card animate__animated" data-animation="animate__fadeInRight">
-                            <div class="feature-icon">
-                                <i class="fa-solid fa-shop"></i>
-                            </div>
-                            <h3>Tarkov Market</h3>
-                            <p>Earn Leaderboard Coins by playing the game - and spend the well deserved coins on external Tarkov Market which includes - Dynamic (on high demand) Pricing, Re-stocking, Cases, and arrival right into your in-game inventory.</p>
+                            <p>Profile management, player reporting, inventory management, and community features.</p>
                         </div>
                     </div>
-                    <div class="feature-row">
-                        <div class="feature-card animate__animated" data-animation="animate__fadeInLeft">
-                            <div class="feature-icon">
-                                <i class="fas fa-history"></i>
+                    <div class="feature-column">
+                        <div class="feature-item">
+                            <div class="feature-header">
+                                <i class="fas fa-chart-line"></i>
+                                <h3>Advanced Statistics</h3>
                             </div>
-                            <h3>Historical Data</h3>
-                            <p>View your progress over time with historical charts and see how you've improved. Including Raid History, Hits History, All Achievements, Trader Standings and Player Model Preview along with other stats.</p>
+                            <p>K/D ratio, survival rates, statistics by maps, hideout, quest progression, raid history, trader standings, and other stats on a full-screen profile.</p>
                         </div>
-                        <div class="feature-card animate__animated" data-animation="animate__fadeInRight">
-                            <div class="feature-icon">
-                                <i class="fas fa-cog"></i>
+                        <div class="feature-item">
+                            <div class="feature-header">
+                                <i class="fa-solid fa-shop"></i>
+                                <h3>Tarkov Market</h3>
                             </div>
-                            <h3>Custom Profiles</h3>
-                            <p>Personalize your Leaderboard Profile with custom banners, styles, themes, showcase your drip of your PMC and your best stats.</p>
+                            <p>Earn coins, buy items with dynamic pricing, and receive them directly in-game.</p>
                         </div>
                     </div>
                 </div>
-                <div class="buttons-container">
-                    <button class="welcome-button animate__animated animate__fadeInUp delay-3" id="continueBtn">
-                        <i class="fas fa-arrow-right"></i> Continue to Leaderboard </button>
-                    <button class="welcome-button animate__animated animate__fadeInUp delay-4" onclick="window.open('https://discord.gg/UrRkqwdgnd', '_blank')">
-                        <i class="fab fa-discord"></i> Join our Discord </button>
+                <div class="action-section">
+                    <button class="action-btn primary animate__animated animate__fadeIn" id="continueBtn">
+                        <i class="fas fa-arrow-right"></i> Enter Leaderboard <span class="btn-glow"></span>
+                    </button>
+                    <div class="secondary-actions">
+                        <button class="action-btn secondary" onclick="window.open('https://discord.gg/UrRkqwdgnd', '_blank')">
+                            <i class="fab fa-discord"></i> Join Discord </button>
+                        <button class="action-btn secondary" onclick="window.location.href = '../insights/';">
+                            <i class="fas fa-chart-bar"></i> View Global Statistics </button>
+                    </div>
                 </div>
             </div>
         </div>

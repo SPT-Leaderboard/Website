@@ -963,6 +963,14 @@ function calculateOverallStats(data) {
     animateNumber('onlinePlayers', onlinePlayers, 0, previousStats.onlinePlayers);
     animateNumber('totalPlayTime', totalPlayTime, 0, previousStats.totalPlayTime);
 
+    // Welcome images yes
+    if (localStorage.getItem('welcomeClosed') !== 'true') {
+        animateNumber('Raids', totalRaids, 0, previousStats.raids);
+        animateNumber('Kills', Math.round(totalKills), 0, previousStats.kills);
+        animateNumber('Players', totalPlayers, 0, previousStats.totalPlayers);
+        animateNumber('Deaths', Math.round(totalDeaths), 0, previousStats.deaths);
+    }
+
     // utils.js
     updateNavbarOffset();
 }
@@ -1054,31 +1062,3 @@ function saveCurrentStats() {
 
     localStorage.setItem('leaderboardStats', JSON.stringify(stats));
 }
-
-// Welcome popup
-document.addEventListener('DOMContentLoaded', function () {
-    const continueBtn = document.getElementById('continueBtn');
-    const welcomePopup = document.getElementById('welcomePopup');
-
-    if (localStorage.getItem('welcomeClosed') === 'true') {
-        welcomePopup.style.display = 'none';
-    } else {
-        welcomePopup.style.display = 'flex';
-        setTimeout(() => {
-            welcomePopup.style.opacity = '1';
-            welcomePopup.style.transform = 'translateY(0)';
-        }, 10);
-    }
-
-    continueBtn.addEventListener('click', function () {
-        welcomePopup.style.opacity = '0';
-        welcomePopup.style.transform = 'translateY(-20px)';
-        welcomePopup.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-
-        localStorage.setItem('welcomeClosed', 'true');
-
-        setTimeout(() => {
-            welcomePopup.style.display = 'none';
-        }, 300);
-    });
-});
