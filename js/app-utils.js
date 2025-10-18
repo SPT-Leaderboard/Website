@@ -17,7 +17,8 @@ function getPrettyMapName(entry) {
         "lighthouse": "Lighthouse",
         "TarkovStreets": "Streets of Tarkov",
         "Sandbox": "Ground Zero - Low",
-        "Sandbox_high": "Ground Zero - High"
+        "Sandbox_high": "Ground Zero - High",
+        "unknown": "Labyrinth"
     };
 
     entry.toLowerCase();
