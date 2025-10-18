@@ -14,7 +14,7 @@ let isDataReady = false;
 // DYNAMIC: Indicates when user is logged in Network or not
 let isLoggedIn = false;
 // Current SPT version
-let currentRelease = "3.11.4";
+let currentRelease = "4.0.1";
 
 // For debugging purposes
 // Will use local paths for some files/fallbacks
