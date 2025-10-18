@@ -9,25 +9,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const continueBtn = document.getElementById('continueBtn');
     const welcomePopup = document.getElementById('welcomePopup');
 
-    if (localStorage.getItem('welcomeClosed') === 'true') {
-        welcomePopup.style.display = 'none';
-    } else {
+    if (localStorage.getItem('isWelcomeScreenClosed') !== 'true') {
         welcomePopup.style.display = 'flex';
         setTimeout(() => {
             welcomePopup.style.opacity = '1';
             welcomePopup.style.transform = 'translateY(0)';
         }, 10);
+
+        continueBtn.addEventListener('click', function () {
+            welcomePopup.style.opacity = '0';
+            welcomePopup.style.transform = 'translateY(-20px)';
+            welcomePopup.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+
+            localStorage.setItem('isWelcomeScreenClosed', 'true');
+
+            setTimeout(() => {
+                welcomePopup.style.display = 'none';
+            }, 300);
+        });
+
     }
-
-    continueBtn.addEventListener('click', function () {
-        welcomePopup.style.opacity = '0';
-        welcomePopup.style.transform = 'translateY(-20px)';
-        welcomePopup.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-
-        localStorage.setItem('welcomeClosed', 'true');
-
-        setTimeout(() => {
-            welcomePopup.style.display = 'none';
-        }, 300);
-    });
 });

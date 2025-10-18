@@ -48,12 +48,6 @@ async function updateServerStatus() {
             statusElement.setAttribute('data-tooltip', status.workText);
         }
     }
-
-    if (isLocalhost) {
-        statusElement.textContent = 'Using Fallback instead API';
-        statusElement.setAttribute('data-tooltip', "Using fallback instead of connecting to the API. Try refreshing the page")
-        statusElement.classList.add('server-maintenance');
-    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

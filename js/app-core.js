@@ -20,6 +20,9 @@ let currentRelease = "3.11.4";
 // Will use local paths for some files/fallbacks
 const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 
+// Is on main page?
+const isOnMainPage = window.location.hostname === "https://sptlb.yuyui.moe";
+
 // For dynamic stats counters
 let oldTotalRaids = 0;
 let oldTotalKills = 0;
@@ -61,8 +64,26 @@ if (isLocalhost) {
 
 // Call main init on DOM load
 document.addEventListener("DOMContentLoaded", async () => {
+    // Load previous global stats from localStorage if can
+    const savedStats = localStorage.getItem('leaderboardStats');
+    if (savedStats) {
+        try {
+            const stats = JSON.parse(savedStats);
+            oldTotalRaids = stats.raids || 0;
+            oldTotalKills = stats.kills || 0;
+            oldTotalDeaths = stats.deaths || 0;
+            oldTotalDamage = stats.damage || 0;
+            oldTotalKDR = stats.kdr || 0;
+            oldTotalSurvival = stats.survival || 0;
+            oldValidPlayers = stats.players || 0;
+        } catch (e) {
+            console.error('Failed to parse saved stats', e);
+        }
+    }
+
     await initAllSeasons();
     await loadAchievementsData();
+
 });
 
 /**
@@ -1024,26 +1045,6 @@ function animateNumber(elementId, targetValue, decimals = 0, startValue = null) 
         element.innerHTML = formatValue(targetValue);
     }, 50); // slight delay to allow Odometer to detect change
 }
-
-// Initialize old stats when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    // Load previous stats from localStorage if can
-    const savedStats = localStorage.getItem('leaderboardStats');
-    if (savedStats) {
-        try {
-            const stats = JSON.parse(savedStats);
-            oldTotalRaids = stats.raids || 0;
-            oldTotalKills = stats.kills || 0;
-            oldTotalDeaths = stats.deaths || 0;
-            oldTotalDamage = stats.damage || 0;
-            oldTotalKDR = stats.kdr || 0;
-            oldTotalSurvival = stats.survival || 0;
-            oldValidPlayers = stats.players || 0;
-        } catch (e) {
-            console.error('Failed to parse saved stats', e);
-        }
-    }
-});
 
 // Save current stats to localStorage
 function saveCurrentStats() {
