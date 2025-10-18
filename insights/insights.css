@@ -7,12 +7,6 @@
     --success-color: #10b981;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 header {
     text-align: center;
     margin-bottom: 30px;
