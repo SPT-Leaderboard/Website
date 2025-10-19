@@ -227,7 +227,7 @@ function renderRaidsStats(raids, currentPlayerId, leaderboardData) {
                             <i class='bx bxs-user-badge'></i>
                             Played on: 
                             <button onclick="openProfile(${otherPlayerInfo.id}, true)" class="cross-profile-link">
-                                <img src="${otherPlayerInfo.profilePicture || 'media/default_avatar.png'}" alt="${otherPlayerInfo.name}" class="cross-profile-avatar">
+                                <img src="${otherPlayerInfo.profilePicture || 'media/default_avatar.png'}" alt="${otherPlayerInfo.name}" class="cross-profile-avatar" onerror="this.src='media/default_avatar.png';">
                                 ${otherPlayerInfo.name}
                             </button>
                         </div>
