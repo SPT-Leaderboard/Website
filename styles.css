@@ -1135,6 +1135,11 @@ button:hover,
     font-weight: bold;
 }
 
+.lts {
+    color: #3da3cc;
+    font-weight: bold;
+}
+
 .impressive {
     color: #ca60df;
     font-weight: bold;

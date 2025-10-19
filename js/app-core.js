@@ -8,11 +8,14 @@ let leaderboardData = []; // For keeping current season data
 let heartbeatData = {}; // Remember heartbeats
 let seasons = []; // Storing available seasons
 let ranOnlyOnce = false; // Run only once (ie winners)
+
 // DYNAMIC: Tells whenever the live update was finished and data is ready
 // Better to use in pair with waitForDataReady(() => myFunction()); - automatic call upon data load
 let isDataReady = false;
+
 // DYNAMIC: Indicates when user is logged in Network or not
 let isLoggedIn = false;
+
 // Current SPT version
 let currentRelease = "4.0.1";
 
@@ -703,14 +706,14 @@ function addColorIndicators(data) {
         if (player.sptVer) {
             const playerParts = player.sptVer.split('.').map(Number);
 
-            if (playerParts[0] < currentParts[0]) {
-                player.versionStatus = 'bad'; // Outdated
-            } else if (playerParts[1] < currentParts[1]) {
-                player.versionStatus = 'average'; // Older than latest
-            } else if (playerParts[2] < currentParts[2]) {
-                player.versionStatus = 'average'; // Older than latest
+            if (playerParts[0] === 4 && playerParts[1] === 0) {
+                // 4.0.x
+                player.versionStatus = 'good';
+            } else if (playerParts[0] === 3 && playerParts[1] === 11) {
+                // Versions 3.11.x (LTS)
+                player.versionStatus = 'lts';
             } else {
-                player.versionStatus = 'good'; // Latest Release
+                player.versionStatus = 'bad';
             }
         }
 
