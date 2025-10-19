@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const minLoadTime = 800 + (index * 100);
 
             setTimeout(() => {
-                fetch(resource.url, { method: 'HEAD', cache: 'no-cache' })
+                fetch(resource.url, { method: 'HEAD' })
                     .then(response => {
                         if (response.ok) {
                             return fetch(resource.url);
