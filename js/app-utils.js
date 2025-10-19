@@ -260,3 +260,20 @@ async function getCustomProfileSettings(playerId) {
         return null;
     }
 }
+
+function waitForDataReady(callback, timeout = 15000) {
+    const startTime = Date.now();
+    const checkInterval = 300;
+
+    const intervalId = setInterval(() => {
+        if (isDataReady) {
+            clearInterval(intervalId);
+            setTimeout(callback, 100);
+        }
+
+        else if (Date.now() - startTime > timeout) {
+            clearInterval(intervalId);
+            showToast(`There was an error.`, 'error');
+        }
+    }, checkInterval);
+}

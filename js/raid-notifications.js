@@ -177,10 +177,8 @@ async function showPlayerNotification(player) {
     // Set backgrounds based on the game/ban
     if (player.banned) {
         notification.className = `player-notification-r died-bg border-died`;
-    } else if (player.publicProfile && !player.banned) {
+    } else {
         notification.className = `player-notification-r ${player.discFromRaid ? 'disconnected-bg border-died' : player.isTransition ? 'transit-bg' : player.lastRaidSurvived ? 'survived-bg border-survived' : 'died-bg border-died'}`;
-    } else if (!player.publicProfile && !player.banned) {
-        notification.className = `player-notification-r player-notification-private-background`;
     }
 
     if (player.banned) {
@@ -212,7 +210,6 @@ async function showPlayerNotification(player) {
                     </span>
                 </div>
             </div>
-            ${player.publicProfile ? `
             <div class="raid-overview-notify">
                 <span class="raid-result-r ${player.lastRaidRanThrough ? 'run-through' : player.discFromRaid ? 'disconnected' : player.isTransition ? 'transit' : player.lastRaidSurvived ? 'survived' : 'died'}">
                     ${player.lastRaidRanThrough ? `<i class='bx  bxs-walking'></i> Runner` : player.discFromRaid ? `<i class='bx  bxs-arrow-out-left-square-half'></i> Left` : player.isTransition ? `<i class='bx bxs-refresh-cw bx-spin'></i>  In Transit (${player.lastRaidMap}
@@ -232,7 +229,6 @@ async function showPlayerNotification(player) {
                     </span>
                     `}
             </div>
-            `: ''}
         </div>
     `;
     }

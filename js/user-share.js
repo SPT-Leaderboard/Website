@@ -53,20 +53,3 @@ function checkUrlHash() {
         }, 500);
     }
 }
-
-function waitForDataReady(callback, timeout = 15000) {
-    const startTime = Date.now();
-    const checkInterval = 300;
-
-    const intervalId = setInterval(() => {
-        if (isDataReady) {
-            clearInterval(intervalId);
-            setTimeout(callback, 100);
-        }
-
-        else if (Date.now() - startTime > timeout) {
-            clearInterval(intervalId);
-            showToast(`Couldn't get profile data.`, 'error');
-        }
-    }, checkInterval);
-}
