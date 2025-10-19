@@ -110,6 +110,10 @@ function renderRaidsStats(raids, currentPlayerId, leaderboardData) {
                 <div class="stat-value">${recentStats.totalLC}</div>
                 <div class="stat-label">Total LC Earned</div>
             </div>
+            <div class="stat-card">
+                <div class="stat-value">${recentStats.totalProfit} RUB</div>
+                <div class="stat-label">Total Profit Made</div>
+            </div>
         </div>
     `;
 
@@ -313,6 +317,7 @@ function calculateRecentStats(raids) {
         totalDamage: 0,
         totalEXP: 0,
         totalLC: 0,
+        totalProfit: 0,
         survived: 0,
         runs: raids.length
     };
@@ -322,6 +327,7 @@ function calculateRecentStats(raids) {
         stats.totalDamage += raid.raidDamage || 0;
         stats.totalEXP += raid.lastRaidEXP || 0;
         stats.totalLC += raid.lcPointsEarned || 0;
+        stats.totalProfit += raid.lastRaidProfit || 0;
 
         if (raid.lastRaidSurvived || raid.lastRaidRanThrough || raid.discFromRaid || raid.isTransition) {
             stats.survived++;
@@ -334,7 +340,8 @@ function calculateRecentStats(raids) {
         totalKills: stats.totalKills.toLocaleString(),
         avgDamage: Math.round(stats.totalDamage / stats.runs).toLocaleString(),
         totalEXP: stats.totalEXP.toLocaleString(),
-        totalLC: stats.totalLC.toLocaleString()
+        totalLC: stats.totalLC.toLocaleString(),
+        totalProfit: stats.totalProfit.toLocaleString()
     };
 }
 
