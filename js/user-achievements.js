@@ -120,11 +120,11 @@ async function formatAchievement(achievementId, timestamp, achievementData) {
 
         const achievement = achievementData?.achievementCompiled?.[achievementId] || {};
 
-        let imageUrl = "files/achievement/Standard_35_1.png";
+        let imageUrl = "media/player-achievements/Standard_35_1.png";
         try {
-            imageUrl = achievement.imageUrl?.slice(1) || "files/achievement/Standard_35_1.png";
+            imageUrl = achievement.imageUrl?.slice(1) || "media/player-achievements/Standard_35_1.png";
         } catch (error) {
-            imageUrl = "files/achievement/Standard_35_1.png";
+            imageUrl = "media/player-achievements/Standard_35_1.png";
         }
 
         const globalPercentage = getAchievementPercentage(achievementId);
@@ -143,7 +143,7 @@ async function formatAchievement(achievementId, timestamp, achievementData) {
         return {
             id: "0",
             timestamp: "Unknown",
-            imageUrl: "files/achievement/Standard_35_1.png",
+            imageUrl: "media/player-achievements/Standard_35_1.png",
             rarity: "Common",
             description: "Error loading achievement data",
             name: "Unknown Achievement",
@@ -176,7 +176,7 @@ async function processPlayerAchievements(player, options = {}) {
         const errorAchievement = {
             id: "0",
             timestamp: "Error",
-            imageUrl: "files/achievement/Standard_35_1.png",
+            imageUrl: "media/player-achievements/Standard_35_1.png",
             rarity: "Common",
             description: "Failed to load achievements",
             name: "Error",
@@ -199,7 +199,7 @@ async function getLatestAchievement(player, achievementData) {
             return {
                 id: "0",
                 timestamp: "Never",
-                imageUrl: "files/achievement/Standard_35_1.png",
+                imageUrl: "media/player-achievements/Standard_35_1.png",
                 rarity: "Common",
                 description: "Nothing here yet. This player doesn't have any achievements.",
                 name: "No achievements",
@@ -216,7 +216,7 @@ async function getLatestAchievement(player, achievementData) {
             return {
                 id: "0",
                 timestamp: "Never",
-                imageUrl: "files/achievement/Standard_35_1.png",
+                imageUrl: "media/player-achievements/Standard_35_1.png",
                 rarity: "Common",
                 description: "Nothing here yet. This player doesn't have any achievements.",
                 name: "No achievements",
@@ -230,7 +230,7 @@ async function getLatestAchievement(player, achievementData) {
         return {
             id: "0",
             timestamp: "Error",
-            imageUrl: "files/achievement/Standard_35_1.png",
+            imageUrl: "media/player-achievements/Standard_35_1.png",
             rarity: "Common",
             description: "Failed to load latest achievement",
             name: "Error",
@@ -299,7 +299,7 @@ function renderSingleAchievement(achievement) {
                 <h3>Latest Achievement</h3>
                 <div class="achievement-content">
                     <div class="achievement-icon Common">
-                        <img src="files/achievement/Standard_35_1.png" alt="Achievement Icon"/>
+                        <img src="media/player-achievements/Standard_35_1.png" alt="Achievement Icon"/>
                         <div class="achievement-time">N/A</div>
                     </div>
                     <div class="achievement-info">
@@ -314,7 +314,7 @@ function renderSingleAchievement(achievement) {
             <h3>Latest Achievement</h3>
             <div class="achievement-content">
                 <div class="achievement-icon ${achievement.rarity || 'Common'}">
-                    <img src="${achievement.imageUrl || 'files/achievement/Standard_35_1.png'}" alt="Achievement Icon"/>
+                    <img src="${achievement.imageUrl || 'media/player-achievements/Standard_35_1.png'}" alt="Achievement Icon"/>
                     <div class="achievement-time">
                         ${achievement.timestamp || "N/A"}
                     </div>
@@ -338,7 +338,7 @@ function renderSingleAchievement(achievement) {
             <h3>Latest Achievement</h3>
             <div class="achievement-content">
                 <div class="achievement-icon Common">
-                    <img src="files/achievement/Standard_35_1.png" alt="Achievement Icon"/>
+                    <img src="media/player-achievements/Standard_35_1.png" alt="Achievement Icon"/>
                     <div class="achievement-time">Error</div>
                 </div>
                 <div class="achievement-info">
@@ -368,7 +368,7 @@ function renderAllAchievements(achievements) {
             <div class="user-achievements profile-section">
                 <div class="achievement-content">
                     <div class="achievement-icon ${ach.rarity || 'Common'}">
-                        <img src="${ach.imageUrl || 'files/achievement/Standard_35_1.png'}" alt="Achievement Icon"/>
+                        <img src="${ach.imageUrl || 'media/player-achievements/Standard_35_1.png'}" alt="Achievement Icon"/>
                         <div class="achievement-time">
                             ${ach.timestamp || "N/A"}
                         </div>

@@ -43,20 +43,12 @@ async function openProfile(playerId, bypass = false) {
         return;
     }
 
-    const isPublic = true;
-
     // If disqualified
     if (player.banned) {
         modal.style.display = "flex";
         modal.classList.add('active');
         showDisqualProfile(modalContent, player);
         setupModalCloseHandlers(modal, player);
-        return;
-    }
-
-    // Privated profile
-    if (!isPublic) {
-        showToast('This profile is private', 'info', 8000)
         return;
     }
 

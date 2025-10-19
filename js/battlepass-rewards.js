@@ -5,7 +5,6 @@
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
 function refreshRewards(player) {
-    if (!player.publicProfile) return;
 
     const elements = {
         mainBackground: document.getElementById('modalPlayerInfo'),

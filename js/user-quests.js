@@ -216,7 +216,7 @@ function createQuestsHTML(quests) {
                 <img src="media/player_quests/${quest.imageUrl}" 
                      alt="${quest.name}" 
                      class="quest-image"
-                     onerror="this.src='media/player_quests/default_quest.jpg'">
+                     onerror="this.src='media/player_quests/default.jpg'">
                 <div class="quest-info">
                     <h3 class="quest-name">${quest.name}</h3>
                     <div class="quest-status status-${quest.status}">
