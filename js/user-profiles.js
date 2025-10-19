@@ -18,7 +18,7 @@ let shouldHideUnsupportedMods = false
 
 async function openProfile(playerId, bypass = false) {
     // Don't open profile again for whatever reason if profile is already open
-    // Only let this happen if user opens a player from friend list
+    // Only let this happen if user opens a player from friend list or raid history
     if (isProfileOpened && !bypass) {
         return;
     }
@@ -115,22 +115,22 @@ function showDisqualProfile(container, player) {
 async function showPublicProfile(container, player) {
 
     isProfileOpened = true;
-    shouldHideUnsupportedMods = player.sptVer === "4.0.0";
-    const playerData = await getCustomProfileSettings(player.id);
+    shouldHideUnsupportedMods = player.sptVer === "4.0.0" || player.sptVer === "4.0.1";
+    const playerData = await getCustomProfileSettings(player.permaLink);
 
     if (playerData) {
-        player.profileTheme = playerData.profileTheme;
-        player.usePrestigeStyling = playerData.usePrestigeStyling;
-        player.prestigeBackground = playerData.prestigeBackground;
-        player.bp_cardbg = playerData.backgroundReward;
-        player.bp_mainbg = playerData.mainBackgroundReward;
-        player.catReward = playerData.catReward;
+        player.profileTheme = playerData.profileTheme ?? 'dark';
+        player.usePrestigeStyling = playerData.usePrestigeStyling ?? false;
+        player.prestigeBackground = playerData.prestigeBackground ?? 'none';
+        player.bp_cardbg = playerData.backgroundReward ?? 'default';
+        player.bp_mainbg = playerData.mainBackgroundReward ?? 'default';
+        player.catReward = playerData.catReward ?? false;
 
-        player.bp_pfpstyle = playerData.pfpStyle;
-        player.bp_pfpbordercolor = playerData.pfpBorder;
-        player.bp_decal = playerData.decal;
-        player.profileAboutMe = playerData.aboutMe;
-        player.discordUser = playerData.discordUser;
+        player.bp_pfpstyle = playerData.pfpStyle ?? 'default';
+        player.bp_pfpbordercolor = playerData.pfpBorder ?? 'default';
+        player.bp_decal = playerData.decal ?? 'default';
+        player.profileAboutMe = playerData.aboutMe ?? '';
+        player.discordUser = playerData.discordUser ?? '';
     }
 
     // Disable auto updating on the background
@@ -500,7 +500,7 @@ async function showPublicProfile(container, player) {
             <div class="playermodel profile-section" id="playermodel">
                 <h3>Player Pre-Raid Preview</h3>
                 <div class="playermodel-image">
-                    <img src="/api/data/pmc_avatars/${player.id}_full.png" alt="Player Model Preview" onerror="this.src='media/default_full_pmc_avatar.png';" />
+                    <img src="/api/data/pmc_avatars/${player.permaLink}_full.png" alt="Player Model Preview" onerror="this.src='media/default_full_pmc_avatar.png';" />
                 </div>
                 <div class="playermodel-stats profile-section">
                     <div class="player-health">
