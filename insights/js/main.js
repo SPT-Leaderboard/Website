@@ -583,7 +583,8 @@ function getFriendlyMapName(mapId) {
         "TarkovStreets": "Streets of Tarkov",
         "laboratory": "Labs",
         "Sandbox": "Ground Zero",
-        "Sandbox_high": "Ground Zero - High"
+        "Sandbox_high": "Ground Zero - High",
+        "unknown": "Labyrinth"
     };
     return mapNames[mapId] || mapId;
 }
