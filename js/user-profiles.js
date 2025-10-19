@@ -733,6 +733,10 @@ async function showPublicProfile(container, player) {
     //
     // Auto Status Updater
     //
+    let statusUpdater;
+    const statusElement = container.querySelector('.player-status span');
+    statusUpdater = startStatusUpdater(player.id, player.permaLink, statusElement);
+
     function startStatusUpdater(playerId, permaLink, statusElement) {
         let raidTimeAnimator = null;
 
@@ -889,9 +893,6 @@ async function showPublicProfile(container, player) {
     }
 
     // Close button stuff
-    let statusUpdater;
-    const statusElement = container.querySelector('.player-status span');
-    statusUpdater = startStatusUpdater(player.id, player.permaLink, statusElement);
     const closeButton = document.getElementById('closeButton');
     closeButton.addEventListener('click', () => {
         if (statusUpdater) {

@@ -699,8 +699,6 @@ function formatLastPlayed(unixTimestamp) {
 
 // Add color indicators to player stats
 function addColorIndicators(data) {
-    const currentParts = currentRelease.split('.').map(Number);
-
     data.forEach(player => {
         // SPT Version
         if (player.sptVer) {
