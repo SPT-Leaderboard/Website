@@ -505,7 +505,7 @@ async function showPublicProfile(container, player) {
                 <div class="playermodel-stats profile-section">
                     <div class="player-health">
                         <img src="media/leaderboard_icons/health_icon.png">
-                        <span class="current">${player.health?.toFixed(0) ?? 450}</span>
+                        <span class="current">${player.health?.toFixed(0) ?? 440}</span>
                     </div>
                     <div class="player-hydration">
                         <img src="media/leaderboard_icons/health_icon_hydration.png">
