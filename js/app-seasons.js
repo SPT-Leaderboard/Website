@@ -4,6 +4,8 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ / 
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
+// This code is inhereted from NCVV. I don't want to remake this. :)
+
 // Array to store our Snowflake objects
 var snowflakes = [];
 
@@ -11,7 +13,7 @@ var snowflakes = [];
 var browserWidth;
 var browserHeight;
 
-// Specify the number of snowflakes you want visible
+// Number of snowflakes
 var numberOfSnowflakes = 20;
 
 // Flag to reset the position of the snowflakes
@@ -19,19 +21,6 @@ var resetPosition = false;
 
 // Handle accessibility
 var enableAnimations = true;
-var reduceMotionQuery = matchMedia("(prefers-reduced-motion)");
-
-// Handle animation accessibility preferences 
-function setAccessibilityState() {
-    if (reduceMotionQuery.matches) {
-        enableAnimations = false;
-    } else {
-        enableAnimations = true;
-    }
-}
-setAccessibilityState();
-
-reduceMotionQuery.addListener(setAccessibilityState);
 
 //
 // It all starts here...
