@@ -227,12 +227,13 @@ async function fetchData() {
         initCharts();
 
         // Fetch data from all
-        const [season1Response, season2Response, season3Response, season4Response, season5Response, mapsResponse] = await Promise.all([
+        const [season1Response, season2Response, season3Response, season4Response, season5Response, season6Response, mapsResponse] = await Promise.all([
             fetch('../api/data/seasons/season1.json'),
             fetch('../api/data/seasons/season2.json'),
             fetch('../api/data/seasons/season3.json'),
             fetch('../api/data/seasons/season4.json'),
             fetch('../api/data/seasons/season5.json'),
+            fetch('../api/data/seasons/season6.json'),
             fetch('../api/data/shared/global_counters.json')
         ]);
 
@@ -241,10 +242,11 @@ async function fetchData() {
         const season3Data = await season3Response.json();
         const season4Data = await season4Response.json();
         const season5Data = await season5Response.json();
+        const season6Data = await season5Response.json();
         mapsData = await mapsResponse.json();
 
         // Combine
-        playersData = [...season1Data.leaderboard, ...season2Data.leaderboard, ...season3Data.leaderboard, ...season4Data.leaderboard, ...season5Data.leaderboard];
+        playersData = [...season1Data.leaderboard, ...season2Data.leaderboard, ...season3Data.leaderboard, ...season4Data.leaderboard, ...season5Data.leaderboard, ...season6Data];
 
         // Display
         processPlayersData();
@@ -501,7 +503,8 @@ function processMapsData() {
         "TarkovStreets",
         "laboratory",
         "Sandbox",
-        "Sandbox_high"
+        "Sandbox_high",
+        "unknown"
     ];
 
     const mapEntries = Object.entries(mapsData).filter(([mapId]) => validMapIds.includes(mapId));
