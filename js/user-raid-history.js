@@ -111,7 +111,7 @@ function renderRaidsStats(raids, currentPlayerId, leaderboardData) {
                 <div class="stat-label">Total LC Earned</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">${recentStats.totalProfit} RUB</div>
+                <div class="stat-value ${recentStats.totalProfit >= 0 ? 'stat-positive' : 'stat-negative'}">${formatProfit(recentStats.totalProfit)} ₽</div>
                 <div class="stat-label">Total Profit Made</div>
             </div>
         </div>
@@ -267,7 +267,7 @@ function renderRaidsStats(raids, currentPlayerId, leaderboardData) {
                             <i class="fa-solid fa-skull-crossbones"></i> Killed in Action`}
                         </span>
 
-                        <div class="raid-profit"> Raid Profit:<span class="${raid.lastRaidProfit > 50000 ? `good` : `bad`}"> ${raid.lastRaidProfit ? raid.lastRaidProfit.toLocaleString() : 0} RUB</span></div>
+                        <div class="raid-profit"> Raid Profit: <span class="${raid.lastRaidProfit >= 0 ? 'stat-positive' : 'stat-negative'}"> ${formatProfit(raid.lastRaidProfit)} ₽</span></div>
 
                         <span class="raid-meta">
                             ${raid.lastRaidMap || 'Unknown'} • ${raid.lastRaidAs || 'N/A'} • ${lastRaidDuration || '00:00'} • LC Earned: <span class="lb-coins">+${raid.lcPointsEarned ? raid.lcPointsEarned : 0}</span> • ${lastRaidAgo || 'Just Now'} ${raid.lastRaidSurvived || raid.lastRaidRanThrough || raid.discFromRaid || raid.isTransition || raid.agressorName == null ? `` : `• Killed by <span class="raid-killer">${raid.agressorName}</span>`}
@@ -341,7 +341,7 @@ function calculateRecentStats(raids) {
         avgDamage: Math.round(stats.totalDamage / stats.runs).toLocaleString(),
         totalEXP: stats.totalEXP.toLocaleString(),
         totalLC: stats.totalLC.toLocaleString(),
-        totalProfit: stats.totalProfit.toLocaleString()
+        totalProfit: stats.totalProfit
     };
 }
 
@@ -397,9 +397,13 @@ function calculateMapStats(raids) {
 }
 
 function formatProfit(profit) {
-    if (profit >= 1000000) {
+    const absoluteProfit = Math.abs(profit);
+
+    if (absoluteProfit >= 1000000000) {
+        return (profit / 1000000000).toFixed(1) + 'B';
+    } else if (absoluteProfit >= 1000000) {
         return (profit / 1000000).toFixed(1) + 'M';
-    } else if (profit >= 1000) {
+    } else if (absoluteProfit >= 1000) {
         return (profit / 1000).toFixed(0) + 'K';
     }
     return profit.toLocaleString('ru-RU');

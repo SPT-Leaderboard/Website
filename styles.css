@@ -3592,6 +3592,7 @@ input[type="checkbox"]:checked:hover {
     color: var(--gray-light);
     font-weight: 700;
     float: right;
+    gap: 5px;
 }
 
 .good {
