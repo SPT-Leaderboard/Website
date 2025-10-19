@@ -21,7 +21,9 @@ function refreshRewards(player) {
     applyRewards(player, elements);
 
     // Handle cat and badger visibility
-    elements.profileCat.style.display = (player.bp_cat && player.battlePassLevel >= 20) ? 'block' : 'none';
+    elements.profileCat.style.display = (player?.bp_cat && player?.battlePassLevel >= 20) ? 'block' : 'none';
+
+    // Deprecated
     elements.badgerPenguin.style.display = 'none';
 }
 
