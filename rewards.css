@@ -161,6 +161,7 @@
 /* Kitties/Penguins :D */
 .kittyrew {
     position: absolute;
+    display: none;
     width: 150px;
     top: 120px;
     left: 23.5rem;
