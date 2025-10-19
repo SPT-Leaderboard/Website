@@ -4,31 +4,31 @@
       "id": "68ead00109886b455ced4319",
       "name": "Katrin0522",
       "pmcLevel": 15,
-      "lastPlayed": 1760468923,
+      "lastPlayed": 1760877005,
       "damage": 2059,
       "accountType": "edge_of_darkness",
       "sptVer": "4.0.0",
       "publicProfile": true,
-      "currentWinstreak": 1,
+      "currentWinstreak": 2,
       "longestShot": 19,
-      "totalRaids": 7,
-      "averageLifeTime": 329,
+      "totalRaids": 8,
+      "averageLifeTime": 287,
       "killToDeathRatio": 0.75,
-      "survivalRate": 33,
+      "survivalRate": 43,
       "registeredOnLeaderboard": 1760250320,
       "banned": false,
       "registrationDate": 1760219210,
-      "absoluteLastTime": 1760468928,
+      "absoluteLastTime": 1760877008,
       "trusted": false,
       "agressorName": "",
-      "lastRaidKills": 1,
+      "lastRaidKills": 0,
       "lastRaidAs": "PMC",
-      "lastRaidDamage": 308,
-      "lastRaidEXP": 573,
+      "lastRaidDamage": 0,
+      "lastRaidEXP": 100,
       "isTransition": false,
       "lastRaidTransitionTo": "None",
       "discFromRaid": false,
-      "lastRaidHits": 54,
+      "lastRaidHits": 0,
       "scavsKilled": 10,
       "bossesKilled": 0,
       "raidHits": {
@@ -64,7 +64,7 @@
           "id": "54cb57776803fa99248b456e",
           "unlocked": true,
           "loyaltyLevel": 2,
-          "salesSum": 2700731,
+          "salesSum": 2706280,
           "standing": 1,
           "disabled": false
         },
@@ -134,7 +134,7 @@
         }
       },
       "lastRaidSurvived": true,
-      "lastRaidTimeSeconds": 220,
+      "lastRaidTimeSeconds": 36,
       "lastRaidMap": "Factory",
       "pmcSide": "Usec",
       "scavLevel": 2,
@@ -148,10 +148,10 @@
         "65141c30ec10ff011f17cc3b": 1760250313,
         "65141e37cf2f1c285e606361": 1760468726
       },
-      "pmcRaids": 6,
+      "pmcRaids": 7,
       "pmcKills": 3,
       "pmcDeaths": 4,
-      "survived": 2,
+      "survived": 3,
       "scavRaids": 1,
       "scavKills": 1,
       "scavDeaths": 1,
@@ -161,16 +161,25 @@
       "scavSurvivalRate": 0,
       "profilePicture": "/api/data/pmc_avatars/68ead00109886b455ced4319.png",
       "profileTheme": "default",
-      "totalScore": 4.0635,
+      "totalScore": 4.5569999999999995,
       "permaLink": "91cee40535623434fe1d85fcaf35c0e6711e2b13546050d9c38d3dcd0dae720d",
       "suspicious": false,
       "permBanned": false,
       "disqualified": false,
-      "dev": false,
+      "dev": true,
       "boostPerc": 0,
-      "totalPlayTime": 1861,
-      "lastRaidRanThrough": false,
+      "totalPlayTime": 1897,
+      "lastRaidRanThrough": true,
       "raidHitsHistory": [
+        {
+          "head": 0,
+          "chest": 0,
+          "stomach": 0,
+          "leftArm": 0,
+          "rightArm": 0,
+          "leftLeg": 0,
+          "rightLeg": 0
+        },
         {
           "head": 0,
           "chest": 42,
@@ -206,21 +215,12 @@
           "rightArm": 1,
           "leftLeg": 0,
           "rightLeg": 0
-        },
-        {
-          "head": 5,
-          "chest": 5,
-          "stomach": 0,
-          "leftArm": 0,
-          "rightArm": 0,
-          "leftLeg": 0,
-          "rightLeg": 0
         }
       ],
-      "seasonsPlayed": 1,
-      "lcPointsEarned": 28,
+      "seasonsPlayed": 2,
+      "lcPointsEarned": 13,
       "scavPlayTime": 209,
-      "lastRaidDamageTaken": 31,
+      "lastRaidDamageTaken": 0,
       "hideout": {
         "Vents": 3,
         "Security": 3,
@@ -254,117 +254,111 @@
       "completed_quests": {
         "5ae448a386f7744d3730fff0": {
           "accept_time": 1760392071,
-          "finish_time": 0,
-          "image_url": "5ae4a74386f7744748710d72.jpg"
+          "finish_time": 0
         },
         "657315ddab5a49b71f098853": {
           "accept_time": 1760391727,
-          "finish_time": 0,
-          "image_url": "658992cd1af57867a167fc13.jpg"
+          "finish_time": 0
         },
         "657315df034d76585f032e01": {
           "accept_time": 1760392063,
-          "finish_time": 0,
-          "image_url": "65899d03adeac0191c51e880.jpg"
+          "finish_time": 0
         },
         "657315e270bb0b8dba00cc48": {
           "accept_time": 1760391729,
-          "finish_time": 1760392535,
-          "image_url": "65899ce3fd239b582c211d31.jpg"
+          "finish_time": 1760392535
         },
         "657315e4a6af4ab4b50f3459": {
           "accept_time": 1760391733,
-          "finish_time": 0,
-          "image_url": "65899c7b6f65fb099516b25d.jpg"
+          "finish_time": 0
         },
         "6744ab1def61d56e020b5c56": {
           "accept_time": 0,
-          "finish_time": 0,
-          "image_url": "675b0854eaef91cffa0f04fe.jpg"
+          "finish_time": 0
         },
         "67a09761e720611a6a01f288": {
           "accept_time": 0,
-          "finish_time": 0,
-          "image_url": "67e3d4858d33d5706d0c2adb.jpg"
-        },
-        "68ead05509886b455ced4397": {
-          "accept_time": 1760392073,
-          "finish_time": 0,
-          "image_url": "616d993bc8c5ad2ab30ff6ba.jpg"
+          "finish_time": 0
         },
         "68ed71f9066a6b4708707f74": {
           "accept_time": 1760391728,
-          "finish_time": 0,
-          "image_url": "616d993bc8c5ad2ab30ff6ba.jpg"
-        },
-        "68ed71f9066a6b4708707f65": {
-          "accept_time": 1760391732,
-          "finish_time": 0,
-          "image_url": "616d993bc8c5ad2ab30ff6ba.jpg"
+          "finish_time": 0
         },
         "6834145ebc1f443d7603c8a7": {
           "accept_time": 1760392066,
-          "finish_time": 0,
-          "image_url": "66562a95dadbac1a541f638f.png"
-        },
-        "68ed71f9066a6b4708707f5a": {
-          "accept_time": 1760392067,
-          "finish_time": 0,
-          "image_url": "616d993bc8c5ad2ab30ff6ba.jpg"
-        },
-        "68ed71f9066a6b4708707f4d": {
-          "accept_time": 1760392069,
-          "finish_time": 0,
-          "image_url": "616d993bc8c5ad2ab30ff6ba.jpg"
+          "finish_time": 0
         },
         "67a09636b8725511260bc421": {
           "accept_time": 1760392075,
-          "finish_time": 0,
-          "image_url": "67e407aabbf507ac3b068a52.jpg"
+          "finish_time": 0
         },
         "596b36c586f77450d6045ad2": {
           "accept_time": 0,
-          "finish_time": 0,
-          "image_url": "59c274ae86f77475060a9341.jpg"
+          "finish_time": 0
+        },
+        "68f4c5aedf71af22d4d50b5e": {
+          "accept_time": 0,
+          "finish_time": 0
+        },
+        "68f4c5aedf71af22d4d50b6b": {
+          "accept_time": 0,
+          "finish_time": 0
+        },
+        "68f4c5aedf71af22d4d50b76": {
+          "accept_time": 0,
+          "finish_time": 0
+        },
+        "68f4c5aedf71af22d4d50b84": {
+          "accept_time": 0,
+          "finish_time": 0
+        },
+        "68f4c5aedf71af22d4d50b9f": {
+          "accept_time": 0,
+          "finish_time": 0
         }
       },
-      "hydration": 73.20001,
-      "energy": 98.40001,
-      "profitGain": 366633,
-      "pmcPlayTime": 220
+      "hydration": 100,
+      "energy": 110,
+      "profitGain": 0,
+      "pmcPlayTime": 256,
+      "max_hydration": 100,
+      "max_energy": 110,
+      "totalProfit": 0,
+      "health": 440,
+      "diedAtX": null
     },
     {
       "id": "68eb48184e06d31a54b8efb2",
       "name": "harmony",
-      "pmcLevel": 3,
-      "lastPlayed": 1760859161,
-      "damage": 140,
+      "pmcLevel": 4,
+      "lastPlayed": 1760877471,
+      "damage": 1127,
       "accountType": "standard",
       "sptVer": "4.0.0",
-      "currentWinstreak": 1,
+      "currentWinstreak": 0,
       "longestShot": 3,
       "isCasual": false,
-      "seasonsPlayed": 1,
+      "seasonsPlayed": 2,
       "permaLink": "d71580abf208616a3a619cd3194ed3751925d1844eb34aec13d5a2e578b77268",
-      "scavTotalProfit": 0,
-      "totalRaids": 1,
+      "scavTotalProfit": -9838,
+      "totalRaids": 9,
       "registeredOnLeaderboard": 1760859161,
       "registrationDate": 1760249939,
-      "absoluteLastTime": 1760859161,
+      "absoluteLastTime": 1760877472,
       "trusted": false,
-      "health": 317.1594,
+      "health": 405,
       "banned": false,
-      "agressorName": "",
+      "agressorName": "T90Commander",
       "lastRaidKills": 1,
       "lastRaidAs": "PMC",
-      "lastRaidDamage": 140,
-      "lastRaidEXP": 0,
+      "lastRaidDamage": 35,
+      "lastRaidEXP": 80,
       "isTransition": false,
       "lastRaidTransitionTo": "None",
       "discFromRaid": false,
-      "lastRaidHits": 5,
-      "lastRaidDamageTaken": 11,
-      "scavsKilled": 0,
+      "lastRaidHits": 1,
+      "lastRaidDamageTaken": 0,
+      "scavsKilled": 2,
       "bossesKilled": 0,
       "raidHits": {
         "head": 3,
@@ -391,7 +385,7 @@
           "id": "54cb50c76803fa8b248b4571",
           "unlocked": true,
           "loyaltyLevel": 1,
-          "salesSum": 0,
+          "salesSum": 10194,
           "standing": 0,
           "disabled": false
         },
@@ -399,7 +393,7 @@
           "id": "54cb57776803fa99248b456e",
           "unlocked": true,
           "loyaltyLevel": 1,
-          "salesSum": 1,
+          "salesSum": 4,
           "standing": 0,
           "disabled": false
         },
@@ -408,7 +402,7 @@
           "unlocked": true,
           "loyaltyLevel": 1,
           "salesSum": 0,
-          "standing": 0.21,
+          "standing": 0.22,
           "disabled": false
         },
         "SKIER": {
@@ -468,28 +462,28 @@
           "disabled": false
         }
       },
-      "lastRaidSurvived": true,
-      "lastRaidTimeSeconds": 92,
+      "lastRaidSurvived": false,
+      "lastRaidTimeSeconds": 108,
       "lastRaidMap": "Factory",
       "pmcSide": "Bear",
-      "scavLevel": 1,
+      "scavLevel": 2,
       "prestige": 0,
       "isUsingFika": false,
       "isUsingRealism": false,
       "isUsingTP": false,
       "isUsingWTT": false,
-      "isNew": true,
+      "isNew": false,
       "allAchievements": {
         "65141c30ec10ff011f17cc3b": 1760260036
       },
       "diedAtX": null,
-      "pmcRaids": 1,
-      "pmcKills": 1,
-      "pmcDeaths": 0,
-      "survived": 1,
+      "pmcRaids": 6,
+      "pmcKills": 5,
+      "pmcDeaths": 1,
+      "survived": 5,
       "averageLifeTime": 92,
-      "killToDeathRatio": 1,
-      "survivalRate": 100,
+      "killToDeathRatio": 5,
+      "survivalRate": 83,
       "hideout": {
         "Vents": 1,
         "Security": 1,
@@ -551,12 +545,357 @@
         }
       },
       "hydration": 97.4,
-      "energy": 95.8,
+      "energy": 82.4001,
       "max_hydration": 100,
       "max_energy": 100,
-      "profitGain": 2484,
-      "totalProfit": 2484,
-      "longestHeadshot": 1,
+      "profitGain": -778767,
+      "totalProfit": -727228,
+      "longestHeadshot": 32,
+      "scavRaids": 3,
+      "scavKills": 1,
+      "scavDeaths": 2,
+      "scavSurvived": 1,
+      "scavAverageLifeTime": 155,
+      "scavKillToDeathRatio": 0.5,
+      "scavSurvivalRate": 33,
+      "profilePicture": "/api/data/pmc_avatars/68eb48184e06d31a54b8efb2.png",
+      "profileTheme": "default",
+      "totalScore": 6.342,
+      "suspicious": false,
+      "permBanned": false,
+      "disqualified": false,
+      "boostPerc": 0,
+      "pmcPlayTime": 459,
+      "totalPlayTime": 923,
+      "dev": true,
+      "lastRaidRanThrough": false,
+      "raidHitsHistory": [
+        {
+          "head": 1,
+          "chest": 0,
+          "stomach": 0,
+          "leftArm": 0,
+          "rightArm": 0,
+          "leftLeg": 0,
+          "rightLeg": 0
+        },
+        {
+          "head": 2,
+          "chest": 0,
+          "stomach": 0,
+          "leftArm": 0,
+          "rightArm": 0,
+          "leftLeg": 0,
+          "rightLeg": 0
+        },
+        {
+          "head": 0,
+          "chest": 0,
+          "stomach": 0,
+          "leftArm": 0,
+          "rightArm": 0,
+          "leftLeg": 0,
+          "rightLeg": 0
+        },
+        {
+          "head": 0,
+          "chest": 0,
+          "stomach": 0,
+          "leftArm": 0,
+          "rightArm": 0,
+          "leftLeg": 0,
+          "rightLeg": 0
+        },
+        {
+          "head": 1,
+          "chest": 0,
+          "stomach": 0,
+          "leftArm": 0,
+          "rightArm": 0,
+          "leftLeg": 0,
+          "rightLeg": 0
+        }
+      ],
+      "lcPointsEarned": 22,
+      "scavProfitGain": -8000,
+      "scavPlayTime": 464
+    },
+    {
+      "id": "68ead00109886b455ced4319",
+      "name": "Katrin0522",
+      "pmcLevel": 15,
+      "lastPlayed": 1760872076,
+      "damage": 185,
+      "accountType": "edge_of_darkness",
+      "sptVer": "4.0.0",
+      "currentWinstreak": 1,
+      "longestShot": 25,
+      "isCasual": false,
+      "seasonsPlayed": 1,
+      "permaLink": "c0c433998c0193c1ece43b1160349f5cf49403921ab30b37988344045fd5c964",
+      "scavTotalProfit": 0,
+      "totalRaids": 1,
+      "registeredOnLeaderboard": 1760872080,
+      "registrationDate": 1760219210,
+      "absoluteLastTime": 1760872080,
+      "trusted": false,
+      "health": 384.901245,
+      "banned": false,
+      "agressorName": "",
+      "lastRaidKills": 0,
+      "lastRaidAs": "PMC",
+      "lastRaidDamage": 185,
+      "lastRaidEXP": 200,
+      "isTransition": false,
+      "lastRaidTransitionTo": "None",
+      "discFromRaid": false,
+      "lastRaidHits": 5,
+      "lastRaidDamageTaken": 0,
+      "scavsKilled": 1,
+      "bossesKilled": 0,
+      "raidHits": {
+        "head": 1,
+        "chest": 1,
+        "stomach": 1,
+        "leftArm": 2,
+        "rightArm": 0,
+        "leftLeg": 0,
+        "rightLeg": 0
+      },
+      "raidHitsHistory": [
+        {
+          "head": 1,
+          "chest": 1,
+          "stomach": 1,
+          "leftArm": 2,
+          "rightArm": 0,
+          "leftLeg": 0,
+          "rightLeg": 0
+        }
+      ],
+      "hasKappa": false,
+      "isUsingStattrack": false,
+      "modWeaponStats": [],
+      "traderInfo": {
+        "REF": {
+          "id": "6617beeaa9cfa777ca915b7c",
+          "unlocked": false,
+          "loyaltyLevel": 2,
+          "salesSum": 2600000,
+          "standing": 1,
+          "disabled": false
+        },
+        "PRAPOR": {
+          "id": "54cb50c76803fa8b248b4571",
+          "unlocked": true,
+          "loyaltyLevel": 2,
+          "salesSum": 3209742,
+          "standing": 1,
+          "disabled": false
+        },
+        "THERAPIST": {
+          "id": "54cb57776803fa99248b456e",
+          "unlocked": true,
+          "loyaltyLevel": 2,
+          "salesSum": 2704482,
+          "standing": 1,
+          "disabled": false
+        },
+        "FENCE": {
+          "id": "579dc571d53a0658a154fbec",
+          "unlocked": true,
+          "loyaltyLevel": 1,
+          "salesSum": 2600000,
+          "standing": 1.24,
+          "disabled": false
+        },
+        "SKIER": {
+          "id": "58330581ace78e27b8b10cee",
+          "unlocked": true,
+          "loyaltyLevel": 2,
+          "salesSum": 2618912,
+          "standing": 1.01,
+          "disabled": false
+        },
+        "PEACEKEEPER": {
+          "id": "5935c25fb3acc3127c3d8cd9",
+          "unlocked": true,
+          "loyaltyLevel": 2,
+          "salesSum": 2600299,
+          "standing": 1,
+          "disabled": false
+        },
+        "MECHANIC": {
+          "id": "5a7c2eca46aef81a7ca2145d",
+          "unlocked": true,
+          "loyaltyLevel": 1,
+          "salesSum": 2626297,
+          "standing": 1,
+          "disabled": false
+        },
+        "RAGMAN": {
+          "id": "5ac3b934156ae10c4430e83c",
+          "unlocked": true,
+          "loyaltyLevel": 1,
+          "salesSum": 2717967,
+          "standing": 1,
+          "disabled": false
+        },
+        "LIGHTKEEPER": {
+          "id": "638f541a29ffd1183d187f57",
+          "unlocked": true,
+          "loyaltyLevel": 1,
+          "salesSum": 2600000,
+          "standing": 1,
+          "disabled": false
+        },
+        "BTR_DRIVER": {
+          "id": "656f0f98d80a697f855d34b1",
+          "unlocked": false,
+          "loyaltyLevel": 1,
+          "salesSum": 2600000,
+          "standing": 1,
+          "disabled": false
+        },
+        "JAEGER": {
+          "id": "5c0647fdd443bc2504c2d371",
+          "unlocked": true,
+          "loyaltyLevel": 2,
+          "salesSum": 2704768,
+          "standing": 1,
+          "disabled": false
+        }
+      },
+      "lastRaidSurvived": true,
+      "lastRaidTimeSeconds": 106,
+      "lastRaidMap": "Factory",
+      "pmcSide": "Usec",
+      "scavLevel": 2,
+      "prestige": 0,
+      "isUsingFika": false,
+      "isUsingRealism": false,
+      "isUsingTP": false,
+      "isUsingWTT": false,
+      "isNew": true,
+      "allAchievements": {
+        "65141c30ec10ff011f17cc3b": 1760250313,
+        "65141e37cf2f1c285e606361": 1760468726
+      },
+      "diedAtX": null,
+      "pmcRaids": 1,
+      "pmcKills": 0,
+      "pmcDeaths": 0,
+      "survived": 1,
+      "averageLifeTime": 106,
+      "killToDeathRatio": 0,
+      "survivalRate": 100,
+      "hideout": {
+        "Vents": 3,
+        "Security": 3,
+        "WaterCloset": 3,
+        "Stash": 4,
+        "Generator": 3,
+        "Heating": 3,
+        "WaterCollector": 3,
+        "MedStation": 3,
+        "Kitchen": 3,
+        "RestSpace": 3,
+        "Workbench": 3,
+        "IntelligenceCenter": 3,
+        "ShootingRange": 3,
+        "Library": 1,
+        "ScavCase": 1,
+        "Illumination": 3,
+        "PlaceOfFame": 1,
+        "AirFilteringUnit": 1,
+        "SolarPower": 1,
+        "BoozeGenerator": 1,
+        "BitcoinFarm": 3,
+        "ChristmasIllumination": 1,
+        "EmergencyWall": 6,
+        "Gym": 1,
+        "WeaponStand": 0,
+        "WeaponStandSecondary": 0,
+        "EquipmentPresetsStand": 0,
+        "CircleOfCultists": 0
+      },
+      "completed_quests": {
+        "5ae448a386f7744d3730fff0": {
+          "accept_time": 1760392071,
+          "finish_time": 0
+        },
+        "657315ddab5a49b71f098853": {
+          "accept_time": 1760391727,
+          "finish_time": 0
+        },
+        "657315df034d76585f032e01": {
+          "accept_time": 1760392063,
+          "finish_time": 0
+        },
+        "657315e270bb0b8dba00cc48": {
+          "accept_time": 1760391729,
+          "finish_time": 1760392535
+        },
+        "657315e4a6af4ab4b50f3459": {
+          "accept_time": 1760391733,
+          "finish_time": 0
+        },
+        "6744ab1def61d56e020b5c56": {
+          "accept_time": 0,
+          "finish_time": 0
+        },
+        "67a09761e720611a6a01f288": {
+          "accept_time": 0,
+          "finish_time": 0
+        },
+        "68ead05509886b455ced4397": {
+          "accept_time": 1760392073,
+          "finish_time": 0
+        },
+        "68ed71f9066a6b4708707f74": {
+          "accept_time": 1760391728,
+          "finish_time": 0
+        },
+        "6834145ebc1f443d7603c8a7": {
+          "accept_time": 1760392066,
+          "finish_time": 0
+        },
+        "67a09636b8725511260bc421": {
+          "accept_time": 1760392075,
+          "finish_time": 0
+        },
+        "596b36c586f77450d6045ad2": {
+          "accept_time": 0,
+          "finish_time": 0
+        },
+        "68f4c5aedf71af22d4d50b5e": {
+          "accept_time": 0,
+          "finish_time": 0
+        },
+        "68f4c5aedf71af22d4d50b6b": {
+          "accept_time": 0,
+          "finish_time": 0
+        },
+        "68f4c5aedf71af22d4d50b76": {
+          "accept_time": 0,
+          "finish_time": 0
+        },
+        "68f4c5aedf71af22d4d50b84": {
+          "accept_time": 0,
+          "finish_time": 0
+        },
+        "68f4c5aedf71af22d4d50b9f": {
+          "accept_time": 0,
+          "finish_time": 0
+        }
+      },
+      "hydration": 97.4,
+      "energy": 106.8,
+      "max_hydration": 100,
+      "max_energy": 110,
+      "profitGain": 0,
+      "totalProfit": 0,
+      "longestHeadshot": 25,
       "scavRaids": 0,
       "scavKills": 0,
       "scavDeaths": 0,
@@ -564,9 +903,251 @@
       "scavAverageLifeTime": 0,
       "scavKillToDeathRatio": 0,
       "scavSurvivalRate": 0,
-      "profilePicture": "/api/data/pmc_avatars/68eb48184e06d31a54b8efb2.png",
+      "profilePicture": "/api/data/pmc_avatars/68ead00109886b455ced4319.png",
       "profileTheme": "default",
-      "totalScore": 6.520499999999999
+      "totalScore": 6.4785
+    },
+    {
+      "id": "68eb6d0cdf025b5fd0c37c31",
+      "name": "Katrin0522",
+      "pmcLevel": 2,
+      "lastPlayed": 1760877452,
+      "damage": 0,
+      "accountType": "unheard_edition",
+      "sptVer": "4.0.0",
+      "currentWinstreak": 1,
+      "longestShot": 0,
+      "isCasual": false,
+      "seasonsPlayed": 1,
+      "permaLink": "c0c433998c0193c1ece43b1160349f5cf49403921ab30b37988344045fd5c964",
+      "scavTotalProfit": 0,
+      "totalRaids": 1,
+      "registeredOnLeaderboard": 1760877455,
+      "registrationDate": 1760259710,
+      "absoluteLastTime": 1760877455,
+      "trusted": false,
+      "health": 440,
+      "banned": false,
+      "agressorName": "",
+      "lastRaidKills": 0,
+      "lastRaidAs": "PMC",
+      "lastRaidDamage": 0,
+      "lastRaidEXP": 237,
+      "isTransition": false,
+      "lastRaidTransitionTo": "None",
+      "discFromRaid": false,
+      "lastRaidHits": 0,
+      "lastRaidDamageTaken": 0,
+      "scavsKilled": 0,
+      "bossesKilled": 0,
+      "raidHits": {
+        "head": 0,
+        "chest": 0,
+        "stomach": 0,
+        "leftArm": 0,
+        "rightArm": 0,
+        "leftLeg": 0,
+        "rightLeg": 0
+      },
+      "raidHitsHistory": [
+        {
+          "head": 0,
+          "chest": 0,
+          "stomach": 0,
+          "leftArm": 0,
+          "rightArm": 0,
+          "leftLeg": 0,
+          "rightLeg": 0
+        }
+      ],
+      "hasKappa": false,
+      "isUsingStattrack": false,
+      "modWeaponStats": [],
+      "traderInfo": {
+        "REF": {
+          "id": "6617beeaa9cfa777ca915b7c",
+          "unlocked": false,
+          "loyaltyLevel": 1,
+          "salesSum": 0,
+          "standing": 0.2,
+          "disabled": false
+        },
+        "PRAPOR": {
+          "id": "54cb50c76803fa8b248b4571",
+          "unlocked": true,
+          "loyaltyLevel": 1,
+          "salesSum": 0,
+          "standing": 0.2,
+          "disabled": false
+        },
+        "THERAPIST": {
+          "id": "54cb57776803fa99248b456e",
+          "unlocked": true,
+          "loyaltyLevel": 1,
+          "salesSum": 1,
+          "standing": 0.2,
+          "disabled": false
+        },
+        "FENCE": {
+          "id": "579dc571d53a0658a154fbec",
+          "unlocked": true,
+          "loyaltyLevel": 1,
+          "salesSum": 0,
+          "standing": 0.5,
+          "disabled": false
+        },
+        "SKIER": {
+          "id": "58330581ace78e27b8b10cee",
+          "unlocked": true,
+          "loyaltyLevel": 1,
+          "salesSum": 0,
+          "standing": 0.2,
+          "disabled": false
+        },
+        "PEACEKEEPER": {
+          "id": "5935c25fb3acc3127c3d8cd9",
+          "unlocked": true,
+          "loyaltyLevel": 1,
+          "salesSum": 0,
+          "standing": 0.2,
+          "disabled": false
+        },
+        "MECHANIC": {
+          "id": "5a7c2eca46aef81a7ca2145d",
+          "unlocked": true,
+          "loyaltyLevel": 1,
+          "salesSum": 0,
+          "standing": 0.2,
+          "disabled": false
+        },
+        "RAGMAN": {
+          "id": "5ac3b934156ae10c4430e83c",
+          "unlocked": true,
+          "loyaltyLevel": 1,
+          "salesSum": 0,
+          "standing": 0.2,
+          "disabled": false
+        },
+        "LIGHTKEEPER": {
+          "id": "638f541a29ffd1183d187f57",
+          "unlocked": true,
+          "loyaltyLevel": 1,
+          "salesSum": 0,
+          "standing": 0.2,
+          "disabled": false
+        },
+        "BTR_DRIVER": {
+          "id": "656f0f98d80a697f855d34b1",
+          "unlocked": false,
+          "loyaltyLevel": 1,
+          "salesSum": 0,
+          "standing": 0.2,
+          "disabled": false
+        },
+        "JAEGER": {
+          "id": "5c0647fdd443bc2504c2d371",
+          "unlocked": false,
+          "loyaltyLevel": 1,
+          "salesSum": 0,
+          "standing": 0.2,
+          "disabled": false
+        }
+      },
+      "lastRaidSurvived": true,
+      "lastRaidTimeSeconds": 90,
+      "lastRaidMap": "Factory",
+      "pmcSide": "Usec",
+      "scavLevel": 1,
+      "prestige": 0,
+      "isUsingFika": false,
+      "isUsingRealism": false,
+      "isUsingTP": false,
+      "isUsingWTT": false,
+      "isNew": true,
+      "allAchievements": {
+        "65141e37cf2f1c285e606361": 1760875939
+      },
+      "diedAtX": null,
+      "pmcRaids": 1,
+      "pmcKills": 0,
+      "pmcDeaths": 0,
+      "survived": 1,
+      "averageLifeTime": 90,
+      "killToDeathRatio": 0,
+      "survivalRate": 100,
+      "hideout": {
+        "Vents": 0,
+        "Security": 0,
+        "WaterCloset": 0,
+        "Stash": 4,
+        "Generator": 0,
+        "Heating": 0,
+        "WaterCollector": 0,
+        "MedStation": 0,
+        "Kitchen": 0,
+        "RestSpace": 0,
+        "Workbench": 0,
+        "IntelligenceCenter": 0,
+        "ShootingRange": 0,
+        "Library": 0,
+        "ScavCase": 0,
+        "Illumination": 0,
+        "PlaceOfFame": 0,
+        "AirFilteringUnit": 0,
+        "SolarPower": 0,
+        "BoozeGenerator": 0,
+        "BitcoinFarm": 0,
+        "ChristmasIllumination": 0,
+        "EmergencyWall": 0,
+        "Gym": 0,
+        "WeaponStand": 0,
+        "WeaponStandSecondary": 0,
+        "EquipmentPresetsStand": 0,
+        "CircleOfCultists": 1
+      },
+      "completed_quests": {
+        "657315ddab5a49b71f098853": {
+          "accept_time": 0,
+          "finish_time": 0
+        },
+        "657315df034d76585f032e01": {
+          "accept_time": 0,
+          "finish_time": 0
+        },
+        "657315e270bb0b8dba00cc48": {
+          "accept_time": 0,
+          "finish_time": 0
+        },
+        "657315e4a6af4ab4b50f3459": {
+          "accept_time": 0,
+          "finish_time": 0
+        },
+        "6744ab1def61d56e020b5c56": {
+          "accept_time": 0,
+          "finish_time": 0
+        },
+        "67a09761e720611a6a01f288": {
+          "accept_time": 0,
+          "finish_time": 0
+        }
+      },
+      "hydration": 97.4,
+      "energy": 96.8,
+      "max_hydration": 100,
+      "max_energy": 100,
+      "profitGain": 46382,
+      "totalProfit": 46382,
+      "longestHeadshot": 0,
+      "scavRaids": 0,
+      "scavKills": 0,
+      "scavDeaths": 0,
+      "scavSurvived": 0,
+      "scavAverageLifeTime": 0,
+      "scavKillToDeathRatio": 0,
+      "scavSurvivalRate": 0,
+      "profilePicture": "/api/data/pmc_avatars/.png",
+      "profileTheme": "default",
+      "totalScore": 6.4785
     }
   ]
 }

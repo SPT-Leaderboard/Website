@@ -55,7 +55,6 @@ let globalCounters = `/api/data/shared/global_counters.json`;
 if (isLocalhost) {
     pmcPfpsPath = `fallbacks/pmc_avatars/`;
     seasonPath = `../fallbacks/season`;
-    lastRaidsPath = `fallbacks/player_raids/}`;
     profileSettingsPath = `fallbacks/profile_settings.json?t=${Date.now()}`;
     weaponStatsPath = `../fallbacks/shared/weapon_counters.json?t=${Date.now()}`;
     profileUrlPath = `127.0.0.1:5500/#id=`;
