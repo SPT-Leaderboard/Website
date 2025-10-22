@@ -18,11 +18,12 @@ async function loadJSON(url) {
 }
 
 // Merge old (SPT 3.11) achievements data with new data (SPT 4.0)
-function mergeAchievements(oldData, newData) {
+function mergeAchievements(oldData, newData, seData = null) {
     return {
         achievementCompiled: {
             ...oldData.achievementCompiled,
-            ...newData.achievementCompiled
+            ...newData.achievementCompiled,
+            ...(seData?.achievementCompiled || {})
         }
     };
 }
