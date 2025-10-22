@@ -55,7 +55,6 @@ function showLoginPrompt() {
     }, 500);
 }
 
-
 async function submitComment(commentText, receiverId, permaLink) {
     const submitBtn = commentSubmit;
     const originalText = submitBtn.innerHTML;
@@ -65,7 +64,7 @@ async function submitComment(commentText, receiverId, permaLink) {
         submitBtn.classList.add('loading');
         submitBtn.disabled = true;
 
-        const response = await fetch('/api/network/functions/comment/send-comment.php', {
+        const response = await fetch('/api/network/functions/comment/send_comment.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

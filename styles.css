@@ -1580,7 +1580,7 @@ button:hover,
     border-radius: 20px;
     width: 90%;
     max-width: 700px;
-    max-height: 85vh;
+    max-height: 75vh;
     overflow-y: auto;
     color: var(--text-light);
     backdrop-filter: blur(20px) saturate(180%);
