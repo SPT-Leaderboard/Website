@@ -15,6 +15,7 @@ async function loadAchievementsData() {
         const [achievementsResponse, achievementsNewResponse, playersResponse] = await Promise.all([
             fetch('achievements/js/compiledAchData.json'),
             fetch('achievements/js/compiledAchDataNew.json'),
+            fetch('achievements/js/compiledAchSEData.json'),
             fetch(`${achievementsPath}`)
         ]);
 
