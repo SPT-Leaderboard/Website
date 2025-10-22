@@ -235,9 +235,17 @@ async function showPublicProfile(container, player) {
                 break;
         }
     }
+    
     // Banned - lowest prio
     else {
         accountColor = '#787878';
+    }
+
+    // PROMO
+    let teamTagClass = '';
+    if (player.teamTag === "SPTLB") {
+        nameClass = 'promo-name';
+        teamTagClass = 'promo-name'
     }
 
     let finalNameClass = '';

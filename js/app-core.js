@@ -471,6 +471,13 @@ async function displayLeaderboard(data) {
             nameClass = 'bronze-name';
         }
 
+        // PROMO
+        let teamTagClass = '';
+        if(player.teamTag === "SPTLB"){
+            nameClass = 'promo-name';
+            teamTagClass = 'promo-name'
+        }
+
         let finalNameClass = '';
         if (nameClass) {
             finalNameClass = nameClass;
@@ -499,7 +506,7 @@ async function displayLeaderboard(data) {
 
         row.innerHTML = `
             <td class="rank ${rankClass}">${player.rank} ${player.medal}</td>
-            <td class="teamtag" data-team="${player.teamTag ? player.teamTag : ``}">${player.teamTag ? `[${player.teamTag}]` : ``}</td>
+            <td class="teamtag ${teamTagClass}" data-team="${player.teamTag ? player.teamTag : ``}">${player.teamTag ? `[${player.teamTag}]` : ``}</td>
             <td class="player-name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''} data-player-id="${player.id || '0'}">
                 ${`<img class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';" />`}
                 ${accountIcon} <span class="${finalNameClass}">${player.name}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div>

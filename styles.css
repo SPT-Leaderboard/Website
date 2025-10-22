@@ -1263,6 +1263,18 @@ button:hover,
     font-size: 1.3em;
 }
 
+.promo-name {
+    color: transparent !important;
+    font-weight: bold !important;
+    font-size: 1.1em !important;
+    background-size: 200%;
+    animation: shine 5s linear infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-image: linear-gradient(-60deg, var(--accent-blue), var(--accent-teal), var(--primary-ultralight), var(--accent-blue));
+    text-shadow: 0 0 15px rgba(99, 102, 241, 0.4), 0 0 30px rgba(100, 255, 218, 0.3);
+}
+
 .account-icon {
     height: 22px;
 }
