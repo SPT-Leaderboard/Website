@@ -1782,6 +1782,53 @@ button:hover,
     grid-column: 1 / -1;
 }
 
+/* Banned Mods Modal */
+.banned-mods-container {
+    width: 100%;
+}
+
+.mods-count-badge {
+    background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: var(--shadow-md);
+}
+
+.banned-mods-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.mods-column {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.mod-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    filter: grayscale(0.3);
+    transition: filter 0.3s ease;
+}
+
+.ban-mod-item:hover .mod-icon {
+    filter: grayscale(0);
+}
+
+.ban-mod-name {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.4;
+    word-break: break-word;
+    flex: 1;
+}
+
 /* Settings Modal */
 .settings-list {
     display: flex;

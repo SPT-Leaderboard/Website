@@ -7,6 +7,7 @@
 let playerWidget;
 let playerOneInput;
 let widgetContainer;
+let bannedMods = [];
 
 function updateVisibility(toggle, element, cookieName) {
     const isVisible = toggle.checked;
@@ -56,6 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
         settingsModal: document.getElementById('settingsModal'),
         settingsButton: document.getElementById('settingsButton'),
 
+        bannedModal: document.getElementById('bannedModal'),
+        bannedButton: document.getElementById('bannedButton'),
+
         closeButtons: document.querySelectorAll('.close'),
         modals: document.querySelectorAll('.modal')
     };
@@ -81,6 +85,86 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listeners
     elements.infoButton.addEventListener('click', () => toggleModal(elements.infoModal, true));
     elements.tosButton.addEventListener('click', () => toggleModal(elements.tosModal, true));
+    elements.bannedButton.addEventListener('click', async () => {
+        try {
+            bannedMods = await getBannedMods();
+
+            if (bannedMods && !bannedMods.error) {
+                toggleModal(elements.bannedModal, true);
+                displayBannedMods(bannedMods);
+            } else {
+                console.error('Failed to load banned mods:', bannedMods?.error);
+            }
+        } catch (error) {
+            console.error('Error loading banned mods:', error);
+        }
+    });
+
+    async function getBannedMods() {
+        try {
+            const response = await fetch(`/api/network/functions/get_banned_mods.php`);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Fetch error:', error);
+            return { error: error.message };
+        }
+    }
+
+    function displayBannedMods(mods) {
+        const container = document.getElementById('bannedModsContainer');
+
+        if (!Array.isArray(mods)) {
+            container.innerHTML = '<p class="error-message">Error loading mods</p>';
+            return;
+        }
+
+        if (mods.length === 0) {
+            container.innerHTML = '<p class="no-mods-message">No banned mods</p>';
+            return;
+        }
+
+        const middleIndex = Math.ceil(mods.length / 2);
+        const firstColumnMods = mods.slice(0, middleIndex);
+        const secondColumnMods = mods.slice(middleIndex);
+
+        const html = `
+        <div class="banned-mods-grid">
+            <div class="mods-column">
+                ${firstColumnMods.map((mod, index) => `
+                    <div class="mod-item" data-index="${index}">
+                        <span class="mod-icon">⚠️</span>
+                        <span class="ban-mod-name">${escapeHtml(mod)}</span>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="mods-column">
+                ${secondColumnMods.map((mod, index) => `
+                    <div class="mod-item" data-index="${index + middleIndex}">
+                        <span class="mod-icon">⚠️</span>
+                        <span class="ban-mod-name">${escapeHtml(mod)}</span>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+
+        container.innerHTML = html;
+    }
+
+    function escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
 
     elements.settingsButton.addEventListener('click', () => {
         toggleModal(elements.settingsModal, true);
@@ -92,6 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => {
             toggleModal(elements.infoModal, false);
             toggleModal(elements.tosModal, false);
+            toggleModal(elements.bannedModal, false);
             toggleModal(elements.settingsModal, false);
             if (playerWidget) playerWidget.hideIfEmpty();
         });
@@ -101,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('click', (event) => {
         if (event.target === elements.infoModal) toggleModal(elements.infoModal, false);
         if (event.target === elements.tosModal) toggleModal(elements.tosModal, false);
+        if (event.target === elements.bannedModal) toggleModal(elements.bannedModal, false);
         if (event.target === elements.settingsModal) {
             toggleModal(elements.settingsModal, false);
             if (playerWidget) playerWidget.hideIfEmpty();

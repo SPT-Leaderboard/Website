@@ -30,6 +30,7 @@
         <script src="js/user-search.js"></script>
         <script src="js/user-quests.js"></script>
         <script src="js/user-hideout.js"></script>
+        <script src="js/user-comments.js"></script>
         <script src="js/user-profiles.js"></script>
         <script src="js/user-friends.js"></script>
         <script data-cfasync="false" src="js/user-share.js"></script>
@@ -80,6 +81,7 @@
                     <a href="insights/" class="navbar-link">Global Insights</a>
                     <a href="achievements/" class="navbar-link">Achievement Rate</a>
                     <button id="infoButton" class="navbar-link">How it works</button>
+                    <button id="bannedButton" class="navbar-link">Banned Mods</button>
                     <button id="tosButton" class="navbar-link">LA/TOS</button>
                     <button id="settingsButton" class="navbar-link">Settings</button>
                     <a class="navbar-link" href="api-docs/">API</a>
@@ -243,6 +245,13 @@
                         <span class="bad">Outdated</span>, <span class="average">Older than latest release</span>, <span class="good">Latest Release</span>
                     </li>
                 </ul>
+            </div>
+        </div>
+        <div id="bannedModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Globally Banned Mods by Leaderboard</h2>
+                <div id="bannedModsContainer"></div>
             </div>
         </div>
         <div id="tosModal" class="modal">
