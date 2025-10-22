@@ -147,14 +147,15 @@ function renderAchievements(stats, searchTerm = '') {
 async function initAchievements() {
     try {
         // Load JSON files in parallel
-        const [oldAchievements, newAchievements, playersData] = await Promise.all([
+        const [oldAchievements, newAchievements, seAchievements, playersData] = await Promise.all([
             loadJSON('../achievements/js/compiledAchData.json'),
             loadJSON('../achievements/js/compiledAchDataNew.json'),
+            loadJSON('../achievements/js/compiledAchSEData.json'),
             loadJSON(achievementsPath)
         ]);
 
         // Merge achievements - new data overwrites old data for same IDs (just to be sure if its changed recently)
-        achievementsData = mergeAchievements(oldAchievements, newAchievements);
+        achievementsData = mergeAchievements(oldAchievements, newAchievements, seAchievements);
 
         // Store player achievements data
         playerAchievements = playersData;
