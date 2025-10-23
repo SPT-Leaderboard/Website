@@ -7,7 +7,7 @@
 async function checkFriends(player) {
     return new Promise((resolve) => {
         const friends = [];
-        const friendLink = player.friendLink;
+        const friendLink = player.permaLink;
         const teamTag = player.teamTag;
 
         if (!friendLink && !teamTag) {
@@ -21,7 +21,7 @@ async function checkFriends(player) {
             // Don't put yourself in friend list
             if (p.id === player.id) continue;
 
-            if ((friendLink && p.friendLink === friendLink) ||
+            if ((friendLink && p.permaLink === friendLink) ||
                 (teamTag && p.teamTag === teamTag)) {
                 friends.push(p);
             }

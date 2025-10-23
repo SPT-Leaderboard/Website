@@ -65,6 +65,11 @@ async function openProfile(playerId, bypass = false) {
 function showDisqualProfile(container, player) {
     const profileModal = document.querySelector(".profile-modal-content");
     const mainBackground = document.getElementById("playerProfileModal");
+    const profileModalBG = document.getElementById("modalPlayerInfo");
+
+    profileModalBG.style.backgroundColor = "";
+    profileModalBG.style.backgroundImage = "";
+
     mainBackground.style.backgroundImage = "";
     mainBackground.style.backgroundColor = "";
 
@@ -87,7 +92,8 @@ function showDisqualProfile(container, player) {
     );
 
     container.innerHTML = `
-    <div class="private-profile-overlay" style="background: none;">
+    <div class="private-profile-overlay">
+    <button id="closeButton" class="close-profile-button">×</button>
         <div class="private-profile-content">
             <img src="https://media1.tenor.com/m/N4XSv7AAXXMAAAAd/thanos-endgame.gif" class="ban-icon" alt="Banned">
             <h3>Profile Banned</h3>
@@ -242,10 +248,8 @@ async function showPublicProfile(container, player) {
     }
 
     // PROMO
-    let teamTagClass = '';
     if (player.teamTag === "SPTLB") {
         nameClass = 'promo-name';
-        teamTagClass = 'promo-name'
     }
 
     let finalNameClass = '';
@@ -500,20 +504,24 @@ async function showPublicProfile(container, player) {
             <div class="playermodel profile-section" id="playermodel">
                 <h3>Player Pre-Raid Preview</h3>
                 <div class="playermodel-image">
-                    <img src="/api/data/pmc_avatars/${player.permaLink}_full.png" alt="Player Model Preview" onerror="this.src='media/default_full_pmc_avatar.png';" />
+                    <img src="${pmcPfpsPath}${player.permaLink}_full.png" 
+                        alt="Player Model Preview" 
+                        onerror="this.src='media/default_full_pmc_avatar.png';" />
                 </div>
                 <div class="playermodel-stats profile-section">
                     <div class="player-health">
-                        <img src="media/leaderboard_icons/health_icon.png">
+                        <img src="media/leaderboard_icons/health_icon.png" alt="Health">
                         <span class="current">${player.health?.toFixed(0) ?? 440}</span>
                     </div>
                     <div class="player-hydration">
-                        <img src="media/leaderboard_icons/health_icon_hydration.png">
-                        <span class="current">${player.hydration?.toFixed(0) ?? 100}</span><span class="max">/${player.max_hydration ?? 100}</span>
+                        <img src="media/leaderboard_icons/health_icon_hydration.png" alt="Hydration">
+                        <span class="current">${player.hydration?.toFixed(0) ?? 100}</span>
+                        <span class="max">/${player.max_hydration ?? 100}</span>
                     </div>
                     <div class="player-energy">
-                        <img src="media/leaderboard_icons/health_icon_energy.png">
-                        <span class="current">${player.energy?.toFixed(0) ?? 100}</span><span class="max">/${player.max_energy ?? 100}</span>
+                        <img src="media/leaderboard_icons/health_icon_energy.png" alt="Energy">
+                        <span class="current">${player.energy?.toFixed(0) ?? 100}</span>
+                        <span class="max">/${player.max_energy ?? 100}</span>
                     </div>
                 </div>
             </div>
@@ -705,6 +713,16 @@ async function showPublicProfile(container, player) {
 
         </div>
     `;
+
+    // Crop the image
+    setTimeout(async () => {
+        try {
+            await loadAndCropPlayerImage(player);
+        } catch (error) {
+            console.error('Failed to process player image:', error);
+        }
+    }, 100);
+
     // Setup close handlers first
     setupModalCloseHandlers();
 
