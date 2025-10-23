@@ -66,17 +66,29 @@
             "description": "Eliminate a Scav while playing as a Scav",
             "name": "You Are Not My Brother"
         },
-        "676094451fec2f7426093be6": {
-            "imageUrl": "/media/player-achievements/676093bf2a7be2d1f706f0ec.png",
-            "rarity": "Legendary",
-            "description": "Earn the Prestige level 2",
-            "name": "More Prestigious"
-        },
         "6634cae870af846d2868dada": {
             "imageUrl": "/media/player-achievements/S24Q2_ARRS3.png",
             "rarity": "Legendary",
             "description": "Pick Skier's side and complete The Tarkov Mystery event task line",
             "name": "Local Strong Man"
+        },
+        "6842c27a38482d35ac0bd847": {
+            "imageUrl": "/media/prestige4.png",
+            "rarity": "Legendary",
+            "description": "Earn the Prestige level 4",
+            "name": "Higher and Higher"
+        },
+        "6842c25bd02bc07d70054019": {
+            "imageUrl": "/media/prestige3.png",
+            "rarity": "Legendary",
+            "description": "Earn the Prestige level 3",
+            "name": "Keeping Up the Pace"
+        },
+        "676094451fec2f7426093be6": {
+            "imageUrl": "/media/player-achievements/676093bf2a7be2d1f706f0ec.png",
+            "rarity": "Legendary",
+            "description": "Earn the Prestige level 2",
+            "name": "More Prestigious"
         },
         "676091c0f457869a94017a23": {
             "imageUrl": "/media/player-achievements/676093b76e682163da028a28.png",
