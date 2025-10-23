@@ -363,6 +363,9 @@ async function displayLeaderboard(data) {
             return;
         }
 
+        // Do not render perma banned players
+        if (player.permBanned) return;
+
         // Check HeartbeatMonitor
         const playerStatus = window.heartbeatMonitor.getPlayerStatus(player.id);
 
@@ -473,7 +476,7 @@ async function displayLeaderboard(data) {
 
         // PROMO
         let teamTagClass = '';
-        if(player.teamTag === "SPTLB"){
+        if (player.teamTag === "SPTLB") {
             nameClass = 'promo-name';
             teamTagClass = 'promo-name'
         }
@@ -574,6 +577,9 @@ async function displaySimpleLeaderboard(data) {
         if (player.isCasual && getCookie('casualToggle') === 'true') {
             return;
         }
+
+        // Do not render perma banned players
+        if (player.permBanned) return;
 
         // Check HeartbeatMonitor
         const playerStatus = window.heartbeatMonitor.getPlayerStatus(player.id);
