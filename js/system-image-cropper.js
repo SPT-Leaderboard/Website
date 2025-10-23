@@ -4,7 +4,6 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ /
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
-
 async function autoCropTransparent(imageElement) {
     return new Promise((resolve) => {
         const canvas = document.createElement('canvas');
