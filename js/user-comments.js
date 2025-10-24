@@ -32,7 +32,7 @@ function initComments(permaLink, playerId) {
         }
 
         // Send Comment
-        submitComment(commentInput.value.trim(), playerId, permaLink);
+        submitComment(commentInput.value.trim(), playerId, permaLink, commentSubmit, commentInput);
     });
 
     // Send comment
@@ -55,8 +55,7 @@ function showLoginPrompt(commentInput) {
     }, 500);
 }
 
-async function submitComment(commentText, receiverId, permaLink) {
-    const submitBtn = commentSubmit;
+async function submitComment(commentText, receiverId, permaLink, submitBtn, commentInput) {
     const originalText = submitBtn.innerHTML;
 
     try {
