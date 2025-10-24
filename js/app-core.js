@@ -263,11 +263,8 @@ async function loadSeasonData(season) {
             return;
         }
 
-        // Calculate ranks before initializing the leaderboard
-        // DEPRECATING: USE calculatePlaces() next season! - harmony
-        calculateRanks(leaderboardData);
-
-        //calculatePlaces(leaderboardData);
+        // Calculate places before initializing the leaderboard
+        calculatePlaces(leaderboardData);
 
         // Run through this real quick before displaying
         addColorIndicators(leaderboardData);
@@ -769,108 +766,12 @@ function convertTimeToSeconds(time) {
 }
 
 /**
- * Calculates and assigns ranks to players based on their stats
+ * Sorts data by totalScore of the player calculated on the server
  * @param {Array<Object>} data - Leaderboard data with all the season entries
  * @returns {void}
  *
- * @description
- * Calculates player skill scores considering:
- * - Kill/Death ratio
- * - Survival rate
- * - PMC Raids
- * - Average lifetime
- * Applies penalties for low raid count and short lifetimes
  */
-async function calculateRanks(data) {
-    const MIN_RAIDS = 50
-    const SOFT_CAP_RAIDS = 100
-    const MIN_LIFE_TIME = 10 // Skill issue tracker
-    const MAX_LIFE_TIME = 35
-
-    const maxKDR = Math.max(...data.map(p => p.killToDeathRatio))
-    const maxSurvival = Math.max(...data.map(p => p.survivalRate))
-    const maxRaids = Math.max(...data.map(p => p.pmcRaids))
-    const maxAvgLifeTime = Math.max(
-        ...data.map(p => Math.min(p.averageLifeTime, MAX_LIFE_TIME))
-    )
-
-    data.forEach(player => {
-        if (player.banned) {
-            player.totalScore = 0;
-            player.damage = 0;
-            player.killToDeathRatio = 0;
-            player.averageLifeTime = 0;
-            player.pmcRaids = 0;
-            player.scavRaids = 0;
-            player.survivalRate = 0;
-            player.profilePicture = "media/default_banned.png";
-            player.survivedToDiedRatio = 0;
-            return;
-        }
-
-        // If totalScore exists
-        //if (player.totalScore !== undefined && player.totalScore !== null) {
-        //    return;
-        //}
-
-        const normKDR = maxKDR ? player.killToDeathRatio / maxKDR : 0;
-        const normSurvival = maxSurvival ? player.survivalRate / maxSurvival : 0;
-        const normRaids = maxRaids ? player.pmcRaids / maxRaids : 0;
-
-        // Max 45 mins. No raid overhaul BS
-        const clampedLifeTime = Math.min(player.averageLifeTime, MAX_LIFE_TIME);
-        const normAvgLifeTime = maxAvgLifeTime ? clampedLifeTime / maxAvgLifeTime : 0;
-
-        let score = normKDR * 0.2 + normSurvival * 0.2 + normRaids * 0.35 + normAvgLifeTime * 0.3;
-
-        // Soft Cap for raids
-        if (player.pmcRaids <= MIN_RAIDS) {
-            score *= 0.3;
-        } else if (player.pmcRaids < SOFT_CAP_RAIDS) {
-            const progress = (player.pmcRaids - MIN_RAIDS) / (SOFT_CAP_RAIDS - MIN_RAIDS);
-            score *= 0.3 + 0.65 * progress;
-        }
-
-        if (player.averageLifeTime / 60 < MIN_LIFE_TIME) {
-            score *= 0.7; // -30% penalty
-        }
-
-        if (player.boostPerc) {
-            // Properly apply boost multiplier (+5% = 1.05, -3% = 0.97)
-            const boostMultiplier = 1 + (player.boostPerc / 100);
-
-            score *= boostMultiplier;
-
-            // Clamp boost to max +-5%
-            const clampedBoost = Math.min(Math.max(boostMultiplier, 0.8), 1.05);
-            score *= clampedBoost;
-        }
-
-        player.totalScore = score;
-
-        if (player.isCasual) {
-            player.totalScore = 0.15;
-        }
-    })
-
-    data.sort((a, b) => b.totalScore - a.totalScore)
-
-    data.forEach((player, index) => {
-        if (player.isCasual) {
-            player.rank = "Casual";
-            player.medal = '';
-            return;
-        }
-
-        player.rank = index + 1;
-        player.medal = ['🥇', '🥈', '🥉'][index] || '';
-    })
-
-    //calculatePlaces(data);
-}
-
 async function calculatePlaces(data) {
-    data.sort((a, b) => b.totalScore - a.totalScore)
 
     data.forEach((player, index) => {
         if (player.banned) {
@@ -881,14 +782,34 @@ async function calculatePlaces(data) {
             player.pmcRaids = 0;
             player.scavRaids = 0;
             player.survivalRate = 0;
+            player.rank = "BANNED";
+            player.medal = "";
             player.profilePicture = "media/default_banned.png";
             player.survivedToDiedRatio = 0;
             return;
         }
+    })
 
+    data.sort((a, b) => b.totalScore - a.totalScore)
+
+    data.forEach((player, index) => {
+                if (player.banned) {
+            player.totalScore = 0;
+            player.damage = 0;
+            player.killToDeathRatio = 0;
+            player.averageLifeTime = 0;
+            player.pmcRaids = 0;
+            player.scavRaids = 0;
+            player.survivalRate = 0;
+            player.rank = "BANNED";
+            player.medal = "";
+            player.profilePicture = "media/default_banned.png";
+            player.survivedToDiedRatio = 0;
+            return;
+        }
+        
         if (player.isCasual) {
             player.rank = "Casual";
-            player.totalScore = 0.15;
             player.medal = '';
             return;
         }
@@ -900,18 +821,18 @@ async function calculatePlaces(data) {
 
 // Get skill rank label
 function getRankLabel(totalScore) {
-    if (totalScore < 0.2) return 'L-';
-    if (totalScore < 0.35) return 'L';
-    if (totalScore < 0.45) return 'L+';
-    if (totalScore < 0.55) return 'M-';
-    if (totalScore < 0.65) return 'M';
-    if (totalScore < 0.72) return 'M+';
-    if (totalScore < 0.78) return 'H-';
-    if (totalScore < 0.84) return 'H';
-    if (totalScore < 0.9) return 'H+';
-    if (totalScore < 0.94) return 'P-';
-    if (totalScore < 0.97) return 'P';
-    if (totalScore < 0.99) return 'P+';
+    if (totalScore < 15) return 'L-';
+    if (totalScore < 25) return 'L';
+    if (totalScore < 35) return 'L+';
+    if (totalScore < 45) return 'M-';
+    if (totalScore < 55) return 'M';
+    if (totalScore < 65) return 'M+';
+    if (totalScore < 72) return 'H-';
+    if (totalScore < 78) return 'H';
+    if (totalScore < 84) return 'H+';
+    if (totalScore < 90) return 'P-';
+    if (totalScore < 94) return 'P';
+    if (totalScore < 97) return 'P+';
     return 'G';
 }
 
