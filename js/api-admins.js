@@ -7,7 +7,7 @@
 async function updateAdminsStatus() {
     const container = document.getElementById('admins-container');
     const contentWrapper = container.querySelector('.content-wrapper');
-    const loadingOverlay = container.querySelector('.loading-overlay');
+    const loadingOverlay = document.getElementById('loading-overlay-admin');
 
     // Show loading overlay with smooth transition
     loadingOverlay.classList.add('active');
