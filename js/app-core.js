@@ -164,10 +164,10 @@ async function prepareSeasonData() {
         await Promise.all([loadSeasonData(seasons[0])]);
 
         // Load previous winners and run it only once
-        if (!ranOnlyOnce) {
-            ranOnlyOnce = true;
-            loadPreviousSeasonWinners();
-        }
+        //if (!ranOnlyOnce) {
+        //    ranOnlyOnce = true;
+        //    loadPreviousSeasonWinners();
+        //}
 
         saveCurrentStats();
     }
