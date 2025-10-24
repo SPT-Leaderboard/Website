@@ -22,7 +22,7 @@ function initComments(permaLink, playerId) {
     // Should we show login prompt or not if user is not logged in when sending a comment
     commentSubmit.addEventListener('click', function () {
         if (!isLoggedIn) {
-            showLoginPrompt();
+            showLoginPrompt(commentInput);
             return;
         }
 
@@ -48,7 +48,7 @@ function initComments(permaLink, playerId) {
 
 }
 
-function showLoginPrompt() {
+function showLoginPrompt(commentInput) {
     commentInput.style.animation = 'shake 0.5s ease-in-out';
     setTimeout(() => {
         commentInput.style.animation = '';
