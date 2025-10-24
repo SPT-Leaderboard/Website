@@ -2849,6 +2849,7 @@ input[type="checkbox"]:checked:hover {
     position: relative;
     width: 100%;
     max-width: 600px;
+    min-height: 500px;
     margin: 0 auto;
     display: flex;
     justify-content: center;
@@ -2865,7 +2866,6 @@ input[type="checkbox"]:checked:hover {
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
 }
-
 
 .player-energy img,
 .player-health img {
@@ -6154,6 +6154,37 @@ input[type="checkbox"]:checked:hover {
     pointer-events: none;
     transition: opacity 0.3s ease;
     z-index: 10;
+}
+
+/* Universal use */
+.loading-overlay-other {
+    position: absolute;
+    width: 150px;
+    height: 50px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 14px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    gap: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 15;
+}
+
+.loading-overlay-other p {
+    font-size: 13px;
+}
+
+.loading-overlay-other.active {
+    opacity: 1;
+    pointer-events: all;
 }
 
 .loading-overlay.active {
