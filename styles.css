@@ -478,7 +478,6 @@ h1 {
     font-family: 'Inter', sans-serif;
     font-size: 0.92rem;
     position: relative;
-    overflow: hidden;
     text-decoration: none;
     backdrop-filter: blur(10px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -512,6 +511,26 @@ h1 {
 .navbar-link--login:hover {
     background: rgba(100, 255, 219, 0.35);
     border: 1px solid rgba(100, 255, 219, 0.5);
+}
+
+/* SPTLB Network notifications */
+#networkNotifies {
+    position: absolute;
+    top: -12px;
+    right: -20px;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.336);
+    z-index: 10;
 }
 
 .season-selector {

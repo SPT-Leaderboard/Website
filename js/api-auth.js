@@ -24,7 +24,7 @@ async function checkAuth() {
         const data = await response.json();
 
         if (data.authenticated && data.username) {
-            updateAuthStatus('authenticated', data.username);
+            updateAuthStatus('authenticated', data.username, data.unreadCount);
             isLoggedIn = true;
         } else {
             updateAuthStatus('not-authenticated', 'Unauthorized');
@@ -38,8 +38,10 @@ async function checkAuth() {
     }
 }
 
-function updateAuthStatus(status, message) {
+function updateAuthStatus(status, message, notifications = 0) {
     const authElement = document.getElementById('authStatus');
+    const notificationElement = document.getElementById('networkNotifies');
+    
     if (!authElement) return;
 
     const authText = authElement.querySelector('.auth-text');
@@ -48,6 +50,17 @@ function updateAuthStatus(status, message) {
     }
 
     authElement.className = `auth-status ${status}`;
+
+    // Обновляем уведомления
+    if (notificationElement) {
+        if (notifications > 0) {
+            notificationElement.textContent = notifications > 99 ? '99+' : notifications;
+            notificationElement.style.display = 'flex';
+        } else {
+            notificationElement.textContent = '';
+            notificationElement.style.display = 'none';
+        }
+    }
 
     setTimeout(() => {
         authElement.classList.add('show');
