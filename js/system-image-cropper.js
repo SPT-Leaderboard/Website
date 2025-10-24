@@ -122,6 +122,7 @@ async function loadAndCropPlayerImage(player) {
     const imageUrl = `${pmcPfpsPath}${player.permaLink}_full.png`;
     const fallbackUrl = 'media/default_full_pmc_avatar.png';
     const imgElement = document.querySelector('.playermodel-image img');
+    const loadingModel = document.getElementById('loading-model');
 
     try {
         const tempImg = new Image();
@@ -131,27 +132,34 @@ async function loadAndCropPlayerImage(player) {
             try {
                 const croppedImage = await autoCropTransparent(tempImg);
                 imgElement.src = croppedImage.src;
-                imgElement.style.opacity = '1';
+                setTimeout(() => {
+                    loadingModel.classList.remove('active');
+                }, 300);
             } catch (error) {
                 console.warn('Auto-crop failed, using original image:', error);
                 imgElement.src = imageUrl;
-                imgElement.style.opacity = '1';
+                setTimeout(() => {
+                    loadingModel.classList.remove('active');
+                }, 300);
             }
         };
 
         tempImg.onerror = () => {
             console.warn('Failed to load player image, using fallback');
             imgElement.src = fallbackUrl;
-            imgElement.style.opacity = '1';
+            setTimeout(() => {
+                loadingModel.classList.remove('active');
+            }, 300);
         };
 
         // Show *loading* state
-        imgElement.style.opacity = '0.3';
+        loadingModel.classList.add('active');
         tempImg.src = imageUrl;
-
     } catch (error) {
         console.error('Error in loadAndCropPlayerImage:', error);
         imgElement.src = fallbackUrl;
-        imgElement.style.opacity = '1';
+        setTimeout(() => {
+            loadingModel.classList.remove('active');
+        }, 300);
     }
 }

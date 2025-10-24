@@ -504,9 +504,14 @@ async function showPublicProfile(container, player) {
             <div class="playermodel profile-section" id="playermodel">
                 <h3>Player Pre-Raid Preview</h3>
                 <div class="playermodel-image">
+                    <div class="loading-overlay-other active" id="loading-model">
+                        <p>Auto-resizing...</p> <div class="loading-spinner"></div>
+                    </div>
+
                     <img src="${pmcPfpsPath}${player.permaLink}_full.png" 
-                        alt="Player Model Preview" 
-                        onerror="this.src='media/default_full_pmc_avatar.png';" />
+                    alt="Player Model Preview" 
+                    onerror="this.onerror=null; this.src='media/default_full_pmc_avatar.png';" />
+
                 </div>
                 <div class="playermodel-stats profile-section">
                     <div class="player-health">
