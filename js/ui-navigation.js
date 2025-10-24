@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const timerToggle = document.getElementById('timerToggle');
     const seasonTimer = document.getElementById('seasonTimer');
     const winnersToggle = document.getElementById('winnersToggle');
-    const winnersElement = document.getElementById('winners');
+    //const winnersElement = document.getElementById('winners');
     const staffToggle = document.getElementById('staffToggle');
     const staffElement = document.getElementById('admins-container');
     const lbToggle = document.getElementById('lbToggle');
@@ -37,13 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Should we display or hide elements
     seasonTimer.style.display = timerToggle.checked ? 'block' : 'none';
-    winnersElement.style.display = winnersToggle.checked ? 'block' : 'none';
+    //winnersElement.style.display = winnersToggle.checked ? 'block' : 'none';
     staffElement.style.display = staffToggle.checked ? 'block' : 'none';
 
     // Then update visibility
     timerToggle.addEventListener('change', () => updateVisibility(timerToggle, seasonTimer, 'showTimer'));
     winnersToggle.addEventListener('change', () => updateVisibility(winnersToggle, winnersElement, 'showWinners'));
-    staffToggle.addEventListener('change', () => updateVisibility(staffToggle, staffElement, 'showStaff'));
+    //staffToggle.addEventListener('change', () => updateVisibility(staffToggle, staffElement, 'showStaff'));
     lbToggle.addEventListener('change', () => updateVisibility(lbToggle, null, 'lbToggle'));
     casualToggle.addEventListener('change', () => updateVisibility(casualToggle, null, 'casualToggle'));
 
