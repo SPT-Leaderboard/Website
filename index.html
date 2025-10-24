@@ -206,29 +206,42 @@
                     <li><strong>Data:</strong> Full season archives in the dropdown menu</li>
                 </ul>
                 <h3>3. Skill Formula</h3>
-                <p>Final skill score is calculated using these weighted factors:</p>
+                <p>Final skill score is calculated using these weighted factors (0.00-100.00 scale):</p>
                 <ul>
-                    <li><strong>KDR</strong></li>
-                    <li><strong>Survival Rate</strong></li>
-                    <li><strong>Average Life Time</strong></li>
-                    <li><strong>PMC Raids</strong></li>
-                    <li><strong>Leaderboard also includes calibration:</strong>
+                    <li><strong>Kill/Death Ratio (25%)</strong></li>
+                    <li><strong>Survival Rate (20%)</strong></li>
+                    <li><strong>Average Life Time (20%)</strong></li>
+                    <li><strong>PMC Raids (25%)</strong></li>
+                    <li><strong>Best of the Best Bonus (10%):</strong>
                         <ul>
-                            <li>Minimum 100 PMC raids required for proper skill score ranking</li>
-                            <li>70% skill score penalty until player reaches 50 raids</li>
-                            <li>Penalty will be applied if player has very low Life Time</li>
-                            <li>Initial raid penalty will decrease linearly until player reaches 100 raids</li>
+                            <li>Best average kills/damage/loot per raid</li>
+                            <li>Single-raid best performances</li>
+                            <li>Best KDR and survival rates</li>
                         </ul>
                     </li>
+                </ul>
+                <p><strong>Leaderboard Calibration & Penalties:</strong></p>
+                <ul>
+                    <li><strong>Raid Requirements:</strong>
+                        <ul>
+                            <li>70% penalty with linear reduction until 50 PMC raids</li>
+                            <li>Full skill score multiplier is unlocked at 100+ PMC raids</li>
+                            <li>Small bonus for players who achieved 200+ PMC raids if Season takes longer than expected</li>
+                        </ul>
+                    </li>
+                    <li><strong>Life Time Penalty:</strong> 30% penalty if average life time below 10 minutes</li>
+                    <li><strong>Performance Tracking:</strong> Your best historical stats are permanently recorded and contribute to score</li>
+                    <li><strong>Boost System:</strong> -+5% skill adjustments based on mod factors</li>
+                    <li><strong>Casual Players:</strong> Capped at 15.00 skill score maximum</li>
                 </ul>
                 <h3>4. Skill Tiers</h3>
                 <p>Players are classified into tiers based on final skill score:</p>
                 <ul>
-                    <li><strong>L- to L+:</strong> Low (0.2-0.55)</li>
-                    <li><strong>M- to M+:</strong> Medium (0.55-0.78)</li>
-                    <li><strong>H- to H+:</strong> High (0.78-0.94)</li>
-                    <li><strong>P- to P+:</strong> Pro (0.94-99)</li>
-                    <li><strong>G:</strong> Godlike (1)</li>
+                    <li><strong>L- to L+:</strong> Low (0.00-34.99)</li>
+                    <li><strong>M- to M+:</strong> Medium (35.00-64.99)</li>
+                    <li><strong>H- to H+:</strong> High (65.00-83.99)</li>
+                    <li><strong>P- to P+:</strong> Pro (84.00-96.99)</li>
+                    <li><strong>G:</strong> Godlike (97.00-100)</li>
                 </ul>
                 <h3>5. Visual Indicators</h3>
                 <p>Statistics, including SPT versions are color-coded based on thresholds:</p>
