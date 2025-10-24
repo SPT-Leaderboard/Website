@@ -27,13 +27,13 @@ async function checkAuth() {
             updateAuthStatus('authenticated', data.username, data.unreadCount);
             isLoggedIn = true;
         } else {
-            updateAuthStatus('not-authenticated', 'Unauthorized');
+            updateAuthStatus('not-authenticated', 'Unauthorized', 0);
             isLoggedIn = false;
         }
 
     } catch (error) {
         console.error('Auth check failed:', error);
-        updateAuthStatus('error', 'Authentication error');
+        updateAuthStatus('error', 'Authentication error', 0);
         isLoggedIn = false;
     }
 }
@@ -51,7 +51,6 @@ function updateAuthStatus(status, message, notifications = 0) {
 
     authElement.className = `auth-status ${status}`;
 
-    // Обновляем уведомления
     if (notificationElement) {
         if (notifications > 0) {
             notificationElement.textContent = notifications > 99 ? '99+' : notifications;
