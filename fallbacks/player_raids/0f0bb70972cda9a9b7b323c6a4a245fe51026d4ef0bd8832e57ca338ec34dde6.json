@@ -1,0 +1,46 @@
+{
+    "raids": [
+        {
+            "absoluteLastTime": 1761338483,
+            "lastRaidSessionID": "68f366a30114bb54a4dd6610",
+            "lastRaidMap": "Streets of Tarkov",
+            "lastRaidAs": "PMC",
+            "raidResult": "Survived",
+            "raidKills": 0,
+            "bossesKilled": 0,
+            "scavsKilled": 0,
+            "raidDamage": 0,
+            "raidTime": 533,
+            "discFromRaid": false,
+            "isTransition": false,
+            "lastRaidTransitionTo": "None",
+            "lastRaidEXP": 243,
+            "lastRaidHits": 0,
+            "agressorName": "",
+            "lastRaidRanThrough": false,
+            "lastRaidSurvived": 1,
+            "lcPointsEarned": 22
+        },
+        {
+            "absoluteLastTime": 1761340700,
+            "lastRaidSessionID": "68f366a30114bb54a4dd6610",
+            "lastRaidMap": "Woods",
+            "lastRaidAs": "PMC",
+            "raidResult": "Killed",
+            "raidKills": 2,
+            "bossesKilled": 2,
+            "scavsKilled": 2,
+            "raidDamage": 1046,
+            "raidTime": 1294,
+            "discFromRaid": false,
+            "isTransition": false,
+            "lastRaidTransitionTo": "None",
+            "lastRaidEXP": 1748,
+            "lastRaidHits": 37,
+            "agressorName": "PVT Michael",
+            "lastRaidRanThrough": false,
+            "lastRaidSurvived": 0,
+            "lcPointsEarned": 92
+        }
+    ]
+}

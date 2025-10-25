@@ -1,0 +1,46 @@
+{
+  "raids": [
+    {
+      "absoluteLastTime": 1761385546,
+      "lastRaidSessionID": "68fc96057e15f30b306c7ea9",
+      "lastRaidMap": "Customs",
+      "lastRaidAs": "PMC",
+      "raidResult": "Survived",
+      "raidKills": 0,
+      "bossesKilled": 1,
+      "scavsKilled": 8,
+      "raidDamage": 1652,
+      "raidTime": 1257,
+      "discFromRaid": false,
+      "isTransition": false,
+      "lastRaidTransitionTo": "None",
+      "lastRaidEXP": 913,
+      "lastRaidHits": 50,
+      "agressorName": "",
+      "lastRaidRanThrough": false,
+      "lastRaidSurvived": 1,
+      "lcPointsEarned": 99
+    },
+    {
+      "absoluteLastTime": 1761387172,
+      "lastRaidSessionID": "68fc96057e15f30b306c7ea9",
+      "lastRaidMap": "Customs",
+      "lastRaidAs": "PMC",
+      "raidResult": "Killed",
+      "raidKills": 1,
+      "bossesKilled": 0,
+      "scavsKilled": 6,
+      "raidDamage": 781,
+      "raidTime": 871,
+      "discFromRaid": false,
+      "isTransition": false,
+      "lastRaidTransitionTo": "None",
+      "lastRaidEXP": 656,
+      "lastRaidHits": 23,
+      "agressorName": "Stepa Moshennik",
+      "lastRaidRanThrough": false,
+      "lastRaidSurvived": 0,
+      "lcPointsEarned": 65
+    }
+  ]
+}

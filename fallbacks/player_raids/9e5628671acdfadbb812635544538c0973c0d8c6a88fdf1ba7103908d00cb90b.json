@@ -1,0 +1,25 @@
+{
+  "raids": [
+    {
+      "absoluteLastTime": 1761355836,
+      "lastRaidSessionID": "68fc100e8c03a768c02e83ca",
+      "lastRaidMap": "Customs",
+      "lastRaidAs": "PMC",
+      "raidResult": "Survived",
+      "raidKills": 6,
+      "bossesKilled": 0,
+      "scavsKilled": 9,
+      "raidDamage": 2739,
+      "raidTime": 1314,
+      "discFromRaid": false,
+      "isTransition": false,
+      "lastRaidTransitionTo": "None",
+      "lastRaidEXP": 1693,
+      "lastRaidHits": 82,
+      "agressorName": "",
+      "lastRaidRanThrough": false,
+      "lastRaidSurvived": 1,
+      "lcPointsEarned": 158
+    }
+  ]
+}

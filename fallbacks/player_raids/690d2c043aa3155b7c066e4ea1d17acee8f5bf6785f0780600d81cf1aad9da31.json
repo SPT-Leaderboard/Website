@@ -1,0 +1,25 @@
+{
+  "raids": [
+    {
+      "absoluteLastTime": 1761354203,
+      "lastRaidSessionID": "68fc16912a552a5f38bf24cf",
+      "lastRaidMap": "Ground Zero - Low",
+      "lastRaidAs": "SCAV",
+      "raidResult": "Survived",
+      "raidKills": 1,
+      "bossesKilled": 0,
+      "scavsKilled": 0,
+      "raidDamage": 35,
+      "raidTime": 864,
+      "discFromRaid": false,
+      "isTransition": false,
+      "lastRaidTransitionTo": "None",
+      "lastRaidEXP": 0,
+      "lastRaidHits": 1,
+      "agressorName": "",
+      "lastRaidRanThrough": false,
+      "lastRaidSurvived": 1,
+      "lcPointsEarned": 79
+    }
+  ]
+}

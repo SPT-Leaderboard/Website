@@ -1,0 +1,46 @@
+{
+  "raids": [
+    {
+      "absoluteLastTime": 1761091407,
+      "lastRaidSessionID": "68f816c71b67a50d30c2ab2d",
+      "lastRaidMap": "Ground Zero - Low",
+      "lastRaidAs": "PMC",
+      "raidResult": "Survived",
+      "raidKills": 8,
+      "bossesKilled": 0,
+      "scavsKilled": 9,
+      "raidDamage": 2192,
+      "raidTime": 1466,
+      "discFromRaid": false,
+      "isTransition": false,
+      "lastRaidTransitionTo": "None",
+      "lastRaidEXP": 1540,
+      "lastRaidHits": 72,
+      "agressorName": "",
+      "lastRaidRanThrough": false,
+      "lastRaidSurvived": 1,
+      "lcPointsEarned": 183
+    },
+    {
+      "absoluteLastTime": 1761097902,
+      "lastRaidSessionID": "68f816c71b67a50d30c2ab2d",
+      "lastRaidMap": "Reserve",
+      "lastRaidAs": "SCAV",
+      "raidResult": "Survived",
+      "raidKills": 0,
+      "bossesKilled": 6,
+      "scavsKilled": 2,
+      "raidDamage": 635,
+      "raidTime": 5306,
+      "discFromRaid": false,
+      "isTransition": false,
+      "lastRaidTransitionTo": "None",
+      "lastRaidEXP": 0,
+      "lastRaidHits": 20,
+      "agressorName": "",
+      "lastRaidRanThrough": false,
+      "lastRaidSurvived": 1,
+      "lcPointsEarned": 1
+    }
+  ]
+}
