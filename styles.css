@@ -517,7 +517,7 @@ h1 {
 #networkNotifies {
     position: absolute;
     top: -12px;
-    right: -20px;
+    right: -13px;
     min-width: 20px;
     height: 20px;
     border-radius: 10px;
@@ -528,7 +528,7 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 6px;
+    padding: 0 2px;
     box-shadow: 0 2px 8px rgba(239, 68, 68, 0.336);
     z-index: 10;
 }
@@ -2821,7 +2821,7 @@ input[type="checkbox"]:checked:hover {
     bottom: 45px;
     font-family: monospace;
     background-color: #ffffff14;
-    place-self: center;
+    justify-self: center;
     padding: 3px;
     border-radius: 8px;
     font-weight: 600;
@@ -5003,6 +5003,7 @@ input[type="checkbox"]:checked:hover {
 
 .trader-card {
     background: rgba(255, 255, 255, 0.068);
+    border: 1px solid #ffffff1a;
     border-radius: 8px;
     padding: 10px;
     text-align: center;
