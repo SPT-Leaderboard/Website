@@ -21,7 +21,7 @@ function updateVisibility(toggle, element, cookieName) {
 document.addEventListener('DOMContentLoaded', () => {
     const timerToggle = document.getElementById('timerToggle');
     const seasonTimer = document.getElementById('seasonTimer');
-    const winnersToggle = document.getElementById('winnersToggle');
+    //const winnersToggle = document.getElementById('winnersToggle');
     //const winnersElement = document.getElementById('winners');
     const staffToggle = document.getElementById('staffToggle');
     const staffElement = document.getElementById('admins-container');
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // If no cookies are found, enable everything
     timerToggle.checked = getCookie('showTimer') !== 'false';
-    winnersToggle.checked = getCookie('showWinners') !== 'false';
+    //winnersToggle.checked = getCookie('showWinners') !== 'false';
     staffToggle.checked = getCookie('showStaff') !== 'false';
     lbToggle.checked = getCookie('lbToggle') !== 'false';
     casualToggle.checked = getCookie('casualToggle') !== 'false';
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Then update visibility
     timerToggle.addEventListener('change', () => updateVisibility(timerToggle, seasonTimer, 'showTimer'));
-    winnersToggle.addEventListener('change', () => updateVisibility(winnersToggle, winnersElement, 'showWinners'));
+    //winnersToggle.addEventListener('change', () => updateVisibility(winnersToggle, winnersElement, 'showWinners'));
     //staffToggle.addEventListener('change', () => updateVisibility(staffToggle, staffElement, 'showStaff'));
     lbToggle.addEventListener('change', () => updateVisibility(lbToggle, null, 'lbToggle'));
     casualToggle.addEventListener('change', () => updateVisibility(casualToggle, null, 'casualToggle'));
