@@ -270,7 +270,7 @@ function renderRaidsStats(raids, currentPlayerId, leaderboardData) {
                         <div class="raid-profit"> Raid Profit: <span class="${raid.lastRaidProfit >= 0 ? 'stat-positive' : 'stat-negative'}"> ${formatProfit(raid.lastRaidProfit)} ₽</span></div>
 
                         <span class="raid-meta">
-                            ${raid.lastRaidMap || 'Unknown'} • ${raid.lastRaidAs || 'N/A'} • ${lastRaidDuration || '00:00'} • LC Earned: <span class="lb-coins">+${raid.lcPointsEarned ? raid.lcPointsEarned : 0}</span> • ${lastRaidAgo || 'Just Now'} ${raid.lastRaidSurvived || raid.lastRaidRanThrough || raid.discFromRaid || raid.isTransition || raid.agressorName == null ? `` : `• Killed by <span class="raid-killer">${raid.agressorName}</span>`}
+                            ${raid.lastRaidMap || 'Unknown'} • ${raid.lastRaidAs || 'N/A'} • ${lastRaidDuration || '00:00'} • LC Earned: <span class="lb-coins">+${raid.lcPointsEarned ? raid.lcPointsEarned : 0}</span> • ${lastRaidAgo || 'Just Now'} ${raid.lastRaidSurvived || raid.lastRaidRanThrough || raid.discFromRaid || raid.isTransition || !raid.agressorName ? `` : `• Killed by <span class="raid-killer">${raid.agressorName}</span>`}
                         </span>
                     </div>
 
@@ -397,6 +397,9 @@ function calculateMapStats(raids) {
 }
 
 function formatProfit(profit) {
+    if(!profit)
+        return 0;
+    
     const absoluteProfit = Math.abs(profit);
 
     if (absoluteProfit >= 1000000000) {
