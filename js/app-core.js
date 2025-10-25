@@ -163,11 +163,12 @@ async function prepareSeasonData() {
     if (seasons.length > 0) {
         await Promise.all([loadSeasonData(seasons[0])]);
 
+        // TODO: Enable this back next season
         // Load previous winners and run it only once
-        //if (!ranOnlyOnce) {
+        //  if (!ranOnlyOnce) {
         //    ranOnlyOnce = true;
         //    loadPreviousSeasonWinners();
-        //}
+        //  }
 
         saveCurrentStats();
     }
@@ -285,19 +286,6 @@ async function loadSeasonData(season) {
         // Mark data is ready for our callback
         isDataReady = true;
     }
-}
-
-/**
- * Resets global statistic counters when called
- * @returns {Promise<void>}
- */
-function resetStats() {
-    animateNumber('totalDeaths', 0);
-    animateNumber('totalRaids', 0);
-    animateNumber('totalKills', 0);
-    animateNumber('totalDamage', 0);
-    animateNumber('averageKDR', 0, 2);
-    animateNumber('averageSurvival', 0, 2);
 }
 
 // Compare last played dates (supports both Unix timestamps and "dd.mm.yyyy" format)
@@ -773,7 +761,7 @@ function convertTimeToSeconds(time) {
  */
 async function calculatePlaces(data) {
 
-    data.forEach((player, index) => {
+    data.forEach((player) => {
         if (player.banned) {
             player.totalScore = 0;
             player.damage = 0;
@@ -793,7 +781,7 @@ async function calculatePlaces(data) {
     data.sort((a, b) => b.totalScore - a.totalScore)
 
     data.forEach((player, index) => {
-                if (player.banned) {
+        if (player.banned) {
             player.totalScore = 0;
             player.damage = 0;
             player.killToDeathRatio = 0;
@@ -807,7 +795,7 @@ async function calculatePlaces(data) {
             player.survivedToDiedRatio = 0;
             return;
         }
-        
+
         if (player.isCasual) {
             player.rank = "Casual";
             player.medal = '';
@@ -928,6 +916,19 @@ function calculateOverallStats(data) {
 
     // utils.js
     updateNavbarOffset();
+}
+
+/**
+ * Resets global statistic counters when called
+ * @returns {Promise<void>}
+ */
+function resetStats() {
+    animateNumber('totalDeaths', 0);
+    animateNumber('totalRaids', 0);
+    animateNumber('totalKills', 0);
+    animateNumber('totalDamage', 0);
+    animateNumber('averageKDR', 0, 2);
+    animateNumber('averageSurvival', 0, 2);
 }
 
 function animateNumber(elementId, targetValue, decimals = 0, startValue = null) {

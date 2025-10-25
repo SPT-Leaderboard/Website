@@ -18,7 +18,7 @@ function getPrettyMapName(entry) {
         "TarkovStreets": "Streets of Tarkov",
         "Sandbox": "Ground Zero - Low",
         "Sandbox_high": "Ground Zero - High",
-        "unknown": "Labyrinth"
+        "labyrinth": "The Labyrinth"
     };
 
     entry.toLowerCase();
@@ -28,7 +28,7 @@ function getPrettyMapName(entry) {
 
 // Get boost descriptions and details for tooltips
 function getBoostDescription(boost) {
-    if (boost >= 4) return 'Great Boost.';
+    if (boost >= 2) return 'Great Boost.';
     if (boost > 0) return 'Small Boost.';
     if (boost === 0) return 'Neutral.';
     return 'Penalty Applied.';
@@ -207,6 +207,30 @@ function formatDate(date) {
     return `${month} ${day} ${year}, ${hours}:${minutes}`;
 }
 
+/**
+ * Formats time of SCAV/PMC total playtime on the main profile section
+ * @param {number} seconds - Amount of seconds
+ * @returns {Array<Object>}
+ */
+function formatOnlineTime(seconds) {
+    if (!seconds)
+        return '0m';
+
+    let result = [];
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const hours = Math.floor((seconds % (3600 * 24)) / 3600);
+
+    result.push(`${hours}h`);
+    result.push(`${minutes}m`)
+
+    return result.join(' ') || '0m';
+}
+
+/**
+ * Format UNIX timestamp to return "Xm ago || Xd ago"
+ * @param {number} seconds - UNIX Timestamp
+ * @returns {Array<Object>}
+ */
 function formatLastSeen(timestamp) {
     if (!timestamp) return 'Long time ago';
 
@@ -276,4 +300,17 @@ function waitForDataReady(callback, timeout = 15000) {
             showToast(`There was an error.`, 'error');
         }
     }, checkInterval);
+}
+
+function formatSalesNum(num) {
+    if (num >= 1000000000) {
+        return (num / 1000000000).toFixed(1) + 'bil';
+    }
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + 'mil';
+    }
+    if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'k';
+    }
+    return num.toString();
 }

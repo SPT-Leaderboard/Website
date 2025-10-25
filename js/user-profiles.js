@@ -1241,33 +1241,6 @@ function generateBadgesHTML(player) {
 // section: Utils
 ////////////////
 
-function formatSalesNum(num) {
-    if (num >= 1000000000) {
-        return (num / 1000000000).toFixed(1) + 'bil';
-    }
-    if (num >= 1000000) {
-        return (num / 1000000).toFixed(1) + 'mil';
-    }
-    if (num >= 1000) {
-        return (num / 1000).toFixed(1) + 'k';
-    }
-    return num.toString();
-}
-
-function formatOnlineTime(seconds) {
-    if (!seconds)
-        return '0m';
-
-    let result = [];
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const hours = Math.floor((seconds % (3600 * 24)) / 3600);
-
-    result.push(`${hours}h`);
-    result.push(`${minutes}m`)
-
-    return result.join(' ') || '0m';
-}
-
 // Close profile on ESC or a button
 function setupModalCloseHandlers() {
     const closeBtn = document.getElementById("closeButton");
