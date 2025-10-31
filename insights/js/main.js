@@ -242,7 +242,7 @@ async function fetchData() {
         const season3Data = await season3Response.json();
         const season4Data = await season4Response.json();
         const season5Data = await season5Response.json();
-        const season6Data = await season5Response.json();
+        const season6Data = await season6Response.json();
         mapsData = await mapsResponse.json();
 
         // Combine
@@ -504,7 +504,7 @@ function processMapsData() {
         "laboratory",
         "Sandbox",
         "Sandbox_high",
-        "unknown"
+        "labyrinth"
     ];
 
     const mapEntries = Object.entries(mapsData).filter(([mapId]) => validMapIds.includes(mapId));
@@ -512,7 +512,7 @@ function processMapsData() {
     const mapNames = mapEntries.map(([mapId]) => mapId);
     const mapCounts = mapEntries.map(([_, count]) => count);
     const backgroundColors = mapNames.map(() => getRandomColor());
-    const friendlyMapNames = mapNames.map(mapId => getFriendlyMapName(mapId));
+    const friendlyMapNames = mapNames.map(mapId => getPrettyMapName(mapId));
 
     // Update chart
     charts.mapsChart.data.labels = friendlyMapNames;
@@ -567,26 +567,6 @@ function formatPlayTime(seconds) {
 function updateChart(chart, newData) {
     chart.data.datasets[0].data = newData;
     chart.update();
-}
-
-// Get a nice name for a map :3
-function getFriendlyMapName(mapId) {
-    const mapNames = {
-        "factory4_day": "Factory (day)",
-        "factory4_night": "Factory (night)",
-        "bigmap": "Customs",
-        "Woods": "Woods",
-        "Shoreline": "Shoreline",
-        "Interchange": "Interchange",
-        "RezervBase": "Reserve",
-        "Lighthouse": "Lighthouse",
-        "TarkovStreets": "Streets of Tarkov",
-        "laboratory": "Labs",
-        "Sandbox": "Ground Zero",
-        "Sandbox_high": "Ground Zero - High",
-        "unknown": "Labyrinth"
-    };
-    return mapNames[mapId] || mapId;
 }
 
 // Random color

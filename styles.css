@@ -54,6 +54,11 @@
     src: local('Bender Regular'), url('/media/font/Bender/Jovanny Lemonad - Bender-Bold.woff') format('woff');
 }
 
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 100, 100, 0.4) rgba(0, 0, 0, 0.1);
+}
+
 .snowflake {
     position: fixed;
     background-color: #ccc;
@@ -173,11 +178,6 @@
 
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(100, 100, 100, 0.6);
-}
-
-* {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(100, 100, 100, 0.4) rgba(0, 0, 0, 0.1);
 }
 
 html {
