@@ -246,7 +246,7 @@ async function fetchData() {
         mapsData = await mapsResponse.json();
 
         // Combine
-        playersData = [...season1Data.leaderboard, ...season2Data.leaderboard, ...season3Data.leaderboard, ...season4Data.leaderboard, ...season5Data.leaderboard, ...season6Data];
+        playersData = [...season1Data.leaderboard, ...season2Data.leaderboard, ...season3Data.leaderboard, ...season4Data.leaderboard, ...season5Data.leaderboard, ...season6Data.leaderboard];
 
         // Display
         processPlayersData();
@@ -504,7 +504,7 @@ function processMapsData() {
         "laboratory",
         "Sandbox",
         "Sandbox_high",
-        "labyrinth"
+        "Labyrinth"
     ];
 
     const mapEntries = Object.entries(mapsData).filter(([mapId]) => validMapIds.includes(mapId));
