@@ -226,7 +226,7 @@ function renderRaidsStats(raids, currentPlayerId, leaderboardData) {
                         <div class="cross-profile-badge">
                             <i class='bx bxs-user-badge'></i>
                             Played on: 
-                            <button onclick="openProfile(${otherPlayerInfo.id}, true)" class="cross-profile-link">
+                            <button data-player-id="${otherPlayerInfo.id || '0'}" class="cross-profile-link">
                                 <img src="${otherPlayerInfo.profilePicture || 'media/default_avatar.png'}" alt="${otherPlayerInfo.name}" class="cross-profile-avatar" onerror="this.src='media/default_avatar.png';">
                                 ${otherPlayerInfo.name}
                             </button>
@@ -309,6 +309,14 @@ function renderRaidsStats(raids, currentPlayerId, leaderboardData) {
     statsContainer.innerHTML = html;
     recentStatsContainer.innerHTML = recentStatsHtml;
     mapStatsContainer.innerHTML = mapStatsHtml;
+
+    // Add click handlers for player items so you can open them :D
+    document.querySelectorAll('.cross-profile-link').forEach(element => {
+        element.addEventListener('click', () => {
+            // We're using a bypass here (2nd argument) to open a profile within a profile, because otherwise it wouldn't open.
+            openProfile(element.dataset.playerId, true);
+        });
+    });
 }
 
 function calculateRecentStats(raids) {
@@ -397,9 +405,9 @@ function calculateMapStats(raids) {
 }
 
 function formatProfit(profit) {
-    if(!profit)
+    if (!profit)
         return 0;
-    
+
     const absoluteProfit = Math.abs(profit);
 
     if (absoluteProfit >= 1000000000) {
