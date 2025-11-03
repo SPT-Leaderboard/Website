@@ -3697,10 +3697,6 @@ input[type="checkbox"]:checked:hover {
     color: #ff6a6a;
 }
 
-.cross-profile-indicator {
-    margin-bottom: 10px;
-}
-
 .cross-profile-badge {
     display: inline-flex;
     align-items: center;
