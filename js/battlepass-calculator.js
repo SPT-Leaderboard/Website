@@ -11,9 +11,7 @@ const MIN_LEVEL = 1;
 async function initHOF(player, bestWeapon) {
     try {
         updatePlayerProfile(player);
-
-        if (!shouldHideUnsupportedMods)
-            updatePlayerProfileMastery(player, bestWeapon);
+        updatePlayerProfileMastery(player, bestWeapon);
 
         // rewardSystem.js
         refreshRewards(player);
@@ -122,8 +120,6 @@ function calculateMasteryLevel(player, bestWeapon) {
 // EXP for weapon mastery
 async function updatePlayerProfileMastery(player, bestWeapon) {
     try {
-        if (shouldHideUnsupportedMods)
-            return;
 
         const levelData = calculateMasteryLevel(player, bestWeapon);
 

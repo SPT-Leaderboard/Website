@@ -13,9 +13,6 @@ const RARITY_ORDER = {
 // To prevent any flicker
 let isProfileOpened = false;
 
-// Temporary hide fav weapon div
-let shouldHideUnsupportedMods = false
-
 async function openProfile(playerId, bypass = false) {
     // Don't open profile again for whatever reason if profile is already open
     // Only let this happen if user opens a player from friend list or raid history
@@ -113,7 +110,6 @@ function showDisqualProfile(container, player) {
 async function showPublicProfile(container, player) {
 
     isProfileOpened = true;
-    shouldHideUnsupportedMods = player.sptVer === "4.0.0" || player.sptVer === "4.0.1";
     const playerData = await getCustomProfileSettings(player.permaLink);
 
     if (playerData) {
@@ -148,7 +144,7 @@ async function showPublicProfile(container, player) {
 
     // Show fav weapon if is using Stattrack
     const bestWeapon = getBestWeapon(player.id, player.modWeaponStats || {});
-    if (!bestWeapon || shouldHideUnsupportedMods) {
+    if (!bestWeapon) {
         player.isUsingStattrack = false;
     }
 
@@ -531,7 +527,7 @@ async function showPublicProfile(container, player) {
                 </div>
             </div>
 
-        <!-- Friend list (hides if no friends) -->
+            <!-- Friend list (hides if no friends) -->
             <div class="friends-list profile-section" id="friend-list">
                 <h3>Friend List</h3>
                 <div class="friends-container" id="friends-container">
@@ -539,7 +535,6 @@ async function showPublicProfile(container, player) {
             </div>
 
             <!-- Meta gun -->
-            ${shouldHideUnsupportedMods ? `` : `
                 <div class="favorite-weapons profile-section" id="weapon-meta-section">
                     <h3>Favorite Weapon</h3>
                     <div class="favorite-weapons-container" id="weapon-container">
@@ -588,10 +583,9 @@ async function showPublicProfile(container, player) {
                     </div>
                     </div>
                 </div>
-            `}
 
             <!-- All weapons list if they exist -->
-            ${!player?.isUsingStattrack || shouldHideUnsupportedMods ? `` :
+            ${!player?.isUsingStattrack ? `` :
             `<div class="weapon-stats profile-section">
                 <h3>Weapons</h3>
                 <div class="weapon-stats-container" id="weapons-container">
