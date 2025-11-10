@@ -236,11 +236,10 @@
     right: -12px;
     background: var(--rank-bg);
     color: white;
-    border-radius: 50%;
+    border-radius: 10px;
     font-size: 0.9rem;
     font-weight: 800;
-    min-width: 30px;
-    height: 30px;
+    padding: 1px 5px 1px 5px;
     display: flex;
     align-items: center;
     justify-content: center;
