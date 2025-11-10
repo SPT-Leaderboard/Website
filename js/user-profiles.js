@@ -143,8 +143,11 @@ async function showPublicProfile(container, player) {
     const badgesHTML = generateBadgesHTML(player);
 
     // Show fav weapon if is using Stattrack
-    const bestWeapon = getBestWeapon(player.id, player.modWeaponStats || {});
-    if (!bestWeapon) {
+    let bestWeapon = null;
+    if (player.modWeaponStats && player.modWeaponStats.weapons[player.permaLink]) {
+        bestWeapon = await getBestWeapon(player.permaLink, player.modWeaponStats);
+        if (!bestWeapon) player.isUsingStattrack = false;
+    } else {
         player.isUsingStattrack = false;
     }
 
@@ -538,14 +541,14 @@ async function showPublicProfile(container, player) {
                 <div class="favorite-weapons profile-section" id="weapon-meta-section">
                     <h3>Favorite Weapon</h3>
                     <div class="favorite-weapons-container" id="weapon-container">
-                            ${!player?.isUsingStattrack ? `
-                    <div class="stattrack-overlay">
-                        <div class="stattrack-message">This player is not using <a href="https://hub.sp-tarkov.com/files/file/2501-stattrack/">Stattrack Mod</a> by AcidPhantasm</div>
-                    </div>
-                    ` : ''}
+                        ${!player?.isUsingStattrack ? `
+                            <div class="stattrack-overlay">
+                                <div class="stattrack-message">This player is not using <a href="https://hub.sp-tarkov.com/files/file/2501-stattrack/">Stattrack Mod</a> by AcidPhantasm</div>
+                            </div>
+                        ` : ''}
                     
-                    <div class="weapon-info ${!player?.isUsingStattrack ? 'stattrack-disabled' : ''}">
-                    <img src="media/weapon_icons/${bestWeapon?.name}.webp" alt="bestWeapon?.name" class="weapon-icon-fav">
+                        <div class="weapon-info ${!player?.isUsingStattrack ? 'stattrack-disabled' : ''}">
+                        <img src="media/weapon_icons/${bestWeapon?.name}.webp" alt="bestWeapon?.name" class="weapon-icon-fav">
                         <div class="weapon-name">${bestWeapon?.name ? bestWeapon.name : 'Unknown'}</div>
                         <div class="weapon-mastery">Mastery Level: <span class="level-value-wp">0</span></div>
 
@@ -585,13 +588,13 @@ async function showPublicProfile(container, player) {
                 </div>
 
             <!-- All weapons list if they exist -->
-            ${!player?.isUsingStattrack ? `` :
-            `<div class="weapon-stats profile-section">
+            ${player?.isUsingStattrack ? `
+            <div class="weapon-stats profile-section">
                 <h3>Weapons</h3>
                 <div class="weapon-stats-container" id="weapons-container">
                 </div>
-            </div>`
-        }
+            </div>
+            ` : ''}
 
             <!-- Trader Standing -->
             <div class="standing-stats profile-section">
@@ -728,7 +731,7 @@ async function showPublicProfile(container, player) {
     // Render stats and init the profile
     // Skip this if player is not using Stattrack
     if (player.isUsingStattrack) {
-        renderWeaponList(player.id, player.modWeaponStats || {});
+        renderWeaponList(player.permaLink, player.modWeaponStats || {});
     }
 
     if (player.raidHitsHistory) {
@@ -1037,9 +1040,8 @@ async function renderWeaponList(playerId, modWeaponStats) {
     const weaponsContainer = document.getElementById('weapons-container');
     weaponsContainer.innerHTML = '';
 
-    const playerWeapons = modWeaponStats[playerId];
+    const playerWeapons = modWeaponStats.weapons?.[playerId]?.weapons;
 
-    // Sort weapons by most kills from top to bottom to show
     const sortedWeapons = Object.entries(playerWeapons)
         .filter(([_, weaponData]) => weaponData.stats?.kills > 0)
         .sort((a, b) => (b[1].stats?.kills || 0) - (a[1].stats?.kills || 0));
@@ -1093,19 +1095,14 @@ async function renderWeaponList(playerId, modWeaponStats) {
     weaponsContainer.appendChild(weaponList);
 }
 
-// Clean weapon name helper
-function cleanWeaponName(weaponName) {
-    return weaponName.replace(/[★☆]/g, "");
-}
-
 function getBestWeapon(playerId, modWeaponStats) {
-    if (!modWeaponStats || !modWeaponStats[playerId]) {
+    if (!modWeaponStats?.weapons?.[playerId]?.weapons) {
         return null;
     }
 
     let maxKills = 0;
     let bestWeapon = null;
-    const playerWeapons = modWeaponStats[playerId];
+    const playerWeapons = modWeaponStats.weapons[playerId].weapons;
 
     // Go through all weapons
     for (const [weaponName, weaponData] of Object.entries(playerWeapons)) {
@@ -1123,6 +1120,11 @@ function getBestWeapon(playerId, modWeaponStats) {
     }
 
     return bestWeapon;
+}
+
+// Clean weapon name helper
+function cleanWeaponName(weaponName) {
+    return weaponName.replace(/[★☆]/g, "");
 }
 
 // Helper function to generate side images HTML
