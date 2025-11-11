@@ -144,7 +144,7 @@ async function showPublicProfile(container, player) {
 
     // Show fav weapon if is using Stattrack
     let bestWeapon = null;
-    if (player.modWeaponStats && player.modWeaponStats.weapons[player.permaLink]) {
+    if (player?.modWeaponStats?.weapons?.[player.permaLink]?.weapons) {
         bestWeapon = await getBestWeapon(player.permaLink, player.modWeaponStats);
         if (!bestWeapon) player.isUsingStattrack = false;
     } else {
