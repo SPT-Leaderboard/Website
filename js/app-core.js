@@ -381,7 +381,7 @@ async function displayLeaderboard(data) {
             badge = `
             <div class="badge-lb tooltip">
                 <em class='bx bxs-alert-shield' style="color:rgb(255, 214, 100);"></em> 
-                <span class="tooltiptext">Marked as suspicious by SkillIssueDetector™</span>
+                <span class="tooltiptext">Marked as suspicious by SkillIssueDetector™ (Beta)</span>
             </div>`;
         } else {
             const boostValue = player.boostPerc || 0;
@@ -596,7 +596,7 @@ async function displaySimpleLeaderboard(data) {
             badge = `
             <div class="badge-lb tooltip">
                 <em class='bx bxs-alert-shield' style="color:rgb(255, 214, 100);"></em> 
-                <span class="tooltiptext">Marked as suspicious by SkillIssueDetector™</span>
+                <span class="tooltiptext">Marked as suspicious by SkillIssueDetector™ (Beta)</span>
             </div>`;
         } else {
             badge = `
