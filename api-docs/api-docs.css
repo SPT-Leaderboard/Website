@@ -104,7 +104,7 @@ header {
 .api-doc {
     border-radius: 8px;
     margin-bottom: 2rem;
-    margin-top: 5rem;
+    margin-top: 10rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     background-color: rgba(57, 89, 131, 0.205);
     backdrop-filter: blur(10px);
