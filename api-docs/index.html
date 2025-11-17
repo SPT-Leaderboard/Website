@@ -65,7 +65,7 @@
                     </li>
                     <li class="command-item" data-command="getPlayerProfileData">
                         <i class="fa-solid fa-user-pen"></i>
-                        <span>GET playerProfileData={permaLink}</span>
+                        <span>GET playerProfileData={permaLink&profileId}</span>
                     </li>
                     <li class="command-item" data-command="getNetworkBalance">
                         <i class="fa-solid fa-coins"></i>
@@ -350,9 +350,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>playerProfileData</td>
+                                    <td>playerProfileData, profileId</td>
                                     <td>string</td>
-                                    <td>Perma Link</td>
+                                    <td>Perma Link and Profile ID</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -363,7 +363,7 @@
                         </h3>
                         <div class="code-block">
                             <code>
-                            <span class="code-keyword">GET</span> https://sptlb.yuyui.moe/api/release/v1/index.php?playerProfileData=68a410ee00052bb06074589a<br>
+                            <span class="code-keyword">GET</span> https://sptlb.yuyui.moe/api/release/v1/index.php?playerProfileData=68a410ee00052bb06074589a&profileId=429f923hlsaj2i3teru3<br>
                         </code>
                         </div>
                     </div>
