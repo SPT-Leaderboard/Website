@@ -15,7 +15,7 @@
         <script src="../api-docs/js/main.js"></script>
         <script src="../js/app-utils.js"></script>
         <script data-cfasync="false" src="../js/app-seasons.js"></script>
-        <title>SPT Leaderboard - Docs</title>
+        <title>SPT Leaderboard - API Documentation</title>
     </head>
 
     <body>
@@ -65,7 +65,7 @@
                     </li>
                     <li class="command-item" data-command="getPlayerProfileData">
                         <i class="fa-solid fa-user-pen"></i>
-                        <span>GET playerProfileData={profileId}</span>
+                        <span>GET playerProfileData={permaLink}</span>
                     </li>
                     <li class="command-item" data-command="getNetworkBalance">
                         <i class="fa-solid fa-coins"></i>
@@ -86,10 +86,6 @@
                     <li class="command-item" data-command="getNotifications">
                         <i class="fa-solid fa-bell"></i>
                         <span>GET notifications={marketToken}</span>
-                    </li>
-                    <li class="command-item" data-command="postIsBanned">
-                        <i class="fa-solid fa-user-shield"></i>
-                        <span>POST isBanned</span>
                     </li>
                 </ul>
             </div>
@@ -339,7 +335,7 @@
                         <h2 class="api-title">GET playerProfileData</h2>
                         <span class="api-method">GET</span>
                     </div>
-                    <p class="api-description"> Retrieves data of a player profile customization. Name, profile description, profile picture (custom), and profile stylings.</p>
+                    <p class="api-description"> Retrieves data of a player profile customization. Name, profile description, profile picture (custom), and profile stylings. Perma Link can be found in any season player data.</p>
                     <div class="api-section">
                         <h3 class="section-title">
                             <i class="fas fa-list section-icon"></i> Parameters
@@ -356,7 +352,7 @@
                                 <tr>
                                     <td>playerProfileData</td>
                                     <td>string</td>
-                                    <td>Profile ID</td>
+                                    <td>Perma Link</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -571,8 +567,8 @@
                             <code>
                             {<br>
                             &nbsp;&nbsp;"success": true,<br>
-                            &nbsp;&nbsp;"data": { notificationData },<br>
-                            &nbsp;&nbsp;"message": "Notifications retrieved successfully"<br>
+                            &nbsp;&nbsp;"data": { ["id1", "id2"] },<br>
+                            &nbsp;&nbsp;"message": "Inventory retrieved successfully"<br>
                             }
                         </code>
                         </div>
