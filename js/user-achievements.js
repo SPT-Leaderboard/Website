@@ -125,7 +125,7 @@ async function formatAchievement(achievementId, timestamp, achievementData) {
 
         let imageUrl = "media/player-achievements/Standard_35_1.png";
         try {
-            imageUrl = achievement.imageUrl?.slice(1) || "media/player-achievements/Standard_35_1.png";
+            imageUrl = `https://assets.tarkov.dev/achievement-${achievementId}-icon.webp` || achievement.imageUrl?.slice(1) || "media/player-achievements/Standard_35_1.png";
         } catch (error) {
             imageUrl = "media/player-achievements/Standard_35_1.png";
         }
