@@ -265,9 +265,9 @@ function calculateGlobalStats(players) {
                 }
             }
 
-            if (player.modWeaponStats) {
-                for (const playerId in player.modWeaponStats) {
-                    const weapons = player.modWeaponStats[playerId];
+            if (player.weapons) {
+                for (const playerId in player.weapons) {
+                    const weapons = player.weapons[playerId].weapons;
                     for (const weaponName in weapons) {
                         const weapon = weapons[weaponName];
                         const weaponKills = weapon.stats.kills;
