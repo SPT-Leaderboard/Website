@@ -2,70 +2,14 @@
 let audioElements = {};
 let lastPlayed = null;
 
-document.addEventListener('DOMContentLoaded', () => {
-    preloadAudio();
-});
-
-function preloadAudio() {
-    const files = [
-        { name: 'season/season_end1', time: 145000 }, // 2:25
-        { name: 'season/season_end2', time: 85000 },  // 1:25
-        { name: 'season/season_end3', time: 30000 },  // 0:30
-        { name: 'season/season_end_final', time: 0 }  // 0:00
-    ];
-
-    files.forEach(({ name, time }) => {
-        const audio = new Audio(`media/sounds/${name}.mp3`);
-        audio.timeThreshold = time;
-        audio.volume = 0.4;
-        audioElements[name] = audio;
-    });
-
-    // Ambience with no timer
-    audioElements['season/season_end_ambience'] = new Audio(`media/sounds/season/season_end_ambience.mp3`);
-    audioElements['season/season_end_ambience'].loop = true;
-}
-
-async function playAppropriateTrack(diff) {
-    let trackToPlay = null;
-
-    if (diff <= 0) {
-        if (isDataReady) {
-            endSeason();
-        }
-    } else if (diff <= 30000) { // 0:30
-        trackToPlay = 'season/season_end3';
-    } else if (diff <= 85000) { // 1:25
-        trackToPlay = 'season/season_end2';
-    } else if (diff <= 145000) { // 2:25
-        trackToPlay = 'season/season_end1';
-    }
-
-    // If track changed
-    if (trackToPlay && lastPlayed !== trackToPlay) {
-        // Stop all tracks
-        Object.values(audioElements).forEach(audio => {
-            audio.pause();
-            audio.currentTime = 0;
-        });
-
-        lastPlayed = trackToPlay;
-        audioElements[trackToPlay].play().catch(e => {
-            console.warn(`Couldn't play ${trackToPlay}:`, e);
-        });
-
-    }
-}
-
 // Season end screen
 async function endSeason() {
     clearInterval(timerInterval);
     const stats = calculateGlobalStats(leaderboardData);
-
-    // When season end sound is over, play music and show video
     const endMusic = new Audio(`media/sounds/season/season_end_final.mp3`);
     endMusic.play();
 
+    // When season end sound is over, play music and show video additional overlay + start showing names
     endMusic.addEventListener('ended', () => {
         const contMusic = new Audio('media/sounds/season/end_music.mp3');
         const videoBackground = document.querySelector('.video-background');
@@ -76,6 +20,11 @@ async function endSeason() {
 
         setTimeout(() => {
             videoBackground.style.opacity = '0.5';
+
+            // Start showing player names after a short delay
+            setTimeout(() => {
+                showAllPlayerNames(leaderboardData);
+            }, 500);
         }, 100);
     });
 
@@ -314,9 +263,13 @@ function calculateGlobalStats(players) {
     });
 
     let mostDeadlyWeapon = "Unknown";
-    if (Object.keys(weaponStats).length > 0) {
-        mostDeadlyWeapon = Object.entries(weaponStats).sort((a, b) => b[1] - a[1])[0][0];
-    }
+    let maxKills = 0;
+    Object.entries(weaponStats).forEach(([weapon, kills]) => {
+        if (kills > maxKills) {
+            maxKills = kills;
+            mostDeadlyWeapon = weapon;
+        }
+    });
 
     let mostPopularMap = "Unknown";
     if (Object.keys(mapStats).length > 0) {
@@ -342,6 +295,7 @@ function calculateGlobalStats(players) {
         topKills,
         topPlayTime,
         mostDeadlyWeapon,
+        totalWeapons: Object.keys(weaponStats).length,
         mostPopularMap,
         richestTrader,
         longestShot,
@@ -350,3 +304,230 @@ function calculateGlobalStats(players) {
         topKillsWeapon: topKillsWeapon
     };
 }
+
+function preloadAudio() {
+    const files = [
+        { name: 'season/season_end1', time: 145000 }, // 2:25
+        { name: 'season/season_end2', time: 85000 },  // 1:25
+        { name: 'season/season_end3', time: 30000 },  // 0:30
+        { name: 'season/season_end_final', time: 0 }  // 0:00
+    ];
+
+    files.forEach(({ name, time }) => {
+        const audio = new Audio(`media/sounds/${name}.mp3`);
+        audio.timeThreshold = time;
+        audio.volume = 0.4;
+        audioElements[name] = audio;
+    });
+
+    // Ambience with no timer
+    audioElements['season/season_end_ambience'] = new Audio(`media/sounds/season/season_end_ambience.mp3`);
+    audioElements['season/season_end_ambience'].loop = true;
+}
+
+async function playAppropriateTrack(diff) {
+    let trackToPlay = null;
+
+    if (diff <= 0) {
+        if (isDataReady) {
+            await endSeason();
+        }
+        return;
+    } else if (diff <= 30000) {
+        trackToPlay = 'season/season_end3';
+    } else if (diff <= 85000) {
+        trackToPlay = 'season/season_end2';
+    } else if (diff <= 145000) {
+        trackToPlay = 'season/season_end1';
+    }
+
+    if (trackToPlay && lastPlayed !== trackToPlay) {
+        if (lastPlayed && audioElements[lastPlayed]) {
+            audioElements[lastPlayed].volume = 0.4;
+            fadeOutAudio(audioElements[lastPlayed], 1000);
+        }
+
+        lastPlayed = trackToPlay;
+        const currentAudio = audioElements[trackToPlay];
+        currentAudio.currentTime = 0;
+        currentAudio.volume = 0;
+
+        try {
+            await currentAudio.play();
+            fadeInAudio(currentAudio, 2000, 0.4);
+        } catch (e) {
+            console.warn(`Couldn't play ${trackToPlay}:`, e);
+        }
+    }
+}
+
+function showAllPlayerNames(players) {
+    const overlay = document.getElementById('seasonOverlay');
+
+    // Fade out
+    const darkOverlay = document.createElement('div');
+    darkOverlay.id = 'memoryOverlay';
+    darkOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 999;
+        opacity: 0;
+        transition: opacity 2s ease-in-out;
+    `;
+
+    // "In Memory of..."
+    const memoryTitle = document.createElement('div');
+    memoryTitle.id = 'memoryTitle';
+    memoryTitle.textContent = 'In Memory of...';
+    memoryTitle.style.cssText = `
+        position: fixed;
+        top: 5%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 38px;
+        font-weight: 700;
+        color: #ffffff;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        z-index: 1001;
+        opacity: 0;
+        transition: opacity 2s ease-in-out;
+        text-align: center;
+    `;
+
+    const namesContainer = document.createElement('div');
+    namesContainer.id = 'playerNamesOverlay';
+    namesContainer.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1000;
+        opacity: 0;
+    `;
+
+    overlay.appendChild(darkOverlay);
+    overlay.appendChild(memoryTitle);
+    overlay.appendChild(namesContainer);
+
+    setTimeout(() => {
+        darkOverlay.style.opacity = '1';
+        memoryTitle.style.opacity = '1';
+        namesContainer.style.opacity = '1';
+    }, 100);
+
+    const validPlayers = players.filter(player => !player.banned && player.name);
+
+    // Start showign names
+    validPlayers.forEach((player, index) => {
+        setTimeout(() => {
+            createFloatingName(player.name, namesContainer, index * 500);
+        }, index * 500);
+    });
+
+    // After showing start fading out names
+    const totalDisplayTime = validPlayers.length * 500 + 5000; // 5 seconds after last name
+    setTimeout(() => {
+        fadeOutAllElements(darkOverlay, memoryTitle, namesContainer);
+    }, totalDisplayTime);
+}
+
+function createFloatingName(playerName, container, delay) {
+    const nameElement = document.createElement('div');
+    nameElement.className = 'floating-player-name';
+    nameElement.textContent = playerName;
+
+    const posX = Math.random() * 80 + 10; // 15% - 85%
+    const posY = Math.random() * 80 + 10; // 10% - 70%
+    const fontSize = Math.random() * 20 + 18; // 18px - 38px
+    const opacity = Math.random() * 0.2 + 0.4; // 40% - 100%
+
+    nameElement.style.cssText = `
+        position: absolute;
+        left: ${posX}%;
+        top: ${posY}%;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: ${fontSize}px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, ${opacity});
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
+        white-space: nowrap;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: opacity 1.5s ease-in-out, transform 2s ease-in-out;
+        pointer-events: none;
+        z-index: 1001;
+    `;
+
+    container.appendChild(nameElement);
+
+    setTimeout(() => {
+        nameElement.style.opacity = '1';
+    }, 100);
+
+    // Automatic remove name after 3-5 seconds
+    const displayTime = 3000 + Math.random() * 2000;
+    setTimeout(() => {
+        nameElement.style.opacity = '0';
+        setTimeout(() => {
+            if (nameElement.parentNode) {
+                nameElement.parentNode.removeChild(nameElement);
+            }
+        }, 1500);
+    }, delay + displayTime);
+}
+
+function fadeOutAllElements(darkOverlay, memoryTitle, namesContainer) {
+    memoryTitle.style.opacity = '0';
+
+    // Remove all elements with fadeout
+    setTimeout(() => {
+        namesContainer.style.opacity = '0';
+        darkOverlay.style.opacity = '0';
+
+        setTimeout(() => {
+            if (darkOverlay.parentNode) darkOverlay.parentNode.removeChild(darkOverlay);
+            if (memoryTitle.parentNode) memoryTitle.parentNode.removeChild(memoryTitle);
+            if (namesContainer.parentNode) namesContainer.parentNode.removeChild(namesContainer);
+        }, 2000);
+    }, 1000);
+}
+
+function fadeOutAudio(audio, duration) {
+    const startVolume = audio.volume;
+    const step = startVolume / (duration / 50);
+
+    const fadeOut = setInterval(() => {
+        if (audio.volume > step) {
+            audio.volume -= step;
+        } else {
+            audio.volume = 0;
+            audio.pause();
+            clearInterval(fadeOut);
+        }
+    }, 50);
+}
+
+function fadeInAudio(audio, duration, targetVolume) {
+    audio.volume = 0;
+    const step = targetVolume / (duration / 50);
+
+    const fadeIn = setInterval(() => {
+        if (audio.volume < targetVolume - step) {
+            audio.volume += step;
+        } else {
+            audio.volume = targetVolume;
+            clearInterval(fadeIn);
+        }
+    }, 50);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    preloadAudio();
+});

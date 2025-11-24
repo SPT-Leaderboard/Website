@@ -5443,6 +5443,24 @@ input[type="checkbox"]:checked:hover {
     background-size: 400% 400%;
 }
 
+.floating-player-name {
+    animation: gentleFloat 6s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+@keyframes gentleFloat {
+    0%, 100% {
+        transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0px);
+    }
+    50% {
+        transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-3px);
+    }
+}
+
+#memoryOverlay {
+    backdrop-filter: blur(5px);
+}
+
 @keyframes glowPulse {
     from {
         box-shadow: 0 0 30px rgba(134, 200, 255, 0.3);
@@ -5594,7 +5612,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .stat-card {
-    background: rgba(255, 255, 255, 0.041);
+    background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     padding: 15px;
