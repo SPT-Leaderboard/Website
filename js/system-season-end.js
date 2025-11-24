@@ -382,7 +382,7 @@ function showAllPlayerNames(players) {
     // "In Memory of..."
     const memoryTitle = document.createElement('div');
     memoryTitle.id = 'memoryTitle';
-    memoryTitle.textContent = 'In Memory of...';
+    memoryTitle.textContent = 'In memory of our Fallen and Risen. Your sacrifice will not be forgotten.';
     memoryTitle.style.cssText = `
         position: fixed;
         top: 5%;
@@ -427,12 +427,12 @@ function showAllPlayerNames(players) {
     // Start showign names
     validPlayers.forEach((player, index) => {
         setTimeout(() => {
-            createFloatingName(player.name, namesContainer, index * 500);
-        }, index * 500);
+            createFloatingName(player.name, namesContainer, 5000);
+        }, index * 300);
     });
 
     // After showing start fading out names
-    const totalDisplayTime = validPlayers.length * 500 + 5000; // 5 seconds after last name
+    const totalDisplayTime = validPlayers.length * 500 + 4000; // 6 seconds after last name
     setTimeout(() => {
         fadeOutAllElements(darkOverlay, memoryTitle, namesContainer);
     }, totalDisplayTime);
