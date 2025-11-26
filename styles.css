@@ -394,6 +394,7 @@ h1 {
     text-shadow: 1px 0px 1px rgb(255 255 255 / 70%);
     color: #f0f0f0;
     background: #ffffff0e;
+    border: 1px solid var(--gray-ultradark);
     padding: 5px 10px;
     border-radius: 4px;
     position: fixed;
