@@ -319,6 +319,11 @@
                     </div>
                     <div class="setting-item">
                         <label class="setting-label">
+                            <input type="checkbox" id="cacheBypassToggle"> Image Cache Bypass </label>
+                        <p class="setting-description">Always try to load fresh PMC profile images upon profile opening.</p>
+                    </div>
+                    <div class="setting-item">
+                        <label class="setting-label">
                             <input type="checkbox" id="timerToggle"> Show Season Countdown Timer </label>
                         <p class="setting-description">Display or hide the time left until new season on the page.</p>
                     </div>
@@ -337,6 +342,9 @@
                             <input type="checkbox" id="casualToggle"> Hide Casual Players </label>
                         <p class="setting-description">Display or hide casual players on the leaderboard.</p>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="saveSettings" class="save-btn">Save Settings</button>
                 </div>
             </div>
         </div>

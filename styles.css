@@ -1807,16 +1807,6 @@ button:hover,
     width: 100%;
 }
 
-.mods-count-badge {
-    background: linear-gradient(135deg, var(--danger), var(--danger-dark));
-    color: white;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    box-shadow: var(--shadow-md);
-}
-
 .banned-mods-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1827,17 +1817,6 @@ button:hover,
     display: flex;
     flex-direction: column;
     gap: 8px;
-}
-
-.mod-icon {
-    font-size: 1.1rem;
-    flex-shrink: 0;
-    filter: grayscale(0.3);
-    transition: filter 0.3s ease;
-}
-
-.ban-mod-item:hover .mod-icon {
-    filter: grayscale(0);
 }
 
 .ban-mod-name {
@@ -2070,6 +2049,30 @@ input[type="checkbox"]:checked:hover {
     color: #ff5555;
     font-size: 13px;
     margin: 0;
+}
+
+.modal-footer {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.save-btn {
+    background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+    color: var(--darker);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.save-btn:hover {
+    box-shadow: 0 5px 15px rgba(100, 255, 218, 0.4);
 }
 
 /* Announcement */
@@ -2785,9 +2788,13 @@ input[type="checkbox"]:checked:hover {
 .user-main-card .aboutMe {
     grid-column: 1 / -1;
     font-size: 15px;
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    border: 1px solid #ffffff1a;
+    max-width: fit-content;
     font-weight: 600;
     color: #cdcdcd;
-    padding: 10px 0;
+    padding: 5px 10px;
     margin: 5px 0;
 }
 

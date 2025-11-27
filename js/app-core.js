@@ -277,7 +277,7 @@ async function loadSeasonData(season) {
         emptyLeaderboardNotification.style.display = 'block';
     } finally {
         // Data is fully ready
-        if (getCookie('lbToggle') === 'true') {
+        if (SettingsHelper.get('lbToggle')) {
             displaySimpleLeaderboard(leaderboardData);
         } else {
             displayLeaderboard(leaderboardData);

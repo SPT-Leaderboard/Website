@@ -119,7 +119,13 @@ async function autoCropTransparent(imageElement) {
 }
 
 async function loadAndCropPlayerImage(player) {
-    const imageUrl = `${pmcPfpsPath}${player.permaLink}_full.png`;
+    let imageUrl = `${pmcPfpsPath}${player.permaLink}_full.png`;
+
+    // Bypass CF cache
+    if (SettingsHelper.get('cacheBypassToggle')) {
+        imageUrl = `${pmcPfpsPath}${player.permaLink}_full.png?t=${Date.now()}`;
+    }
+
     const fallbackUrl = 'media/default_full_pmc_avatar.png';
     const imgElement = document.querySelector('.playermodel-image img');
     const loadingModel = document.getElementById('loading-model');
