@@ -1221,7 +1221,7 @@ function generateBadgesHTML(player) {
     if (player?.suspicious == true && !player.isCasual) {
         badges += `<div class="badge tooltip">
         <em class='bx  bxs-alert-shield' style="color:rgb(255, 214, 100);"></em> 
-        <span class="tooltiptext">Marked as suspicious by SkillIssueDetector™ or warned by Moderation. Their statistics may be innacurate</span>
+        <span class="tooltiptext">Marked as suspicious by SkillIssueDetector™ or warned by Moderation. Their statistics may be inaccurate</span>
       </div>`;
     } else {
         badges += `<div class="badge tooltip">
