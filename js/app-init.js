@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resources = [
         { name: "Connectivity with API", url: "/api/main/online.json", weight: 25 },
         { name: "Connectivity with Network", url: "/api/network/explore/messages.json", weight: 25 },
+        { name: "Snowy Theme", url: "js/app-seasons.js", weight: 10 },
         { name: "Core Logic", url: "js/app-core.js", weight: 25 },
         { name: "Core Utils", url: "js/app-utils.js", weight: 10 },
         { name: "API Monitor", url: "js/api-monitor.js", weight: 25 },
@@ -40,13 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let loadingMessages = [
         "Duping free Leaderboard Coins...",
         "Syncing with SPTLB network...",
-        "Banning bad players...",
         "Placing good players on top...",
         "Installing winter theme DLC...",
         "Preparing the competition...",
         "Setting up real-time rankings...",
         "Preparing your BattlePass rewards...",
-        "Calculating your Skill Rating...",
         "Polishing our UI..."
     ];
 
@@ -139,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
             statusText.textContent = "Almost ready...";
         } else {
             waitForDataReady(() => completeLoading());
-            statusText.textContent = "Welcome to SPTLB!";
+            statusText.textContent = "Awaiting data from API...";
         }
     }
 
@@ -152,6 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Complete loading successfully
     function completeLoading() {
+        statusText.textContent = "Welcome to SPTLB!";
+
         loader.classList.add('complete');
 
         setTimeout(() => {
