@@ -337,7 +337,7 @@ async function showPublicProfile(container, player) {
 
             <div class="battlepass-level profile-section">
                 <h3>
-                    Leaderboard BattlePass Level
+                    Leaderboard Level
                 </h3>
                 <div class="bp-wrapper" id="playerRankIcon">
                     <div class="level-info">

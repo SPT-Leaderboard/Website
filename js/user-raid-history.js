@@ -120,17 +120,22 @@ function renderRaidsStats(raids, currentPlayerId, leaderboardData) {
     let mapStatsHtml = '';
     if (mapStats.length > 0) {
         mapStatsHtml = `
-                <div class="maps-stats-grid">
-                    ${mapStats.map(map => `
-                    <div class="map-stat-card">
+            <div class="maps-stats-grid">
+                ${mapStats.map(map => `
+                    <div class="map-stat-card ${map.isFavourite ? 'favourite-map' : ''}">
                         <div class="map-header">
                             <div class="map-image">
                                 <img src="media/leaderboard_icons/maps/${map.map}.png" alt="${map.map}" 
                                     onerror="this.src='media/leaderboard_icons/maps/Default.png'">
                             </div>
                             <div class="map-info">
-                                <h4 class="map-name">${map.map}</h4>
-                                <div class="map-raids-count">${map.totalRaids} raids</div>
+                                <h4 class="map-name">
+                                    ${map.map}
+                                    ${map.isFavourite ? '<span class="favourite-badge">FAVOURITE</span>' : ''}
+                                </h4>
+                                <div class="map-raids-count">
+                                    ${map.totalRaids} raids
+                                </div>
                             </div>
                         </div>
                         
@@ -267,7 +272,7 @@ function renderRaidsStats(raids, currentPlayerId, leaderboardData) {
                             <i class="fa-solid fa-skull-crossbones"></i> Killed in Action`}
                         </span>
 
-                        ${raid.lastRaidProfit == -1? `` : `<div class="raid-profit"> Raid Profit: <span class="${raid.lastRaidProfit > 0 ? 'stat-positive' : 'stat-negative'}"> ${formatProfit(raid.lastRaidProfit)} ₽</span></div>`}
+                        ${raid.lastRaidProfit == -1 ? `` : `<div class="raid-profit"> Raid Profit: <span class="${raid.lastRaidProfit > 0 ? 'stat-positive' : 'stat-negative'}"> ${formatProfit(raid.lastRaidProfit)} ₽</span></div>`}
 
                         <span class="raid-meta">
                             ${raid.lastRaidMap || 'Unknown'} • ${raid.lastRaidAs || 'N/A'} • ${lastRaidDuration || '00:00'} • LC Earned: <span class="lb-coins">+${raid.lcPointsEarned ? raid.lcPointsEarned : 0}</span> • ${lastRaidAgo || 'Just Now'} ${raid.lastRaidSurvived || raid.lastRaidRanThrough || raid.discFromRaid || raid.isTransition || !raid.agressorName ? `` : `• Killed by <span class="raid-killer">${raid.agressorName}</span>`}
@@ -384,7 +389,7 @@ function calculateMapStats(raids) {
     });
 
     // Calculate averages
-    return Object.values(mapStats).map(stats => {
+    const result = Object.values(mapStats).map(stats => {
         const avgTime = stats.totalRaids > 0 ? Math.round(stats.totalTime / stats.totalRaids) : 0;
         const avgProfit = stats.totalRaids > 0 ? Math.round(stats.totalProfit / stats.totalRaids) : 0;
         const avgKills = stats.totalRaids > 0 ? (stats.totalKills / stats.totalRaids).toFixed(1) : 0;
@@ -402,6 +407,14 @@ function calculateMapStats(raids) {
             formattedProfit: formatProfit(avgProfit)
         };
     });
+
+    const sorted = result.sort((a, b) => b.totalRaids - a.totalRaids);
+
+    return sorted.map((stats, index) => ({
+        ...stats,
+        rank: index + 1,
+        isFavourite: index < 3 || stats.totalRaids >= 50
+    }));
 }
 
 function formatProfit(profit) {
@@ -420,14 +433,14 @@ function formatProfit(profit) {
     return profit.toLocaleString('ru-RU');
 }
 
-function getTimeProgress(currentTime, minTime = 1, maxTime = 1800) {
+function getTimeProgress(currentTime, minTime = 1, maxTime = 4300) {
     const clamped = Math.max(minTime, Math.min(currentTime, maxTime));
     return ((clamped - minTime) / (maxTime - minTime)) * 100;
 }
 
 function getTimeQuality(time) {
     if (time < 600) return 'low';
-    if (time < 800) return 'medium';
+    if (time < 1000) return 'medium';
     if (time < 1200) return 'good';
     return 'excellent';
 }
