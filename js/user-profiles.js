@@ -258,6 +258,11 @@ async function showPublicProfile(container, player) {
         finalNameClass = accountClass; // TP
     }
 
+    // Winner - priority
+    if (player.isWinner === true) {
+        finalNameClass = 'player-name-gold';
+    }
+
     container.innerHTML = `
         <!-- left column -->
         <img src="media/rewards/other/badgerTester.gif" class="badger" id="badger" />
@@ -271,7 +276,7 @@ async function showPublicProfile(container, player) {
                 <div class="pfp"><img src="${player.profilePicture}" class="player-avatar" id="profile-avatar" alt="${player.name}" onerror="this.src='media/default_avatar.png';" /></div>
                 <div class="profile-header">
                     <div class="name-wrapper">
-                        <div class="name ${finalNameClass}" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''}>
+                        <div class="${finalNameClass} ${player.isWinner ? `` : `name`}" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''}>
                             ${player.teamTag ? `[${player.teamTag}]` : ``}
                             ${player.name}
                         </div>

@@ -19324,6 +19324,7 @@
     {
       "id": "68f5533d27c54912e4f0b860",
       "name": "harmony",
+      "isWinner": true,
       "pmcLevel": 5,
       "lastPlayed": 1762678161,
       "damage": 12689,

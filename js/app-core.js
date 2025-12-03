@@ -397,7 +397,7 @@ async function displayLeaderboard(data) {
                 <em class='bx bxs-shield-alt-2' style="color:rgb(100, 255, 165);"></em>
                 <span class="tooltiptext">Profile in good standing</span>
             </div>
-            <div class="boost-container tooltip" style="background: ${boostColor}15; border: 1px solid ${boostColor}50">
+            <div class="boost-container tooltip">
                 <span class="boost-value">${boostValue.toFixed(1)}%</span>
                 <em class='bx ${boostIcon}' style="color:${boostColor}; font-size:0.8em"></em>
                 <em class='bx bxs-bolt' style="color:${boostColor}"></em>
@@ -473,9 +473,13 @@ async function displayLeaderboard(data) {
             finalNameClass = accountClass; // TP
         }
 
-        // get rank
-        // Temporary solution
-        const playerRating = player.pmcRaids;
+        // Winner - priority
+        if (player.isWinner === true) {
+            finalNameClass = 'player-name-gold';
+        }
+
+        // Get Rank
+        const playerRating = player.networkRaids ?? 0;
         const rank = getRank(playerRating);
         const rankHTML = `
             <div class="badge-lb tooltip">
@@ -497,7 +501,7 @@ async function displayLeaderboard(data) {
             <td class="teamtag ${teamTagClass}" data-team="${player.teamTag ? player.teamTag : ``}">${player.teamTag ? `[${player.teamTag}]` : ``}</td>
             <td class="player-name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''} data-player-id="${player.id || '0'}">
                 ${`<img class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';" />`}
-                ${accountIcon} <span class="${finalNameClass}">${player.name}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div>
+                ${accountIcon} <span class="${finalNameClass}">${player.isWinner ? `<i class='bx  bxs-trophy-star'></i>` : ``} ${player.name}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div>
             </td>
             <td>${lastGame || 'N/A'}</td>
             <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class='bx  bxs-share'></i> </button></td>
