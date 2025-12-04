@@ -7,6 +7,7 @@
 const seasonEndTimestamp = 1755188000 * 1000;
 
 let timerInterval;
+let seasonEnded = false; 
 
 document.addEventListener('DOMContentLoaded', () => {
     const endDateDisplay = document.getElementById('endDateDisplay');
@@ -28,8 +29,11 @@ function updateTimer() {
     if (diff <= 0) {
         timerDisplay.textContent = "Season has ended!";
         clearInterval(timerInterval);
-        waitForDataReady(() => endSeason());
-
+        
+        if (!seasonEnded) {
+            seasonEnded = true;
+            waitForDataReady(() => endSeason());
+        }
     } else {
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));

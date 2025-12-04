@@ -3,7 +3,7 @@ let audioElements = {};
 let lastPlayed = null;
 
 // Season end screen
-async function playAppropriateTrack(diff) {
+function playAppropriateTrack(diff) {
     let trackToPlay = null;
 
     if (diff <= 30000) { // 0:30
@@ -30,8 +30,7 @@ async function playAppropriateTrack(diff) {
     }
 }
 
-async function endSeason() {
-    clearInterval(timerInterval);
+function endSeason() {
     const stats = calculateGlobalStats(leaderboardData);
     const endMusic = new Audio(`media/sounds/season/season_end_final.mp3`);
     endMusic.play();
@@ -48,9 +47,8 @@ async function endSeason() {
         videoBackground.style.opacity = '0.5';
 
         // Start showing player names after a short delay
-        setTimeout(() => {
-            showAllPlayerNames(leaderboardData);
-        }, 500);
+        showAllPlayerNames(leaderboardData);
+
     });
 
     const roundedBillions = Math.round(stats.totalSalesSum / 1_000_000_000);
@@ -243,7 +241,6 @@ function calculateGlobalStats(players) {
                 for (const profileId in player.weapons) {
                     const profileData = player.weapons[profileId];
 
-                    // Проверяем наличие weapons в profileData
                     if (!profileData.weapons) continue;
 
                     const weapons = profileData.weapons;
