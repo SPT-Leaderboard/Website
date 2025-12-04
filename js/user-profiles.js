@@ -112,6 +112,11 @@ async function showPublicProfile(container, player) {
     isProfileOpened = true;
     const playerData = await getCustomProfileSettings(player.permaLink);
 
+    // Disable rendering of the leaderboard when profile is open
+    const leaderboardTable = document.getElementById('leaderboardTable');
+
+    leaderboardTable.classList.add('hidden');
+
     if (playerData) {
         player.profileTheme = playerData.profileTheme ?? 'dark';
         player.usePrestigeStyling = playerData.usePrestigeStyling ?? false;
@@ -258,9 +263,14 @@ async function showPublicProfile(container, player) {
         finalNameClass = accountClass; // TP
     }
 
+    // premium
+    if (player.isPremium === true) {
+        finalNameClass = 'player-name-premium only-name';
+    }
+
     // Winner - priority
     if (player.isWinner === true) {
-        finalNameClass = 'player-name-gold';
+        finalNameClass = 'player-name-gold only-name';
     }
 
     container.innerHTML = `
@@ -1189,6 +1199,13 @@ function generateBadgesHTML(player) {
         </div>`;
     }
 
+    if (player.isPremium) {
+        badges += `<div class="badge tooltip badge-premium">
+            <em class="bx bxs-bolt"></em>
+            <span class="tooltiptext">Premium BattlePass Owner</span>
+        </div>`;
+    }
+
     // Was banned before
     if (player.wasBannedBefore) {
         badges += `<div class="badge tooltip">
@@ -1271,6 +1288,10 @@ function setupModalCloseHandlers() {
     function closeProfile() {
         modal.classList.remove('active');
         modal.classList.add('closing');
+
+        // Enable rendering of the leaderboard when profile is closed
+        const leaderboardTable = document.getElementById('leaderboardTable');
+        leaderboardTable.classList.remove('hidden');
 
         setTimeout(() => {
             AutoUpdater.setEnabled(true);

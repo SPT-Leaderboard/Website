@@ -220,7 +220,7 @@ async function showPlayerNotification(player) {
             <div class="notification-header-r">
                 <img src="${player.profilePicture}" alt="${player.name}'s avatar" class="notification-avatar-r" onerror="this.src='media/default_avatar.png';">
                 <div class="notification-text-r">
-                    <span class="${player.isWinner? `user-name Legendary` : `notification-name-r`}" style="color:${accountColor}; margin-bottom: 4px; font-weight: 700;">
+                    <span class="${player.isWinner? `player-name-gold only-name` : `notification-name-r`}" style="color:${accountColor}; margin-bottom: 4px; font-weight: 700;">
                         ${specialIconNotification}${player.teamTag ? `[${player.teamTag}]` : ``} ${player.name}
                     </span>
                     <span class="notification-info-r">
