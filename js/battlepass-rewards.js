@@ -30,7 +30,7 @@ function resetStyles({ mainBackground, profileCard, profileAvatar, profileBackgr
     // Reset main background
     mainBackground.style.backgroundImage = '';
     mainBackground.style.backgroundColor = '';
-    mainBackground.className = mainBackground.className.replace(/(usec|bear|labs|lighthouse|goons|raider)-background|prestige-(tagilla|killa|both)/g, '');
+    mainBackground.className = mainBackground.className.replace(/(usec|bear|labs|lighthouse|goons|raider)-background|prestige-(tagilla|killa|both)|theme-premium/g, '');
 
     // Reset weapon 
     profileBackground.className = profileBackground.className.replace(/(scratches|cult-(signs|signs2|circle))/g, '');
@@ -98,6 +98,10 @@ function applyRewards(player, elements) {
             unlocked: isAchievementUnlocked(player, achievementMap.raider)
         }
     };
+
+    if (player.isPremium === true) {
+        mainBackground.classList.add('theme-premium');
+    }
 
     if (player.bp_mainbg === 'none') {
         mainBackground.style.backgroundColor = 'none';
