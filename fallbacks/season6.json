@@ -20181,7 +20181,7 @@
       "energy": 57.1495819,
       "max_hydration": 100,
       "max_energy": 100,
-      "profitGain": -1545351,
+      "lastProfitGain": -1545351,
       "totalProfit": -2454829,
       "pmcPlayTime": 6022,
       "longestHeadshot": 150
@@ -206449,6 +206449,7 @@
       "accountType": "standard",
       "sptVer": "4.0.4",
       "currentWinstreak": 0,
+      "lastProfitGain": 23132943,
       "longestShot": 25,
       "isCasual": false,
       "seasonsPlayed": 1,
@@ -206457,7 +206458,7 @@
       "totalRaids": 29,
       "registeredOnLeaderboard": 1762593136,
       "registrationDate": 1762591907,
-      "absoluteLastTime": 1763048584,
+      "absoluteLastTime": 1803048584,
       "trusted": false,
       "health": 440,
       "banned": false,
@@ -206929,7 +206930,7 @@
           "disabled": false
         }
       },
-      "lastRaidSurvived": false,
+      "lastRaidSurvived": true,
       "lastRaidTimeSeconds": 209,
       "lastRaidMap": "Reserve",
       "pmcSide": "Usec",
@@ -207184,7 +207185,8 @@
       "dev": true,
       "lastRaidRanThrough": false,
       "lcPointsEarned": 42,
-      "pmcPlayTime": 8147
+      "pmcPlayTime": 8147,
+      "isWinner": true
     },
     {
       "id": "690ef543afb4935e70c873b4",

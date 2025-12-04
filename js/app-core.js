@@ -333,16 +333,6 @@ async function displayLeaderboard(data) {
         const row = document.createElement('tr');
         let lastGame;
 
-        const nowInSeconds = Math.floor(Date.now() / 1000);
-        const fifteenDaysInSeconds = 1296000;
-
-        // Player was online for more 15 days, skip to render less jank
-        // Top 50 will always be shown
-        // Will not work when autoUpdater is off
-        if (player.rank > 50 && player.absoluteLastTime < nowInSeconds - fifteenDaysInSeconds && AutoUpdater.getStatus()) {
-            return;
-        }
-
         // If user has enabled option to hide Casual Players - we hide them
         if (player.isCasual && getCookie('casualToggle') === 'true') {
             return;
@@ -473,9 +463,9 @@ async function displayLeaderboard(data) {
             finalNameClass = accountClass; // TP
         }
 
-        // Winner - priority
+        // Winner - 1 priority
         if (player.isWinner === true) {
-            finalNameClass = 'player-name-gold';
+            finalNameClass = 'player-name-gold Legendary';
         }
 
         // Get Rank
@@ -501,7 +491,7 @@ async function displayLeaderboard(data) {
             <td class="teamtag ${teamTagClass}" data-team="${player.teamTag ? player.teamTag : ``}">${player.teamTag ? `[${player.teamTag}]` : ``}</td>
             <td class="player-name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''} data-player-id="${player.id || '0'}">
                 ${`<img class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';" />`}
-                ${accountIcon} <span class="${finalNameClass}">${player.isWinner ? `<i class='bx  bxs-trophy-star'></i>` : ``} ${player.name}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div>
+                ${accountIcon} <span class="${finalNameClass}">${player.name}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div>
             </td>
             <td>${lastGame || 'N/A'}</td>
             <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class='bx  bxs-share'></i> </button></td>

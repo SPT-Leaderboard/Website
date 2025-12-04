@@ -89,6 +89,11 @@ async function showPlayerNotification(player) {
             break;
     }
 
+    if(player.isWinner){
+        specialIconNotification = ``;
+        accountColor = '';
+    }
+
     // Raidstreak/Killstreaks
     let isOnRaidStreak = false;
     let streakNotificationKillText = '';
@@ -102,9 +107,22 @@ async function showPlayerNotification(player) {
         streakNotificationKillText = `ON A ${player.currentWinstreak} RAID WIN STREAK!`;
     }
 
+    // Profit
+    let shouldShowProfit = false;
+    let profitText = '';
+    if (player?.lastProfitGain && player.lastProfitGain > 1400000) {
+        const profitRaid = new Audio('media/sounds/earnings/profit.mp3');
+        profitRaid.volume = 0.15;
+        profitRaid.play();
+
+        profitText = `${player.name} just got out with ${player.lastProfitGain.toLocaleString()} RUB!`
+
+        shouldShowProfit = true;
+    }
+
     // Killstreak
     const kills = player.lastRaidKills;
-    if (!isOnRaidStreak && player.lastRaidSurvived && player.lastRaidKills > 1 && !player.banned) {
+    if (!isOnRaidStreak && !shouldShowProfit && player.lastRaidSurvived && player.lastRaidKills > 1 && !player.banned) {
         let killStreak;
         let soundFile;
         let notificationText;
@@ -202,7 +220,7 @@ async function showPlayerNotification(player) {
             <div class="notification-header-r">
                 <img src="${player.profilePicture}" alt="${player.name}'s avatar" class="notification-avatar-r" onerror="this.src='media/default_avatar.png';">
                 <div class="notification-text-r">
-                    <span class="notification-name-r" style="color:${accountColor}">
+                    <span class="${player.isWinner? `user-name Legendary` : `notification-name-r`}" style="color:${accountColor}; margin-bottom: 4px; font-weight: 700;">
                         ${specialIconNotification}${player.teamTag ? `[${player.teamTag}]` : ``} ${player.name}
                     </span>
                     <span class="notification-info-r">
@@ -219,7 +237,7 @@ async function showPlayerNotification(player) {
                 <span class="raid-meta-notify">
                     ${player.lastRaidMap || 'Unknown'} • ${player.lastRaidAs || 'N/A'} ${player.lastRaidSurvived ? `` : `• Killed by ${player.agressorName}`} • ${player.lastRaidEXP} EXP
                 </span>
-                ${kills > 5 ? `
+                ${(kills > 5 && !shouldShowProfit) ? `
                     <span class="notification-last-raid-streak">
                         ${streakNotificationKillText}
                     </span>
@@ -228,6 +246,11 @@ async function showPlayerNotification(player) {
                         ${streakNotificationKillText}
                     </span>
                     `}
+                ${shouldShowProfit ? `
+                    <span class="notification-last-raid-profit">
+                        ${profitText}
+                    </span>
+                    ` : ``}
             </div>
         </div>
     `;

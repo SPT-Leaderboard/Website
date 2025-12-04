@@ -1169,7 +1169,7 @@ function generateBadgesHTML(player) {
             condition: (seasons) => seasons > 4,
             icon: "bx bxs-crown",
             style: "color: #FFD700; text-shadow: 0 0 5px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFD700;",
-            tooltip: (seasons) => `${seasons} seasons of service. Meet a legend!`
+            tooltip: (seasons) => `${seasons} seasons of service. Meet the legend!`
         }
     ];
 
@@ -1178,6 +1178,14 @@ function generateBadgesHTML(player) {
         badges += `<div class="badge tooltip">
             <img src="media/prestige${player.prestige}.png" width="40" height="40" alt="Prestige">
             <span class="tooltiptext">This player has reached prestige level ${player.prestige}</span>
+        </div>`;
+    }
+
+    // Has won last season
+    if (player.isWinner) {
+        badges += `<div class="badge tooltip">
+            <em class="bx  bxs-trophy-star" style="color:rgba(252, 255, 91, 1);"></em>
+            <span class="tooltiptext">This player is a winner of previous Season!</span>
         </div>`;
     }
 
@@ -1197,6 +1205,7 @@ function generateBadgesHTML(player) {
         </div>`;
     }
 
+    // Dev
     if (player.dev) {
         badges += `<div class="badge tooltip">
             <img src="media/leaderboard_icons/icon_developer.png" style="width: 20px; height: 20px">
