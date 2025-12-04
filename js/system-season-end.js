@@ -3,6 +3,33 @@ let audioElements = {};
 let lastPlayed = null;
 
 // Season end screen
+async function playAppropriateTrack(diff) {
+    let trackToPlay = null;
+
+    if (diff <= 30000) { // 0:30
+        trackToPlay = 'season/season_end3';
+    } else if (diff <= 85000) { // 1:25
+        trackToPlay = 'season/season_end2';
+    } else if (diff <= 145000) { // 2:25
+        trackToPlay = 'season/season_end1';
+    }
+
+    // If track changed
+    if (trackToPlay && lastPlayed !== trackToPlay) {
+        // Stop all tracks
+        Object.values(audioElements).forEach(audio => {
+            audio.pause();
+            audio.currentTime = 0;
+        });
+
+        lastPlayed = trackToPlay;
+        audioElements[trackToPlay].play().catch(e => {
+            console.warn(`Couldn't play ${trackToPlay}:`, e);
+        });
+
+    }
+}
+
 async function endSeason() {
     clearInterval(timerInterval);
     const stats = calculateGlobalStats(leaderboardData);
@@ -18,14 +45,12 @@ async function endSeason() {
         contMusic.loop = true;
         contMusic.play();
 
-        setTimeout(() => {
-            videoBackground.style.opacity = '0.5';
+        videoBackground.style.opacity = '0.5';
 
-            // Start showing player names after a short delay
-            setTimeout(() => {
-                showAllPlayerNames(leaderboardData);
-            }, 500);
-        }, 100);
+        // Start showing player names after a short delay
+        setTimeout(() => {
+            showAllPlayerNames(leaderboardData);
+        }, 500);
     });
 
     const roundedBillions = Math.round(stats.totalSalesSum / 1_000_000_000);
@@ -324,42 +349,6 @@ function preloadAudio() {
     audioElements['season/season_end_ambience'].loop = true;
 }
 
-async function playAppropriateTrack(diff) {
-    let trackToPlay = null;
-
-    if (diff <= 0) {
-        if (isDataReady) {
-            await endSeason();
-        }
-        return;
-    } else if (diff <= 30000) {
-        trackToPlay = 'season/season_end3';
-    } else if (diff <= 85000) {
-        trackToPlay = 'season/season_end2';
-    } else if (diff <= 145000) {
-        trackToPlay = 'season/season_end1';
-    }
-
-    if (trackToPlay && lastPlayed !== trackToPlay) {
-        if (lastPlayed && audioElements[lastPlayed]) {
-            audioElements[lastPlayed].volume = 0.4;
-            fadeOutAudio(audioElements[lastPlayed], 1000);
-        }
-
-        lastPlayed = trackToPlay;
-        const currentAudio = audioElements[trackToPlay];
-        currentAudio.currentTime = 0;
-        currentAudio.volume = 0;
-
-        try {
-            await currentAudio.play();
-            fadeInAudio(currentAudio, 2000, 0.4);
-        } catch (e) {
-            console.warn(`Couldn't play ${trackToPlay}:`, e);
-        }
-    }
-}
-
 function showAllPlayerNames(players) {
     const overlay = document.getElementById('seasonOverlay');
 
@@ -496,35 +485,6 @@ function fadeOutAllElements(darkOverlay, memoryTitle, namesContainer) {
             if (namesContainer.parentNode) namesContainer.parentNode.removeChild(namesContainer);
         }, 2000);
     }, 1000);
-}
-
-function fadeOutAudio(audio, duration) {
-    const startVolume = audio.volume;
-    const step = startVolume / (duration / 50);
-
-    const fadeOut = setInterval(() => {
-        if (audio.volume > step) {
-            audio.volume -= step;
-        } else {
-            audio.volume = 0;
-            audio.pause();
-            clearInterval(fadeOut);
-        }
-    }, 50);
-}
-
-function fadeInAudio(audio, duration, targetVolume) {
-    audio.volume = 0;
-    const step = targetVolume / (duration / 50);
-
-    const fadeIn = setInterval(() => {
-        if (audio.volume < targetVolume - step) {
-            audio.volume += step;
-        } else {
-            audio.volume = targetVolume;
-            clearInterval(fadeIn);
-        }
-    }, 50);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
