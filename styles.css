@@ -1313,9 +1313,9 @@ button:hover,
 }
 
 .player-name-gold {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: bold;
-    font-size: 1.2rem;
+    font-family: 'Bender Bold', sans-serif;
+    font-weight: bolder;
+    font-size: 1.1rem;
     color: transparent;
     background: linear-gradient(45deg,
             #ffd700 0%,
@@ -1331,8 +1331,11 @@ button:hover,
     border-radius: 6px;
     padding: 4px 8px;
     display: inline-block;
+    letter-spacing: 1px;
+}
+
+.player-name-gold.only-name {
     position: relative;
-    letter-spacing: 0.5px;
 }
 
 .player-name-gold::before {
@@ -1354,30 +1357,21 @@ button:hover,
         inset 0 -1px 0 rgba(120, 90, 0, 0.3);
 }
 
-@keyframes gold-glow {
-
-    0%,
-    100% {
-        box-shadow:
-            0 0 10px rgba(255, 215, 0, 0.4),
-            0 0 20px rgba(255, 215, 0, 0.2);
-    }
-
-    50% {
-        box-shadow:
-            0 0 15px rgba(255, 215, 0, 0.7),
-            0 0 30px rgba(255, 215, 0, 0.4),
-            0 0 40px rgba(255, 215, 0, 0.2);
-    }
+.badge-premium {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.player-name-gold {
-    animation: gold-glow 4s ease-in-out infinite;
-    box-shadow:
-        0 0 0 1px rgba(255, 215, 0, 0.1),
-        0 0 8px rgba(255, 215, 0, 0.2);
+.badge-premium .bxs-bolt {
+    font-size: 1.2em;
+    background: linear-gradient(135deg, #8a2be2, #da70d6, #9370db);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
 }
-
 
 /* Stats bar */
 .top-stats-bar {
@@ -2897,7 +2891,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .pmc-level {
-position: relative;
+    position: relative;
     bottom: 45px;
     font-family: monospace;
     background-color: #ffffff14;
@@ -5416,15 +5410,13 @@ position: relative;
     font-size: 19px;
     font-weight: 700;
     text-align: center;
-    
-    background-image: linear-gradient(
-        90deg,
-        #fbff00 0%,
-        #f8ff92 25%,
-        #fbff00 50%,
-        #efff95 75%,
-        #fbff00 100%
-    );
+
+    background-image: linear-gradient(90deg,
+            #fbff00 0%,
+            #f8ff92 25%,
+            #fbff00 50%,
+            #efff95 75%,
+            #fbff00 100%);
     background-size: 200% auto;
     color: transparent;
     background-clip: text;
@@ -5440,7 +5432,7 @@ position: relative;
     0% {
         background-position: 200% center;
     }
-    
+
     100% {
         background-position: -200% center;
     }
