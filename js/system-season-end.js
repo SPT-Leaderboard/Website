@@ -28,7 +28,7 @@ async function endSeason() {
         }, 100);
     });
 
-    const roundedBillions = Math.round(stats.totalSalesSum / 1_000_000_000_000);
+    const roundedBillions = Math.round(stats.totalSalesSum / 1_000_000_000);
     const roundedDamage = Math.round(stats.totalDamage / 1_000_000);
 
     const overlay = document.createElement('div');
@@ -85,8 +85,8 @@ async function endSeason() {
                             <div class="stat-label">HOTTEST MAP</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">${roundedBillions} TRILLION</div>
-                            <div class="stat-label">RUBLES TRADED</div>
+                            <div class="stat-value">${roundedBillions} BILLION</div>
+                            <div class="stat-label">RUBLES TRADED ACROSS</div>
                         </div>
                     </div>
                 </div>
@@ -135,7 +135,7 @@ async function endSeason() {
                 <div class="facts-grid">
                     <div class="fact-card">
                         <div class="fact-icon"><img src="media/season_end/Mastering.png" width="20px" height="25px"></div>
-                        <div class="fact-text">${stats.mostDeadlyWeapon} was the deadliest weapon</div>
+                        <div class="fact-text">${stats.topKillsWeapon} was the deadliest weapon with ${stats.topKillsWeaponCount} kills</div>
                     </div>
                     <div class="fact-card">
                         <div class="fact-icon"><img src="media/season_end/icon_unique_id.png" width="25px" height="25px"></div>
@@ -189,14 +189,14 @@ function calculateGlobalStats(players) {
     let topKillsWeaponCount = 0;
 
     players.forEach(player => {
-        if (!player.banned) {
-            const kd = (player.killToDeathRatio && player.pmcRaids > 50) ?? 0;
-            const kills = player.pmcKills ?? 0;
-            const deaths = player.pmcDeaths ?? 0;
-            const playTime = player.totalPlayTime ?? 0;
-            const raids = player.totalRaids ?? 0;
-            const survived = player.pmcSurvived ?? 0;
-            const damage = player.damage ?? 0;
+        if (!player.banned && !player.isCasual) {
+            const kd = player.killToDeathRatio || 0;
+            const kills = player.pmcKills || 0;
+            const deaths = player.pmcDeaths || 0;
+            const playTime = player.totalPlayTime || 0;
+            const raids = player.totalRaids || 0;
+            const survived = player.pmcSurvived || 0;
+            const damage = player.damage || 0;
 
             totalKills += kills;
             totalDeaths += deaths;
@@ -215,18 +215,26 @@ function calculateGlobalStats(players) {
             }
 
             if (player.weapons) {
-                for (const playerId in player.weapons) {
-                    const weapons = player.weapons[playerId].weapons;
+                for (const profileId in player.weapons) {
+                    const profileData = player.weapons[profileId];
+
+                    // Проверяем наличие weapons в profileData
+                    if (!profileData.weapons) continue;
+
+                    const weapons = profileData.weapons;
+
                     for (const weaponName in weapons) {
                         const weapon = weapons[weaponName];
-                        const weaponKills = weapon.stats.kills;
+                        const weaponKills = weapon.stats?.kills || 0;
 
-                        weaponStats[weaponName] = (weaponStats[weaponName] || 0) + weaponKills;
+                        if (weaponKills > 0) {
+                            const weaponKey = weapon.originalId || weaponName;
+                            weaponStats[weaponKey] = (weaponStats[weaponKey] || 0) + weaponKills;
 
-                        //topKillsWeapon
-                        if (weaponKills > topKillsWeaponCount) {
-                            topKillsWeaponCount = weaponKills;
-                            topKillsWeapon = weaponName;
+                            if (weaponStats[weaponKey] > topKillsWeaponCount) {
+                                topKillsWeaponCount = weaponStats[weaponKey];
+                                topKillsWeapon = weaponName;
+                            }
                         }
                     }
                 }
@@ -257,17 +265,8 @@ function calculateGlobalStats(players) {
             }
 
             if (!topKD || kd > topKD.killToDeathRatio) topKD = player;
-            if (!topKills || kills > topKills.totalKills) topKills = player;
+            if (!topKills || kills > topKills.pmcKills) topKills = player;
             if (!topPlayTime || playTime > topPlayTime.totalPlayTime) topPlayTime = player;
-        }
-    });
-
-    let mostDeadlyWeapon = "Unknown";
-    let maxKills = 0;
-    Object.entries(weaponStats).forEach(([weapon, kills]) => {
-        if (kills > maxKills) {
-            maxKills = kills;
-            mostDeadlyWeapon = weapon;
         }
     });
 
@@ -294,14 +293,14 @@ function calculateGlobalStats(players) {
         topKD,
         topKills,
         topPlayTime,
-        mostDeadlyWeapon,
+        topKillsWeapon,
+        topKillsWeaponCount,
         totalWeapons: Object.keys(weaponStats).length,
         mostPopularMap,
         richestTrader,
         longestShot,
         longestShotPlayer,
-        totalSalesSum,
-        topKillsWeapon: topKillsWeapon
+        totalSalesSum
     };
 }
 
@@ -380,6 +379,7 @@ function showAllPlayerNames(players) {
     `;
 
     // "In Memory of..."
+    // Lazy to move it to CSS.. So here you go, enjoy
     const memoryTitle = document.createElement('div');
     memoryTitle.id = 'memoryTitle';
     memoryTitle.textContent = 'In memory of our Fallen and Risen. Your sacrifice will not be forgotten.';
@@ -388,13 +388,12 @@ function showAllPlayerNames(players) {
         top: 5%;
         left: 50%;
         transform: translateX(-50%);
-        font-family: 'Rajdhani', sans-serif;
-        font-size: 38px;
+        font-family: Rajdhani, sans-serif;
+        font-size: 18px;
         font-weight: 700;
-        color: #ffffff;
-        text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        color: rgb(177 176 176);
         z-index: 1001;
-        opacity: 0;
+        opacity: 1;
         transition: opacity 2s ease-in-out;
         text-align: center;
     `;
