@@ -269,6 +269,20 @@
     border: 2px solid #8b5cf6;
 }
 
+.theme-premium .playermodel-image {
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    padding: 15px 0 15px;
+    border: 1px solid #ffffff30;
+}
+
+.theme-premium #playermodel {
+    background: url(/media/rewards/other/premium-float.gif);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
 /* Kitties/Penguins :D */
 .kittyrew {
     position: absolute;

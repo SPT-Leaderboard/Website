@@ -207418,7 +207418,34 @@
       "lastRaidRanThrough": false,
       "lcPointsEarned": 42,
       "pmcPlayTime": 8147,
-      "isPremium": true
+      "isPremium": true,
+      "isWinner": true,
+      "showcase": {
+        "1": {
+        "item_id": "6489870774a806211e4fb685",
+        "name": "4.6x30mm AP SX ammo pack (40 pcs)",
+        "icon_path": "/../api/network/media/market/6489870774a806211e4fb685.png",
+        "rarity": "epic",
+        "base_price": 2500,
+        "slot": 1
+        },
+        "2": {
+        "item_id": "5d1b317c86f7742523398392",
+        "name": "Hand drill",
+        "icon_path": "/../api/network/media/market/5d1b317c86f7742523398392.png",
+        "rarity": "epic",
+        "base_price": 1500,
+        "slot": 2
+        },
+        "3": {
+        "item_id": "619cbfeb6b8a1b37a54eebfa",
+        "name": "Bulbex cable cutter",
+        "icon_path": "/../api/network/media/market/619cbfeb6b8a1b37a54eebfa.png",
+        "rarity": "rare",
+        "base_price": 1800,
+        "slot": 3
+        }
+      }
     },
     {
       "id": "690ef543afb4935e70c873b4",

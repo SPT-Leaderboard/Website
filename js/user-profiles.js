@@ -341,6 +341,30 @@ async function showPublicProfile(container, player) {
                     </div>
                 </div>
 
+                ${player.showcase && Object.keys(player.showcase).length > 0 ? `
+                <div class="player-overview player-showcase">
+                    <div class="showcase-mini">
+                        <div class="showcase-mini-header">
+                            <span class="showcase-title">Item Showcase</span>
+                        </div>
+                        <div class="showcase-items-mini">
+                            ${Object.values(player.showcase).map(item => `
+                                <div class="showcase-item-mini" data-rarity="${item.rarity}">
+                                    <div class="item-mini-icon">
+                                        <img src="${item.icon_path.replace(/^\/\.\.\//, '/')}" alt="${item.name}">
+                                        <div class="item-mini-glow"></div>
+                                    </div>
+                                    <div class="item-mini-tooltip">
+                                        <span class="item-mini-name">${item.name}</span>
+                                        <span class="item-mini-price">${item.base_price} LC</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
                 <div class="badges">${badgesHTML}</div>
                 <div class="registerDate">Joined: ${regDate}</div>
                 <div class="pmc-side-wrapper">
