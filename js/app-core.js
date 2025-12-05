@@ -383,7 +383,7 @@ async function displayLeaderboard(data) {
                 boostValue < 0 ? 'bx-arrow-down-stroke' : 'bxs-radio-circle';
 
             badge = `
-            ${player.isPremium? `
+            ${player.isPremium ? `
             <div class="badge-lb tooltip" style="display: inline !important;">
                 <em class='bx bxs-shield-alt-2' style="color:rgb(100, 255, 165);"></em>
                 <span class="tooltiptext" style="bottom: 170%;">Profile in good standing</span>
@@ -508,8 +508,8 @@ async function displayLeaderboard(data) {
         row.innerHTML = `
             <td class="rank ${rankClass}">${player.rank} ${player.medal}</td>
             <td class="teamtag ${teamTagClass}" data-team="${player.teamTag ? player.teamTag : ``}">${player.teamTag ? `[${player.teamTag}]` : ``}</td>
-            <td class="${player.isPremium? 'theme-premium' : ``} player-name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''} data-player-id="${player.id || '0'}">
-                <div class="${player.isPremium? 'theme-premium' : ``} lb-row-wrapper">${`<img class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';" />`}
+            <td class="${player.isPremium ? 'theme-premium' : player.hasWinterTheme ? 'theme-winter' : ``} player-name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''} data-player-id="${player.id || '0'}">
+                <div class="${player.isPremium ? 'theme-premium' : player.hasWinterTheme ? 'theme-winter' : ``} lb-row-wrapper">${`<img class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';" />`}
                 ${accountIcon} <span class="${finalNameClass}">${player.name}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div></div>
             </td>
             <td>${lastGame || 'N/A'}</td>

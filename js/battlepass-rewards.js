@@ -53,7 +53,7 @@ function applyRewards(player, elements) {
     }
 
     // Apply profile decal
-    if (!["redshade", "steelshade", "gradient"].includes(player.profileTheme.toLowerCase())) {
+    if (!["redshade", "steelshade", "premium", "gradient"].includes(player.profileTheme.toLowerCase())) {
         const decalMap = {
             "cult-signs2": { level: 20, class: 'cult-signs2' },
             "cult-signs": { level: 15, class: 'cult-signs' },

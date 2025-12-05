@@ -158,6 +158,7 @@
     background: linear-gradient(169deg, #5a6166 0%, #56636e 42%, #3F4952 69%);
 }
 
+/* Special theme premium */
 .theme-premium {
     background: linear-gradient(169deg,
             #12071f 0%,
@@ -280,6 +281,297 @@
     padding: 5px 18px 5px 18px;
     backdrop-filter: blur(5px);
     border-radius: 10px;
+}
+
+/* winter theme */
+.theme-winter {
+    background: linear-gradient(169deg,
+            #0c1b2f 0%,
+            #1a2f4d 25%,
+            #2c4d73 50%,
+            #1a2f4d 75%,
+            #0c1b2f 100%);
+    background-size: 300% 300%;
+    animation: winterBgMove 12s ease-in-out infinite;
+    position: relative;
+
+}
+
+.theme-winter::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 80%, rgba(96, 165, 250, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(186, 230, 253, 0.1) 0%, transparent 50%),
+        url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 5L55 20L70 25L55 30L50 45L45 30L30 25L45 20L50 5Z' fill='white' fill-opacity='0.05'/%3E%3C/svg%3E");
+    animation: winterShimmer 12s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes winterBgMove {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+@keyframes winterShimmer {
+
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.theme-winter .stat-card {
+    position: relative;
+    overflow: hidden;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(96, 165, 250, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 4px 20px rgba(56, 189, 248, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+.theme-winter .stat-card:hover {
+    border-color: rgba(56, 189, 248, 0.4);
+    transform: translateY(-2px);
+    box-shadow:
+        0 8px 30px rgba(56, 189, 248, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.theme-winter .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(186, 230, 253, 0.1),
+            transparent);
+    transition: left 0.7s ease;
+}
+
+.theme-winter .stat-card:hover::before {
+    left: 100%;
+}
+
+.theme-winter .stat-value {
+    font-weight: 800;
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9, #0284c7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+}
+
+.theme-winter .stat-label {
+    color: #bae6fd;
+    font-weight: 500;
+}
+
+.theme-winter .user-main-card {
+    position: relative;
+    background: linear-gradient(145deg,
+            rgba(15, 23, 42, 0.85),
+            rgba(30, 58, 138, 0.7));
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    box-shadow:
+        0 0 30px rgba(56, 189, 248, 0.25),
+        inset 0 1px 1px rgba(255, 255, 255, 0.15),
+        0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.theme-winter .user-main-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0L50 50L0 100L50 50L100 100L50 50L100 0L50 50Z' fill='none' stroke='%2338bdf8' stroke-width='0.5' stroke-opacity='0.1'/%3E%3C/svg%3E");
+    pointer-events: none;
+}
+
+.theme-winter .player-avatar {
+    border: 2px solid #38bdf8;
+    box-shadow:
+        0 0 20px rgba(56, 189, 248, 0.4),
+        inset 0 0 20px rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.theme-winter .player-avatar:hover {
+    border-color: #7dd3fc;
+    box-shadow:
+        0 0 30px rgba(56, 189, 248, 0.6),
+        inset 0 0 30px rgba(255, 255, 255, 0.15);
+    transform: scale(1.02);
+}
+
+.theme-winter .player-name {
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg,
+            rgba(56, 189, 248, 0.2),
+            rgba(14, 165, 233, 0.1));
+    backdrop-filter: blur(10px);
+    padding: 5px 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-winter #playermodel {
+    background: linear-gradient(145deg,
+            rgba(15, 23, 42, 0.9),
+            rgba(30, 58, 138, 0.7));
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    box-shadow:
+        0 0 25px rgba(56, 189, 248, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-winter #playermodel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/media/rewards/other/snow-effect.gif');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.theme-winter .playermodel-image {
+    backdrop-filter: blur(20px);
+    border-radius: 15px;
+    padding: 15px 0 15px;
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    background: rgba(15, 23, 42, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-winter .playermodel-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg,
+            transparent 30%,
+            rgba(56, 189, 248, 0.1) 50%,
+            transparent 70%);
+    animation: iceFlow 4s linear infinite;
+    pointer-events: none;
+}
+
+.theme-winter .exp-progress {
+    background: linear-gradient(90deg,
+            #38bdf8,
+            #0ea5e9,
+            #0284c7,
+            #38bdf8);
+    background-size: 200% 100%;
+    animation: iceFlow 3s linear infinite;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+.theme-winter .exp-progress-wp {
+    background: linear-gradient(90deg,
+            #7dd3fc,
+            #38bdf8,
+            #0ea5e9,
+            #7dd3fc);
+    background-size: 200% 100%;
+    animation: iceFlow 3s linear infinite;
+    box-shadow: 0 0 10px rgba(125, 211, 252, 0.5);
+}
+
+.theme-winter .profile-section {
+    background: linear-gradient(145deg,
+            rgba(15, 23, 42, 0.7),
+            rgba(30, 58, 138, 0.5));
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    box-shadow:
+        0 4px 20px rgba(56, 189, 248, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+}
+
+.theme-winter .badge {
+    background: linear-gradient(135deg,
+            rgba(56, 189, 248, 0.2),
+            rgba(14, 165, 233, 0.15));
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: #bae6fd;
+}
+
+.theme-winter .trader-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(96, 165, 250, 0.2);
+    transition: all 0.3s ease;
+}
+
+.theme-winter .trader-card:hover {
+    border-color: rgba(56, 189, 248, 0.5);
+    background: rgba(15, 23, 42, 0.8);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(56, 189, 248, 0.15);
+}
+
+.theme-winter .trader-standing {
+    color: #7dd3fc;
+}
+
+.theme-winter.lb-row-wrapper {
+    background: linear-gradient(90deg,
+            rgba(15, 23, 42, 0.6),
+            rgba(30, 58, 138, 0.4));
+    border: 2px solid rgba(56, 189, 248, 0.3);
+    padding: 5px 18px;
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.theme-winter.lb-row-wrapper:hover {
+    border-color: rgba(56, 189, 248, 0.6);
+    background: linear-gradient(90deg,
+            rgba(15, 23, 42, 0.8),
+            rgba(30, 58, 138, 0.6));
+    transform: translateX(5px);
 }
 
 /* Kitties/Penguins :D */
