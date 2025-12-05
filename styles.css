@@ -765,6 +765,12 @@ h1 {
 }
 
 /* Leader board */
+.lb-row-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
 table {
     background-color: rgb(57 89 131 / 29%);
     width: 100%;

@@ -186,22 +186,6 @@
     overflow: hidden;
 }
 
-.theme-premium::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg,
-            transparent 30%,
-            rgba(168, 85, 247, 0.05) 50%,
-            transparent 70%);
-    animation: premiumScan 20s linear infinite;
-    pointer-events: none;
-    overflow: hidden;
-}
-
 @keyframes premiumBgMove {
 
     0%,
@@ -223,16 +207,6 @@
 
     50% {
         opacity: 1;
-    }
-}
-
-@keyframes premiumScan {
-    0% {
-        transform: translateX(-100%) translateY(-100%) rotate(45deg);
-    }
-
-    100% {
-        transform: translateX(100%) translateY(100%) rotate(45deg);
     }
 }
 
@@ -281,6 +255,31 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+}
+
+.theme-premium.player-name {
+    border-radius: 5px;
+    border: 2px solid #ffffff30;
+    background: url(/media/rewards/other/premium-float.gif);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.theme-premium .lb-profile-picture {
+    border: 2px solid #8b5cf6;
+}
+
+.theme-premium .lb-profile-picture:hover {
+    border: 2px solid #b392ff !important;
+}
+
+.theme-premium.lb-row-wrapper {
+    background: none;
+    border: 2px solid #ffffff30;
+    padding: 5px 18px 5px 18px;
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
 }
 
 /* Kitties/Penguins :D */

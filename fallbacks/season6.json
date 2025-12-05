@@ -207419,8 +207419,8 @@
       "lcPointsEarned": 42,
       "pmcPlayTime": 8147,
       "isPremium": true,
-      "isWinner": true,
-      "showcase": {
+      "isWinner": false,
+      "showcase2": {
         "1": {
         "item_id": "6489870774a806211e4fb685",
         "name": "4.6x30mm AP SX ammo pack (40 pcs)",

@@ -383,6 +383,24 @@ async function displayLeaderboard(data) {
                 boostValue < 0 ? 'bx-arrow-down-stroke' : 'bxs-radio-circle';
 
             badge = `
+            ${player.isPremium? `
+            <div class="badge-lb tooltip" style="display: inline !important;">
+                <em class='bx bxs-shield-alt-2' style="color:rgb(100, 255, 165);"></em>
+                <span class="tooltiptext" style="bottom: 170%;">Profile in good standing</span>
+            </div>
+            <div class="badge-lb tooltip badge-premium" style="display: inline !important;">
+                <em class="bx bxs-bolt"></em>
+                <span class="tooltiptext" style="bottom: 170%;">Premium BattlePass Owner</span>
+            </div>
+            <div class="boost-container tooltip">
+                <span class="boost-value">${boostValue.toFixed(1)}%</span>
+                <em class='bx ${boostIcon}' style="color:${boostColor}; font-size:0.8em"></em>
+                <em class='bx bxs-bolt' style="color:${boostColor}"></em>
+                <span class="tooltiptext">
+                    ${getBoostDescription(boostValue)}
+                </span>
+            </div>
+            ` : `
             <div class="badge-lb tooltip">
                 <em class='bx bxs-shield-alt-2' style="color:rgb(100, 255, 165);"></em>
                 <span class="tooltiptext">Profile in good standing</span>
@@ -394,7 +412,8 @@ async function displayLeaderboard(data) {
                 <span class="tooltiptext">
                     ${getBoostDescription(boostValue)}
                 </span>
-            </div>`;
+            </div> `}
+            `
         }
 
         // Account type handling
@@ -489,9 +508,9 @@ async function displayLeaderboard(data) {
         row.innerHTML = `
             <td class="rank ${rankClass}">${player.rank} ${player.medal}</td>
             <td class="teamtag ${teamTagClass}" data-team="${player.teamTag ? player.teamTag : ``}">${player.teamTag ? `[${player.teamTag}]` : ``}</td>
-            <td class="player-name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''} data-player-id="${player.id || '0'}">
-                ${`<img class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';" />`}
-                ${accountIcon} <span class="${finalNameClass}">${player.name}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div>
+            <td class="${player.isPremium? 'theme-premium' : ``} player-name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''} data-player-id="${player.id || '0'}">
+                <div class="${player.isPremium? 'theme-premium' : ``} lb-row-wrapper">${`<img class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';" />`}
+                ${accountIcon} <span class="${finalNameClass}">${player.name}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div></div>
             </td>
             <td>${lastGame || 'N/A'}</td>
             <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class='bx  bxs-share'></i> </button></td>
@@ -755,25 +774,6 @@ function convertTimeToSeconds(time) {
  */
 async function calculatePlaces(data) {
 
-    data.forEach((player) => {
-        if (player.banned) {
-            player.totalScore = 0;
-            player.damage = 0;
-            player.killToDeathRatio = 0;
-            player.averageLifeTime = 0;
-            player.pmcRaids = 0;
-            player.scavRaids = 0;
-            player.survivalRate = 0;
-            player.rank = "BANNED";
-            player.medal = "";
-            player.profilePicture = "media/default_banned.png";
-            player.survivedToDiedRatio = 0;
-            return;
-        }
-    })
-
-    data.sort((a, b) => b.totalScore - a.totalScore)
-
     data.forEach((player, index) => {
         if (player.banned) {
             player.totalScore = 0;
@@ -799,6 +799,8 @@ async function calculatePlaces(data) {
         player.rank = index + 1;
         player.medal = ['🥇', '🥈', '🥉'][index] || '';
     })
+
+    data.sort((a, b) => b.totalScore - a.totalScore);
 }
 
 // Get skill rank label
