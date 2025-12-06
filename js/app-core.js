@@ -165,10 +165,10 @@ async function prepareSeasonData() {
 
         // TODO: Enable this back next season
         // Load previous winners and run it only once
-        //  if (!ranOnlyOnce) {
-        //    ranOnlyOnce = true;
-        //    loadPreviousSeasonWinners();
-        //  }
+        if (!ranOnlyOnce) {
+            ranOnlyOnce = true;
+            loadPreviousSeasonWinners();
+        }
 
         saveCurrentStats();
     }
@@ -197,7 +197,7 @@ async function loadPreviousSeasonWinners() {
         const data = await response.json();
         const previousSeasonData = data.leaderboard || [];
 
-        calculateRanks(previousSeasonData);
+        calculatePlaces(previousSeasonData);
         displayWinners(previousSeasonData);
     } catch (error) {
         console.error('Error loading previous season:', error);
