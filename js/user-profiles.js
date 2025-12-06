@@ -149,10 +149,17 @@ async function showPublicProfile(container, player) {
 
     // Show fav weapon if is using Stattrack
     let bestWeapon = null;
-    if (player?.modWeaponStats?.weapons?.[player.permaLink]?.weapons) {
-        bestWeapon = await getBestWeapon(player.permaLink, player.modWeaponStats);
-        if (!bestWeapon) player.isUsingStattrack = false;
-    } else {
+    player.isUsingStattrack = false;
+
+    try {
+        if (player?.permaLink && player.stattrack_weapons[player.permaLink]) {
+            bestWeapon = await getBestWeapon(player.stattrack_weapons[player.permaLink]);
+            if (bestWeapon) {
+                player.isUsingStattrack = true;
+            }
+        }
+    } catch (error) {
+        console.error("Error getting best weapon:", error);
         player.isUsingStattrack = false;
     }
 
@@ -772,7 +779,7 @@ async function showPublicProfile(container, player) {
     // Render stats and init the profile
     // Skip this if player is not using Stattrack
     if (player.isUsingStattrack) {
-        renderWeaponList(player.permaLink, player.modWeaponStats || {});
+        renderWeaponList(player.permaLink, player.stattrack_weapons || {});
     }
 
     if (player.raidHitsHistory) {
@@ -1081,7 +1088,13 @@ async function renderWeaponList(playerId, modWeaponStats) {
     const weaponsContainer = document.getElementById('weapons-container');
     weaponsContainer.innerHTML = '';
 
-    const playerWeapons = modWeaponStats.weapons?.[playerId]?.weapons;
+    const playerWeapons = modWeaponStats[playerId] || {};
+
+    if (Object.keys(playerWeapons).length === 0) {
+        weaponsContainer.style.display = 'none';
+        return;
+    }
+
 
     const sortedWeapons = Object.entries(playerWeapons)
         .filter(([_, weaponData]) => weaponData.stats?.kills > 0)
@@ -1092,7 +1105,7 @@ async function renderWeaponList(playerId, modWeaponStats) {
 
     sortedWeapons.forEach(([weaponName, weaponData], index) => {
         // Clean weapon names from stars
-        const cleanWeaponName = weaponName.replace(/[★☆]/g, "");
+        const cleanWeaponName = weaponName.replace(/[★☆]/g, "").trim();
 
         const kills = weaponData.stats?.kills || 0;
         const shotsFired = weaponData.stats?.totalShots || 0;
@@ -1136,14 +1149,14 @@ async function renderWeaponList(playerId, modWeaponStats) {
     weaponsContainer.appendChild(weaponList);
 }
 
-function getBestWeapon(playerId, modWeaponStats) {
-    if (!modWeaponStats?.weapons?.[playerId]?.weapons) {
+function getBestWeapon(modWeaponStats) {
+    if (!modWeaponStats) {
         return null;
     }
 
     let maxKills = 0;
     let bestWeapon = null;
-    const playerWeapons = modWeaponStats.weapons[playerId].weapons;
+    const playerWeapons = modWeaponStats;
 
     // Go through all weapons
     for (const [weaponName, weaponData] of Object.entries(playerWeapons)) {
@@ -1165,7 +1178,7 @@ function getBestWeapon(playerId, modWeaponStats) {
 
 // Clean weapon name helper
 function cleanWeaponName(weaponName) {
-    return weaponName.replace(/[★☆]/g, "");
+    return weaponName.replace(/[★☆]/g, "").trim();
 }
 
 // Helper function to generate side images HTML

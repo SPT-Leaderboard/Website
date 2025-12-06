@@ -11,7 +11,10 @@ const MIN_LEVEL = 1;
 async function initHOF(player, bestWeapon) {
     try {
         updatePlayerProfile(player);
-        updatePlayerProfileMastery(player, bestWeapon);
+
+        if (player.isUsingStattrack) {
+            updatePlayerProfileMastery(player, bestWeapon);
+        }
 
         // rewardSystem.js
         refreshRewards(player);
@@ -51,7 +54,7 @@ function calculatePlayerLevel(player) {
         level = Math.max(MIN_LEVEL, Math.min(level, MAX_LEVEL));
 
         // Dynamic
-        const currentLevelExp = totalExp - level * BASE_EXP_PER_LEVEL;
+        const currentLevelExp = totalExp % BASE_EXP_PER_LEVEL;
         const expForNextLevel = BASE_EXP_PER_LEVEL - currentLevelExp;
 
         player.battlePassLevel = level;

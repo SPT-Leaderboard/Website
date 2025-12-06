@@ -99,8 +99,13 @@ function applyRewards(player, elements) {
         }
     };
 
-    if (player.isPremium === true) {
+    if (player.isPremium === true && player.profileTheme.toLowerCase() === 'premium') {
         mainBackground.classList.add('theme-premium');
+    }
+
+    if (player.profileTheme.toLowerCase() === 'winter') {
+        mainBackground.classList.remove('theme-premium');
+        mainBackground.classList.add('theme-winter');
     }
 
     if (player.bp_mainbg === 'none') {

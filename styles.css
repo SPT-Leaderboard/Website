@@ -2843,7 +2843,7 @@ input[type="checkbox"]:checked:hover {
 
 .showcase-items-mini {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     gap: 12px;
     height: 70px;
