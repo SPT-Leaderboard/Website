@@ -165,7 +165,8 @@ async function showPublicProfile(container, player) {
         "theme-default",
         "theme-redshade",
         "theme-steelshade",
-        "theme-premium"
+        "theme-premium",
+        "theme-winter"
     );
     profileModal.classList.add(
         `theme-${player.profileTheme?.toLowerCase()
