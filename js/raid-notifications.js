@@ -110,7 +110,7 @@ async function showPlayerNotification(player) {
     // Profit
     let shouldShowProfit = false;
     let profitText = '';
-    if (player?.lastProfitGain && player.lastProfitGain > 1400000) {
+    if (player?.lastProfitGain && player.lastProfitGain > 3500000) {
         const profitRaid = new Audio('media/sounds/earnings/profit.mp3');
         profitRaid.volume = 0.15;
         profitRaid.play();
