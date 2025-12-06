@@ -110,9 +110,9 @@ async function showPlayerNotification(player) {
     // Profit
     let shouldShowProfit = false;
     let profitText = '';
-    if (player?.lastProfitGain && player.lastProfitGain > 3500000) {
+    if (player?.lastProfitGain && player.lastProfitGain > 15000000) {
         const profitRaid = new Audio('media/sounds/earnings/profit.mp3');
-        profitRaid.volume = 0.15;
+        profitRaid.volume = 0.20;
         profitRaid.play();
 
         profitText = `${player.name} just got out with ${player.lastProfitGain.toLocaleString()} RUB!`
