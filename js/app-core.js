@@ -773,8 +773,8 @@ function convertTimeToSeconds(time) {
  *
  */
 async function calculatePlaces(data) {
-
-    data.forEach((player, index) => {
+    // Обработка банов и кэжуальных игроков
+    data.forEach((player) => {
         if (player.banned) {
             player.totalScore = 0;
             player.damage = 0;
@@ -795,12 +795,27 @@ async function calculatePlaces(data) {
             player.medal = '';
             return;
         }
+    });
 
-        player.rank = index + 1;
-        player.medal = ['🥇', '🥈', '🥉'][index] || '';
-    })
+    // Sorting only non banned players
+    data.sort((a, b) => {
+        if (a.banned && !b.banned) return 1;
+        if (!a.banned && b.banned) return -1;
 
-    data.sort((a, b) => b.totalScore - a.totalScore);
+        return b.totalScore - a.totalScore;
+    });
+
+    let rankCounter = 1;
+
+    data.forEach((player, index) => {
+        if (player.banned || player.isCasual) {
+            return;
+        }
+
+        player.rank = rankCounter;
+        player.medal = ['🥇', '🥈', '🥉'][rankCounter - 1] || '';
+        rankCounter++;
+    });
 }
 
 // Get skill rank label
