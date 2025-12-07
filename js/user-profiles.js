@@ -1105,7 +1105,7 @@ async function renderWeaponList(playerId, modWeaponStats) {
 
     sortedWeapons.forEach(([weaponName, weaponData], index) => {
         // Clean weapon names from stars
-        const cleanWeaponName = weaponName.replace(/[★☆]/g, "").trim();
+        const cleanWeaponName = cleanWeaponNameFunc(weaponName);
 
         const kills = weaponData.stats?.kills || 0;
         const shotsFired = weaponData.stats?.totalShots || 0;
@@ -1129,7 +1129,7 @@ async function renderWeaponList(playerId, modWeaponStats) {
 
         weaponItem.innerHTML = `
             <div class="weapon-info">
-                <div class="weapon-name">${weaponName}</div>
+                <div class="weapon-name">${cleanWeaponName}</div>
                 <div class="weapon-infos">
                     <div class="stat"><span class="stat-label">Kills:</span> ${kills}</div>
                     <div class="stat"><span class="stat-label">Shots:</span> ${shotsFired}</div>
@@ -1162,7 +1162,7 @@ function getBestWeapon(modWeaponStats) {
     for (const [weaponName, weaponData] of Object.entries(playerWeapons)) {
         const kills = weaponData.stats?.kills || 0;
 
-        const cleanWeaponNames = cleanWeaponName(weaponName);
+        const cleanWeaponNames = cleanWeaponNameFunc(weaponName);
         // Found best weapon by kills and assign data
         if (kills > maxKills) {
             maxKills = kills;
@@ -1177,8 +1177,13 @@ function getBestWeapon(modWeaponStats) {
 }
 
 // Clean weapon name helper
-function cleanWeaponName(weaponName) {
-    return weaponName.replace(/[★☆]/g, "").trim();
+function cleanWeaponNameFunc(weaponName) {
+    let cleaned = weaponName.replace(/<color=.*?>/g, "");
+
+    cleaned = cleaned.replace(/<\/color>/g, "");
+    cleaned = cleaned.replace(/[★☆]/g, "");
+    
+    return cleaned.trim();
 }
 
 // Helper function to generate side images HTML
