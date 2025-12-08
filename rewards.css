@@ -158,17 +158,24 @@
     background: linear-gradient(169deg, #5a6166 0%, #56636e 42%, #3F4952 69%);
 }
 
-/* Special theme premium */
+/* ============================================
+   PREMIUM THEME - ENHANCED VERSION
+   ============================================ */
+
 .theme-premium {
-    background: linear-gradient(169deg,
+    background:
+        linear-gradient(169deg,
             #12071f 0%,
             #24093d 25%,
             #4a0b73 50%,
             #24093d 75%,
-            #12071f 100%);
-    background-size: 300% 300%;
+            #12071f 100%),
+        radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
+    background-size: 100% 100%;
     animation: premiumBgMove 8s ease-in-out infinite;
     position: relative;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .theme-premium::before {
@@ -182,7 +189,6 @@
         radial-gradient(circle at 20% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
         radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
         radial-gradient(circle at 40% 40%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
-    animation: premiumShimmer 8s ease-in-out infinite;
     pointer-events: none;
     overflow: hidden;
 }
@@ -199,49 +205,71 @@
     }
 }
 
-@keyframes premiumShimmer {
-
-    0%,
-    100% {
-        opacity: 0.5;
-    }
-
-    50% {
-        opacity: 1;
-    }
-}
-
 .theme-premium .stat-card {
     position: relative;
     overflow: hidden;
-    background: rgba(30, 41, 59, 0.3);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(99, 102, 241, 0.1);
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 10px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .theme-premium .stat-value {
-    font-weight: 800;
-    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    font-weight: 900;
+    background: linear-gradient(135deg, #8b5cf6, #6366f1, #ec4899);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    background-size: 200% 200%;
     position: relative;
+    display: inline-block;
+    letter-spacing: -0.5px;
+}
+
+.theme-premium .stat-label {
+    color: rgba(255, 255, 255, 0.479);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+    letter-spacing: 0.5px;
 }
 
 .theme-premium .user-main-card {
     position: relative;
     background: linear-gradient(145deg,
-            rgba(51, 22, 90, 0.9),
-            rgba(45, 11, 74, 0.9));
-    border: 1px solid rgba(139, 92, 246, 0.5);
+            rgba(51, 22, 90, 0.95),
+            rgba(45, 11, 74, 0.95),
+            rgba(74, 11, 115, 0.8));
+    border: 1px solid rgba(139, 92, 246, 0.6);
     box-shadow:
-        0 0 20px rgba(139, 92, 246, 0.3),
-        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        0 0 40px rgba(139, 92, 246, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+}
+
+.theme-premium .user-main-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.5),
+            transparent);
 }
 
 .theme-premium .player-avatar {
-    border: 2px solid #8b5cf6;
+    border: 2px solid transparent;
+    background: linear-gradient(45deg, #8b5cf6, #6366f1, #ec4899) border-box;
+    padding: 3px;
+    box-shadow:
+        0 0 20px rgba(139, 92, 246, 0.5),
+        0 0 40px rgba(139, 92, 246, 0.3);
+    transition: all 0.3s ease;
 }
 
 .theme-premium .playermodel-image {
@@ -252,10 +280,14 @@
 }
 
 .theme-premium #playermodel {
-    background: url(/media/rewards/other/premium-float.gif);
+    background:
+        linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.1)),
+        url(/media/rewards/other/premium-float.gif);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    background-blend-mode: overlay;
+    border: 2px solid rgba(139, 92, 246, 0.3);
 }
 
 .theme-premium.player-name {
@@ -268,22 +300,221 @@
 }
 
 .theme-premium .lb-profile-picture {
-    border: 2px solid #8b5cf6;
+    border: 2px solid transparent;
+    background: linear-gradient(45deg, #8b5cf6, #6366f1) border-box;
+    padding: 1px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
 }
 
 .theme-premium .lb-profile-picture:hover {
-    border: 2px solid #b392ff !important;
+    border: 3px solid #b392ff !important;
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(179, 146, 255, 0.8);
 }
 
-.theme-premium.lb-row-wrapper {
-    background: none;
-    border: 2px solid #ffffff30;
-    padding: 5px 18px 5px 18px;
-    backdrop-filter: blur(5px);
+.theme-premium .lb-row-wrapper {
+    background: rgba(30, 41, 59, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 10px 20px;
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.theme-premium .lb-row-wrapper:hover {
+    border-color: rgba(139, 92, 246, 0.6);
+    background: rgba(30, 41, 59, 0.5);
+    transform: translateX(5px);
+    box-shadow: 0 5px 20px rgba(139, 92, 246, 0.3);
+}
+
+.theme-premium .exp-bar {
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* winter theme */
+.theme-premium .exp-progress {
+    background: linear-gradient(90deg,
+            #8b5cf6,
+            #6366f1,
+            #ec4899);
+    background-size: 200% 100%;
+    animation: gradMove 2s ease infinite;
+    height: 100%;
+    border-radius: 10px;
+    position: relative;
+}
+
+.theme-premium .exp-progress::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent);
+}
+
+@keyframes gradMove {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+@keyframes shimmerBar {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.theme-premium .trader-card {
+    position: relative;
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.theme-premium .trader-card[data-unlocked="true"] {
+    border-color: rgba(72, 187, 120, 0.3);
+}
+
+.theme-premium .trader-card[data-unlocked="true"]:hover {
+    border-color: rgba(72, 187, 120, 0.6);
+    box-shadow: 0 10px 25px rgba(72, 187, 120, 0.2);
+}
+
+.theme-premium button,
+.theme-premium .comment-submit {
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.theme-premium button::before,
+.theme-premium .comment-submit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent);
+    transition: left 0.5s;
+}
+
+.theme-premium button:hover::before,
+.theme-premium .comment-submit:hover::before {
+    left: 100%;
+}
+
+.theme-premium button:hover,
+.theme-premium .comment-submit:hover {
+    box-shadow:
+        0 10px 20px rgba(139, 92, 246, 0.4),
+        0 0 30px rgba(139, 92, 246, 0.3);
+    background: linear-gradient(135deg, #9c7cf7, #7475f2);
+}
+
+.theme-premium .close-profile-button {
+    background: rgba(139, 92, 246, 0.2);
+    border: 2px solid rgba(139, 92, 246, 0.5);
+    color: #8b5cf6;
+    font-size: 24px;
+    width: 40px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.theme-premium .close-profile-button:hover {
+    background: rgba(139, 92, 246, 0.4);
+    border-color: #8b5cf6;
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+}
+
+.theme-premium .showcase-item-mini {
+    position: relative;
+    border: 2px solid transparent;
+    background: linear-gradient(45deg,
+            rgba(139, 92, 246, 0.1),
+            rgba(99, 102, 241, 0.1)) padding-box;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.theme-premium .showcase-item-mini:hover {
+    transform: translateY(-5px) scale(1.05);
+    border-color: rgba(139, 92, 246, 0.5);
+    box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+}
+
+.theme-premium .showcase-item-mini[data-rarity="legendary"] {
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.theme-premium .showcase-item-mini[data-rarity="legendary"]:hover {
+    border-color: rgba(245, 158, 11, 0.6);
+    box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3);
+}
+
+.theme-premium .favorite-weapons {
+    position: relative;
+    background: linear-gradient(135deg,
+            rgba(51, 22, 90, 0.9),
+            rgba(45, 11, 74, 0.9));
+    border: 2px solid rgba(139, 92, 246, 0.4);
+    overflow: hidden;
+}
+
+.theme-premium .favorite-weapons::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg,
+            #8b5cf6,
+            #6366f1,
+            #ec4899);
+    border-radius: 3px 3px 0 0;
+}
+
+/* Winter theme */
 .theme-winter {
     background: linear-gradient(169deg,
             #0c1b2f 0%,

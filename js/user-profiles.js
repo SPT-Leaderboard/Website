@@ -282,6 +282,10 @@ async function showPublicProfile(container, player) {
         finalNameClass = 'player-name-gold only-name';
     }
 
+    // Get rank
+    const playerRating = player.networkRaids ?? 0;
+    const rank = getRank(playerRating, 1000, 512);
+
     container.innerHTML = `
         <!-- left column -->
         <img src="media/rewards/other/badgerTester.gif" class="badger" id="badger" />
@@ -462,6 +466,13 @@ async function showPublicProfile(container, player) {
                 <div class="weapon-stats-container" id="achievements-container">
                 </div>
             </div>
+
+            <div class="profile-section">
+                <h3>Hideout</h3>
+                <div class="hideout-container" id="hideout-container">
+                    <!-- JS -->
+                </div>
+            </div>
             
         </div>
 
@@ -470,42 +481,30 @@ async function showPublicProfile(container, player) {
 
             <!-- Raid History -->
             <div class="raid-block">
-                <div class="last-raids" id="raids-stats-container">
-                    <div class="loader-glass">
-                        <div class="loader-content" id="main-profile-loader">
-                            <img src="media/loading_bar.gif" width="30" height="30" class="loader-icon">
-                            <h3 class="loader-text">Crunching latest data for you...</h3>
-                            <div class="loader-progress">
-                                <div class="progress-bar"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="raid-summary profile-section">
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <div class="stat-value">${player.currentWinstreak.toLocaleString()}</div>
+                            <div class="stat-value">${player.currentWinstreak.toLocaleString('en-EN')}</div>
                             <div class="stat-label">Current Raid Streak</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">${player.longestShot.toLocaleString()}m</div>
+                            <div class="stat-value">${player.longestShot.toLocaleString('en-EN')}m</div>
                             <div class="stat-label">Average Engagement Distance</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">${player.pmcKills.toLocaleString()}</div>
+                            <div class="stat-value">${player.pmcKills.toLocaleString('en-EN')}</div>
                             <div class="stat-label">PMC Kills</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">${player.scavsKilled.toLocaleString()}</div>
+                            <div class="stat-value">${player.scavsKilled.toLocaleString('en-EN')}</div>
                             <div class="stat-label">SCAV Kills</div>
                         </div>
                         <div class="stat-card">
-                          <div class="stat-value">${player.bossesKilled.toLocaleString()}</div>
+                          <div class="stat-value">${player.bossesKilled.toLocaleString('en-EN')}</div>
                           <div class="stat-label">Bosses Killed</div>
                         </div>
                         <div class="stat-card">
-                          <div class="stat-value">${player.damage.toLocaleString()}</div>
+                          <div class="stat-value">${player.damage.toLocaleString('en-EN')}</div>
                           <div class="stat-label">Damage Dealt</div>
                         </div>
                     </div>
@@ -514,18 +513,17 @@ async function showPublicProfile(container, player) {
                         <!-- JavaScript -->
                     </div>
                 </div>
-
             </div>
 
-            <div class="profile-section">
-                <div class="quests-container" id="quests-container">
-                    <!-- JS -->
-                </div>
-            </div>
-
-            <div class="profile-section">
-                <div class="hideout-container" id="hideout-container">
-                    <!-- JS -->
+            <div class="last-raids" id="raids-stats-container">
+                <div class="loader-glass">
+                    <div class="loader-content" id="main-profile-loader">
+                        <img src="media/loading_bar.gif" width="30" height="30" class="loader-icon">
+                        <h3 class="loader-text">Crunching latest data for you...</h3>
+                        <div class="loader-progress">
+                            <div class="progress-bar"></div>
+                        </div>
+                     </div>
                 </div>
             </div>
 
@@ -541,6 +539,12 @@ async function showPublicProfile(container, player) {
                 <div class="comments-list">
                 </div>
             </div>
+
+            <div class="profile-section">
+                <div class="quests-container" id="quests-container">
+                    <!-- JS -->
+                </div>
+            </div>
             
         </div>
 
@@ -550,16 +554,22 @@ async function showPublicProfile(container, player) {
             <!-- Player image -->
             <div class="playermodel profile-section" id="playermodel">
                 <h3>Player Pre-Raid Preview</h3>
+                
+                <div class="rank-display">
+                    <img src="${rank.image}" alt="${rank.fullName}" class="rank-icon">
+                    <span class="rank-name">${rank.fullName}</span>
+                </div>
+                
                 <div class="playermodel-image">
                     <div class="loading-overlay-other active" id="loading-model">
                         <p>Auto-resizing...</p> <div class="loading-spinner"></div>
                     </div>
 
                     <img src="${pmcPfpsPath}${player.permaLink}_full.png" 
-                    alt="Player Model Preview" 
-                    onerror="this.onerror=null; this.src='media/default_full_pmc_avatar.png';" />
-
+                        alt="Player Model Preview" 
+                        onerror="this.onerror=null; this.src='media/default_full_pmc_avatar.png';" />
                 </div>
+                
                 <div class="playermodel-stats profile-section">
                     <div class="player-health">
                         <img src="media/leaderboard_icons/health_icon.png" alt="Health">
@@ -1182,7 +1192,7 @@ function cleanWeaponNameFunc(weaponName) {
 
     cleaned = cleaned.replace(/<\/color>/g, "");
     cleaned = cleaned.replace(/[★☆]/g, "");
-    
+
     return cleaned.trim();
 }
 

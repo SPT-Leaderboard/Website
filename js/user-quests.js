@@ -57,21 +57,35 @@ function processQuestsData(playerQuests, compiledQuests) {
                 return null;
             }
 
-            const isNotAccepted = playerQuest.accept_time === 0;
-            const isCompleted = !isNotAccepted && playerQuest.finish_time > 0;
-            const isInProgress = !isNotAccepted && !isCompleted;
+            const hasFinishTime = playerQuest.finish_time > 0;
+            const hasAcceptTime = playerQuest.accept_time > 0;
 
+            let isCompleted = false;
+            let isInProgress = false;
+            let isNotAccepted = false;
             let status, statusText;
-            if (isNotAccepted) {
-                status = 'not-accepted';
-                statusText = 'Not Accepted';
-            } else if (isCompleted) {
+
+            if (hasFinishTime) {
+                // Finished
+                isCompleted = true;
                 status = 'completed';
                 statusText = 'Completed';
-            } else {
+            } else if (hasAcceptTime) {
+                // Active
+                isInProgress = true;
                 status = 'in-progress';
                 statusText = 'In Progress';
+            } else {
+                // Not accepted
+                isNotAccepted = true;
+                status = 'not-accepted';
+                statusText = 'Not Accepted';
             }
+
+            // For quests that have no accept_time, using finish_time
+            const sortTime = hasAcceptTime
+                ? playerQuest.accept_time
+                : (hasFinishTime ? playerQuest.finish_time : 0);
 
             return {
                 id: questId,
@@ -81,17 +95,24 @@ function processQuestsData(playerQuests, compiledQuests) {
                 isCompleted,
                 isInProgress,
                 status,
-                statusText
+                statusText,
+                sortTime
             };
         })
         .filter(quest => quest !== null)
         .sort((a, b) => {
-            if (a.isNotAccepted !== b.isNotAccepted) {
-                return a.isNotAccepted ? 1 : -1;
+            // Sort by statusc
+            const statusOrder = { 'in-progress': 0, 'completed': 1, 'not-accepted': 2 };
+
+            if (a.status !== b.status) {
+                return statusOrder[a.status] - statusOrder[b.status];
             }
-            if (!a.isNotAccepted && !b.isNotAccepted) {
-                return b.accept_time - a.accept_time;
+
+            // then time
+            if (a.sortTime !== b.sortTime) {
+                return b.sortTime - a.sortTime;
             }
+
             return 0;
         });
 }
@@ -179,7 +200,6 @@ function createStatsHTML(stats) {
 }
 
 function filterAndSortQuests(quests) {
-    // Фильтрация
     let filtered = quests.filter(quest => {
         const matchesFilter = currentFilter === 'all' ||
             (currentFilter === 'completed' && quest.isCompleted) ||
@@ -195,19 +215,17 @@ function filterAndSortQuests(quests) {
 
     // Accepted quests first
     filtered.sort((a, b) => {
-        if (a.isNotAccepted !== b.isNotAccepted) {
-            return a.isNotAccepted ? 1 : -1;
+        const statusOrder = { 'in-progress': 0, 'completed': 1, 'not-accepted': 2 };
+
+        if (a.status !== b.status) {
+            return statusOrder[a.status] - statusOrder[b.status];
         }
-        // Accepted quests sort by accept time
-        if (!a.isNotAccepted && !b.isNotAccepted) {
-            return b.accept_time - a.accept_time;
-        }
-        return 0;
+
+        return b.sortTime - a.sortTime;
     });
 
     return filtered;
 }
-
 
 function createQuestsHTML(quests) {
     return quests.map((quest, index) => `
@@ -231,24 +249,28 @@ function createQuestsHTML(quests) {
                         <span class="timeline-value" style="color: #94a3b8;">Available</span>
                     </div>
                 ` : `
-                    <div class="timeline-item">
-                        <span class="timeline-label">Accepted At:</span>
-                        <span class="timeline-value time-ago">${getTimeAgo(new Date(quest.accept_time * 1000))}</span>
-                    </div>
-                    <div class="timeline-item">
-                        <span class="timeline-label">Accept Date:</span>
-                        <span class="timeline-value">${new Date(quest.accept_time * 1000).toLocaleDateString()}</span>
-                    </div>
+                    ${quest.accept_time > 0 ? `
+                        <div class="timeline-item">
+                            <span class="timeline-label">Accepted:</span>
+                            <span class="timeline-value time-ago">${getTimeAgo(new Date(quest.accept_time * 1000))}</span>
+                        </div>
+                    ` : quest.isCompleted ? `
+                        <div class="timeline-item">
+                            <span class="timeline-label">Completed:</span>
+                            <span class="timeline-value time-ago">${getTimeAgo(new Date(quest.finish_time * 1000))}</span>
+                        </div>
+                    ` : ''}
+                    
                     ${quest.isCompleted ? `
-                    <div class="timeline-item">
-                        <span class="timeline-label">Completed:</span>
-                        <span class="timeline-value">${getTimeAgo(new Date(quest.finish_time * 1000))}</span>
-                    </div>
+                        <div class="timeline-item">
+                            <span class="timeline-label">Completed Date:</span>
+                            <span class="timeline-value">${new Date(quest.finish_time * 1000).toLocaleDateString()}</span>
+                        </div>
                     ` : `
-                    <div class="timeline-item">
-                        <span class="timeline-label">Status:</span>
-                        <span class="timeline-value" style="color: #f59e0b;">Active</span>
-                    </div>
+                        <div class="timeline-item">
+                            <span class="timeline-label">Status:</span>
+                            <span class="timeline-value" style="color: #f59e0b;">Active</span>
+                        </div>
                     `}
                 `}
             </div>
@@ -256,7 +278,7 @@ function createQuestsHTML(quests) {
     `).join('');
 }
 
-// Функции управления
+// #region Controls
 function setSort(sortType) {
     currentSort = sortType;
     refreshQuestsDisplay();

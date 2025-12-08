@@ -80,6 +80,9 @@ function renderRaidsStats(raids, currentPlayerId, leaderboardData) {
     const mapStats = calculateMapStats(raids);
     const recentStats = calculateRecentStats(raids);
 
+    // Find player
+    const extraPlayerData = leaderboardData.find(player => player.id === currentPlayerId);
+
     let html = '';
     let recentStatsHtml = `
         <div class="recent-stats-header">
@@ -113,6 +116,10 @@ function renderRaidsStats(raids, currentPlayerId, leaderboardData) {
             <div class="stat-card">
                 <div class="stat-value ${recentStats.totalProfit >= 0 ? 'stat-positive' : 'stat-negative'}">${formatProfit(recentStats.totalProfit)} ₽</div>
                 <div class="stat-label">Total Profit Made</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value ${extraPlayerData.longestHeadshot >= 350 ? 'stat-positive' : 'stat-negative'}">${extraPlayerData.longestHeadshot}</div>
+                <div class="stat-label">Longest Headshot (M)</div>
             </div>
         </div>
     `;
@@ -186,7 +193,7 @@ function renderRaidsStats(raids, currentPlayerId, leaderboardData) {
 
                             <div class="map-stat-item">
                                 <div class="map-stat-label">Avg. EXP</div>
-                                <div class="map-stat-value">${map.avgEXP.toLocaleString()}</div>
+                                <div class="map-stat-value">${map.avgEXP.toLocaleString('en-EN')}</div>
                             </div>
 
                             <div class="map-stat-item">
@@ -258,7 +265,7 @@ function renderRaidsStats(raids, currentPlayerId, leaderboardData) {
                     </div>
 
                     <h3 class="section-title ${raid.lastRaidRanThrough ? 'run-through' : raid.discFromRaid ? 'disconnected' : raid.isTransition ? 'transit' : raid.lastRaidSurvived ? 'survived' : 'died'}" style="margin-top: 0;">
-                        Raid on ${new Date(raid.absoluteLastTime * 1000).toLocaleString()} ${crossProfileIndicator}
+                        Raid on ${new Date(raid.absoluteLastTime * 1000).toLocaleString('en-EN')} ${crossProfileIndicator}
                     </h3>
 
                     <div style="margin-bottom: 10px;">
@@ -283,27 +290,27 @@ function renderRaidsStats(raids, currentPlayerId, leaderboardData) {
                 `<div class="raid-stats-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
                         <div class="raid-stat-block">
                             <span class="profile-stat-label">PMC Kills:</span>
-                            <span class="profile-stat-value">${raid.raidKills.toLocaleString() ?? 0}</span>
+                            <span class="profile-stat-value">${raid.raidKills.toLocaleString('en-EN') ?? 0}</span>
                         </div>
                         <div class="raid-stat-block">
                             <span class="profile-stat-label">SCAV Kills:</span>
-                            <span class="profile-stat-value">${raid.scavsKilled.toLocaleString() ?? 0}</span>
+                            <span class="profile-stat-value">${raid.scavsKilled.toLocaleString('en-EN') ?? 0}</span>
                         </div>
                         <div class="raid-stat-block">
                             <span class="profile-stat-label">Boss Kills:</span>
-                            <span class="profile-stat-value">${raid.bossesKilled.toLocaleString() ?? 0}</span>
+                            <span class="profile-stat-value">${raid.bossesKilled.toLocaleString('en-EN') ?? 0}</span>
                         </div>
                         <div class="raid-stat-block">
                             <span class="profile-stat-label">Damage:</span>
-                            <span class="profile-stat-value">${raid.raidDamage.toLocaleString() ?? 0}</span>
+                            <span class="profile-stat-value">${raid.raidDamage.toLocaleString('en-EN') ?? 0}</span>
                         </div>
                         <div class="raid-stat-block">
                             <span class="profile-stat-label">Player Hits:</span>
-                            <span class="profile-stat-value">${raid.lastRaidHits.toLocaleString() ?? 0}</span>
+                            <span class="profile-stat-value">${raid.lastRaidHits.toLocaleString('en-EN') ?? 0}</span>
                         </div>
                         <div class="raid-stat-block">
                             <span class="profile-stat-label">Loot EXP:</span>
-                            <span class="profile-stat-value">${raid.lastRaidEXP.toLocaleString() ?? 0}</span>
+                            <span class="profile-stat-value">${raid.lastRaidEXP.toLocaleString('en-EN') ?? 0}</span>
                         </div>
                     </div>`
                 : ``}
@@ -350,10 +357,10 @@ function calculateRecentStats(raids) {
     return {
         survivalRate: Math.round((stats.survived / stats.runs) * 100),
         avgKills: (stats.totalKills / stats.runs).toFixed(1),
-        totalKills: stats.totalKills.toLocaleString(),
-        avgDamage: Math.round(stats.totalDamage / stats.runs).toLocaleString(),
-        totalEXP: stats.totalEXP.toLocaleString(),
-        totalLC: stats.totalLC.toLocaleString(),
+        totalKills: stats.totalKills.toLocaleString('en-EN'),
+        avgDamage: Math.round(stats.totalDamage / stats.runs).toLocaleString('en-EN'),
+        totalEXP: stats.totalEXP.toLocaleString('en-EN'),
+        totalLC: stats.totalLC.toLocaleString('en-EN'),
         totalProfit: stats.totalProfit
     };
 }
@@ -430,7 +437,7 @@ function formatProfit(profit) {
     } else if (absoluteProfit >= 1000) {
         return (profit / 1000).toFixed(0) + 'K';
     }
-    return profit.toLocaleString('ru-RU');
+    return profit.toLocaleString('en-EN');
 }
 
 function getTimeProgress(currentTime, minTime = 1, maxTime = 4300) {

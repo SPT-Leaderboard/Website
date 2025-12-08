@@ -89,7 +89,7 @@ async function showPlayerNotification(player) {
             break;
     }
 
-    if(player.isWinner){
+    if (player.isWinner) {
         specialIconNotification = ``;
         accountColor = '';
     }
@@ -110,12 +110,12 @@ async function showPlayerNotification(player) {
     // Profit
     let shouldShowProfit = false;
     let profitText = '';
-    if (player?.lastProfitGain && player.lastProfitGain > 15000000) {
+    if (player?.lastProfitGain && player.lastProfitGain > 25000000) {
         const profitRaid = new Audio('media/sounds/earnings/profit.mp3');
-        profitRaid.volume = 0.20;
+        profitRaid.volume = 0.23;
         profitRaid.play();
 
-        profitText = `${player.name} just got out with ${player.lastProfitGain.toLocaleString()} RUB!`
+        profitText = `${player.name} just got out with ${player.lastProfitGain.toLocaleString('en-EN')} ₽!`
 
         shouldShowProfit = true;
     }
@@ -220,7 +220,7 @@ async function showPlayerNotification(player) {
             <div class="notification-header-r">
                 <img src="${player.profilePicture}" alt="${player.name}'s avatar" class="notification-avatar-r" onerror="this.src='media/default_avatar.png';">
                 <div class="notification-text-r">
-                    <span class="${player.isWinner? `player-name-gold only-name` : `notification-name-r`}" style="color:${accountColor}; margin-bottom: 4px; font-weight: 700;">
+                    <span class="${player.isWinner ? `player-name-gold only-name` : `notification-name-r`}" style="color:${accountColor}; margin-bottom: 4px; font-weight: 700;">
                         ${specialIconNotification}${player.teamTag ? `[${player.teamTag}]` : ``} ${player.name}
                     </span>
                     <span class="notification-info-r">
