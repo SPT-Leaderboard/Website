@@ -287,7 +287,7 @@ function renderRaidsStats(raids, currentPlayerId, leaderboardData) {
                             ${lastRaidDuration || '00:00'} •
                             LC Earned: <span class="lb-coins">+${raid.lcPointsEarned ? raid.lcPointsEarned : 0}</span> •
                             ${lastRaidAgo || 'Just Now'} ${raid.lastRaidSurvived || raid.lastRaidRanThrough || raid.discFromRaid || raid.isTransition || !raid.agressorName ? `` : `• Killed by <span class="raid-killer">${raid.agressorName}</span> •`}
-                            <span class="${raid.TotalScoreDiff >= 0 ? 'stat-positive' : 'stat-negative'}"> ${raid.TotalScoreDiff} Skill Score</span>
+                            <span class="${raid.TotalScoreDiff >= 0 ? 'stat-positive' : 'stat-negative'}"> ${raid.TotalScoreDiff ?? 0} Skill Score Gain</span>
                         </span>
                     </div>
 
