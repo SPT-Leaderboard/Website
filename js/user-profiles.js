@@ -556,8 +556,19 @@ async function showPublicProfile(container, player) {
                 <h3>Player Pre-Raid Preview</h3>
                 
                 <div class="rank-display">
-                    <img src="${rank.image}" alt="${rank.fullName}" class="rank-icon">
-                    <span class="rank-name">${rank.fullName}</span>
+                    <div class="rank-icon-container">
+                        <div class="circular-progress" 
+                            style="--progress: ${rank.progress};
+                                    --progress-color: ${rank.borderColor};">
+                            <img src="${rank.image}" alt="${rank.fullName}" class="rank-icon">
+                        </div>
+                    </div>
+                    <span class="rank-name" 
+                        style="background: ${rank.gradient};
+                                border-color: ${rank.borderColor};
+                                color: ${rank.textColor};">
+                        ${rank.fullName}
+                    </span>
                 </div>
                 
                 <div class="playermodel-image">

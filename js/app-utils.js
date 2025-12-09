@@ -53,6 +53,7 @@ function getRank(rating, maxRating = 1000, res = 32) {
     const rankIndex = Math.min(totalRanks - 1, Math.floor((rating / maxRating) * totalRanks));
     const level = rankIndex + 1;
     const levelGroup = Math.floor((level - 1) / 6);
+    const groupProgress = ((level - 1) % 6) / 5;
 
     // Level inside rank group level (yes)
     const rankInGroup = ((level - 1) % 6) + 1;
@@ -70,16 +71,61 @@ function getRank(rating, maxRating = 1000, res = 32) {
         ['Colonel', 'Brigadier General', 'General', 'Marshal', 'Commander Elite', 'Legend']
     ];
 
+    const getGroupColor = (groupIndex, progress) => {
+        const groupColors = [
+            [100, 149, 237],  // Blue
+            [50, 205, 50],    // Green
+            [255, 165, 0],    // Orange
+            [220, 20, 60],    // Crimson
+            [138, 43, 226],   // Blue (second blue)
+            [255, 215, 0]     // Gold
+        ];
+
+        if (groupIndex >= 5) {
+            return groupColors[5];
+        }
+
+        // Same cubic easing from CSS, but in JS, behold :kek:
+        const easeInOutCubic = (t) => {
+            return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        };
+
+        const easedProgress = easeInOutCubic(progress);
+        const color1 = groupColors[groupIndex];
+        const color2 = groupColors[groupIndex + 1];
+
+        return [
+            Math.round(color1[0] + (color2[0] - color1[0]) * easedProgress),
+            Math.round(color1[1] + (color2[1] - color1[1]) * easedProgress),
+            Math.round(color1[2] + (color2[2] - color1[2]) * easedProgress)
+        ];
+    };
+
+    const [r, g, b] = getGroupColor(levelGroup, groupProgress);
+
+    // Dynamic coloring (wow)
+    const color = `rgba(${r}, ${g}, ${b}, ${0.2 + groupProgress * 0.3})`;
+    const borderColor = `rgba(${Math.max(r - 30, 0)}, ${Math.max(g - 30, 0)}, ${Math.max(b - 30, 0)}, 0.6)`;
+    const textColor = `hsl(${Math.round((r + g + b) / 3)}, 100%, 95%)`;
+
+    // Gradient
+    const gradient = `linear-gradient(135deg, 
+        rgba(${r}, ${g}, ${b}, 0.4), 
+        rgba(${Math.max(r - 50, 0)}, ${Math.max(g - 50, 0)}, ${Math.max(b - 50, 0)}, 0.6))`;
+
     const rankName = rankNames[levelGroup][rankInGroup - 1];
 
     return {
         image: `media/player_ranks/Rank${levelGroup + 1}/${rankInGroup}@${res}px.png`,
         name: rankName,
-        fullName: `${rankName} (Level ${level})`,
+        fullName: `${rankName} (LVL ${level})`,
         level: level,
         rankInGroup: rankInGroup,
         levelGroup: levelGroup + 1,
-        progress: Math.round((rating / maxRating) * 100)
+        progress: Math.round((rating / maxRating) * 100),
+        gradient: gradient,
+        borderColor: borderColor,
+        textColor: textColor
     };
 }
 

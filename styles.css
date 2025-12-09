@@ -5085,12 +5085,21 @@ input[type="checkbox"]:checked:hover {
     position: absolute;
     top: 90px;
     right: 30px;
+        top: 70px;
+    right: 10px;
     z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
     animation: fadeIn 0.5s ease-out;
+}
+
+.rank-icon-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .rank-icon {
@@ -5101,6 +5110,29 @@ input[type="checkbox"]:checked:hover {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.circular-progress {
+    position: relative;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: conic-gradient(var(--progress-color, #4285f4) calc(var(--progress, 0) * 3.6deg),
+            rgba(255, 255, 255, 0.1) 0deg);
+    padding: 4px;
+}
+
+.circular-progress::before {
+    content: '';
+    position: absolute;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    z-index: 1;
+}
+
 .rank-name {
     font-family: 'Bender Regular', sans-serif;
     font-size: 14px;
@@ -5108,18 +5140,19 @@ input[type="checkbox"]:checked:hover {
     color: #fff;
     text-align: center;
     padding: 4px 12px;
-    background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.2), 
-        rgba(130, 174, 255, 0.3));
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.2),
+            rgba(130, 174, 255, 0.3));
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 
+    box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.3),
         inset 0 1px 1px rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(8px);
     white-space: nowrap;
     min-width: 120px;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
 }
 
 /* BattlePass Level */
