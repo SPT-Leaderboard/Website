@@ -3060,7 +3060,7 @@ input[type="checkbox"]:checked:hover {
     font-weight: 600;
     color: #cdcdcd;
     padding: 5px 10px;
-    margin: 5px 0;
+    margin: 25px 0px 0px;
 }
 
 .user-main-card .badges {
