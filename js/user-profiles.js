@@ -1223,28 +1223,34 @@ function generateBadgesHTML(player) {
 
     const seasonTiers = [
         {
-            condition: (seasons) => seasons > 1 && seasons <= 2,
+            condition: (seasons) => seasons >= 1 && seasons <= 2,
             icon: "bx bxs-joystick",
             style: "",
-            tooltip: (seasons) => `This player has been around for ${seasons} seasons!`
+            tooltip: (seasons) => `This player has been around for ${seasons} season${seasons === 1 ? '' : 's'}! Say hi!`
         },
         {
-            condition: (seasons) => seasons > 2 && seasons <= 3,
+            condition: (seasons) => seasons >= 3 && seasons <= 4,
             icon: "bx bxs-medal-star",
-            style: "color: #CD7F32",
-            tooltip: (seasons) => `${seasons} seasons of service. Veteran.`
+            style: "color: rgb(100, 149, 237)",
+            tooltip: (seasons) => `${seasons} seasons of service.`
         },
         {
-            condition: (seasons) => seasons > 3 && seasons <= 4,
-            icon: "bx bxs-bullseye",
-            style: "color: #81ffdfff",
-            tooltip: (seasons) => `${seasons} seasons! Champion.`
+            condition: (seasons) => seasons >= 5 && seasons <= 6,
+            icon: "fa-solid fa-star",
+            style: "color: rgba(205, 50, 128, 1)",
+            tooltip: (seasons) => `${seasons} seasons of service.`
         },
         {
-            condition: (seasons) => seasons > 4,
+            condition: (seasons) => seasons >= 7 && seasons <= 8,
             icon: "bx bxs-crown",
             style: "color: #FFD700; text-shadow: 0 0 5px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFD700;",
-            tooltip: (seasons) => `${seasons} seasons of service. Meet the legend!`
+            tooltip: (seasons) => `${seasons} seasons of service.`
+        },
+        {
+            condition: (seasons) => seasons >= 9,
+            icon: "fa-solid fa-eye",
+            style: "color: #B9F2FF; text-shadow: 0 0 5px #B9F2FF, 0 0 20px #B9F2FF, 0 0 40px #B9F2FF; animation: pulse 2s infinite;",
+            tooltip: (seasons) => `${seasons} seasons of service. `
         }
     ];
 
