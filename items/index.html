@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="../styles.css">
+        <link rel="stylesheet" type="text/css" href="../items/styles.css">
+        <link rel="icon" href="../media/newlogo_transparent_snow.png">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+        <script src="https://betterdiscord.app/js/vendor/countUp.min.js?v=DBxeQBHNMaYkRvB8uPOLm07cbQj54TDexlykb-Dcg28"></script>
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="https://github.hubspot.com/odometer/themes/odometer-theme-default.css">
+        <script src="../js/app-core.js"></script>
+        <script src="../items/js/main.js"></script>
+        <script src="../js/api-monitor.js"></script>
+        <script src="../js/app-utils.js"></script>
+        <script data-cfasync="false" src="../js/app-seasons.js"></script>
+        <title>SPT Leaderboard - Items</title>
+    </head>
+
+    <body>
+        <div class="snowflake"></div>
+        <nav class="navbar" role="navigation">
+            <a href="#" aria-label="Items">
+                <img src="../media/newlogo_transparent_snow.png" alt="SPT Leaderboard Logo" class="navbar-logo">
+            </a>
+            <div class="navbar-links-container">
+                <a href="/../" class="navbar-link">Go back</a>
+                <a href="/../insights/" class="navbar-link">Global Insights</a>
+                <a href="/../achievements/" class="navbar-link">Achievement Rate</a>
+                <a href="/../api-docs/" class="navbar-link">API</a>
+                <a href="/../api/network/login/index.php" class="navbar-link navbar-link--login">Network Login</a>
+            </div>
+            <div class="snow-corners-transparent"></div>
+        </nav>
+        <h1 style="margin-top: 150px;" class="animate__animated animate__fadeInDown">Item Info</h1>
+        <div class="top-stats-bar">
+            <div class="live-data-label" id="serverStatus">Getting API Status...</div>
+        </div>
+        <main class="items-container">
+            <div class="items-header">
+                <div class="stats-overview">
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-items">0</div>
+                        <div class="stat-label">Items Recorded</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-extracted">0</div>
+                        <div class="stat-label">Extracted</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-died">0</div>
+                        <div class="stat-label">Lost in Raid</div>
+                    </div>
+                </div>
+                <div class="controls-section">
+                    <div class="search-box">
+                        <input type="text" id="item-search" placeholder="Search items..." class="search-input">
+                    </div>
+                    <div class="filters">
+                        <select id="sort-select" class="filter-select">
+                            <option value="name">Name A-Z</option>
+                            <option value="name-desc">Name Z-A</option>
+                            <option value="extracted">Most Extracted</option>
+                            <option value="died">Most Lost</option>
+                            <option value="total">Most Total</option>
+                        </select>
+                        <select id="filter-select" class="filter-select">
+                            <option value="all">All Items</option>
+                            <option value="extracted">Extracted Only</option>
+                            <option value="died">Lost Only</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="items-grid" id="items-grid">
+                <!-- JS -->
+            </div>
+            <div class="pagination" id="pagination">
+                <button class="page-btn prev-btn" disabled>← Previous</button>
+                <div class="page-numbers" id="page-numbers"></div>
+                <button class="page-btn next-btn">Next →</button>
+            </div>
+        </main>
+        <footer class="modern-footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo-slogan">
+                        <img src="../media/newlogo_transparent_snow.png" class="footer-logo">
+                        <p class="slogan">Built with passion. Powered by community.</p>
+                    </div>
+                    <div class="license-info">
+                        <p>© 2025 SPT Leaderboard. All rights reserved.</p>
+                        <p>This project is not affiliated with Battlestate Games or SPTarkov Project. Escape From Tarkov is a registered trademark of Battlestate Games.</p>
+                        <p>Released under <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a></p>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <ul>
+                        <li><a href="https://github.com/SPT-Leaderboard/Website/issues" target="_blank" rel="noopener">Contribute</a></li>
+                        <li><a href="https://github.com/SPT-Leaderboard/Website" target="_blank" rel="noopener">GitHub Page</a></li>
+                        <li><a href="https://forge.sp-tarkov.com/mod/2101/spt-leaderboard" target="_blank" rel="noopener">SPTarkov Mod</a></li>
+                        <li><a href="/api-docs">API Documentation</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </body>
+
+</html>

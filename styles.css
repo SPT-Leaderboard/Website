@@ -3,8 +3,6 @@
     --bg-dark-secondary: #223d5f;
     --accent-teal: #64ffda;
     --accent-blue: #1e90ff;
-    --text-light: #ccd6f6;
-    --text-muted: #8892b0;
     --darker: #0f172a;
 
     /* Inherited from SPTLB Network */
@@ -18,6 +16,7 @@
 
     --success: #10b981;
     --success-dark: #059669;
+    --warning: #f59e0b;
 
     --dark: #1e293b;
     --darker: #0f172a;
@@ -26,6 +25,10 @@
     --light: #f8fafc;
     --lighter: #ffffff;
 
+    --text-light: #ccd6f6;
+    --text-muted: #8892b0;
+    --text-white: #f8fafc;
+
     --gray: #94a3b8;
     --gray-light: #e2e8f0;
     --gray-dark: #64748b;
@@ -33,11 +36,20 @@
 
     --accent: #f59e0b;
     --accent-dark: #d97706;
+    --accent-purple: #8b5cf6;
+
+    --bg-darker: #0f172a;
+    --bg-card: #1e293b;
+    --bg-card-light: #334155;
+
+    --border: #2d3748;
+    --border-light: #4a5568;
 
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
 }
 
 @font-face {

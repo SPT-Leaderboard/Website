@@ -117,7 +117,7 @@ function processQuestsData(playerQuests, compiledQuests) {
         });
 }
 
-function displayQuestsWithControls(quests, container) {
+async function displayQuestsWithControls(quests, container) {
     const stats = calculateQuestStats(quests);
 
     const controlsHTML = `
@@ -157,7 +157,7 @@ function displayQuestsWithControls(quests, container) {
     `;
 
     const filteredQuests = filterAndSortQuests(quests);
-    const questsHTML = createQuestsHTML(filteredQuests);
+    const questsHTML = await createQuestsHTML(filteredQuests);
 
     container.innerHTML = controlsHTML + `<div class="quests-grid">${questsHTML}</div>`;
     updateQuestCounter(filteredQuests.length, quests.length);
@@ -227,55 +227,95 @@ function filterAndSortQuests(quests) {
     return filtered;
 }
 
-function createQuestsHTML(quests) {
-    return quests.map((quest, index) => `
-        <div class="quest-card ${quest.status}" style="animation-delay: ${index * 0.05}s">
-            <div class="quest-header">
-                <img src="media/player_quests/${quest.imageUrl}" 
-                     alt="${quest.name}" 
-                     class="quest-image"
-                     onerror="this.src='media/player_quests/default.jpg'">
-                <div class="quest-info">
-                    <h3 class="quest-name">${quest.name}</h3>
-                    <div class="quest-status status-${quest.status}">
-                        ${quest.statusText}
+async function createQuestsHTML(quests) {
+    const questsHTML = await Promise.all(
+        quests.map(async (quest, index) => {
+            const correctImageUrl = await getQuestImageUrl(quest.id, quest.imageUrl);
+            
+            return `
+                <div class="quest-card ${quest.status}" style="animation-delay: ${index * 0.05}s">
+                    <div class="quest-header">
+                        <img src="${correctImageUrl}" 
+                             alt="${quest.name}" 
+                             class="quest-image"
+                             loading="lazy">
+                        <div class="quest-info">
+                            <h3 class="quest-name">${quest.name}</h3>
+                            <div class="quest-status status-${quest.status}">
+                                ${quest.statusText}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="quest-timeline">
+                        ${quest.isNotAccepted ? `
+                            <div class="timeline-item">
+                                <span class="timeline-label">Status:</span>
+                                <span class="timeline-value" style="color: #94a3b8;">Available</span>
+                            </div>
+                        ` : `
+                            ${quest.accept_time > 0 ? `
+                                <div class="timeline-item">
+                                    <span class="timeline-label">Accepted:</span>
+                                    <span class="timeline-value time-ago">${getTimeAgo(new Date(quest.accept_time * 1000))}</span>
+                                </div>
+                            ` : quest.isCompleted ? `
+                                <div class="timeline-item">
+                                    <span class="timeline-label">Completed:</span>
+                                    <span class="timeline-value time-ago">${getTimeAgo(new Date(quest.finish_time * 1000))}</span>
+                                </div>
+                            ` : ''}
+                            
+                            ${quest.isCompleted ? `
+                                <div class="timeline-item">
+                                    <span class="timeline-label">Complete Date:</span>
+                                    <span class="timeline-value">${new Date(quest.finish_time * 1000).toLocaleDateString()}</span>
+                                </div>
+                            ` : `
+                                <div class="timeline-item">
+                                    <span class="timeline-label">Status:</span>
+                                    <span class="timeline-value" style="color: #f59e0b;">Active</span>
+                                </div>
+                            `}
+                        `}
                     </div>
                 </div>
-            </div>
-            <div class="quest-timeline">
-                ${quest.isNotAccepted ? `
-                    <div class="timeline-item">
-                        <span class="timeline-label">Status:</span>
-                        <span class="timeline-value" style="color: #94a3b8;">Available</span>
-                    </div>
-                ` : `
-                    ${quest.accept_time > 0 ? `
-                        <div class="timeline-item">
-                            <span class="timeline-label">Accepted:</span>
-                            <span class="timeline-value time-ago">${getTimeAgo(new Date(quest.accept_time * 1000))}</span>
-                        </div>
-                    ` : quest.isCompleted ? `
-                        <div class="timeline-item">
-                            <span class="timeline-label">Completed:</span>
-                            <span class="timeline-value time-ago">${getTimeAgo(new Date(quest.finish_time * 1000))}</span>
-                        </div>
-                    ` : ''}
-                    
-                    ${quest.isCompleted ? `
-                        <div class="timeline-item">
-                            <span class="timeline-label">Completed Date:</span>
-                            <span class="timeline-value">${new Date(quest.finish_time * 1000).toLocaleDateString()}</span>
-                        </div>
-                    ` : `
-                        <div class="timeline-item">
-                            <span class="timeline-label">Status:</span>
-                            <span class="timeline-value" style="color: #f59e0b;">Active</span>
-                        </div>
-                    `}
-                `}
-            </div>
-        </div>
-    `).join('');
+            `;
+        })
+    );
+    
+    return questsHTML.join('');
+}
+
+async function checkImageExists(imageUrl) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = imageUrl;
+    });
+}
+
+async function getQuestImageUrl(questId, imageFileName, attempts = 0) {
+    const basePath = 'media/player_quests/';
+    const baseName = imageFileName.split('.')[0];
+    const extensions = ['.png', '.jpg', '.jpeg'];
+    
+    if (attempts >= extensions.length) {
+        return basePath + 'default.jpg';
+    }
+    
+    const currentExt = attempts === 0 ? 
+        imageFileName.substring(imageFileName.lastIndexOf('.')) : 
+        extensions[attempts];
+    
+    const testUrl = basePath + baseName + currentExt;
+    const exists = await checkImageExists(testUrl);
+    
+    if (exists) {
+        return testUrl;
+    } else {
+        return getQuestImageUrl(questId, imageFileName, attempts + 1);
+    }
 }
 
 // #region Controls
