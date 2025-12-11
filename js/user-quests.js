@@ -336,15 +336,15 @@ function handleSearch(searchTerm) {
     refreshQuestsDisplay();
 }
 
-function refreshQuestsDisplay() {
+async function refreshQuestsDisplay() {
     const questsContainer = document.getElementById('quests-container');
     const questsGrid = questsContainer.querySelector('.quests-grid');
     const filteredQuests = filterAndSortQuests(currentQuests);
 
     questsGrid.classList.add('updating');
 
-    setTimeout(() => {
-        questsGrid.innerHTML = createQuestsHTML(filteredQuests);
+    setTimeout(async () => {
+        questsGrid.innerHTML = await createQuestsHTML(filteredQuests);
         updateQuestCounter(filteredQuests.length);
         questsGrid.classList.remove('updating');
     }, 200);
