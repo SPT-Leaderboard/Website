@@ -182,15 +182,15 @@ class ItemsRenderer {
             
             <div class="item-stats">
                 <div class="stat">
-                    <div class="stat-value extracted-stat">${item.extracted.toLocaleString()}</div>
+                    <div class="stat-value-i extracted-stat">${item.extracted.toLocaleString()}</div>
                     <div class="stat-label">Extracted</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-value died-stat">${item.died.toLocaleString()}</div>
+                    <div class="stat-value-i died-stat">${item.died.toLocaleString()}</div>
                     <div class="stat-label">Lost</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-value">${item.total.toLocaleString()}</div>
+                    <div class="stat-value-i">${item.total.toLocaleString()}</div>
                     <div class="stat-label">Total</div>
                 </div>
                 

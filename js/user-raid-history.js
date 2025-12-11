@@ -301,7 +301,7 @@ function createScoreSection(raid) {
             ${raid.TotalScoreDiff ? `
                 <div class="score-diff ${raid.TotalScoreDiff >= 0 ? 'stat-positive' : 'stat-negative'}">
                     <i class='bx ${raid.TotalScoreDiff >= 0 ? 'bx-trending-up' : 'bx-trending-down'}'></i>
-                    ${raid.TotalScoreDiff > 0 ?? '+'}${raid.TotalScoreDiff} SS
+                    ${raid.TotalScoreDiff > 0 ? '+' : ''}${raid.TotalScoreDiff} SS
                 </div>
             ` : ''}
         </div>
