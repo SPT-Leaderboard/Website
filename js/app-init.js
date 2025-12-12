@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorContainer = document.getElementById('error-container');
     const errorMessage = document.getElementById('error-message');
     const retryButton = document.getElementById('retry-button');
-    const resourceList = document.getElementById('resource-list');
 
     // Resources to load
     const resources = [
@@ -56,16 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to load a resource
     function loadResource(resource, index) {
         return new Promise((resolve, reject) => {
-            const resourceItem = document.createElement('div');
-            resourceItem.className = 'resource-item-pre';
-            resourceItem.style.animationDelay = `${index * 0.1}s`;
-            resourceItem.innerHTML = `
-                <span class="resource-name-pre">${resource.name}</span>
-                <span class="resource-status-pre">Loading</span>
-            `;
-            resourceList.appendChild(resourceItem);
-
-            updateResourceCounter();
 
             const startTime = Date.now();
             const minLoadTime = 800 + (index * 100);
@@ -81,14 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                     .then(response => {
                         if (response.ok) {
-                            const statusEl = resourceItem.querySelector('.resource-status-pre');
-                            statusEl.textContent = 'Loaded';
-                            statusEl.classList.add('loaded');
-                            resourceItem.classList.add('loaded');
 
                             loadedResources += resource.weight;
                             updateProgress();
-                            updateResourceCounter();
 
                             if (Math.random() > 0.7) {
                                 statusText.textContent = getRandomMessage();
@@ -100,25 +84,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     })
                     .catch(error => {
-                        const statusEl = resourceItem.querySelector('.resource-status-pre');
-                        statusEl.textContent = 'Failed';
-                        statusEl.classList.add('failed');
-                        resourceItem.classList.add('failed');
-
-                        updateResourceCounter();
                         reject(new Error(`Failed to load ${resource.name}: ${error.message}`));
                     });
             }, minLoadTime - (Date.now() - startTime));
         });
-    }
-
-    function updateResourceCounter() {
-        const total = filteredResources.length;
-        const loaded = document.querySelectorAll('.resource-item-pre.loaded').length;
-        const failed = document.querySelectorAll('.resource-item-pre.failed').length;
-        const completed = loaded + failed;
-
-        document.getElementById('resource-count').textContent = `${completed}/${total}`;
     }
 
     // Update progress bar and status text
@@ -189,7 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
         errorContainer.classList.remove('visible');
         progressBar.style.width = '0%';
         loadedResources = 0;
-        resourceList.innerHTML = '';
         init();
     });
 
