@@ -114,7 +114,6 @@ async function showPublicProfile(container, player) {
 
     // Disable rendering of the leaderboard when profile is open
     const leaderboardTable = document.getElementById('leaderboardTable');
-
     leaderboardTable.classList.add('hidden');
 
     if (playerData) {
@@ -130,6 +129,7 @@ async function showPublicProfile(container, player) {
         player.bp_decal = playerData.decal ?? 'default';
         player.profileAboutMe = playerData.aboutMe ?? '';
         player.discordUser = playerData.discordUser ?? '';
+        player.customPfp = playerData.pfp ?? '';
     }
 
     // Disable auto updating on the background
@@ -296,7 +296,7 @@ async function showPublicProfile(container, player) {
         <div class="left-column">
 
             <div class="user-main-card profile-section" id="main-profile-card">
-                <div class="pfp"><img src="${player.profilePicture}" class="player-avatar" id="profile-avatar" alt="${player.name}" onerror="this.src='media/default_avatar.png';" /></div>
+                <div class="pfp"><img src="${player.customPfp ? player.customPfp : player.profilePicture}" class="player-avatar" id="profile-avatar" alt="${player.name}" onerror="this.src='media/default_avatar.png';" /></div>
                 <div class="profile-header">
                     <div class="name-wrapper">
                         <div class="${finalNameClass} ${player.isWinner ? `` : `name`}" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''}>
