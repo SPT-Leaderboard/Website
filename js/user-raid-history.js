@@ -180,15 +180,15 @@ function createRaidBadges(raid) {
     if (raid.raidKills >= 10) {
         badges.push({
             type: 'kills',
-            icon: 'fa-solid fa-crosshairs',
-            text: `Slayer (${raid.raidKills} kills)`,
+            icon: 'fa-solid fa-gun',
+            text: `Map Wipe (${raid.raidKills} kills!)`,
             color: 'warning'
         });
     } else if (raid.bossesKilled > 5) {
         badges.push({
             type: 'boss-killer',
-            icon: 'fa-solid fa-crown',
-            text: `Boss Killer (${raid.bossesKilled})`,
+            icon: 'fa-solid fa-crosshairs',
+            text: `Boss Hunter (${raid.bossesKilled})`,
             color: 'purple'
         });
     }
@@ -206,7 +206,7 @@ function createRaidBadges(raid) {
         badges.push({
             type: 'intel',
             icon: 'fa-solid fa-file-contract',
-            text: 'Intel Found!',
+            text: 'Intel Folder Found!',
             color: 'info'
         });
     }
@@ -223,7 +223,7 @@ function createRaidBadges(raid) {
     if (raid.foundBitcoin) {
         badges.push({
             type: 'bitcoin',
-            icon: 'fa-solid fa-coins',
+            icon: 'fa-brands fa-bitcoin',
             text: 'Bitcoin Found!',
             color: 'bitcoin'
         });
@@ -276,8 +276,9 @@ function createCrossProfileIndicator(raid, currentPlayerId, leaderboardData) {
                     <i class='bx bxs-user-badge'></i>
                     Played on: 
                     <button data-player-id="${otherPlayer.id}" class="cross-profile-link">
-                        <img src="${otherPlayer.profilePicture || 'media/default_avatar.png'}" 
+                        <img  src="${otherPlayer.profilePicture || 'media/default_avatar.png'}" 
                              alt="${otherPlayer.name}" 
+                             loading="lazy"
                              class="cross-profile-avatar"
                              onerror="this.src='media/default_avatar.png';">
                         ${otherPlayer.name}
@@ -301,7 +302,8 @@ function createBackgroundImage(raid) {
     return `
         <div class="last-raid-full-background">
             <img src="media/leaderboard_icons/maps/${raid.lastRaidMap}.png" 
-                 alt="${raid.lastRaidMap} background">
+                loading="lazy"
+                alt="${raid.lastRaidMap} background">
         </div>
     `;
 }
@@ -314,7 +316,8 @@ function createMapSection(raid, raidStatus) {
     return `
         <div class="last-raid-map ${raidStatus.class}-border">
             <img src="media/leaderboard_icons/maps/${raid.lastRaidMap}.png" 
-                 alt="${raid.lastRaidMap}">
+                 alt="${raid.lastRaidMap}"
+                 loading="lazy">
             <div class="map-hover-info">
                 ${raid.lastRaidMap}
             </div>
@@ -453,7 +456,7 @@ function renderMapStats(raids) {
                     <div class="map-stat-card ${map.isFavourite ? 'favourite-map' : ''}">
                         <div class="map-header">
                             <div class="map-image">
-                                <img src="media/leaderboard_icons/maps/${map.map}.png" alt="${map.map}" 
+                                <img loading="lazy" src="media/leaderboard_icons/maps/${map.map}.png" alt="${map.map}" 
                                     onerror="this.src='media/leaderboard_icons/maps/Default.png'">
                             </div>
                             <div class="map-info">

@@ -423,12 +423,12 @@ async function displayLeaderboard(data) {
 
         // 1st prio - dev
         if (player.dev) {
-            accountIcon = `<img src="media/leaderboard_icons/icon_developer.png" alt="Developer" style="width: 15px; height: 15px" class="account-icon">`;
+            accountIcon = `<img loading="lazy" src="media/leaderboard_icons/icon_developer.png" alt="Developer" style="width: 15px; height: 15px" class="account-icon">`;
             accountColor = '#2486ff';
         }
         // 2nd prio - Tester
         else if (player.trusted && !player.banned) {
-            accountIcon = `<img src="media/trusted.png" alt="Tester" class="account-icon">`;
+            accountIcon = `<img loading="lazy" src="media/trusted.png" alt="Tester" class="account-icon">`;
             accountColor = '#ba8bdb';
         }
         // 3rd prio - twitch players
@@ -440,11 +440,11 @@ async function displayLeaderboard(data) {
         else if (!player.banned && !player.isUsingTP) {
             switch (player.accountType) {
                 case 'edge_of_darkness':
-                    accountIcon = `<img src="media/EOD.png" alt="EOD" class="account-icon">`;
+                    accountIcon = `<img loading="lazy" src="media/EOD.png" alt="EOD" class="account-icon">`;
                     accountColor = '#be8301';
                     break;
                 case 'unheard_edition':
-                    accountIcon = `<img src="media/Unheard.png" alt="Unheard" class="account-icon">`;
+                    accountIcon = `<img loading="lazy" src="media/Unheard.png" alt="Unheard" class="account-icon">`;
                     accountColor = '#54d0e7';
                     break;
             }
@@ -492,14 +492,14 @@ async function displayLeaderboard(data) {
         const rank = getRank(playerRating);
         const rankHTML = `
             <div class="badge-lb tooltip">
-                <img src="${rank.image}" height="20"> 
+                <img loading="lazy" src="${rank.image}" height="20"> 
                 <span class="tooltiptext">${rank.fullName}</span>
             </div>
         `
 
         // Prestige icon
         const prestigeImg = [1, 2].includes(player.prestige)
-            ? `<img src="media/leaderboard_icons/Prestige_Icon${player.prestige}.png" style="width: 25px; height: 25px" class="prestige-icon" alt="Prestige ${player.prestige}">`
+            ? `<img loading="lazy" src="media/leaderboard_icons/Prestige_Icon${player.prestige}.png" style="width: 25px; height: 25px" class="prestige-icon" alt="Prestige ${player.prestige}">`
             : '';
 
         // Skill rank label
@@ -509,7 +509,7 @@ async function displayLeaderboard(data) {
             <td class="rank ${rankClass}">${player.rank} ${player.medal}</td>
             <td class="teamtag ${teamTagClass}" data-team="${player.teamTag ? player.teamTag : ``}">${player.teamTag ? `[${player.teamTag}]` : ``}</td>
             <td class="${player.isPremium ? 'theme-premium' : player.hasWinterTheme ? 'theme-winter' : ``} player-name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''} data-player-id="${player.id || '0'}">
-                <div class="${player.isPremium ? 'theme-premium' : player.hasWinterTheme ? 'theme-winter' : ``} lb-row-wrapper">${`<img class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';" />`}
+                <div class="${player.isPremium ? 'theme-premium' : player.hasWinterTheme ? 'theme-winter' : ``} lb-row-wrapper">${`<img loading="lazy" class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';" />`}
                 ${accountIcon} <span class="${finalNameClass}">${player.name}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div></div>
             </td>
             <td>${lastGame || 'N/A'}</td>
