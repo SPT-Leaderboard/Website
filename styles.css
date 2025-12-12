@@ -4345,6 +4345,8 @@ input[type="checkbox"]:checked:hover {
     display: flex;
     gap: 15px;
     align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .map-faction {
