@@ -141,6 +141,7 @@ function createRaidCard(raid, currentPlayerId, leaderboardData) {
 
 function createVisualSection(raid, raidStatus) {
     const killerInfo = createKillerInfo(raid);
+    const raidBadges = createRaidBadges(raid);
 
     return `
         <div class="raid-visual-section">
@@ -157,16 +158,92 @@ function createVisualSection(raid, raidStatus) {
                         ${formatSeconds(raid.raidTime)}
                     </span>
                     ${killerInfo || ''}
-
                     <span class="meta-item">
                         <i class='bx bxs-history'></i>
                         ${formatLastPlayedRaid(raid.absoluteLastTime)}
                     </span>
 
+                    ${raidBadges || ''}
                 </div>
             </div>
         </div>
     `;
+}
+
+function createRaidBadges(raid) {
+    if (raid.discFromRaid) {
+        return '';
+    }
+
+    const badges = [];
+
+    if (raid.raidKills >= 10) {
+        badges.push({
+            type: 'kills',
+            icon: 'fa-solid fa-crosshairs',
+            text: `Slayer (${raid.raidKills} kills)`,
+            color: 'warning'
+        });
+    } else if (raid.bossesKilled > 5) {
+        badges.push({
+            type: 'boss-killer',
+            icon: 'fa-solid fa-crown',
+            text: `Boss Killer (${raid.bossesKilled})`,
+            color: 'purple'
+        });
+    }
+
+    if (raid.foundLedx) {
+        badges.push({
+            type: 'ledx',
+            icon: 'fa-solid fa-syringe',
+            text: 'LEDX Found!',
+            color: 'ledx'
+        });
+    }
+
+    if (raid.foundIntel) {
+        badges.push({
+            type: 'intel',
+            icon: 'fa-solid fa-file-contract',
+            text: 'Intel Found!',
+            color: 'info'
+        });
+    }
+
+    if (raid.foundGPU) {
+        badges.push({
+            type: 'gpu',
+            icon: 'fa-solid fa-microchip',
+            text: 'GPU Found!',
+            color: 'gpu'
+        });
+    }
+
+    if (raid.foundBitcoin) {
+        badges.push({
+            type: 'bitcoin',
+            icon: 'fa-solid fa-coins',
+            text: 'Bitcoin Found!',
+            color: 'bitcoin'
+        });
+    }
+
+    if (raid.lastRaidProfit > 15000000) {
+        badges.push({
+            type: 'rich',
+            icon: 'fa-solid fa-sack-dollar',
+            text: 'Richest Raid',
+            color: 'gold'
+        });
+    }
+
+    return badges.map(badge => `
+        <span class="meta-item badge-${badge.color}">
+            <i class="${badge.icon}"></i>
+            ${badge.text}
+        </span>
+    `).join('');
 }
 
 function getRaidStatus(raid) {
@@ -174,6 +251,7 @@ function getRaidStatus(raid) {
     if (raid.discFromRaid) return RAID_STATUSES.DISCONNECTED;
     if (raid.isTransition) return RAID_STATUSES.TRANSIT;
     if (raid.lastRaidSurvived) return RAID_STATUSES.SURVIVED;
+
     return RAID_STATUSES.DIED;
 }
 
@@ -280,6 +358,7 @@ function createProfitSection(raid) {
 
     return `
         <div class="raid-profit ${profitClass}">
+            <i class='bx  bxs-currency-notes'></i> 
             <i class="${profitIcon}"></i>
             <span>${formatProfit(raid.lastRaidProfit)} ₽</span>
         </div>

@@ -4397,6 +4397,61 @@ input[type="checkbox"]:checked:hover {
     border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
+.badge-success {
+    background-color: rgba(40, 167, 69, 0.15);
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.badge-danger {
+    background-color: rgba(220, 53, 69, 0.15);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.badge-warning {
+    background-color: rgba(255, 193, 7, 0.15);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.badge-purple {
+    background-color: rgba(111, 66, 193, 0.15);
+    color: #6f42c1;
+    border: 1px solid rgba(111, 66, 193, 0.3);
+}
+
+.badge-gpu {
+    background-color: rgba(0, 123, 255, 0.15);
+    color: #007bff;
+    border: 1px solid rgba(0, 123, 255, 0.3);
+}
+
+.badge-bitcoin {
+    background-color: rgba(255, 193, 7, 0.2);
+    color: #f7931a;
+    border: 1px solid rgba(255, 193, 7, 0.4);
+}
+
+.badge-ledx {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #ff6b8b;
+    border: 1px solid rgba(220, 53, 69, 0.4);
+    animation: pulse 2s infinite;
+}
+
+.badge-info {
+    background-color: rgba(23, 162, 184, 0.15);
+    color: #17a2b8;
+    border: 1px solid rgba(23, 162, 184, 0.3);
+}
+
+.badge-gold {
+    background-color: rgba(255, 215, 0, 0.15);
+    color: #ffd700;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
 .score-diff {
     display: inline-flex;
     align-items: center;
