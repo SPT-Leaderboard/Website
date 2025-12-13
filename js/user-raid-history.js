@@ -247,10 +247,10 @@ function createRaidBadges(raid) {
 }
 
 function getRaidStatus(raid) {
-    if (raid.lastRaidRanThrough) return RAID_STATUSES.RUN_THROUGH;
-    if (raid.discFromRaid) return RAID_STATUSES.DISCONNECTED;
     if (raid.isTransition) return RAID_STATUSES.TRANSIT;
     if (raid.lastRaidSurvived) return RAID_STATUSES.SURVIVED;
+    if (raid.lastRaidRanThrough) return RAID_STATUSES.RUN_THROUGH;
+    if (raid.discFromRaid) return RAID_STATUSES.DISCONNECTED;
 
     return RAID_STATUSES.DIED;
 }
@@ -342,7 +342,7 @@ function createRaidInfo(raid, raidStatus) {
 
 function createRaidResult(raid, raidStatus) {
     const transitInfo = raid.isTransition && raid.lastRaidTransitionTo
-        ? ` <span class="transit-arrow">→</span> ${raid.lastRaidTransitionTo}`
+        ? ` <span class="transit-arrow"><i class="fa-solid fa-person-walking-dashed-line-arrow-right"></i></span> ${raid.lastRaidTransitionTo}`
         : '';
 
     return `

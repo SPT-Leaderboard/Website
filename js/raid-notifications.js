@@ -109,14 +109,24 @@ async function showPlayerNotification(player) {
 
     // Profit
     let shouldShowProfit = false;
+    let hasLostProfit = false;
     let profitText = '';
-    if (player?.lastProfitGain && !player.isCasual && player.lastProfitGain > 15000000) {
+    if (player?.lastProfitGain && !player.isCasual && player.lastProfitGain > 10000000) {
         const profitRaid = new Audio('media/sounds/earnings/profit.mp3');
-        profitRaid.volume = 0.23;
+        profitRaid.volume = 0.20;
         profitRaid.play();
 
         profitText = `${player.name} just got out with ${player.lastProfitGain.toLocaleString('en-EN')} ₽!`
 
+        shouldShowProfit = true;
+    } else if (player?.lastProfitGain && !player.isCasual && player.lastProfitGain > -5000000) {
+        const profitRaid = new Audio('media/sounds/earnings/profit_lost.mp3');
+        profitRaid.volume = 0.05;
+        profitRaid.play();
+
+        profitText = `${player.name} just lost ${Math.abs(player.lastProfitGain).toLocaleString('en-EN')} ₽!`
+
+        hasLostProfit = true;
         shouldShowProfit = true;
     }
 
@@ -247,7 +257,7 @@ async function showPlayerNotification(player) {
                     </span>
                     `}
                 ${shouldShowProfit ? `
-                    <span class="notification-last-raid-profit">
+                    <span class="notification-last-raid-profit ${hasLostProfit ? `last-raid-lost-profit` : ``}">
                         ${profitText}
                     </span>
                     ` : ``}

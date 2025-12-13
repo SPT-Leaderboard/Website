@@ -5964,7 +5964,6 @@ input[type="checkbox"]:checked:hover {
     font-size: 19px;
     font-weight: 700;
     text-align: center;
-
     background-image: linear-gradient(90deg,
             #fbff00 0%,
             #f8ff92 25%,
@@ -5979,6 +5978,27 @@ input[type="checkbox"]:checked:hover {
     animation: textclip 3s linear infinite;
     display: inline-block;
     will-change: background-position;
+    backface-visibility: hidden;
+}
+
+.last-raid-lost-profit {
+    text-transform: uppercase;
+    font-size: 19px;
+    font-weight: 700;
+    text-align: center;
+    background-image: linear-gradient(90deg,
+            #ff0000 0%,
+            #ff9292 25%,
+            #ff5c40 50%,
+            #ff9595 75%,
+            #ff0000 100%);
+    background-size: 200% auto;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: none;
+    display: inline-block;
     backface-visibility: hidden;
 }
 
@@ -7224,6 +7244,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 @keyframes logoGradient {
+
     0%,
     100% {
         background-position: 0% 50%;
@@ -7235,6 +7256,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 @keyframes logoFloat {
+
     0%,
     100% {
         transform: translateY(0px);
