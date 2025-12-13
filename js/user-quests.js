@@ -231,7 +231,7 @@ async function createQuestsHTML(quests) {
     const questsHTML = await Promise.all(
         quests.map(async (quest, index) => {
             const correctImageUrl = await getQuestImageUrl(quest.id, quest.imageUrl);
-            
+
             return `
                 <div class="quest-card ${quest.status}" style="animation-delay: ${index * 0.05}s">
                     <div class="quest-header">
@@ -282,7 +282,7 @@ async function createQuestsHTML(quests) {
             `;
         })
     );
-    
+
     return questsHTML.join('');
 }
 
@@ -299,18 +299,18 @@ async function getQuestImageUrl(questId, imageFileName, attempts = 0) {
     const basePath = 'media/player_quests/';
     const baseName = imageFileName.split('.')[0];
     const extensions = ['.png', '.jpg', '.jpeg'];
-    
+
     if (attempts >= extensions.length) {
         return basePath + 'default.jpg';
     }
-    
-    const currentExt = attempts === 0 ? 
-        imageFileName.substring(imageFileName.lastIndexOf('.')) : 
+
+    const currentExt = attempts === 0 ?
+        imageFileName.substring(imageFileName.lastIndexOf('.')) :
         extensions[attempts];
-    
+
     const testUrl = basePath + baseName + currentExt;
     const exists = await checkImageExists(testUrl);
-    
+
     if (exists) {
         return testUrl;
     } else {

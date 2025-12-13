@@ -188,7 +188,7 @@ function createRaidBadges(raid) {
         badges.push({
             type: 'boss-killer',
             icon: 'fa-solid fa-crosshairs',
-            text: `Boss Hunter (${raid.bossesKilled})`,
+            text: `Boss Hunter (${raid.bossesKilled} killed!)`,
             color: 'purple'
         });
     }
@@ -197,7 +197,7 @@ function createRaidBadges(raid) {
         badges.push({
             type: 'ledx',
             icon: 'fa-solid fa-syringe',
-            text: 'LEDX Found!',
+            text: 'Found LEDX!',
             color: 'ledx'
         });
     }
@@ -206,7 +206,7 @@ function createRaidBadges(raid) {
         badges.push({
             type: 'intel',
             icon: 'fa-solid fa-file-contract',
-            text: 'Intel Folder Found!',
+            text: 'Found Intel Folder!',
             color: 'info'
         });
     }
@@ -215,7 +215,7 @@ function createRaidBadges(raid) {
         badges.push({
             type: 'gpu',
             icon: 'fa-solid fa-microchip',
-            text: 'GPU Found!',
+            text: 'Found GPU!',
             color: 'gpu'
         });
     }
@@ -224,7 +224,7 @@ function createRaidBadges(raid) {
         badges.push({
             type: 'bitcoin',
             icon: 'fa-brands fa-bitcoin',
-            text: 'Bitcoin Found!',
+            text: 'Found Bitcoin!',
             color: 'bitcoin'
         });
     }

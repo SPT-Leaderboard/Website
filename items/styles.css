@@ -38,24 +38,6 @@
     border-color: var(--primary);
 }
 
-.stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg,
-            transparent,
-            rgba(255, 255, 255, 0.1),
-            transparent);
-    transition: left 0.6s ease;
-}
-
-.stat-card:hover::before {
-    left: 100%;
-}
-
 .stat-value {
     font-size: 2.5rem;
     font-weight: 800;
@@ -89,7 +71,7 @@
     width: 100%;
     padding: 15px 50px 15px 20px;
     background: var(--bg-dark-secondary);
-    border: 2px solid var(--border-light);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     color: var(--text-light);
     font-size: 1rem;
@@ -287,7 +269,7 @@
 .page-btn {
     padding: 12px 24px;
     background: var(--bg-dark-secondary);
-    border: 2px solid var(--border-light);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     color: var(--text-light);
     font-size: 0.95rem;
@@ -403,7 +385,6 @@
 
 .error-message button:hover {
     background: var(--primary-dark);
-    transform: translateY(-2px);
 }
 
 .extracted-stat {

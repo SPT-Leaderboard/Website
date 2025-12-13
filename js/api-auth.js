@@ -41,7 +41,7 @@ async function checkAuth() {
 function updateAuthStatus(status, message, notifications = 0) {
     const authElement = document.getElementById('authStatus');
     const notificationElement = document.getElementById('networkNotifies');
-    
+
     if (!authElement) return;
 
     const authText = authElement.querySelector('.auth-text');

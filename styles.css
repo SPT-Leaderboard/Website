@@ -3023,13 +3023,14 @@ input[type="checkbox"]:checked:hover {
     color: #bfebff;
     text-shadow: 0 0 3px rgba(191, 235, 255, 0.4);
     margin-bottom: 5px;
+    transition: all ease-in-out 200ms;
     font-feature-settings: "tnum";
     font-variant-numeric: tabular-nums;
 }
 
 .stat-item:hover .stat-value {
-    color: #91dcff;
-    text-shadow: 0 0 15px rgba(145, 220, 255, 0.6);
+    color: #b7e8ff;
+    text-shadow: 0 0 15px rgba(190, 233, 253, 0.2);
 }
 
 .stat-name {
@@ -6770,22 +6771,9 @@ input[type="checkbox"]:checked:hover {
     background: rgba(255, 255, 255, 0.08);
 }
 
-.admin-status::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    transition: all 0.3s ease;
-}
-
 .admin-status.online {
     color: #a5f3fc;
-}
-
-.admin-status.online::before {
-    background: linear-gradient(to bottom, #22d3ee, #0ea5e9);
+    border: 1px solid #22d3ee5c;
 }
 
 .admin-status.offline {
