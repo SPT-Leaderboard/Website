@@ -130,6 +130,7 @@ async function showPublicProfile(container, player) {
         player.profileAboutMe = playerData.aboutMe ?? '';
         player.discordUser = playerData.discordUser ?? '';
         player.customPfp = playerData.pfp ?? '';
+        player.customName = playerData.name ?? '';
     }
 
     // Disable auto updating on the background
@@ -301,7 +302,7 @@ async function showPublicProfile(container, player) {
                     <div class="name-wrapper">
                         <div class="${finalNameClass} ${player.isWinner ? `` : `name`}" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''}>
                             ${player.teamTag ? `[${player.teamTag}]` : ``}
-                            ${player.name}
+                            ${player.customName ? player.customName : player.name}
                         </div>
                         <div class="registerDate">Joined: ${regDate}</div>
                     </div>
