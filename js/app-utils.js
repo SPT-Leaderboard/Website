@@ -48,27 +48,39 @@ window.addEventListener('load', updateNavbarOffset);
 window.addEventListener('resize', updateNavbarOffset);
 
 // Ranks
-function getRank(rating, maxRating = 1000, res = 32) {
-    const totalRanks = 30;
+function getRank(rating, maxRating = 2000, res = 32) {
+    const totalRanks = 50;
     const rankIndex = Math.min(totalRanks - 1, Math.floor((rating / maxRating) * totalRanks));
     const level = rankIndex + 1;
-    const levelGroup = Math.floor((level - 1) / 6);
-    const groupProgress = ((level - 1) % 6) / 5;
+    const levelGroup = Math.floor((level - 1) / 10);
+    const groupProgress = ((level - 1) % 10) / 9;
 
     // Level inside rank group level (yes)
     const rankInGroup = ((level - 1) % 6) + 1;
 
+    // Map the images (6 images per 10 ranks show smoothly)
+    const imageIndex = Math.min(6, Math.floor((rankInGroup + 1) / 2));
+    if (rankInGroup === 9) imageIndex = 5;
+    if (rankInGroup === 10) imageIndex = 6;
+
     const rankNames = [
         // Level 1
-        ['Recruit', 'Private', 'Private First Class', 'Specialist', 'Trooper', 'Agent'],
+        ['Recruit', 'Private', 'Private Second Class', 'Private First Class', 'Lance Corporal',
+            'Specialist', 'Trooper', 'Rifleman', 'Grenadier', 'Combatant'],
         // Level 2
-        ['Corporal', 'Sergeant', 'Staff Sergeant', 'Petty Officer', 'Detective', 'Operator'],
+        ['Corporal', 'Sergeant', 'Staff Sergeant', 'Sergeant First Class', 'Master Sergeant',
+            'First Sergeant', 'Sergeant Major', 'Command Sergeant Major', 'Senior Enlisted Advisor', 'Chief Petty Officer'],
         // Level 3
-        ['Gunnery Sergeant', 'Master Sergeant', 'Lieutenant', 'Warrant Officer', 'Specialist Elite', 'Tactician'],
+        ['Second Lieutenant', 'First Lieutenant', 'Captain', 'Major', 'Lieutenant Colonel',
+            'Colonel', 'Brigadier General', 'Major General', 'Lieutenant General', 'General'],
         // Level 4
-        ['Captain', 'Major', 'Commander', 'Lieutenant Commander', 'Elite Operative', 'Vanguard'],
+        ['General of the Army', 'Field Marshal', 'Marshal of the Air Force', 'Fleet Admiral',
+            'Admiral of the Fleet', 'Supreme Commander', 'Chief of Defense', 'Generalissimo',
+            'Grand Marshal', 'Arch-General'],
         // Level 5
-        ['Colonel', 'Brigadier General', 'General', 'Marshal', 'Commander Elite', 'Legend']
+        ['BEAR Commander', 'USEC Commander', 'TerraGroup Agent', 'High Commander',
+            'Grand Warlord', 'Marshal General', 'Ghost of Tarkov', 'Operator Supreme',
+            'TerraGroup Operator', 'Legend']
     ];
 
     const getGroupColor = (groupIndex, progress) => {
@@ -116,7 +128,7 @@ function getRank(rating, maxRating = 1000, res = 32) {
     const rankName = rankNames[levelGroup][rankInGroup - 1];
 
     return {
-        image: `media/player_ranks/Rank${levelGroup + 1}/${rankInGroup}@${res}px.png`,
+        image: `media/player_ranks/Rank${levelGroup + 1}/${imageIndex}@${res}px.png`,
         name: rankName,
         fullName: `${rankName} (LVL ${level})`,
         level: level,

@@ -285,7 +285,7 @@ async function showPublicProfile(container, player) {
 
     // Get rank
     const playerRating = player.networkRaids ?? 0;
-    const rank = getRank(playerRating, 1000, 512);
+    const rank = getRank(playerRating, 2000, 512);
 
     container.innerHTML = `
         <!-- left column -->
