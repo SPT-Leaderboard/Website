@@ -832,7 +832,6 @@ async function showPublicProfile(container, player) {
     //
     let statusUpdater;
     const statusElement = container.querySelector('.player-status span');
-    statusUpdater = startStatusUpdater(player.id, player.permaLink, statusElement);
 
     // I have no clue, this is bullshit but it works
     class RaidTimeAnimator {
@@ -988,6 +987,8 @@ async function showPublicProfile(container, player) {
             }
         };
     }
+
+    statusUpdater = startStatusUpdater(player.id, player.permaLink, statusElement);
 
     // Close button stuff
     const closeButton = document.getElementById('closeButton');
