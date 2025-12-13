@@ -314,9 +314,9 @@ function capitalize(str, locale = 'en-EN') {
     return str[0].toLocaleUpperCase(locale) + str.slice(1).toLocaleLowerCase(locale);
 }
 
-async function getCustomProfileSettings(playerId) {
+async function getCustomProfileSettings(permaLink) {
     try {
-        const response = await fetch(`/api/network/profile/profiles/${playerId}.json?t=${Date.now()}`);
+        const response = await fetch(`${profileAppearencePath}${permaLink}.json?t=${Date.now()}`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -324,7 +324,7 @@ async function getCustomProfileSettings(playerId) {
 
         const data = await response.json();
 
-        return data[playerId] || null;
+        return data[permaLink] || null;
     } catch (error) {
         console.error('Failed to load profile settings:', error);
         return null;

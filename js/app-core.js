@@ -43,7 +43,7 @@ let seasonPath = '/api/data/seasons/season';
 let seasonLocalPath = `fallbacks/season`;
 let seasonPathEnd = `.json?t=${Date.now()}`;
 let lastRaidsPath = `/api/data/player_raids/`;
-let profileSettingsPath = `/api/data/profile_settings.json?t=${Date.now()}`;
+let profileAppearencePath = `/api/network/profile/profiles/`;
 let weaponStatsPath = `/api/data/shared/weapon_counters.json?t=${Date.now()}`;
 let profileUrlPath = `https://sptlb.yuyui.moe/#id=`;
 let heartbeatsPath = `/api/main/heartbeat/heartbeats.json?t=${Date.now()}`;
@@ -55,7 +55,7 @@ let globalCounters = `/api/data/shared/global_counters.json`;
 if (isLocalhost) {
     pmcPfpsPath = `fallbacks/pmc_avatars/`;
     seasonPath = `../fallbacks/season`;
-    profileSettingsPath = `fallbacks/profile_settings.json?t=${Date.now()}`;
+    profileAppearencePath = `fallbacks/profile_settings/`;
     weaponStatsPath = `../fallbacks/shared/weapon_counters.json?t=${Date.now()}`;
     profileUrlPath = `127.0.0.1:5500/#id=`;
     heartbeatsPath = `fallbacks/heartbeats.json?t=${Date.now()}`;

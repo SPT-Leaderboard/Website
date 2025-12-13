@@ -3523,6 +3523,10 @@ input[type="checkbox"]:checked:hover {
     align-items: center;
 }
 
+.player-discord i {
+    color: #7289da;
+}
+
 .badge {
     width: 45px;
     height: 45px;
