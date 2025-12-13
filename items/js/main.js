@@ -1,8 +1,15 @@
+//     _____ ____  ______   __    _________    ____  __________  ____  ____  ___    ____  ____ 
+//    / ___// __ \/_  __/  / /   / ____/   |  / __ \/ ____/ __ \/ __ )/ __ \/   |  / __ \/ __ \
+//    \__ \/ /_/ / / /    / /   / __/ / /| | / / / / __/ / /_/ / __  / / / / /| | / /_/ / / / /  
+//   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ / 
+//  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
+
 const CONFIG = {
     IMAGE_BASE_URL: 'https://tarkynator.com/data/images/',
     IMAGE_EXTENSION: '-512.webp',
     ITEMS_JSON_URL: '/api/data/shared/item_counters.json',
     LOCALE_JSON_URL: '../items/js/data/en.json',
+    LOCALE_JSON_LOCAL_URL: '../fallbacks/shared/item_counters.json',
     SUFFIXES: {
         NAME: ' Name',
         SHORT_NAME: ' ShortName'
@@ -50,8 +57,10 @@ class ItemsRenderer {
     }
 
     async loadData() {
+        let itemsPath = isLocalhost ? CONFIG.LOCALE_JSON_LOCAL_URL : CONFIG.ITEMS_JSON_URL;
+
         const [itemsResponse, localeResponse] = await Promise.all([
-            fetch(CONFIG.ITEMS_JSON_URL),
+            fetch(itemsPath),
             fetch(CONFIG.LOCALE_JSON_URL)
         ]);
 
@@ -164,6 +173,13 @@ class ItemsRenderer {
         const formattedDate = this.formatLastUpdated(item.lastUpdated);
         const isRecent = this.isRecentlyUpdated(item.lastUpdated);
 
+        // Ignore bad items
+        if (item.name === 'Unknown Item' ||
+            item.name === 'Armor steel' ||
+            item.name === '6.5 mm aramid insert and titanium plates' ||
+            item.name === 'Working hard drive') return;
+        
+
         card.innerHTML = `
             <div class="item-header">
                 <img src="${this.getImageUrl(item.id)}"  alt="${item.name}"  class="item-image">
@@ -211,7 +227,6 @@ class ItemsRenderer {
             </div>
         `;
 
-        // Анимация при появлении
         card.style.opacity = '0';
         card.style.transform = 'translateY(20px)';
 
@@ -227,13 +242,13 @@ class ItemsRenderer {
     renderPagination(totalPages) {
         this.elements.pageNumbers.innerHTML = '';
 
-        // Предыдущая кнопка
+        // prev page
         this.elements.prevBtn.disabled = this.currentPage === 1;
 
-        // Следующая кнопка
+        // next page
         this.elements.nextBtn.disabled = this.currentPage === totalPages;
 
-        // Номера страниц
+        // page numbers
         let startPage = Math.max(1, this.currentPage - 2);
         let endPage = Math.min(totalPages, startPage + 4);
 
@@ -335,11 +350,14 @@ class ItemsRenderer {
         `;
     }
 
-    formatLastUpdated(dateString) {
-        if (!dateString) return 'Never';
+    formatLastUpdated(unixTimestamp) {
+        if (typeof unixTimestamp !== "number" || unixTimestamp <= 0) {
+            return "Unknown";
+        }
 
+        const date = new Date(unixTimestamp * 1000);
         const now = new Date();
-        const date = new Date(dateString);
+
         const diffMs = now - date;
         const diffMins = Math.floor(diffMs / 60000);
         const diffHours = Math.floor(diffMs / 3600000);
@@ -363,7 +381,7 @@ class ItemsRenderer {
         if (!dateString) return false;
 
         const now = new Date();
-        const date = new Date(dateString);
+        const date = new Date(dateString * 1000);
         const diffHours = (now - date) / 3600000;
 
         return diffHours < 24;
