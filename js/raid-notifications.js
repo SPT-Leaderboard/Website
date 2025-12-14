@@ -108,26 +108,45 @@ async function showPlayerNotification(player) {
     }
 
     // Profit
+    // Profit
     let shouldShowProfit = false;
     let hasLostProfit = false;
     let profitText = '';
-    if (player?.lastProfitGain && !player.isCasual && player.lastProfitGain > 10000000) {
-        const profitRaid = new Audio('media/sounds/earnings/profit.mp3');
-        profitRaid.volume = 0.20;
-        profitRaid.play();
 
-        profitText = `${player.name} just got out with ${player.lastProfitGain.toLocaleString('en-EN')} ₽!`
+    if (player?.lastProfitGain !== undefined && player?.lastProfitGain !== null && !player.isCasual) {
+        const profit = Number(player.lastProfitGain);
 
-        shouldShowProfit = true;
-    } else if (player?.lastProfitGain && !player.isCasual && player.lastProfitGain > -5000000) {
-        const profitRaid = new Audio('media/sounds/earnings/profit_lost.mp3');
-        profitRaid.volume = 0.05;
-        profitRaid.play();
+        console.log(`Debug: ${player.name} profit = ${profit} ₽`);
 
-        profitText = `${player.name} just lost ${Math.abs(player.lastProfitGain).toLocaleString('en-EN')} ₽!`
+        // +10MIL
+        if (profit >= 10000000) {
+            try {
+                const profitRaid = new Audio('media/sounds/earnings/profit.mp3');
+                profitRaid.volume = 0.20;
+                profitRaid.play();
+            } catch (e) {
+                console.log('Could not play profit sound:', e);
+            }
 
-        hasLostProfit = true;
-        shouldShowProfit = true;
+            profitText = `${player.name} just got out with ${profit.toLocaleString('en-EN')} ₽!`;
+            shouldShowProfit = true;
+            console.log(`Showing profit for ${player.name}: +${profit} ₽`);
+        }
+        // -2MIL
+        else if (!player.lastRaidSurvived && profit <= -2000000) {
+            try {
+                const profitRaid = new Audio('media/sounds/earnings/profit_lost.mp3');
+                profitRaid.volume = 0.05;
+                profitRaid.play();
+            } catch (e) {
+                console.log('Could not play sound:', e);
+            }
+
+            profitText = `${player.name} just lost ${Math.abs(profit).toLocaleString('en-EN')} ₽!`;
+            hasLostProfit = true;
+            shouldShowProfit = true;
+            console.log(`Showing loss for ${player.name}: ${profit} ₽`);
+        }
     }
 
     // Killstreak
