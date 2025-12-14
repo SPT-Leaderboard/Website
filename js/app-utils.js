@@ -79,8 +79,8 @@ function getRank(rating, maxRating = 2000, res = 32) {
             'Grand Marshal', 'Arch-General'],
         // Level 5
         ['BEAR Commander', 'USEC Commander', 'TerraGroup Agent', 'High Commander',
-            'Grand Warlord', 'Marshal General', 'Ghost of Tarkov', 'Operator Supreme',
-            'TerraGroup Operator', 'Legend']
+            'Warlord', 'Marshal General', 'Ghost of Tarkov', 'Operator Supreme',
+            'TerraGroup Operator', 'Tarkov Legend']
     ];
 
     const getGroupColor = (groupIndex, progress) => {
