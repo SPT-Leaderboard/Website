@@ -99,6 +99,7 @@ async function showPlayerNotification(player) {
 
     // PROMO
     let teamTagClass = '';
+    let nameClass = '';
     if (player.teamTag === "SPTLB") {
         nameClass = 'promo-name';
         teamTagClass = 'promo-name'
