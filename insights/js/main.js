@@ -100,15 +100,6 @@ function initCharts() {
             false,
             'Hit Distribution by Body Part'
         ),
-        activityChart: createChart(
-            'activityChart',
-            'bar',
-            ['<1 Week', '<1 Month', '<3 Months', '>3 Months'],
-            [0, 0, 0, 0],
-            'Players',
-            false,
-            'Player Activity (Last Played)'
-        ),
         traderPopularityChart: createChart(
             'traderPopularityChart',
             'bar',
@@ -227,13 +218,13 @@ async function fetchData() {
         initCharts();
 
         // Fetch data from all
-        const [season1Response, season2Response, season3Response, season4Response, season5Response, season6Response, mapsResponse] = await Promise.all([
-            fetch('../api/data/seasons/season1.json'),
+        const [season1Response, season2Response, season3Response, season4Response, season5Response, season6Response, globalsResponse] = await Promise.all([
             fetch('../api/data/seasons/season2.json'),
             fetch('../api/data/seasons/season3.json'),
             fetch('../api/data/seasons/season4.json'),
             fetch('../api/data/seasons/season5.json'),
             fetch('../api/data/seasons/season6.json'),
+            fetch('../api/data/seasons/season7.json'),
             fetch('../api/data/shared/global_counters.json')
         ]);
 
@@ -243,7 +234,7 @@ async function fetchData() {
         const season4Data = await season4Response.json();
         const season5Data = await season5Response.json();
         const season6Data = await season6Response.json();
-        mapsData = await mapsResponse.json();
+        mapsData = await globalsResponse.json();
 
         // Combine
         playersData = [...season1Data.leaderboard, ...season2Data.leaderboard, ...season3Data.leaderboard, ...season4Data.leaderboard, ...season5Data.leaderboard, ...season6Data.leaderboard];
@@ -266,12 +257,11 @@ function processPlayersData() {
 
     const totalPmcRaids = playersData.reduce((sum, p) => sum + (p.pmcRaids || 0), 0);
     const totalScavRaids = playersData.reduce((sum, p) => sum + (p.scavRaids || 0), 0);
-    const totalFinalRaids = playersData.reduce((sum, p) => sum + (p.totalRaids || 0), 0);
-    const totalDamage = playersData.reduce((sum, p) => sum + (p.damage || 0), 0);
+    const totalFinalRaids = mapsData.total_raids;
+    const totalDamage = mapsData.total_damage;
 
     const totalRaids = totalPmcRaids + totalScavRaids + totalFinalRaids;
-    const totalPlayTimeSeconds = playersData.reduce((sum, p) => sum + (p.totalPlayTime || 0), 0);
-    const totalPlayTimeFormatted = formatPlayTime(totalPlayTimeSeconds);
+    const totalPlayTimeFormatted = formatPlayTime(mapsData.total_playtime);
 
     const totalKills = playersData.reduce((sum, p) => sum + (p.pmcKills || 0) + (p.bossesKilled || 0) + (p.scavsKilled || 0), 0);
     const totalDeaths = playersData.reduce((sum, p) => sum + (p.pmcDeaths || 0) + (p.scavDeaths || 0), 0);
@@ -397,20 +387,6 @@ function processPlayersData() {
     ];
     updateChart(charts.hitDistributionChart, hitDistributionValues);
 
-    // Activity (online)
-    const now = Math.floor(Date.now() / 1000);
-    const activityGroups = [0, 0, 0, 0]; // <1 week, <1 month, <3 months, >3 months
-
-    playersData.forEach(p => {
-        const daysSinceLastPlayed = (now - p.lastPlayed) / (60 * 60 * 24);
-
-        if (daysSinceLastPlayed <= 7) activityGroups[0]++;
-        else if (daysSinceLastPlayed <= 30) activityGroups[1]++;
-        else if (daysSinceLastPlayed <= 90) activityGroups[2]++;
-        else activityGroups[3]++;
-    });
-    updateChart(charts.activityChart, activityGroups);
-
     // trader popularity
     const traderPopularity = {
         'PRAPOR': 0, 'THERAPIST': 0, 'SKIER': 0, 'PEACEKEEPER': 0,
@@ -451,10 +427,10 @@ function processPlayersData() {
         }
         totalSales /= 1000000;
 
-        if (totalSales < 1) salesSumRanges[0]++;
-        else if (totalSales < 5) salesSumRanges[1]++;
-        else if (totalSales < 10) salesSumRanges[2]++;
-        else if (totalSales < 50) salesSumRanges[3]++;
+        if (totalSales < 5) salesSumRanges[0]++;
+        else if (totalSales < 30) salesSumRanges[1]++;
+        else if (totalSales < 50) salesSumRanges[2]++;
+        else if (totalSales < 100) salesSumRanges[3]++;
         else salesSumRanges[4]++;
     });
     updateChart(charts.salesSumChart, salesSumRanges);
