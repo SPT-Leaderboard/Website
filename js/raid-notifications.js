@@ -150,8 +150,8 @@ async function showPlayerNotification(player) {
 
         console.log(`Debug: ${player.name} profit = ${profit} ₽`);
 
-        // +10MIL
-        if (profit >= 10000000) {
+        // +2.3MIL
+        if (profit >= 2300000) {
             try {
                 const profitRaid = new Audio('media/sounds/earnings/profit.mp3');
                 profitRaid.volume = 0.20;
@@ -165,7 +165,7 @@ async function showPlayerNotification(player) {
             console.log(`Showing profit for ${player.name}: +${profit} ₽`);
         }
         // -2MIL
-        else if (!player.lastRaidSurvived && profit <= -2500000) {
+        else if (!player.lastRaidSurvived && profit <= -2000000) {
             try {
                 const profitRaid = new Audio('media/sounds/earnings/profit_lost.mp3');
                 profitRaid.volume = 0.05;
