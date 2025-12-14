@@ -117,6 +117,7 @@ async function showPlayerNotification(player) {
     }
 
     // Winner - priority
+    let finalNameClass = '';
     if (player.isWinner) {
         finalNameClass = 'player-name-gold Legendary';
     } else if (player.isPremium) {
