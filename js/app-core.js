@@ -485,6 +485,8 @@ async function displayLeaderboard(data) {
         // Winner - 1 priority
         if (player.isWinner === true) {
             finalNameClass = 'player-name-gold Legendary';
+        } else if(player.isPremium === true) {
+            finalNameClass = 'premium-name';
         }
 
         // Get Rank
@@ -508,8 +510,8 @@ async function displayLeaderboard(data) {
         row.innerHTML = `
             <td class="rank ${rankClass}">${player.rank} ${player.medal}</td>
             <td class="teamtag ${teamTagClass}" data-team="${player.teamTag ? player.teamTag : ``}">${player.teamTag ? `[${player.teamTag}]` : ``}</td>
-            <td class="${player.isPremium ? 'theme-premium' : player.hasWinterTheme ? 'theme-winter' : ``} player-name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''} data-player-id="${player.id || '0'}">
-                <div class="${player.isPremium ? 'theme-premium' : player.hasWinterTheme ? 'theme-winter' : ``} lb-row-wrapper">${`<img loading="lazy" class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';" />`}
+            <td class="player-name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''} data-player-id="${player.id || '0'}">
+                <div class="lb-row-wrapper">${`<img loading="lazy" class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';" />`}
                 ${accountIcon} <span class="${finalNameClass}">${player.name}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div></div>
             </td>
             <td>${lastGame || 'N/A'}</td>
