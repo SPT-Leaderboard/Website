@@ -3054,7 +3054,7 @@ input[type="checkbox"]:checked:hover {
 
 .user-main-card .name {
     font-size: 1.2em;
-    color: #84d2ff;
+    color: #dadada;
     font-weight: bold;
     line-height: 1.2;
     display: flex;
@@ -5810,7 +5810,7 @@ input[type="checkbox"]:checked:hover {
         0 8px 32px rgba(0, 0, 0, 0.3),
         0 2px 8px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
-    border-left: 4px solid #4a6cf7;
+    border-left: 4px solid;
     animation: slideInLastRaid 0.3s forwards;
     backdrop-filter: blur(5px);
     font-family: 'Segoe UI', system-ui, sans-serif;
@@ -5834,6 +5834,10 @@ input[type="checkbox"]:checked:hover {
 
 .border-survived {
     border-left: 4px solid #4ade80;
+}
+
+.border-transit {
+    border-left: 4px solid #fbbf24;
 }
 
 .notification-content-r {
@@ -5910,11 +5914,11 @@ input[type="checkbox"]:checked:hover {
 }
 
 .raid-result-r.disconnected {
-    color: #fbbf24;
+    color: #f87171;
 }
 
 .raid-result-r.transit {
-    color: #60a5fa;
+    color: #fbbf24;
 }
 
 .raid-meta-notify {
