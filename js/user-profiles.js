@@ -273,14 +273,11 @@ async function showPublicProfile(container, player) {
         finalNameClass = accountClass; // TP
     }
 
-    // premium
-    if (player.isPremium === true) {
-        finalNameClass = 'player-name-premium only-name';
-    }
-
     // Winner - priority
     if (player.isWinner === true) {
-        finalNameClass = 'player-name-gold only-name';
+        finalNameClass = 'player-name-gold Legendary';
+    } else if (player.isPremium === true) {
+        finalNameClass = 'premium-name';
     }
 
     // Get rank

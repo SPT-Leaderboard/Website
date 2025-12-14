@@ -63,19 +63,45 @@ async function showPlayerNotification(player) {
         return;
     }
 
-    let specialIconNotification = '';
+    // Account type handling
+    let accountIcon = '';
     let accountColor = '';
+    let accountClass = '';
 
-    // Tester
-    if (player.trusted) {
-        specialIconNotification = '<img src="media/trusted.png" alt="Tester" class="account-icon">';
+    // 1st prio - dev
+    if (player.dev) {
+        accountIcon = `<img loading="lazy" src="media/leaderboard_icons/icon_developer.png" alt="Developer" style="width: 15px; height: 15px" class="account-icon">`;
+        accountColor = '#2486ff';
+    }
+    // 2nd prio - Tester
+    else if (player.trusted && !player.banned) {
+        accountIcon = `<img loading="lazy" src="media/trusted.png" alt="Tester" class="account-icon">`;
         accountColor = '#ba8bdb';
     }
+    // 3rd prio - twitch players
+    else if (!player.banned && player.isUsingTP) {
+        accountClass = 'gradient-tp-text';
+        accountColor = '';
+    }
+    // 4th prio - account type
+    else if (!player.banned && !player.isUsingTP) {
+        switch (player.accountType) {
+            case 'edge_of_darkness':
+                accountIcon = `<img loading="lazy" src="media/EOD.png" alt="EOD" class="account-icon">`;
+                accountColor = '#be8301';
+                break;
+            case 'unheard_edition':
+                accountIcon = `<img loading="lazy" src="media/Unheard.png" alt="Unheard" class="account-icon">`;
+                accountColor = '#54d0e7';
+                break;
+        }
+    }
 
-    // Developer
-    if (player.dev) {
-        specialIconNotification = `<img src="media/leaderboard_icons/icon_developer.png" alt="Developer" style="width: 15px; height: 15px" class="account-icon">`;
-        accountColor = '#2486ff';
+    // PROMO
+    let teamTagClass = '';
+    if (player.teamTag === "SPTLB") {
+        nameClass = 'promo-name';
+        teamTagClass = 'promo-name'
     }
 
     let rankClass = '';
@@ -89,9 +115,15 @@ async function showPlayerNotification(player) {
             break;
     }
 
+    // Winner - priority
     if (player.isWinner) {
-        specialIconNotification = ``;
-        accountColor = '';
+        finalNameClass = 'player-name-gold Legendary';
+    } else if (player.isPremium) {
+        finalNameClass = 'premium-name';
+    } else if (nameClass) {
+        finalNameClass = nameClass;
+    } else if (accountClass) {
+        finalNameClass = accountClass;
     }
 
     // Raidstreak/Killstreaks
@@ -225,7 +257,7 @@ async function showPlayerNotification(player) {
     if (player.banned) {
         notification.className = `player-notification-r died-bg border-died`;
     } else {
-        notification.className = `player-notification-r ${player.discFromRaid ? 'disconnected-bg border-died' : player.isTransition ? 'transit-bg' : player.lastRaidSurvived ? 'survived-bg border-survived' : 'died-bg border-died'}`;
+        notification.className = `player-notification-r ${player.discFromRaid ? 'disconnected-bg border-died' : player.isTransition ? 'transit-bg border-transit' : player.lastRaidSurvived ? 'survived-bg border-survived' : 'died-bg border-died'}`;
     }
 
     if (player.banned) {
@@ -249,8 +281,9 @@ async function showPlayerNotification(player) {
             <div class="notification-header-r">
                 <img src="${player.profilePicture}" alt="${player.name}'s avatar" class="notification-avatar-r" onerror="this.src='media/default_avatar.png';">
                 <div class="notification-text-r">
-                    <span class="${player.isWinner ? `player-name-gold only-name` : `notification-name-r`}" style="color:${accountColor}; margin-bottom: 4px; font-weight: 700;">
-                        ${specialIconNotification}${player.teamTag ? `[${player.teamTag}]` : ``} ${player.name}
+                    <span class="${finalNameClass} ${player.isWinner ? 'only-name' : 'notification-name-r'}" 
+                        style="${accountColor && !finalNameClass.includes('gradient') ? `color:${accountColor};` : ''} margin-bottom: 4px; font-weight: 700;">
+                        ${accountIcon}${player.teamTag ? `[${player.teamTag}] ` : ''}${player.name}
                     </span>
                     <span class="notification-info-r">
                         Finished raid • ${formatLastPlayedRaid(player.absoluteLastTime)} • ${!player.isCasual ? `<span class="${rankClass}">Rank #${player.rank}</span>` : `Casual Mode`}
@@ -259,7 +292,7 @@ async function showPlayerNotification(player) {
             </div>
             <div class="raid-overview-notify">
                 <span class="raid-result-r ${player.lastRaidRanThrough ? 'run-through' : player.discFromRaid ? 'disconnected' : player.isTransition ? 'transit' : player.lastRaidSurvived ? 'survived' : 'died'}">
-                    ${player.lastRaidRanThrough ? `<i class='bx  bxs-walking'></i> Runner` : player.discFromRaid ? `<i class='bx  bxs-arrow-out-left-square-half'></i> Left` : player.isTransition ? `<i class='bx bxs-refresh-cw bx-spin'></i>  In Transit (${player.lastRaidMap}
+                    ${player.lastRaidRanThrough ? `<i class='bx  bxs-walking'></i> Runner` : player.discFromRaid ? `<i class='bx  bxs-arrow-out-left-square-half'></i> Left` : player.isTransition ? `<i class='bx bxs-refresh-cw bx-spin'></i>  Transit (${player.lastRaidMap}
                     <i class='fa-solid fa-person-walking-arrow-right'></i>  ${player.lastRaidTransitionTo || 'Unknown'})` : player.lastRaidSurvived ? `<i class='bx  bxs-walking'></i> Survived` : `
                     <i class="fa-solid fa-skull-crossbones"></i> Killed in Action`}
                 </span>
