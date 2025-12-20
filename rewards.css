@@ -32,6 +32,26 @@
     background-repeat: no-repeat;
 }
 
+.waves-bg {
+    background: url(media/rewards/card_background/waves.gif);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.sunset-bg {
+    background: url(media/rewards/card_background/sunset.gif);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.grenades-bg {
+    background: url(media/rewards/card_background/grenades.gif);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
 
 .labs-bg {
     background: url(media/rewards/card_background/labs.png);
@@ -138,6 +158,10 @@
     background-color: #181a20;
 }
 
+.theme-pastel {
+    background-color: #594b7e;
+}
+
 .theme-dark {
     background-color: #000000eb;
 }
@@ -159,7 +183,7 @@
 }
 
 /* ============================================
-   PREMIUM THEME - ENHANCED VERSION
+   PREMIUM THEME - ENHANCED
    ============================================ */
 
 .theme-premium {

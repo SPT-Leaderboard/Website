@@ -17,7 +17,7 @@ let isDataReady = false;
 let isLoggedIn = false;
 
 // Current SPT version
-let currentRelease = "4.0.1";
+let currentRelease = "4.0.8";
 
 // For debugging purposes
 // Will use local paths for some files/fallbacks
@@ -40,11 +40,13 @@ let oldTotalPlayTime = 0;
 
 // Paths
 let seasonPath = '/api/data/seasons/season';
-let seasonLocalPath = `fallbacks/season`;
+let seasonLocalPath = `fallbacks/`;
 let seasonPathEnd = `.json?t=${Date.now()}`;
 let lastRaidsPath = `/api/data/player_raids/`;
 let profileAppearencePath = `/api/network/profile/profiles/`;
 let weaponStatsPath = `/api/data/shared/weapon_counters.json?t=${Date.now()}`;
+let profileComments = `/api/data/user-comments/player_`;
+let profileCommentsEnd = `.json?t=${Date.now()}`;
 let profileUrlPath = `https://sptlb.yuyui.moe/#id=`;
 let heartbeatsPath = `/api/main/heartbeat/heartbeats.json?t=${Date.now()}`;
 let achievementsPath = `/api/data/shared/achievement_counters.json`;
@@ -57,6 +59,8 @@ if (isLocalhost) {
     seasonPath = `../fallbacks/season`;
     profileAppearencePath = `fallbacks/profile_settings/`;
     weaponStatsPath = `../fallbacks/shared/weapon_counters.json?t=${Date.now()}`;
+    profileComments = `fallbacks/user-comments/player_`;
+    profileCommentsEnd = `.json?t=${Date.now()}`;
     profileUrlPath = `127.0.0.1:5500/#id=`;
     heartbeatsPath = `fallbacks/heartbeats.json?t=${Date.now()}`;
     achievementsPath = `../fallbacks/shared/achievement_counters.json`;
@@ -134,6 +138,10 @@ async function initAllSeasons() {
     // Clean up before initialize
     let seasonNumber = 2;
     seasons = [];
+
+    if (!isOnMainPage && !isLocalhost) {
+        return;
+    }
 
     try {
         while (true) {
@@ -383,7 +391,7 @@ async function displayLeaderboard(data) {
                 boostValue < 0 ? 'bx-arrow-down-stroke' : 'bxs-radio-circle';
 
             badge = `
-            ${player.isPremium ? `
+            ${isPremium(player) ? `
             <div class="badge-lb tooltip" style="display: inline !important;">
                 <em class='bx bxs-shield-alt-2' style="color:rgb(100, 255, 165);"></em>
                 <span class="tooltiptext" style="bottom: 170%;">Profile in good standing</span>
@@ -423,7 +431,7 @@ async function displayLeaderboard(data) {
 
         // 1st prio - dev
         if (player.dev) {
-            accountIcon = `<img loading="lazy" src="media/leaderboard_icons/icon_developer.png" alt="Developer" style="width: 15px; height: 15px" class="account-icon">`;
+            accountIcon = `<i class="fa-solid fa-user-shield" style="color: rgba(221, 150, 253, 1); font-size: 18px;"></i>`;
             accountColor = '#2486ff';
         }
         // 2nd prio - Tester
@@ -485,7 +493,8 @@ async function displayLeaderboard(data) {
         // Winner - 1 priority
         if (player.isWinner === true) {
             finalNameClass = 'player-name-gold Legendary';
-        } else if(player.isPremium === true) {
+        } else if (isPremium(player)) {
+            player.isPremium = true;
             finalNameClass = 'premium-name';
         }
 

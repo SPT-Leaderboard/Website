@@ -439,7 +439,6 @@ class PlayerWidget {
         const openBtn = this.container.querySelector('#openProfileBtn');
         const closeBtn = this.container.querySelector('.close-widget');
 
-        // Обновление статистики
         const updateStats = () => {
             const p1Id = playerOneInput.value.trim();
             localStorage.setItem('playerOneId', p1Id);

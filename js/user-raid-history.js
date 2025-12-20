@@ -32,6 +32,7 @@ const RAID_STATUSES = {
         label: 'In Transit'
     }
 };
+
 const RAID_STAT_KEYS = [
     { key: 'raidKills', label: 'PMC Kills', format: 'number' },
     { key: 'scavsKilled', label: 'SCAV Kills', format: 'number' },
@@ -44,6 +45,8 @@ const RAID_STAT_KEYS = [
 // #region Init
 async function initLastRaids(playerId, permaLink) {
     const statsContainer = document.getElementById('raids-stats-container');
+    const mapStatsContainer = document.getElementById('maps-container');
+    const recentStatsContainer = document.getElementById('recent-raids-stats');
 
     if (!statsContainer) {
         statsContainer.innerHTML = `
@@ -57,15 +60,43 @@ async function initLastRaids(playerId, permaLink) {
 
     // Show loader
     statsContainer.innerHTML = `
-                        <div class="loader-glass">
-                        <div class="loader-content" id="main-profile-loader">
-                            <img src="media/loading_bar.gif" width="30" height="30" class="loader-icon">
-                            <h3 class="loader-text">Crunching latest data for you...</h3>
-                            <div class="loader-progress">
-                                <div class="progress-bar"></div>
-                            </div>
-                        </div>
-                    </div>`;
+            <div class="loader-dots" id="main-profile-loader">
+            <div class="shimmer-bg"></div>
+                <div class="dots-container">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+                <p class="dots-text">Fetching Raids...</p>
+            </div>
+        `;
+
+    recentStatsContainer.innerHTML = `
+        <div class="loader-dots">
+        <div class="shimmer-bg"></div>
+            <div class="dots-container">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <p class="dots-text">Awaiting Summary...</p>
+        </div>
+    `;
+
+    mapStatsContainer.innerHTML = `
+        <div class="loader-dots">
+        <div class="shimmer-bg"></div>
+            <div class="dots-container">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <p class="dots-text">Awaiting Map Stats...</p>
+        </div>
+    `;
 
     try {
         const playerRaidsPath = `${lastRaidsPath}${permaLink}.json?t=${Date.now()}`;
@@ -264,6 +295,7 @@ function shouldDisplayStats(raid) {
         raid.lastRaidEXP < 500);
 }
 
+// #region Cross-profile
 function createCrossProfileIndicator(raid, currentPlayerId, leaderboardData) {
     if (!raid.lastRaidSessionID || raid.lastRaidSessionID === currentPlayerId) return '';
 

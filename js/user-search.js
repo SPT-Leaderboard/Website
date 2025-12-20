@@ -191,15 +191,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 150);
     });
 
-    autoUpdateToggle.addEventListener('change', function () {
-        const label = this.parentElement;
-        if (this.checked) {
-            label.style.color = 'var(--accent-teal)';
-        } else {
-            label.style.color = 'var(--text-light)';
-        }
-    });
-
     searchInput.addEventListener('keydown', function (e) {
         if (e.ctrlKey) {
             if (e.key === '1') {

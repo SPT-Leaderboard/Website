@@ -16,6 +16,20 @@ async function loadQuestData(quests) {
         return;
     }
 
+    // Show loader
+    questsContainer.innerHTML = `
+        <div class="loader-dots">
+        <div class="shimmer-bg"></div>
+            <div class="dots-container">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <p class="dots-text">Processing Quests...</p>
+        </div>
+    `;
+
     if (!quests || Object.keys(quests).length === 0) {
         questsContainer.innerHTML = `
             <div class="no-stats-message">

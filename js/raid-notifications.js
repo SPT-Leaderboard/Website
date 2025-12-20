@@ -150,10 +150,8 @@ async function showPlayerNotification(player) {
     if (player?.lastProfitGain !== undefined && player?.lastProfitGain !== null && !player.isCasual) {
         const profit = Number(player.lastProfitGain);
 
-        console.log(`Debug: ${player.name} profit = ${profit} ₽`);
-
-        // +2.3MIL
-        if (profit >= 2300000) {
+        // +2.5MIL
+        if (profit >= 2500000) {
             try {
                 const profitRaid = new Audio('media/sounds/earnings/profit.mp3');
                 profitRaid.volume = 0.20;
@@ -281,7 +279,7 @@ async function showPlayerNotification(player) {
         notification.innerHTML = `
         <div class="notification-content-r">
             <div class="notification-header-r">
-                <img src="${player.profilePicture}" alt="${player.name}'s avatar" class="notification-avatar-r" onerror="this.src='media/default_avatar.png';">
+                <img src="${player.profilePicture}" alt="${player.name}'s avatar" onclick="openProfile(${player.id})" class="notification-avatar-r" onerror="this.src='media/default_avatar.png';">
                 <div class="notification-text-r">
                     <span class="${finalNameClass} ${player.isWinner ? 'only-name' : 'notification-name-r'}" 
                         style="${accountColor && !finalNameClass.includes('gradient') ? `color:${accountColor};` : ''} margin-bottom: 4px; font-weight: 700;">

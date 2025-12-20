@@ -27,6 +27,10 @@ class ItemsRenderer {
         this.totalItems = 0;
         this.totalExtracted = 0;
         this.totalDied = 0;
+        // Caching
+        this.imageCache = new Map();
+        this.lastFetchTime = 0;
+        this.CACHE_DURATION = 120000;
 
         // DOM
         this.elements = {
@@ -57,10 +61,15 @@ class ItemsRenderer {
     }
 
     async loadData() {
+        const now = Date.now();
+        if (now - this.lastFetchTime < this.CACHE_DURATION && this.itemsData && this.localeData) {
+            return;
+        }
+
         let itemsPath = isLocalhost ? CONFIG.LOCALE_JSON_LOCAL_URL : CONFIG.ITEMS_JSON_URL;
 
         const [itemsResponse, localeResponse] = await Promise.all([
-            fetch(itemsPath),
+            fetch(`${itemsPath}?t=${Date.now()}`),
             fetch(CONFIG.LOCALE_JSON_URL)
         ]);
 
@@ -73,6 +82,9 @@ class ItemsRenderer {
 
         this.totalItems = Object.keys(this.itemsData).length;
         this.filteredItems = this.prepareItemsData();
+
+        // Set last fetch time to optimize
+        this.lastFetchTime = now;
     }
 
     prepareItemsData() {
@@ -84,7 +96,9 @@ class ItemsRenderer {
             return {
                 id: itemId,
                 name: localeInfo.name,
+                nameLower: localeInfo.name.toLowerCase(),
                 shortName: localeInfo.shortName,
+                shortNameLower: localeInfo.shortName.toLowerCase(),
                 extracted: stats.extracted,
                 died: stats.died,
                 total: total,
@@ -118,7 +132,13 @@ class ItemsRenderer {
     }
 
     getImageUrl(itemId) {
-        return `${CONFIG.IMAGE_BASE_URL}${itemId}${CONFIG.IMAGE_EXTENSION}`;
+        if (this.imageCache.has(itemId)) {
+            return this.imageCache.get(itemId);
+        }
+
+        const url = `${CONFIG.IMAGE_BASE_URL}${itemId}${CONFIG.IMAGE_EXTENSION}`;
+        this.imageCache.set(itemId, url);
+        return url;
     }
 
     sortItems(items) {
@@ -144,17 +164,20 @@ class ItemsRenderer {
 
     filterItems(items) {
         const filterBy = this.elements.filterSelect.value;
-        const searchTerm = this.elements.searchInput.value.toLowerCase();
+        const searchTerm = this.elements.searchInput.value.trim().toLowerCase();
+
+        if (!searchTerm && filterBy === 'all') {
+            return items; // Skip if no conditions
+        }
 
         return items.filter(item => {
-            // Search
-            const matchesSearch = searchTerm === '' ||
-                item.name.toLowerCase().includes(searchTerm) ||
-                item.shortName.toLowerCase().includes(searchTerm);
+            // Use lowercase for search
+            if (searchTerm &&
+                !item.nameLower.includes(searchTerm) &&
+                !item.shortNameLower.includes(searchTerm)) {
+                return false;
+            }
 
-            if (!matchesSearch) return false;
-
-            // Filters
             switch (filterBy) {
                 case 'extracted':
                     return item.extracted > 0;
@@ -170,15 +193,25 @@ class ItemsRenderer {
         const card = document.createElement('div');
         card.className = 'item-card';
 
+        // Filter bad items
+        const badItems = new Set([
+            'Unknown Item',
+            'Armor steel',
+            '6.5 mm aramid insert and titanium plates',
+            'Working hard drive',
+            '13 mm aramid insert and ceramic plates',
+            'Aluminum insert',
+            `Accountant's notes`,
+            'Aramid insert'
+        ]);
+
+        if (badItems.has(item.name)) {
+            return null;
+        }
+
         const formattedDate = this.formatLastUpdated(item.lastUpdated);
         const isRecent = this.isRecentlyUpdated(item.lastUpdated);
 
-        // Ignore bad items
-        if (item.name === 'Unknown Item' ||
-            item.name === 'Armor steel' ||
-            item.name === '6.5 mm aramid insert and titanium plates' ||
-            item.name === 'Working hard drive') return;
-        
 
         card.innerHTML = `
             <div class="item-header">
@@ -198,16 +231,16 @@ class ItemsRenderer {
             
             <div class="item-stats">
                 <div class="stat">
-                    <div class="stat-value-i extracted-stat">${item.extracted.toLocaleString()}</div>
-                    <div class="stat-label">Extracted</div>
+                    <div class="stat-value-i extracted-stat">${formatSalesNum(item.extracted).toLocaleString()}</div>
+                    <div class="stat-label-i">Extracted</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-value-i died-stat">${item.died.toLocaleString()}</div>
-                    <div class="stat-label">Lost</div>
+                    <div class="stat-value-i died-stat">${formatSalesNum(item.died).toLocaleString()}</div>
+                    <div class="stat-label-i">Lost</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-value-i">${item.total.toLocaleString()}</div>
-                    <div class="stat-label">Total</div>
+                    <div class="stat-value-i">${formatSalesNum(item.total).toLocaleString()}</div>
+                    <div class="stat-label-i">Total</div>
                 </div>
                 
                 <div class="stat-ratio">
@@ -226,15 +259,6 @@ class ItemsRenderer {
                 </div>
             </div>
         `;
-
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-
-        setTimeout(() => {
-            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, 10);
 
         return card;
     }
@@ -278,10 +302,11 @@ class ItemsRenderer {
 
         this.totalPages = Math.ceil(sorted.length / CONFIG.ITEMS_PER_PAGE);
         const startIndex = (this.currentPage - 1) * CONFIG.ITEMS_PER_PAGE;
-        const endIndex = startIndex + CONFIG.ITEMS_PER_PAGE;
+        const endIndex = Math.min(startIndex + CONFIG.ITEMS_PER_PAGE, sorted.length);
         const itemsToShow = sorted.slice(startIndex, endIndex);
 
         this.elements.itemsGrid.innerHTML = '';
+        const fragment = document.createDocumentFragment();
 
         if (itemsToShow.length === 0) {
             this.elements.itemsGrid.innerHTML = `
@@ -292,8 +317,14 @@ class ItemsRenderer {
             `;
         } else {
             itemsToShow.forEach(item => {
-                this.elements.itemsGrid.appendChild(this.createItemCard(item));
+                const card = this.createItemCard(item);
+                if (card) {
+                    fragment.appendChild(card);
+                }
             });
+
+            this.elements.itemsGrid.innerHTML = '';
+            this.elements.itemsGrid.appendChild(fragment);
         }
 
         this.renderPagination(this.totalPages);
@@ -302,11 +333,15 @@ class ItemsRenderer {
     setupEventListeners() {
         // bouncy debounce for search
         this.elements.searchInput.addEventListener('input', () => {
-            clearTimeout(this.debounceTimer);
-            this.debounceTimer = setTimeout(() => {
-                this.currentPage = 1;
-                this.renderItems();
-            }, 300);
+            if (this.rafId) cancelAnimationFrame(this.rafId);
+
+            this.rafId = requestAnimationFrame(() => {
+                clearTimeout(this.debounceTimer);
+                this.debounceTimer = setTimeout(() => {
+                    this.currentPage = 1;
+                    this.renderItems();
+                }, 300);
+            });
         });
 
         this.elements.sortSelect.addEventListener('change', () => {
@@ -334,9 +369,6 @@ class ItemsRenderer {
         // Auto-refresh every 30 seconds
         setInterval(async () => {
             await this.loadData();
-            this.calculateTotals();
-            this.renderStatistics();
-            this.renderItems();
         }, 30000);
     }
 
@@ -384,7 +416,22 @@ class ItemsRenderer {
         const date = new Date(dateString * 1000);
         const diffHours = (now - date) / 3600000;
 
-        return diffHours < 24;
+        return diffHours < 5;
+    }
+
+    destroy() {
+        this.elements.searchInput.removeEventListener('input', this.handleSearch);
+        this.elements.sortSelect.removeEventListener('change', this.handleSort);
+        this.elements.filterSelect.removeEventListener('change', this.handleFilter);
+
+        clearTimeout(this.debounceTimer);
+        clearInterval(this.refreshInterval);
+
+        this.imageCache.clear();
+
+        this.elements = null;
+        this.itemsData = null;
+        this.localeData = null;
     }
 }
 

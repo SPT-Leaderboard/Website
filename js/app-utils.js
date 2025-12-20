@@ -362,13 +362,23 @@ function waitForDataReady(callback, timeout = 15000) {
 
 function formatSalesNum(num) {
     if (num >= 1000000000) {
-        return (num / 1000000000).toFixed(1) + 'bil';
+        return (num / 1000000000).toFixed(1) + 'Bil';
     }
     if (num >= 1000000) {
-        return (num / 1000000).toFixed(1) + 'mil';
+        return (num / 1000000).toFixed(1) + 'Mil';
     }
     if (num >= 1000) {
-        return (num / 1000).toFixed(1) + 'k';
+        return (num / 1000).toFixed(1) + 'K';
     }
     return num.toString();
+}
+
+function isPremium(player) {
+    const now = Math.floor(Date.now() / 1000);
+
+    if(player.isPremium && player.premiumUntil && player.premiumUntil > now){
+        return true;
+    } else {
+        return false;
+    }
 }

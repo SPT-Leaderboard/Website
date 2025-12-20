@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" type="text/css" href="../styles.css">
         <link rel="stylesheet" type="text/css" href="../achievements/ach.css">
-        <link rel="icon" href="../media/newlogo_transparent_snow.png">
+        <link rel="icon" href="../media/icon_transparent.png">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
         <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
@@ -22,7 +22,7 @@
         <div class="snowflake"></div>
         <nav class="navbar" role="navigation">
             <a href="#" aria-label="Achievements">
-                <img src="../media/newlogo_transparent_snow.png" alt="SPT Leaderboard Logo" class="navbar-logo">
+                <img src="../media/icon_transparent.png" alt="SPT Leaderboard Logo" class="navbar-logo">
             </a>
             <div class="navbar-links-container">
                 <a href="../" class="navbar-link">Go back</a>
@@ -38,13 +38,23 @@
             <div class="live-data-label" id="serverStatus">Getting API Status...</div>
         </div>
         <div id="achievements-container">
+            <div class="loader-dots"  style="height: 500px">
+                <div class="shimmer-bg"></div>
+                <div class="dots-container">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+                <p class="dots-text">Processing Achievements...</p>
+            </div>
         </div>
         <footer class="modern-footer">
             <div class="footer-content">
                 <div class="footer-brand">
                     <div class="logo-slogan">
-                        <img src="../media/newlogo_transparent_snow.png" class="footer-logo">
-                        <p class="slogan">Built with passion. Powered by community.</p>
+                        <img src="../media/icon_transparent.png" class="footer-logo">
+                        <p class="slogan">Built with passion. <span class="curve_underline">Powered by community.</span></p>
                     </div>
                     <div class="license-info">
                         <p>© 2025 SPT Leaderboard. All rights reserved.</p>

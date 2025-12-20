@@ -30,7 +30,7 @@ function resetStyles({ mainBackground, profileCard, profileAvatar, profileBackgr
     // Reset main background
     mainBackground.style.backgroundImage = '';
     mainBackground.style.backgroundColor = '';
-    mainBackground.className = mainBackground.className.replace(/(usec|bear|labs|lighthouse|goons|raider)-background|prestige-(tagilla|killa|both)|theme-premium/g, '');
+    mainBackground.className = mainBackground.className.replace(/(usec|bear|labs|lighthouse|goons|raider)-background|prestige-(tagilla|killa|both)/g, '');
 
     // Reset weapon 
     profileBackground.className = profileBackground.className.replace(/(scratches|cult-(signs|signs2|circle))/g, '');
@@ -99,7 +99,7 @@ function applyRewards(player, elements) {
         }
     };
 
-    if (player.isPremium === true && player.profileTheme.toLowerCase() === 'premium') {
+    if (isPremium(player) && player.profileTheme.toLowerCase() === 'premium') {
         mainBackground.classList.add('theme-premium');
     }
 

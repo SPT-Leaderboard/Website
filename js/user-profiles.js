@@ -85,7 +85,8 @@ function showDisqualProfile(container, player) {
         "theme-gradient",
         "theme-default",
         "theme-redshade",
-        "theme-steelshade"
+        "theme-steelshade",
+        "theme-premium"
     );
 
     container.innerHTML = `
@@ -108,6 +109,20 @@ function showDisqualProfile(container, player) {
 
 // Public profile
 async function showPublicProfile(container, player) {
+
+    // Show loader
+    container.innerHTML = `
+        <div class="loader-dots" style="grid-column: 1 / -1;">
+            <div class="shimmer-bg"></div>
+            <div class="dots-container">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <p class="dots-text">Loading Profile...</p>
+        </div>
+    `
 
     isProfileOpened = true;
     const playerData = await getCustomProfileSettings(player.permaLink);
@@ -152,6 +167,7 @@ async function showPublicProfile(container, player) {
     let bestWeapon = null;
     player.isUsingStattrack = false;
 
+    // Use try catch as stattrack_weapons[player.permaLink] might not exist on a player at all
     try {
         if (player?.permaLink && player.stattrack_weapons[player.permaLink]) {
             bestWeapon = await getBestWeapon(player.stattrack_weapons[player.permaLink]);
@@ -276,7 +292,7 @@ async function showPublicProfile(container, player) {
     // Winner - priority
     if (player.isWinner === true) {
         finalNameClass = 'player-name-gold Legendary';
-    } else if (player.isPremium === true) {
+    } else if (isPremium(player)) {
         finalNameClass = 'premium-name';
     }
 
@@ -514,27 +530,39 @@ async function showPublicProfile(container, player) {
             </div>
 
             <div class="last-raids" id="raids-stats-container">
-                <div class="loader-glass">
-                    <div class="loader-content" id="main-profile-loader">
-                        <img src="media/loading_bar.gif" width="30" height="30" class="loader-icon">
-                        <h3 class="loader-text">Crunching latest data for you...</h3>
-                        <div class="loader-progress">
-                            <div class="progress-bar"></div>
-                        </div>
-                     </div>
-                </div>
             </div>
 
             <div class="profile-section">
                 <div class="comment-form">
-                    <textarea class="comment-input" id="comment-text" placeholder="Write your comment... (Must Be logged in SPTLB Network)"></textarea>
+                    <textarea class="comment-input" id="comment-text" placeholder="Say something nice..."></textarea>
                     <button class="comment-submit" id="submit-comment">
                         <i class='bx bx-send'></i>
                         Send
                     </button>
                 </div>
                 <div class="divider"></div>
-                <div class="comments-list">
+                
+                <div class="comments-header">
+                    <h3>Comments (<span id="comments-count">0</span>)</h3>
+                    <div class="pagination-info" id="pagination-info">Page 1 of 1</div>
+                </div>
+                
+                <div class="comments-list" id="comments-list">
+                    <!-- JS -->
+                </div>
+                
+                <div class="pagination-controls" id="pagination-controls">
+                    <button class="pagination-btn pagination-prev" id="prev-page" disabled>
+                        <i class='bx bx-chevron-left'></i> Prev
+                    </button>
+                    
+                    <div class="page-indicators" id="page-indicators">
+                        <!-- JS -->
+                    </div>
+                    
+                    <button class="pagination-btn pagination-next" id="next-page">
+                        Next <i class='bx bx-chevron-right'></i>
+                    </button>
                 </div>
             </div>
 
@@ -1269,7 +1297,7 @@ function generateBadgesHTML(player) {
         </div>`;
     }
 
-    if (player.isPremium) {
+    if (isPremium(player)) {
         badges += `<div class="badge tooltip badge-premium">
             <em class="bx bxs-bolt"></em>
             <span class="tooltiptext">Premium BattlePass Owner</span>
@@ -1295,8 +1323,8 @@ function generateBadgesHTML(player) {
     // Dev
     if (player.dev) {
         badges += `<div class="badge tooltip">
-            <img src="media/leaderboard_icons/icon_developer.png" style="width: 20px; height: 20px">
-            <span class="tooltiptext">Developer playing the game.. Seriously?</span>
+            <em class="fa-solid fa-user-shield" style="color: rgba(221, 150, 253, 1); font-size: 18px;"></em>
+            <span class="tooltiptext">SPTLB Staff Member</span>
         </div>`;
     }
 
