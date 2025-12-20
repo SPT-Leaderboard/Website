@@ -23,7 +23,7 @@
         <div class="snowflake"></div>
         <nav class="navbar" role="navigation">
             <a href="#" aria-label="Weapon Meta">
-                <img src="../media/newlogo_transparent_snow.png" alt="SPT Leaderboard Logo" class="navbar-logo">
+                <img src="../media/icon_transparent.png" alt="SPT Leaderboard Logo" class="navbar-logo">
             </a>
             <div class="navbar-links-container">
                 <a href="/../" class="navbar-link">Go back</a>
@@ -61,14 +61,23 @@
             </div>
         </div>
         <div id="weaponsContainer" class="weapons-container animate animate__animated animate__fadeIn">
-            <!-- JS -->
+            <div class="loader-dots" style="grid-column: 1 / -1; height: 400px">
+                <div class="shimmer-bg"></div>
+                <div class="dots-container">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+                <p class="dots-text">Processing Weapons...</p>
+            </div>
         </div>
         <footer class="modern-footer">
             <div class="footer-content">
                 <div class="footer-brand">
                     <div class="logo-slogan">
-                        <img src="../media/newlogo_transparent_snow.png" class="footer-logo">
-                        <p class="slogan">Built with passion. Powered by community.</p>
+                        <img src="../media/icon_transparent.png" class="footer-logo">
+                        <p class="slogan">Built with passion. <span class="curve_underline">Powered by community.</span></p>
                     </div>
                     <div class="license-info">
                         <p>© 2025 SPT Leaderboard. All rights reserved.</p>
