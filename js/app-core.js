@@ -24,7 +24,7 @@ let currentRelease = "4.0.8";
 const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 
 // Is on main page?
-const isOnMainPage = window.location.hostname === "https://sptlb.yuyui.moe";
+const isProduction = window.location.hostname.includes("sptlb.yuyui.moe");
 
 // For dynamic stats counters
 let oldTotalRaids = 0;
@@ -102,30 +102,10 @@ async function checkSeasonExists(seasonNumber) {
         // Check server first
         const serverUrl = `${seasonPath}${seasonNumber}${seasonPathEnd}`;
         const serverResponse = await fetch(serverUrl);
-
-        if (serverResponse.ok) return true;
-
-        if (serverResponse.status === 404) {
-            // Nothing found on the server - check locally
-            try {
-                const localUrl = `${seasonLocalPath}${seasonNumber}.json`;
-                const localResponse = await fetch(localUrl);
-                return localResponse.ok;
-            } catch (localError) {
-                return false;
-            }
-        }
-
-        return false;
+       
+        return serverResponse.ok;
     } catch (error) {
-        // If any error - check locally
-        try {
-            const localUrl = `${seasonLocalPath}${seasonNumber}.json`;
-            const localResponse = await fetch(localUrl);
-            return localResponse.ok;
-        } catch (localError) {
-            return false;
-        }
+        return false;
     }
 }
 
@@ -134,14 +114,10 @@ async function checkSeasonExists(seasonNumber) {
  * @returns {Promise<void>}
  */
 async function initAllSeasons() {
-    // Seasons start from 1
+    // Seasons start from 2
     // Clean up before initialize
     let seasonNumber = 2;
     seasons = [];
-
-    if (!isOnMainPage && !isLocalhost) {
-        return;
-    }
 
     try {
         while (true) {
@@ -254,14 +230,6 @@ async function loadSeasonData(season) {
     try {
         // Try loading data from server first
         let response = await fetch(`${seasonPath}${season}${seasonPathEnd}`);
-
-        // If not, load locally
-        if (!response.ok && response.status === 404) {
-            response = await fetch(`${seasonLocalPath}${season}.json`);
-            if (!response.ok) throw new Error('Failed to load season data');
-        } else if (!response.ok) {
-            throw new Error('Failed to load season data');
-        }
 
         const data = await response.json();
         leaderboardData = data.leaderboard || [];
