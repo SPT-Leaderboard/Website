@@ -1323,7 +1323,7 @@ function generateBadgesHTML(player) {
     // Dev
     if (player.dev) {
         badges += `<div class="badge tooltip">
-            <em class="fa-solid fa-user-shield" style="color: rgba(221, 150, 253, 1); font-size: 18px;"></em>
+            <em class="fa-solid fa-user-shield promo-name" alt="Staff" style="font-size: 18px;"></em>
             <span class="tooltiptext">SPTLB Staff Member</span>
         </div>`;
     }

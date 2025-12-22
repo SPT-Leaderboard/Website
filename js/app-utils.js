@@ -28,9 +28,9 @@ function getPrettyMapName(entry) {
 
 // Get boost descriptions and details for tooltips
 function getBoostDescription(boost) {
-    if (boost >= 2) return 'Great Boost.';
-    if (boost > 0) return 'Small Boost.';
-    if (boost === 0) return 'Neutral.';
+    if (boost >= 2) return 'Great Boost';
+    if (boost > 0) return 'Small Boost';
+    if (boost === 0) return 'Neutral';
     return 'Penalty Applied.';
 }
 
