@@ -52,6 +52,7 @@ let heartbeatsPath = `/api/main/heartbeat/heartbeats.json?t=${Date.now()}`;
 let achievementsPath = `/api/data/shared/achievement_counters.json`;
 let pmcPfpsPath = `/api/data/pmc_avatars/`;
 let globalCounters = `/api/data/shared/global_counters.json`;
+let adminsOnline = `/api/admins_online.json`;
 
 // Paths for local files if debug is on
 if (isLocalhost) {
@@ -66,6 +67,7 @@ if (isLocalhost) {
     achievementsPath = `../fallbacks/shared/achievement_counters.json`;
     lastRaidsPath = `../fallbacks/player_raids/`;
     globalCounters = `../fallbacks/shared/global_counters.json`;
+    adminsOnline = `fallbacks/admins_online.json`;
 }
 
 // Call main init on DOM load
@@ -102,7 +104,7 @@ async function checkSeasonExists(seasonNumber) {
         // Check server first
         const serverUrl = `${seasonPath}${seasonNumber}${seasonPathEnd}`;
         const serverResponse = await fetch(serverUrl);
-       
+
         return serverResponse.ok;
     } catch (error) {
         return false;
@@ -192,29 +194,107 @@ async function loadPreviousSeasonWinners() {
  * For each existing season fills the dropdown menu where you can select seasons
  */
 function populateSeasonDropdown() {
-    const seasonSelect = document.getElementById('seasonSelect');
-    seasonSelect.innerHTML = '';
+    const dropdown = document.getElementById('customSeasonDropdown');
+    const dropdownToggle = dropdown.querySelector('.dropdown-toggle');
+    const dropdownSelected = dropdown.querySelector('.dropdown-selected');
+    const dropdownItems = document.getElementById('dropdownItems');
+    const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+    const hiddenSelect = document.getElementById('seasonSelect');
 
-    // Add individual seasons
+    let currentSeason = seasons[0];
+
+    // Initialize hidden select for compatibility
+    hiddenSelect.innerHTML = '';
     seasons.forEach(season => {
         const option = document.createElement('option');
         option.value = season;
         option.textContent = `Season ${season}`;
-        seasonSelect.appendChild(option);
-    })
+        hiddenSelect.appendChild(option);
+    });
 
-    seasonSelect.addEventListener('change', event => {
-        AppState.setAutoUpdate(false);
+    // Populate dropdown items
+    function populateItems() {
+        dropdownItems.innerHTML = '';
 
-        const selectedValue = event.target.value;
-        loadSeasonData(selectedValue);
+        seasons.forEach(season => {
+            const item = document.createElement('div');
+            item.className = `dropdown-item ${season === currentSeason ? 'selected' : ''}`;
+            item.setAttribute('role', 'option');
+            item.setAttribute('data-value', season);
+            item.textContent = `Season ${season}`;
 
-        if (selectedValue == seasons[0]) {
+            item.addEventListener('click', () => {
+                selectSeason(season);
+                closeDropdown();
+            });
+
+            dropdownItems.appendChild(item);
+        });
+    }
+
+    // Select season
+    function selectSeason(season) {
+        currentSeason = season;
+        dropdownSelected.textContent = `Season ${season}`;
+
+        // Update selected state
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.classList.remove('selected');
+            if (item.getAttribute('data-value') === season) {
+                item.classList.add('selected');
+            }
+        });
+
+        // Update hidden select
+        hiddenSelect.value = season;
+
+        // Trigger change event
+        const event = new Event('change');
+        hiddenSelect.dispatchEvent(event);
+
+        // Load season data
+        loadSeasonData(season);
+
+        // Update auto-update state
+        if (season === seasons[0]) {
             AppState.setAutoUpdate(true);
         } else {
+            AppState.setAutoUpdate(false);
             showToast('Live Data Flow was automatically disabled', 'info', 8000);
         }
-    })
+    }
+
+    // Toggle dropdown
+    function toggleDropdown() {
+        const isExpanded = dropdownToggle.getAttribute('aria-expanded') === 'true';
+        dropdownToggle.setAttribute('aria-expanded', !isExpanded);
+
+        if (!isExpanded) {
+            dropdownMenu.classList.add('show');
+        } else {
+            closeDropdown();
+        }
+    }
+
+    // Close dropdown
+    function closeDropdown() {
+        dropdownToggle.setAttribute('aria-expanded', 'false');
+        dropdownMenu.classList.remove('show');
+    }
+
+    // Event listeners
+    dropdownToggle.addEventListener('click', toggleDropdown);
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!dropdown.contains(e.target)) {
+            closeDropdown();
+        }
+    });
+
+    // Initialize
+    selectSeason(seasons[0]);
+    populateItems();
 }
 
 /**
@@ -399,7 +479,7 @@ async function displayLeaderboard(data) {
 
         // 1st prio - dev
         if (player.dev) {
-            accountIcon = `<i class="fa-solid fa-user-shield" style="color: rgba(221, 150, 253, 1); font-size: 18px;"></i>`;
+            accountIcon = `<i class="fa-solid fa-user-shield promo-name" alt="Staff" style="font-size: 18px;"></i>`;
             accountColor = '#2486ff';
         }
         // 2nd prio - Tester
