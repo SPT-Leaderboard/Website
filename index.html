@@ -86,8 +86,18 @@
                     <a href="/api/network/login/index.php" class="navbar-link navbar-link--login">Network Login <div id="networkNotifies"></div></a>
                 </div>
                 <div class="season-selector">
-                    <label for="seasonSelect" class="visually-hidden">Season:</label>
-                    <select id="seasonSelect" aria-label="Select season"></select>
+                    <label for="seasonSelect">Season:</label>
+                    <div class="custom-dropdown" id="customSeasonDropdown">
+                        <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="listbox">
+                            <span class="dropdown-selected">Loading seasons...</span>
+                        </button>
+                        <div class="dropdown-menu" role="listbox">
+                            <div class="dropdown-items" id="dropdownItems">
+                                <!-- Seasons will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                    <select id="seasonSelect" aria-label="Select season" style="display: none;"></select>
                 </div>
                 <div class="snow-corners-transparent"></div>
             </nav>
@@ -396,6 +406,12 @@
             </div>
         </div>
         <div id="admins-container">
+            <div class="header">
+                <h3><i class="bx bx-shield-alt"></i> Staff Online</h3>
+                <button class="toggle-btn" id="toggle-admins">
+                    <i class="bx bx-chevron-down"></i>
+                </button>
+            </div>
             <div class="content-wrapper"></div>
             <div class="loading-overlay" id="loading-overlay-admin">
                 <div class="loading-spinner"></div>
