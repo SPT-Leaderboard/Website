@@ -7,7 +7,7 @@
 function refreshRewards(player) {
 
     const elements = {
-        mainBackground: document.getElementById('modalPlayerInfo'),
+        mainBackground: document.querySelector(".profile-modal-content"),
         profileCard: document.getElementById('main-profile-card'),
         profileAvatar: document.getElementById('profile-avatar'),
         profileBackground: document.getElementById('weapon-meta-section'),
@@ -72,7 +72,10 @@ function applyRewards(player, elements) {
         "purple": { level: 15, class: 'purple-bg' },
         "streets3": { level: 10, class: 'streets3-bg' },
         "streets2": { level: 7, class: 'streets2-bg' },
-        "streets": { level: 4, class: 'streets-bg' }
+        "streets": { level: 4, class: 'streets-bg' },
+        "waves": { level: 20, class: 'waves-bg' },
+        "sunset": { level: 6, class: 'sunset-bg' },
+        "grenades": { level: 12, class: 'grenades-bg' },
     };
 
     if (cardBgMap[player.bp_cardbg]?.level <= bpLevel) {
@@ -98,15 +101,6 @@ function applyRewards(player, elements) {
             unlocked: isAchievementUnlocked(player, achievementMap.raider)
         }
     };
-
-    if (isPremium(player) && player.profileTheme.toLowerCase() === 'premium') {
-        mainBackground.classList.add('theme-premium');
-    }
-
-    if (player.profileTheme.toLowerCase() === 'winter') {
-        mainBackground.classList.remove('theme-premium');
-        mainBackground.classList.add('theme-winter');
-    }
 
     if (player.bp_mainbg === 'none') {
         mainBackground.style.backgroundColor = 'none';

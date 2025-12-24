@@ -190,14 +190,20 @@ async function showPublicProfile(container, player) {
         "theme-redshade",
         "theme-steelshade",
         "theme-premium",
-        "theme-winter"
+        "theme-winter",
+        "theme-pastel"
     );
-    profileModal.classList.add(
-        `theme-${player.profileTheme?.toLowerCase()
-            ? player.profileTheme?.toLowerCase()
-            : "default"
-        }`
-    );
+
+    const theme = player.profileTheme?.toLowerCase() || 'default';
+
+    // Assign themes
+    if (isPremium(player) && theme === 'premium') {
+        profileModal.classList.add('theme-premium');
+    } else if(!isPremium(player) && theme === 'premium') {
+        profileModal.classList.add(`theme-dark`);
+    } else {
+        profileModal.classList.add(`theme-${theme}`);
+    }
 
     // About me
     const aboutText = player.profileAboutMe
