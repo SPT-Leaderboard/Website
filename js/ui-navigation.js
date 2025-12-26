@@ -380,10 +380,10 @@ class PlayerWidget {
                         <div style="display: flex; align-items: center; gap: 6px;">
                             <input type="text" id="widgetPlayerOneId" class="player-id-input" style="flex: 1;" placeholder="Enter player ID">
                             <button id="copyIdBtn" title="Copy ID" class="icon-btn" style="display: none;">
-                                <i class='bx bx-copy'></i>
+                                <i class="fa-solid fa-copy"></i>
                             </button>
                             <button id="openProfileBtn" title="Open Profile" class="icon-btn" style="display: none;">
-                                <i class='bx bx-user-circle'></i>
+                                <i class="fa-solid fa-user"></i>
                             </button>
                         </div>
                     </div>
@@ -463,8 +463,8 @@ class PlayerWidget {
             const id = playerOneInput.value.trim();
             if (id) {
                 navigator.clipboard.writeText(id).then(() => {
-                    copyBtn.innerHTML = "<i class='bx bx-check'></i>";
-                    setTimeout(() => copyBtn.innerHTML = "<i class='bx bx-copy'></i>", 1500);
+                    copyBtn.innerHTML = "<i class='fa-solid fa-check'></i>";
+                    setTimeout(() => copyBtn.innerHTML = "<i class='fa-solid fa-copy'></i>", 1500);
                 });
             }
         });

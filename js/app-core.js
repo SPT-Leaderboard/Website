@@ -420,13 +420,13 @@ async function displayLeaderboard(data) {
         if (player.banned) {
             badge = `
             <div class="badge-lb tooltip">
-                <em class='bx bxs-alert-shield' style="color:rgba(255, 110, 100, 1);"></em> 
+                <em class="fa-solid fa-triangle-exclamation" style="color:rgba(255, 110, 100, 1);"></em>
                 <span class="tooltiptext">Profile is banned</span>
             </div>`;
         } else if (player?.suspicious && !player.isCasual) {
             badge = `
             <div class="badge-lb tooltip">
-                <em class='bx bxs-alert-shield' style="color:rgb(255, 214, 100);"></em> 
+                <em class="fa-solid fa-triangle-exclamation" style="color:rgb(255, 214, 100);"></em>
                 <span class="tooltiptext">Marked as suspicious by SkillIssueDetector™ (Beta)</span>
             </div>`;
         } else {
@@ -435,36 +435,33 @@ async function displayLeaderboard(data) {
                 boostValue > 3 ? 'rgba(100, 200, 255, 1)' :
                     boostValue < 0 ? 'rgba(255, 110, 100, 1)' : 'rgba(255, 255, 255, 1)';
 
-            const boostIcon = boostValue > 0 ? 'bx-arrow-up-stroke' :
-                boostValue < 0 ? 'bx-arrow-down-stroke' : 'bxs-radio-circle';
+            const boostIcon = boostValue > 0 ? 'fa-arrow-up' : 'fa-arrow-down';
 
             badge = `
             ${isPremium(player) ? `
             <div class="badge-lb tooltip" style="display: inline !important;">
-                <em class='bx bxs-shield-alt-2' style="color:rgb(100, 255, 165);"></em>
+                <em class='fa-solid fa-shield' style="color:rgb(100, 255, 165);"></em>
                 <span class="tooltiptext" style="bottom: 170%;">Profile in good standing</span>
             </div>
             <div class="badge-lb tooltip badge-premium" style="display: inline !important;">
-                <em class="bx bxs-bolt"></em>
+                <em class="fa-solid fa-bolt"></em>
                 <span class="tooltiptext" style="bottom: 170%;">Premium BattlePass Owner</span>
             </div>
             <div class="boost-container tooltip">
                 <span class="boost-value">${boostValue.toFixed(1)}%</span>
-                <em class='bx ${boostIcon}' style="color:${boostColor}; font-size:0.8em"></em>
-                <em class='bx bxs-bolt' style="color:${boostColor}"></em>
+                <em class='fa-solid ${boostIcon}' style="color:${boostColor}; font-size:0.8em"></em>
                 <span class="tooltiptext">
                     ${getBoostDescription(boostValue)}
                 </span>
             </div>
             ` : `
             <div class="badge-lb tooltip">
-                <em class='bx bxs-shield-alt-2' style="color:rgb(100, 255, 165);"></em>
+                <em class='fa-solid fa-shield' style="color:rgb(100, 255, 165);"></em>
                 <span class="tooltiptext">Profile in good standing</span>
             </div>
             <div class="boost-container tooltip">
                 <span class="boost-value">${boostValue.toFixed(1)}%</span>
-                <em class='bx ${boostIcon}' style="color:${boostColor}; font-size:0.8em"></em>
-                <em class='bx bxs-bolt' style="color:${boostColor}"></em>
+                <em class='fa-solid ${boostIcon}' style="color:${boostColor}; font-size:0.8em"></em>
                 <span class="tooltiptext">
                     ${getBoostDescription(boostValue)}
                 </span>
@@ -572,7 +569,7 @@ async function displayLeaderboard(data) {
                 ${accountIcon} <span class="${finalNameClass}">${player.name}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div></div>
             </td>
             <td>${lastGame || 'N/A'}</td>
-            <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class='bx  bxs-share'></i> </button></td>
+            <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class="fa-solid fa-share-from-square"></i> </button></td>
             <td>${badge}</td>
             <td>${`${player.pmcRaids} / ${player.scavRaids ?? 0} (${player.pmcRaids + player.scavRaids ?? 0})`}</td>
             <td class="${player.survivedToDiedRatioClass}">${player.survivalRate}%</td>
@@ -657,26 +654,59 @@ async function displaySimpleLeaderboard(data) {
         }
 
         // Add profile standing
+        // Add profile standing
         let badge = '';
         if (player.banned) {
             badge = `
             <div class="badge-lb tooltip">
-                <em class='bx bxs-alert-shield' style="color:rgba(255, 110, 100, 1);"></em> 
+                <em class="fa-solid fa-triangle-exclamation" style="color:rgba(255, 110, 100, 1);"></em>
                 <span class="tooltiptext">Profile is banned</span>
             </div>`;
         } else if (player?.suspicious && !player.isCasual) {
             badge = `
             <div class="badge-lb tooltip">
-                <em class='bx bxs-alert-shield' style="color:rgb(255, 214, 100);"></em> 
+                <em class="fa-solid fa-triangle-exclamation" style="color:rgb(255, 214, 100);"></em>
                 <span class="tooltiptext">Marked as suspicious by SkillIssueDetector™ (Beta)</span>
             </div>`;
         } else {
+            const boostValue = player.boostPerc || 0;
+            const boostColor = boostValue >= 1 && boostValue <= 3 ? 'rgba(142, 255, 189, 1)' :
+                boostValue > 3 ? 'rgba(100, 200, 255, 1)' :
+                    boostValue < 0 ? 'rgba(255, 110, 100, 1)' : 'rgba(255, 255, 255, 1)';
+
+            const boostIcon = boostValue > 0 ? 'fa-arrow-up' :
+                boostValue < 0 ? 'fa-arrow-down' : 'fa-arrows-to-dot';
+
             badge = `
+            ${isPremium(player) ? `
+            <div class="badge-lb tooltip" style="display: inline !important;">
+                <em class='fa-solid fa-shield' style="color:rgb(100, 255, 165);"></em>
+                <span class="tooltiptext" style="bottom: 170%;">Profile in good standing</span>
+            </div>
+            <div class="badge-lb tooltip badge-premium" style="display: inline !important;">
+                <em class="fa-solid fa-bolt"></em>
+                <span class="tooltiptext" style="bottom: 170%;">Premium BattlePass Owner</span>
+            </div>
+            <div class="boost-container tooltip">
+                <span class="boost-value">${boostValue.toFixed(1)}%</span>
+                <em class='fa-solid ${boostIcon}' style="color:${boostColor}; font-size:0.8em"></em>
+                <span class="tooltiptext">
+                    ${getBoostDescription(boostValue)}
+                </span>
+            </div>
+            ` : `
             <div class="badge-lb tooltip">
-                <em class='bx bxs-shield-alt-2' style="color:rgb(100, 255, 165);"></em>
+                <em class='fa-solid fa-shield' style="color:rgb(100, 255, 165);"></em>
                 <span class="tooltiptext">Profile in good standing</span>
             </div>
-            `;
+            <div class="boost-container tooltip">
+                <span class="boost-value">${boostValue.toFixed(1)}%</span>
+                <em class='fa-solid ${boostIcon}' style="color:${boostColor}; font-size:0.8em"></em>
+                <span class="tooltiptext">
+                    ${getBoostDescription(boostValue)}
+                </span>
+            </div> `}
+            `
         }
 
         // Skill rank label
@@ -688,7 +718,7 @@ async function displaySimpleLeaderboard(data) {
                 <span">${player.name}</span>
             </td>
             <td>${lastGame || 'N/A'}</td>
-            <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class='bx  bxs-share'></i> </button></td>
+            <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class="fa-solid fa-share-from-square"></i> </button></td>
             <td>${badge}</td>
             <td>${`${player.pmcRaids} / ${player.scavRaids ?? 0} (${player.pmcRaids + player.scavRaids ?? 0})`}</td>
             <td>${player.survivalRate}%</td>

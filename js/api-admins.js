@@ -92,7 +92,7 @@ async function updateAdminsStatus() {
                 <div class="admin-dropdown">
                     <div class="dropdown-header ${dropdownExpanded ? 'active' : ''}">
                         <span>+${hiddenAdmins.length} more</span>
-                        <i class="bx bx-chevron-down"></i>
+                        <i class="fa-solid fa-chevron-down"></i>
                     </div>
                     <div class="dropdown-content ${dropdownExpanded ? 'expanded' : ''}">
                         ${hiddenAdmins.join('')}

@@ -22,7 +22,7 @@ function initComments(permaLink, playerId) {
         commentInput.disabled = true;
         commentInput.placeholder = "Please log in to comment...";
         commentSubmit.disabled = true;
-        commentSubmit.innerHTML = '<i class="bx bx-key-alt"></i> Login Required';
+        commentSubmit.innerHTML = '<i class="fa-solid fa-key"></i> Login Required';
     }
 
     initPaginationControls();
@@ -228,7 +228,7 @@ async function submitComment(commentText, receiverId, permaLink, submitBtn, comm
     const originalText = submitBtn.innerHTML;
 
     try {
-        submitBtn.innerHTML = '<i class="bx bx-loader bx-spin"></i> Sending...';
+        submitBtn.innerHTML = 'Sending...';
         submitBtn.classList.add('loading');
         submitBtn.disabled = true;
 
@@ -314,7 +314,7 @@ function showCommentSuccess() {
     const submitBtn = commentSubmit;
     const originalHtml = submitBtn.innerHTML;
 
-    submitBtn.innerHTML = '<i class="bx bx-check"></i> Sent!';
+    submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> Sent!';
     submitBtn.style.background = 'linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1))';
     submitBtn.style.borderColor = 'rgba(16, 185, 129, 0.3)';
 
@@ -329,7 +329,7 @@ function showCommentError(error) {
     const submitBtn = commentSubmit;
     const originalHtml = submitBtn.innerHTML;
 
-    submitBtn.innerHTML = `<i class="bx bx-error"></i> ${error}`;
+    submitBtn.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${error}`;
     submitBtn.style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1))';
     submitBtn.style.borderColor = 'rgba(239, 68, 68, 0.3)';
 
@@ -422,7 +422,7 @@ function displayNoComments() {
     if (commentsList) {
         commentsList.innerHTML = `
             <div class="no-comments">
-                <i class='bx bxs-message'></i>
+                <i class="fa-solid fa-comment"></i>
                 <p>No comments yet</p>
                 <span>Be the first to leave a comment!</span>
             </div>

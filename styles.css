@@ -1483,7 +1483,7 @@ button:hover,
     justify-content: center;
 }
 
-.badge-premium .bxs-bolt {
+.badge-premium .fa-bolt {
     font-size: 1.2em;
     background: linear-gradient(135deg, #8a2be2, #da70d6, #9370db);
     -webkit-background-clip: text;
@@ -3678,6 +3678,11 @@ input[type="checkbox"]:checked:hover {
     justify-self: center;
     background-color: #ffffff0f;
     border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.boost-container em {
+    margin-left: 5px;
+    margin-top: 5px;
 }
 
 .boost-value {
@@ -7033,7 +7038,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .toggle-btn i {
-    font-size: 20px;
+    font-size: 15px;
     transition: transform 0.3s ease;
 }
 
@@ -7087,7 +7092,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .dropdown-header i {
-    font-size: 16px;
+    font-size: 12px;
     transition: transform 0.3s ease;
 }
 

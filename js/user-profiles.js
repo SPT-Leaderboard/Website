@@ -199,7 +199,7 @@ async function showPublicProfile(container, player) {
     // Assign themes
     if (isPremium(player) && theme === 'premium') {
         profileModal.classList.add('theme-premium');
-    } else if(!isPremium(player) && theme === 'premium') {
+    } else if (!isPremium(player) && theme === 'premium') {
         profileModal.classList.add(`theme-dark`);
     } else {
         profileModal.classList.add(`theme-${theme}`);
@@ -542,7 +542,7 @@ async function showPublicProfile(container, player) {
                 <div class="comment-form">
                     <textarea class="comment-input" id="comment-text" placeholder="Say something nice..."></textarea>
                     <button class="comment-submit" id="submit-comment">
-                        <i class='bx bx-send'></i>
+                        <i class="fa-solid fa-paper-plane"></i>
                         Send
                     </button>
                 </div>
@@ -559,7 +559,7 @@ async function showPublicProfile(container, player) {
                 
                 <div class="pagination-controls" id="pagination-controls">
                     <button class="pagination-btn pagination-prev" id="prev-page" disabled>
-                        <i class='bx bx-chevron-left'></i> Prev
+                        <i class="fa-solid fa-chevron-left"></i> Prev
                     </button>
                     
                     <div class="page-indicators" id="page-indicators">
@@ -567,7 +567,7 @@ async function showPublicProfile(container, player) {
                     </div>
                     
                     <button class="pagination-btn pagination-next" id="next-page">
-                        Next <i class='bx bx-chevron-right'></i>
+                        Next <i class="fa-solid fa-chevron-right"></i>
                     </button>
                 </div>
             </div>
@@ -1257,13 +1257,13 @@ function generateBadgesHTML(player) {
     const seasonTiers = [
         {
             condition: (seasons) => seasons >= 1 && seasons <= 2,
-            icon: "bx bxs-joystick",
+            icon: "fa-solid fa-gamepad",
             style: "",
             tooltip: (seasons) => `This player has been around for ${seasons} season${seasons === 1 ? '' : 's'}! Say hi!`
         },
         {
             condition: (seasons) => seasons >= 3 && seasons <= 4,
-            icon: "bx bxs-medal-star",
+            icon: "fa-solid fa-medal",
             style: "color: rgb(100, 149, 237)",
             tooltip: (seasons) => `${seasons} seasons of service.`
         },
@@ -1275,7 +1275,7 @@ function generateBadgesHTML(player) {
         },
         {
             condition: (seasons) => seasons >= 7 && seasons <= 8,
-            icon: "bx bxs-crown",
+            icon: "fa-solid fa-crown",
             style: "color: #FFD700; text-shadow: 0 0 5px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFD700;",
             tooltip: (seasons) => `${seasons} seasons of service.`
         },
@@ -1298,14 +1298,14 @@ function generateBadgesHTML(player) {
     // Has won last season
     if (player.isWinner) {
         badges += `<div class="badge tooltip">
-            <em class="bx  bxs-trophy-star" style="color:rgba(252, 255, 91, 1);"></em>
+            <em class="fa-solid fa-trophy" style="color:rgba(252, 255, 91, 1);"></em>
             <span class="tooltiptext">This player is a winner of previous Season!</span>
         </div>`;
     }
 
     if (isPremium(player)) {
         badges += `<div class="badge tooltip badge-premium">
-            <em class="bx bxs-bolt"></em>
+            <em class="fa-solid fa-bolt"></em>
             <span class="tooltiptext">Premium BattlePass Owner</span>
         </div>`;
     }
@@ -1313,7 +1313,7 @@ function generateBadgesHTML(player) {
     // Was banned before
     if (player.wasBannedBefore) {
         badges += `<div class="badge tooltip">
-        <em class='bx  bxs-target' style="color:rgba(255, 204, 204, 1);"></em>
+        <em class='fa-solid fa-bullseye' style="color:rgba(255, 204, 204, 1);"></em>
         <span class="tooltiptext">Mark of the dead. This player was previously banned</span>
       </div>`;
     }
@@ -1355,12 +1355,12 @@ function generateBadgesHTML(player) {
 
     if (player?.suspicious == true && !player.isCasual) {
         badges += `<div class="badge tooltip">
-        <em class='bx  bxs-alert-shield' style="color:rgb(255, 214, 100);"></em> 
-        <span class="tooltiptext">Marked as suspicious by SkillIssueDetector™ or warned by Moderation. Their statistics may be inaccurate</span>
-      </div>`;
+         <em class="fa-solid fa-triangle-exclamation" style="color:rgb(255, 214, 100);"></em>
+         <span class="tooltiptext">Marked as suspicious by SkillIssueDetector™ (Beta)</span>
+        </div>`;
     } else {
         badges += `<div class="badge tooltip">
-        <em class='bx  bxs-shield-alt-2' style="color:rgb(100, 255, 165);"></em>
+        <em class='fa-solid fa-shield' style="color:rgb(100, 255, 165);"></em>
         <span class="tooltiptext">Profile in good standing</span>
       </div>`;
     }

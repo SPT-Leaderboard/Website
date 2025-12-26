@@ -70,7 +70,7 @@ async function showPlayerNotification(player) {
 
     // 1st prio - dev
     if (player.dev) {
-        accountIcon = `<img loading="lazy" src="media/leaderboard_icons/icon_developer.png" alt="Developer" style="width: 15px; height: 15px" class="account-icon">`;
+        accountIcon = `<i class="fa-solid fa-user-shield promo-name" alt="Staff" style="font-size: 18px;"></i>`;
         accountColor = '#2486ff';
     }
     // 2nd prio - Tester
@@ -292,8 +292,8 @@ async function showPlayerNotification(player) {
             </div>
             <div class="raid-overview-notify">
                 <span class="raid-result-r ${player.lastRaidRanThrough ? 'run-through' : player.discFromRaid ? 'disconnected' : player.isTransition ? 'transit' : player.lastRaidSurvived ? 'survived' : 'died'}">
-                    ${player.lastRaidRanThrough ? `<i class='bx  bxs-walking'></i> Runner` : player.discFromRaid ? `<i class='bx  bxs-arrow-out-left-square-half'></i> Left` : player.isTransition ? `<i class='bx bxs-refresh-cw bx-spin'></i>  Transit (${player.lastRaidMap}
-                    <i class='fa-solid fa-person-walking-arrow-right'></i>  ${player.lastRaidTransitionTo || 'Unknown'})` : player.lastRaidSurvived ? `<i class='bx  bxs-walking'></i> Survived` : `
+                    ${player.lastRaidRanThrough ? `<i class="fa-solid fa-person-walking"></i> Runner` : player.discFromRaid ? `<i class="fa-solid fa-arrow-right-from-bracket"></i> Left` : player.isTransition ? `<i class="fa-solid fa-arrows-rotate fa-spin"></i>  Transit (${player.lastRaidMap}
+                    <i class='fa-solid fa-person-walking-arrow-right'></i>  ${player.lastRaidTransitionTo || 'Unknown'})` : player.lastRaidSurvived ? `<i class="fa-solid fa-person-walking"></i> Survived` : `
                     <i class="fa-solid fa-skull-crossbones"></i> Killed in Action`}
                 </span>
                 <span class="raid-meta-notify">
@@ -491,7 +491,7 @@ async function showNewPlayerWelcome(player) {
             <div class="raid-overview-notify">
                 <div class="new-player-stats">
                     <span class="new-player-stat">
-                        <i class='bx bx-trending-up'></i>
+                        <i class="fa-solid fa-arrow-trend-up"></i>
                         Joined us at #${player.rank} rank
                     </span>
                 </div>
