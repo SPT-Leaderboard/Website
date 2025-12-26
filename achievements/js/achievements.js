@@ -18,10 +18,9 @@ async function loadJSON(url) {
 }
 
 // Merge old (SPT 3.11) achievements data with new data (SPT 4.0)
-function mergeAchievements(oldData, newData, seData = null) {
+function mergeAchievements(newData, seData = null) {
     return {
         achievementCompiled: {
-            ...oldData.achievementCompiled,
             ...newData.achievementCompiled,
             ...(seData?.achievementCompiled || {})
         }
@@ -148,15 +147,14 @@ function renderAchievements(stats, searchTerm = '') {
 async function initAchievements() {
     try {
         // Load JSON files in parallel
-        const [oldAchievements, newAchievements, seAchievements, playersData] = await Promise.all([
+        const [newAchievements, seAchievements, playersData] = await Promise.all([
             loadJSON('../achievements/js/compiledAchData.json'),
-            loadJSON('../achievements/js/compiledAchDataNew.json'),
             loadJSON('../achievements/js/compiledAchSEData.json'),
             loadJSON(achievementsPath)
         ]);
 
         // Merge achievements - new data overwrites old data for same IDs (just to be sure if its changed recently)
-        achievementsData = mergeAchievements(oldAchievements, newAchievements, seAchievements);
+        achievementsData = mergeAchievements(newAchievements, seAchievements);
 
         // Store player achievements data
         playerAchievements = playersData;
