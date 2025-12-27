@@ -70,17 +70,79 @@
                 <a href="#" aria-label="Home">
                     <img src="media/icon_transparent.png" alt="SPT Leaderboard Logo" class="navbar-logo">
                 </a>
-                <div class="navbar-links-container">
-                    <a href="meta/" class="navbar-link">Weapon Meta</a>
-                    <a href="insights/" class="navbar-link">Global Insights</a>
-                    <a href="achievements/" class="navbar-link">Achievement Rate</a>
-                    <a href="items/" class="navbar-link">Items</a>
-                    <button id="infoButton" class="navbar-link">How it works</button>
-                    <button id="bannedButton" class="navbar-link">Banned Mods</button>
-                    <button id="tosButton" class="navbar-link">LA/TOS</button>
-                    <button id="settingsButton" class="navbar-link">Settings</button>
-                    <a class="navbar-link" href="api-docs/">API</a>
-                    <a href="/api/network/login/index.php" class="navbar-link navbar-link--login">Network Login <div id="networkNotifies"></div></a>
+                <div class="navbar-compact-menu">
+                    <!-- Stats -->
+                    <div class="compact-dropdown">
+                        <button class="compact-toggle" aria-expanded="false" aria-haspopup="true">
+                            <span class="compact-icon"><i class="fa-solid fa-chart-column"></i></span>
+                            <span class="compact-text">Stats</span>
+                            <span class="dropdown-arrow"><i class="fa-solid fa-caret-down"></i></span>
+                        </button>
+                        <div class="compact-menu">
+                            <a href="meta/" class="compact-item">
+                                <span class="item-icon"><i class="fa-solid fa-gun"></i></span>
+                                <span>Weapon Meta</span>
+                            </a>
+                            <a href="insights/" class="compact-item">
+                                <span class="item-icon"><i class="fa-solid fa-globe"></i></span>
+                                <span>Global Insights</span>
+                            </a>
+                            <a href="achievements/" class="compact-item">
+                                <span class="item-icon"><i class="fa-solid fa-trophy"></i></span>
+                                <span>Achievement Rate</span>
+                            </a>
+                            <a href="items/" class="compact-item">
+                                <span class="item-icon"><i class="fa-solid fa-boxes-stacked"></i></span>
+                                <span>Items</span>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Info -->
+                    <div class="compact-dropdown">
+                        <button class="compact-toggle" aria-expanded="false" aria-haspopup="true">
+                            <span class="compact-icon"><i class="fa-solid fa-circle-question"></i></span>
+                            <span class="compact-text">Info</span>
+                            <span class="dropdown-arrow"><i class="fa-solid fa-caret-down"></i></span>
+                        </button>
+                        <div class="compact-menu">
+                            <button class="compact-item" id="infoButton">
+                                <span class="item-icon"><i class="fa-solid fa-lightbulb"></i></span>
+                                <span>How it works</span>
+                            </button>
+                            <button class="compact-item" id="bannedButton">
+                                <span class="item-icon"><i class="fa-solid fa-ban"></i></span>
+                                <span>Banned Mods</span>
+                            </button>
+                            <button class="compact-item" id="tosButton">
+                                <span class="item-icon"><i class="fa-solid fa-rectangle-list"></i></span>
+                                <span>LA/TOS</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Settings -->
+                    <div class="compact-dropdown">
+                        <button class="compact-toggle" aria-expanded="false" aria-haspopup="true">
+                            <span class="compact-icon"><i class="fa-solid fa-gear"></i></span>
+                            <span class="compact-text">System</span>
+                            <span class="dropdown-arrow"><i class="fa-solid fa-caret-down"></i></span>
+                        </button>
+                        <div class="compact-menu">
+                            <button class="compact-item" id="settingsButton">
+                                <span class="item-icon"><i class="fa-solid fa-list-check"></i></span>
+                                <span>Settings</span>
+                            </button>
+                            <a class="compact-item" href="api-docs/">
+                                <span class="item-icon"><i class="fa-solid fa-network-wired"></i></span>
+                                <span>API Docs</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="/api/network/login/index.php" class="navbar-link navbar-link--login compact-login-btn">
+                        <span class="login-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></span>
+                        <span>Login</span>
+                        <div id="networkNotifies"></div>
+                    </a>
+                </div>
                 </div>
                 <div class="season-selector">
                     <label for="seasonSelect">Season:</label>

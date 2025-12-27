@@ -308,7 +308,7 @@ function createCrossProfileIndicator(raid, currentPlayerId, leaderboardData) {
                     <i class="fa-solid fa-user-clock"></i>
                     Played on: 
                     <button data-player-id="${otherPlayer.id}" class="cross-profile-link">
-                        <img  src="${otherPlayer.profilePicture || 'media/default_avatar.png'}" 
+                        <img src="${otherPlayer.profilePicture || 'media/default_avatar.png'}" 
                              alt="${otherPlayer.name}" 
                              loading="lazy"
                              class="cross-profile-avatar"

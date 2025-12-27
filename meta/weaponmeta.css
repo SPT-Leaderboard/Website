@@ -469,7 +469,6 @@
 .weapon-filters {
     position: sticky;
     top: 155px;
-    z-index: 1;
     margin-bottom: 25px;
     margin-left: 90px;
     margin-right: 90px;
@@ -480,7 +479,7 @@
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
+    z-index: 2;
 }
 
 .search-box {

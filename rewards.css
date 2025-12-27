@@ -437,7 +437,6 @@
     box-shadow: 0 10px 25px rgba(72, 187, 120, 0.2);
 }
 
-.theme-premium button,
 .theme-premium .comment-submit {
     background: linear-gradient(135deg, #8b5cf6, #6366f1);
     border: none;
@@ -449,7 +448,6 @@
     transition: all 0.3s ease;
 }
 
-.theme-premium button::before,
 .theme-premium .comment-submit::before {
     content: '';
     position: absolute;
@@ -464,12 +462,10 @@
     transition: left 0.5s;
 }
 
-.theme-premium button:hover::before,
 .theme-premium .comment-submit:hover::before {
     left: 100%;
 }
 
-.theme-premium button:hover,
 .theme-premium .comment-submit:hover {
     box-shadow:
         0 10px 20px rgba(139, 92, 246, 0.4),

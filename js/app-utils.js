@@ -4,6 +4,10 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ /
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
+document.addEventListener('DOMContentLoaded', () => {
+    initNavbar();
+});
+
 function getPrettyMapName(entry) {
     const mapAliases = {
         "bigmap": "Customs",
@@ -36,16 +40,67 @@ function getBoostDescription(boost) {
 
 // Auto offset top by top-stats-bar height
 // This is done so navbar doesn't get in the way when window is resized
-function updateNavbarOffset() {
-    const bar = document.querySelector('.top-stats-bar');
-    if (bar) {
-        document.documentElement.style.setProperty('--top-stats-height', bar.offsetHeight + 15 + 'px');
-        document.documentElement.style.setProperty('--top-stats-height-variant', bar.offsetHeight - 50 + 'px');
+function initNavbar() {
+    function updateNavbarOffset() {
+        const bar = document.querySelector('.top-stats-bar');
+        if (bar) {
+            document.documentElement.style.setProperty('--top-stats-height', bar.offsetHeight + 15 + 'px');
+            document.documentElement.style.setProperty('--top-stats-height-variant', bar.offsetHeight - 50 + 'px');
+        }
     }
-}
 
-window.addEventListener('load', updateNavbarOffset);
-window.addEventListener('resize', updateNavbarOffset);
+    window.addEventListener('load', updateNavbarOffset);
+    window.addEventListener('resize', updateNavbarOffset);
+
+    // Navbar dropdowns
+    const dropdowns = document.querySelectorAll('.compact-dropdown');
+
+    dropdowns.forEach(dropdown => {
+        const toggle = dropdown.querySelector('.compact-toggle');
+        const menu = dropdown.querySelector('.compact-menu');
+
+        if (toggle && menu) {
+            // Toggling...
+            toggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+                // Close
+                document.querySelectorAll('.compact-dropdown').forEach(other => {
+                    if (other !== dropdown) {
+                        other.querySelector('.compact-toggle')?.setAttribute('aria-expanded', 'false');
+                        other.querySelector('.compact-menu')?.classList.remove('show');
+                    }
+                });
+
+                // Toggle menu
+                this.setAttribute('aria-expanded', !isExpanded);
+                menu.classList.toggle('show', !isExpanded);
+            });
+        }
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.compact-dropdown')) {
+            document.querySelectorAll('.compact-dropdown').forEach(dropdown => {
+                dropdown.querySelector('.compact-toggle')?.setAttribute('aria-expanded', 'false');
+                dropdown.querySelector('.compact-menu')?.classList.remove('show');
+            });
+        }
+    });
+
+    document.querySelectorAll('.compact-item').forEach(item => {
+        item.addEventListener('click', function () {
+            const dropdown = this.closest('.compact-dropdown');
+            if (dropdown) {
+                setTimeout(() => {
+                    dropdown.querySelector('.compact-toggle')?.setAttribute('aria-expanded', 'false');
+                    dropdown.querySelector('.compact-menu')?.classList.remove('show');
+                }, 100);
+            }
+        });
+    });
+}
 
 // Ranks
 function getRank(rating, maxRating = 2000, res = 32) {
@@ -376,7 +431,7 @@ function formatSalesNum(num) {
 function isPremium(player) {
     const now = Math.floor(Date.now() / 1000);
 
-    if(player.isPremium && player.premiumUntil && player.premiumUntil > now){
+    if (player.isPremium && player.premiumUntil && player.premiumUntil > now) {
         return true;
     } else {
         return false;

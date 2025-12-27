@@ -21,15 +21,58 @@
     <body>
         <div class="snowflake"></div>
         <nav class="navbar" role="navigation">
-            <a href="#" aria-label="Achievements">
+            <a href="#" aria-label="Weapon Meta">
                 <img src="../media/icon_transparent.png" alt="SPT Leaderboard Logo" class="navbar-logo">
             </a>
-            <div class="navbar-links-container">
-                <a href="../" class="navbar-link">Go back</a>
-                <a href="/../meta/" class="navbar-link">Weapon Meta</a>
-                <a href="/../insights/" class="navbar-link">Global Insights</a>
-                <a href="/../api-docs/" class="navbar-link">API</a>
-                <a href="/../api/network/login/index.php" class="navbar-link navbar-link--login">Network Login</a>
+            <div class="navbar-compact-menu">
+                <!-- Stats -->
+                <div class="compact-dropdown">
+                    <button class="compact-toggle" aria-expanded="false" aria-haspopup="true">
+                        <span class="compact-icon"><i class="fa-solid fa-chart-column"></i></span>
+                        <span class="compact-text">Stats</span>
+                        <span class="dropdown-arrow"><i class="fa-solid fa-caret-down"></i></span>
+                    </button>
+                    <div class="compact-menu">
+                        <a href="meta/" class="compact-item">
+                            <span class="item-icon"><i class="fa-solid fa-gun"></i></span>
+                            <span>Weapon Meta</span>
+                        </a>
+                        <a href="insights/" class="compact-item">
+                            <span class="item-icon"><i class="fa-solid fa-globe"></i></span>
+                            <span>Global Insights</span>
+                        </a>
+                        <a href="achievements/" class="compact-item">
+                            <span class="item-icon"><i class="fa-solid fa-trophy"></i></span>
+                            <span>Achievement Rate</span>
+                        </a>
+                        <a href="items/" class="compact-item">
+                            <span class="item-icon"><i class="fa-solid fa-boxes-stacked"></i></span>
+                            <span>Items</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Settings -->
+                <div class="compact-dropdown">
+                    <button class="compact-toggle" aria-expanded="false" aria-haspopup="true">
+                        <span class="compact-icon"><i class="fa-solid fa-gear"></i></span>
+                        <span class="compact-text">System</span>
+                        <span class="dropdown-arrow"><i class="fa-solid fa-caret-down"></i></span>
+                    </button>
+                    <div class="compact-menu">
+                        <a class="compact-item" href="api-docs/">
+                            <span class="item-icon"><i class="fa-solid fa-network-wired"></i></span>
+                            <span>API Docs</span>
+                        </a>
+                    </div>
+                </div>
+                <a href="/../" class="navbar-link navbar-link--login compact-login-btn">
+                    <span class="login-icon"><i class="fa-solid fa-angles-left"></i></span>
+                    <span>Go back</span>
+                </a>
+                <a href="/api/network/login/index.php" class="navbar-link navbar-link--login compact-login-btn">
+                    <span class="login-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></span>
+                    <span>Login</span>
+                </a>
             </div>
             <div class="snow-corners-transparent"></div>
         </nav>
@@ -38,7 +81,7 @@
             <div class="live-data-label" id="serverStatus">Getting API Status...</div>
         </div>
         <div id="achievements-container">
-            <div class="loader-dots"  style="height: 500px">
+            <div class="loader-dots" style="height: 500px">
                 <div class="shimmer-bg"></div>
                 <div class="dots-container">
                     <div class="dot"></div>

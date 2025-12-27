@@ -679,6 +679,250 @@ h1 {
     font-weight: 500;
 }
 
+/* Other navbar selectors */
+.navbar-compact-menu {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-grow: 1;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.compact-dropdown {
+    position: relative;
+    z-index: 1001;
+}
+
+.compact-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: linear-gradient(145deg,
+            rgba(57, 89, 131, 0.25),
+            rgba(57, 89, 131, 0.15));
+    border: 1px solid rgba(100, 255, 218, 0.25);
+    border-radius: 12px;
+    color: var(--text-light);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 100px;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.compact-toggle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(100, 255, 218, 0.1),
+            transparent);
+    transition: left 0.6s ease;
+}
+
+.compact-toggle:hover::before {
+    left: 100%;
+}
+
+.compact-toggle:hover {
+    background: linear-gradient(145deg,
+            rgba(57, 89, 131, 0.35),
+            rgba(57, 89, 131, 0.25));
+    border-color: rgba(100, 255, 218, 0.4);
+    box-shadow:
+        0 4px 15px rgba(100, 255, 218, 0.15),
+        0 0 0 1px rgba(100, 255, 218, 0.1);
+    color: var(--accent-teal);
+}
+
+.compact-toggle[aria-expanded="true"] {
+    background: linear-gradient(145deg,
+            rgba(57, 89, 131, 0.4),
+            rgba(57, 89, 131, 0.3));
+    border-color: rgba(100, 255, 218, 0.5);
+    border-radius: 12px 12px 0 0;
+    color: var(--accent-teal);
+}
+
+.compact-icon {
+    font-size: 1.1rem;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+    transition: all 0.3s ease;
+}
+
+.compact-toggle:hover .compact-icon,
+.compact-toggle[aria-expanded="true"] .compact-icon {
+    transform: scale(1.1);
+}
+
+.compact-text {
+    white-space: nowrap;
+}
+
+.dropdown-arrow {
+    font-size: 0.65rem;
+    transition: transform 0.3s ease;
+    opacity: 0.7;
+    margin-left: 4px;
+}
+
+.compact-toggle[aria-expanded="true"] .dropdown-arrow {
+    transform: rotate(180deg);
+    opacity: 1;
+}
+
+.compact-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    background: linear-gradient(145deg,
+            rgba(10, 25, 47, 0.98),
+            rgba(10, 25, 47, 0.95));
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(100, 255, 218, 0.2);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.25),
+        0 0 40px rgba(100, 255, 218, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.compact-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.compact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+}
+
+.compact-item:last-child {
+    border-bottom: none;
+}
+
+.compact-item:hover {
+    background: linear-gradient(90deg,
+            rgba(100, 255, 218, 0.1),
+            transparent);
+    color: var(--accent-teal);
+    padding-left: 18px;
+}
+
+.compact-item:active {
+    background: rgba(100, 255, 218, 0.15);
+}
+
+.item-icon {
+    font-size: 0.95rem;
+    width: 20px;
+    text-align: center;
+    opacity: 0.8;
+    transition: all 0.2s ease;
+}
+
+.compact-item:hover .item-icon {
+    opacity: 1;
+    transform: scale(1.15);
+}
+
+.compact-dropdown:nth-child(1) .compact-toggle {
+    border-color: rgba(66, 153, 225, 0.3);
+}
+
+.compact-dropdown:nth-child(1) .compact-toggle:hover,
+.compact-dropdown:nth-child(1) .compact-toggle[aria-expanded="true"] {
+    border-color: rgba(66, 153, 225, 0.5);
+    box-shadow: 0 4px 15px rgba(66, 153, 225, 0.15);
+}
+
+.compact-dropdown:nth-child(2) .compact-toggle {
+    border-color: rgba(72, 187, 120, 0.3);
+}
+
+.compact-dropdown:nth-child(2) .compact-toggle:hover,
+.compact-dropdown:nth-child(2) .compact-toggle[aria-expanded="true"] {
+    border-color: rgba(72, 187, 120, 0.5);
+    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.15);
+}
+
+.compact-dropdown:nth-child(3) .compact-toggle {
+    border-color: rgba(159, 122, 234, 0.3);
+}
+
+.compact-dropdown:nth-child(3) .compact-toggle:hover,
+.compact-dropdown:nth-child(3) .compact-toggle[aria-expanded="true"] {
+    border-color: rgba(159, 122, 234, 0.5);
+    box-shadow: 0 4px 15px rgba(159, 122, 234, 0.15);
+}
+
+.compact-login-btn {
+    background: rgba(100, 255, 219, 0.25);
+    border: 1px solid rgba(100, 255, 219, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 12px;
+    color: var(--text-light);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 100px;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    position: relative;
+}
+
+.compact-login-btn:hover {
+    background: rgba(100, 255, 219, 0.35);
+    border: 1px solid rgba(100, 255, 219, 0.5);
+    box-shadow: 0 4px 15px rgba(100, 255, 219, 0.2);
+}
+
+.login-icon {
+    font-size: 1rem;
+}
+
+.compact-menu.show .compact-item {
+    animation: slideIn 0.3s ease-out backwards;
+}
+
 /* Leaderboard Controls */
 .leaderboard-controls {
     max-width: 1200px;
