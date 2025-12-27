@@ -8,7 +8,7 @@
 const RAID_STATUSES = {
     SURVIVED: {
         class: 'survived',
-        icon: 'bx bxs-walking',
+        icon: 'fa-solid fa-person-walking',
         label: 'Survived'
     },
     DIED: {
@@ -18,17 +18,17 @@ const RAID_STATUSES = {
     },
     RUN_THROUGH: {
         class: 'run-through',
-        icon: 'bx bxs-walking',
+        icon: 'fa-solid fa-person-walking',
         label: 'Runner'
     },
     DISCONNECTED: {
         class: 'disconnected',
-        icon: 'bx bxs-arrow-out-left-square-half',
+        icon: 'fa-solid fa-plug-circle-xmark',
         label: 'Left'
     },
     TRANSIT: {
         class: 'transit',
-        icon: 'bx bxs-refresh-cw bx-spin',
+        icon: 'fa-solid fa-arrows-spin fa-spin',
         label: 'In Transit'
     }
 };
@@ -181,16 +181,16 @@ function createVisualSection(raid, raidStatus) {
                 <h4 class="map-name">${raid.lastRaidMap || 'Unknown Map'}</h4>
                 <div class="map-details">
                     <span class="map-faction ${raid.lastRaidAs === 'PMC' ? 'pmc-faction' : 'scav-faction'}">
-                        <i class='bx ${raid.lastRaidAs === 'PMC' ? 'bxs-shield' : 'bxs-user-voice'}'></i>
+                        <i class='fa-solid ${raid.lastRaidAs === 'PMC' ? 'fa-shield-halved' : 'fa-person-rifle'}'></i>
                         ${raid.lastRaidAs === 'PMC' ? 'PMC' : 'SCAV'}
                     </span>
                     <span class="meta-item">
-                        <i class='bx bxs-wrist-watch'></i>
+                        <i class="fa-solid fa-stopwatch"></i>
                         ${formatSeconds(raid.raidTime)}
                     </span>
                     ${killerInfo || ''}
                     <span class="meta-item">
-                        <i class='bx bxs-history'></i>
+                        <i class="fa-solid fa-clock-rotate-left"></i>
                         ${formatLastPlayedRaid(raid.absoluteLastTime)}
                     </span>
 
@@ -305,7 +305,7 @@ function createCrossProfileIndicator(raid, currentPlayerId, leaderboardData) {
         return `
             <div class="cross-profile-indicator">
                 <div class="cross-profile-badge">
-                    <i class='bx bxs-user-badge'></i>
+                    <i class="fa-solid fa-user-clock"></i>
                     Played on: 
                     <button data-player-id="${otherPlayer.id}" class="cross-profile-link">
                         <img  src="${otherPlayer.profilePicture || 'media/default_avatar.png'}" 
@@ -323,7 +323,7 @@ function createCrossProfileIndicator(raid, currentPlayerId, leaderboardData) {
     return `
         <div class="cross-profile-indicator">
             <div class="cross-profile-badge unknown">
-                <i class='bx bxs-user-x'></i>
+                <i class="fa-solid fa-user-xmark"></i>
                 Played on another profile
             </div>
         </div>
@@ -389,11 +389,11 @@ function createProfitSection(raid) {
     if (raid.lastRaidProfit === -1) return '';
 
     const profitClass = raid.lastRaidProfit > 0 ? 'stat-positive' : 'stat-negative';
-    const profitIcon = raid.lastRaidProfit > 0 ? 'bx  bx-trending-up' : 'bx  bx-trending-down';
+    const profitIcon = raid.lastRaidProfit > 0 ? 'fa-solid fa-arrow-trend-up' : 'fa-solid fa-arrow-trend-down';
 
     return `
         <div class="raid-profit ${profitClass}">
-            <i class='bx  bxs-currency-notes'></i> 
+            <i class="fa-solid fa-money-bill-trend-up"></i>
             <i class="${profitIcon}"></i>
             <span>${formatProfit(raid.lastRaidProfit)} ₽</span>
         </div>
@@ -407,14 +407,14 @@ function createScoreSection(raid) {
         <div class="raid-score-section">
             ${raid.lcPointsEarned ? `
                 <div class="lb-coins">
-                    <i class='bx bxs-coin'></i>
+                    <i class="fa-solid fa-coins"></i>
                     +${raid.lcPointsEarned} LC
                 </div>
             ` : ''}
             
             ${raid.TotalScoreDiff ? `
                 <div class="score-diff ${raid.TotalScoreDiff >= 0 ? 'stat-positive' : 'stat-negative'}">
-                    <i class='bx ${raid.TotalScoreDiff >= 0 ? 'bx-trending-up' : 'bx-trending-down'}'></i>
+                    <i class='${raid.TotalScoreDiff >= 0 ? 'fa-solid fa-arrow-trend-up' : 'fa-solid fa-arrow-trend-down'}'></i>
                     ${raid.TotalScoreDiff > 0 ? '+' : ''}${raid.TotalScoreDiff} SS
                 </div>
             ` : ''}
