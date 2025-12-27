@@ -1013,9 +1013,6 @@ function calculateOverallStats(data) {
         animateNumber('Players', totalPlayers, 0, previousStats.totalPlayers);
         animateNumber('Deaths', Math.round(totalDeaths), 0, previousStats.deaths);
     }
-
-    // utils.js
-    updateNavbarOffset();
 }
 
 /**
