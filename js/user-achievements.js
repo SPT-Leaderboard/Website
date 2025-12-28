@@ -120,12 +120,7 @@ async function formatAchievement(achievementId, timestamp, achievementData) {
 
         const achievement = achievementData?.achievementCompiled?.[achievementId] || {};
 
-        let imageUrl = "media/player-achievements/Standard_35_1.png";
-        try {
-            imageUrl = `https://assets.tarkov.dev/achievement-${achievementId}-icon.webp` || achievement.imageUrl?.slice(1) || "media/player-achievements/Standard_35_1.png";
-        } catch (error) {
-            imageUrl = "media/player-achievements/Standard_35_1.png";
-        }
+        let imageUrl = await loadAchievementImage(achievement, achievementId);
 
         const globalPercentage = getAchievementPercentage(achievementId);
 
@@ -140,15 +135,6 @@ async function formatAchievement(achievementId, timestamp, achievementData) {
         };
     } catch (error) {
         console.error('Error formatting achievement:', error);
-        return {
-            id: "0",
-            timestamp: "Unknown",
-            imageUrl: "media/player-achievements/Standard_35_1.png",
-            rarity: "Common",
-            description: "Error loading achievement data",
-            name: "Unknown Achievement",
-            globalPercentage: 0
-        };
     }
 }
 
@@ -161,13 +147,13 @@ async function processPlayerAchievements(player, options = {}) {
         if (options.renderAll) {
             const allAchievements = await getAllAchievements(player, achievementData.achievementsData);
             if (options.container) {
-                options.container.innerHTML = renderAllAchievements(allAchievements);
+                options.container.innerHTML = await renderAllAchievements(allAchievements);
             }
             return allAchievements;
         } else {
             const latestAchievement = await getLatestAchievement(player, achievementData.achievementsData);
             if (options.container) {
-                options.container.innerHTML = renderSingleAchievement(latestAchievement);
+                options.container.innerHTML = await renderSingleAchievement(latestAchievement);
             }
             return latestAchievement;
         }
@@ -185,8 +171,8 @@ async function processPlayerAchievements(player, options = {}) {
 
         if (options.container) {
             options.container.innerHTML = options.renderAll
-                ? renderAllAchievements([])
-                : renderSingleAchievement(errorAchievement);
+                ? await renderAllAchievements([])
+                : await renderSingleAchievement(errorAchievement);
         }
 
         return options.renderAll ? [] : errorAchievement;
@@ -272,27 +258,7 @@ async function getAllAchievements(player, achievementData) {
     }
 }
 
-async function getAllAchievements(player, achievementData) {
-    if (!player.allAchievements || Object.keys(player.allAchievements).length === 0) {
-        return [];
-    }
-
-    const achievementsPromises = Object.entries(player.allAchievements)
-        .map(async ([id, timestamp]) => await formatAchievement(id, timestamp, achievementData));
-
-    let achievements = await Promise.all(achievementsPromises);
-
-    achievements.sort((a, b) => {
-        const rarityCompare = RARITY_ORDER[a.rarity] - RARITY_ORDER[b.rarity];
-        if (rarityCompare !== 0) return rarityCompare;
-
-        return b.timestamp - a.timestamp;
-    });
-
-    return achievements;;
-}
-
-function renderSingleAchievement(achievement) {
+async function renderSingleAchievement(achievement) {
     try {
         if (!achievement) {
             return `
@@ -314,7 +280,7 @@ function renderSingleAchievement(achievement) {
             <h3>Latest Achievement</h3>
             <div class="achievement-content">
                 <div class="achievement-icon ${achievement.rarity || 'Common'}">
-                    <img src="${achievement.imageUrl || 'media/player-achievements/Standard_35_1.png'}" alt="Achievement Icon"/>
+                    <img src="${await loadAchievementImage(achievement, achievement.id)}" alt="Achievement Icon"/>
                     <div class="achievement-time">
                         ${achievement.timestamp || "N/A"}
                     </div>
@@ -350,7 +316,7 @@ function renderSingleAchievement(achievement) {
     }
 }
 
-function renderAllAchievements(achievements) {
+async function renderAllAchievements(achievements) {
     try {
         if (!achievements || !Array.isArray(achievements) || achievements.length === 0) {
             return `
@@ -361,14 +327,31 @@ function renderAllAchievements(achievements) {
         `;
         }
 
-        return achievements.map(ach => {
-            if (!ach) return '';
+        const imagePromises = achievements.map(ach =>
+            ach ? loadAchievementImage(ach, ach.id) : Promise.resolve(null)
+        );
 
-            return `
+        const imageUrls = await Promise.allSettled(imagePromises);
+
+        let html = '';
+
+        for (let i = 0; i < achievements.length; i++) {
+            const ach = achievements[i];
+            if (!ach) continue;
+
+            const imageResult = imageUrls[i];
+            let imageUrl = "media/player-achievements/Standard_35_1.png";
+
+            if (imageResult.status === 'fulfilled' && imageResult.value) {
+                imageUrl = imageResult.value;
+            }
+
+            html += `
             <div class="user-achievements profile-section">
                 <div class="achievement-content">
                     <div class="achievement-icon ${ach.rarity || 'Common'}">
-                        <img src="${ach.imageUrl || 'media/player-achievements/Standard_35_1.png'}" alt="Achievement Icon"/>
+                        <img src="${imageUrl}" alt="Achievement Icon"
+                             onerror="this.onerror=null; this.src='media/player-achievements/Standard_35_1.png'"/>
                         <div class="achievement-time">
                             ${ach.timestamp || "N/A"}
                         </div>
@@ -386,7 +369,20 @@ function renderAllAchievements(achievements) {
                     </div>
                 </div>
             </div>
-        `}).join('');
+            `;
+        }
+
+        if (!html) {
+            return `
+            <div class="no-stats-message">
+                <h3>No Achievements Available</h3>
+                <p>This player doesn't have any achievements, or they haven't been recorded yet.</p>
+            </div>
+        `;
+        }
+
+        return html;
+
     } catch (error) {
         console.error('Error rendering all achievements:', error);
         return `
@@ -396,4 +392,68 @@ function renderAllAchievements(achievements) {
             </div>
         `;
     }
+}
+
+// A more robust way to get achievement icons for everyone
+async function loadAchievementImage(achievement, achievementId) {
+    // Check CDN
+    if (achievementId) {
+        const cdnUrl = `https://assets.tarkov.dev/achievement-${achievementId}-icon.webp`;
+
+        try {
+            const cdnSuccess = await testImageLoad(cdnUrl, 1000);
+
+            if (cdnSuccess) {
+                return cdnUrl;
+            } else {
+                throw new Error('CDN недоступен');
+            }
+        } catch (error) {
+            // Whoops, get the local image
+            return getLocalImagePath(achievement);
+        }
+    }
+
+    return getLocalImagePath(achievement);
+}
+
+function getLocalImagePath(achievement) {
+    // JSON path
+    if (achievement?.imageUrl) {
+        let path = achievement.imageUrl.startsWith('/')
+            ? achievement.imageUrl.slice(1)
+            : achievement.imageUrl;
+
+        // If this local, return
+        if (path) {
+            return path;
+        }
+    }
+
+    // Fallback
+    return "media/player-achievements/Standard_35_1.png";
+}
+
+function testImageLoad(url, timeout = 2000) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        let timer;
+
+        img.onload = () => {
+            clearTimeout(timer);
+            resolve(true);
+        };
+
+        img.onerror = () => {
+            clearTimeout(timer);
+            resolve(false);
+        };
+
+        timer = setTimeout(() => {
+            img.src = '';
+            resolve(false);
+        }, timeout);
+
+        img.src = url;
+    });
 }

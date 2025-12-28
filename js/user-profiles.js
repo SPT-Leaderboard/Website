@@ -478,7 +478,7 @@ async function showPublicProfile(container, player) {
             </div>
             
             <div class="user-achievements profile-section">
-                ${renderSingleAchievement(latestAchievement)}
+                ${await renderSingleAchievement(latestAchievement)}
             </div>
 
             <div class="weapon-stats profile-section">
