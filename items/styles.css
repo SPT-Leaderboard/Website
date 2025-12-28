@@ -495,7 +495,7 @@
 }
 
 .last-updated {
-position: absolute;
+    position: absolute;
     top: 5px;
     right: 20px;
     font-size: 0.8rem;

@@ -1051,7 +1051,7 @@ h1 {
     background: var(--bg-dark-secondary);
     border-radius: 12px;
     padding: 4px;
-    border: 1px solid var(--text-muted);
+    border: 2px solid var(--text-muted);
     width: 190px;
     gap: 5px;
 }
