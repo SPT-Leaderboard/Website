@@ -7,6 +7,7 @@
         <link rel="stylesheet" type="text/css" href="../achievements/ach.css">
         <link rel="icon" href="../media/icon_transparent.png">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
         <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
         <link href='https://cdn.boxicons.com/fonts/animations.min.css' rel='stylesheet'>
@@ -14,6 +15,7 @@
         <script src="../js/app-core.js"></script>
         <script src="../achievements/js/achievements.js"></script>
         <script src="../js/api-monitor.js"></script>
+        <script src="../js/app-utils.js"></script>
         <script data-cfasync="false" src="../js/app-seasons.js"></script>
         <title>SPT Leaderboard - Achievements</title>
     </head>
@@ -33,19 +35,19 @@
                         <span class="dropdown-arrow"><i class="fa-solid fa-caret-down"></i></span>
                     </button>
                     <div class="compact-menu">
-                        <a href="meta/" class="compact-item">
+                        <a href="/meta/" class="compact-item">
                             <span class="item-icon"><i class="fa-solid fa-gun"></i></span>
                             <span>Weapon Meta</span>
                         </a>
-                        <a href="insights/" class="compact-item">
+                        <a href="/insights/" class="compact-item">
                             <span class="item-icon"><i class="fa-solid fa-globe"></i></span>
                             <span>Global Insights</span>
                         </a>
-                        <a href="achievements/" class="compact-item">
+                        <a href="/achievements/" class="compact-item">
                             <span class="item-icon"><i class="fa-solid fa-trophy"></i></span>
                             <span>Achievement Rate</span>
                         </a>
-                        <a href="items/" class="compact-item">
+                        <a href="/items/" class="compact-item">
                             <span class="item-icon"><i class="fa-solid fa-boxes-stacked"></i></span>
                             <span>Items</span>
                         </a>
@@ -59,7 +61,7 @@
                         <span class="dropdown-arrow"><i class="fa-solid fa-caret-down"></i></span>
                     </button>
                     <div class="compact-menu">
-                        <a class="compact-item" href="api-docs/">
+                        <a class="compact-item" href="/api-docs/">
                             <span class="item-icon"><i class="fa-solid fa-network-wired"></i></span>
                             <span>API Docs</span>
                         </a>
@@ -76,7 +78,7 @@
             </div>
             <div class="snow-corners-transparent"></div>
         </nav>
-        <h1 style="margin-top: 150px;" class="animate__animated animate__fadeInDown">Global Achievements</h1>
+        <h1 style="margin-top: 180px;" class="animate__animated animate__fadeInDown">Global Achievements</h1>
         <div class="top-stats-bar">
             <div class="live-data-label" id="serverStatus">Getting API Status...</div>
         </div>
