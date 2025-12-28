@@ -1,5 +1,53 @@
 {
   "achievementCompiled": {
+    "694e114418e06664c0682cb8": {
+      "imageUrl": "/media/player-achievements/wagesicon.png",
+      "rarity": "Common",
+      "description": "Eliminate 30 enemy PMCs using the Red Wages of Sin",
+      "name": "Blood Money"
+    },
+    "694e110ec53e29d1d4682cb4": {
+      "imageUrl": "/media/player-achievements/an94icon.png",
+      "rarity": "Common",
+      "description": "Eliminate 25 enemy PMCs using the AN-94",
+      "name": "I'm a Burst Fire Believer"
+    },
+    "694e10ca6b29ea7d14682cb0": {
+      "imageUrl": "/media/player-achievements/hipoint.png",
+      "rarity": "Rare",
+      "description": "Eliminate 20 enemy scavs using the Hi-Point C9 pistol. The gun that shouldn't work but somehow does. Like you.",
+      "name": "Poverty Doesn't Taste Great"
+    },
+    "694e1063088b36b489682cac": {
+      "imageUrl": "/media/player-achievements/pm9icon.png",
+      "rarity": "Common",
+      "description": "Eliminate 15 enemy scavs with leg-shots using the Minebea PM-9",
+      "name": "Tokyo Grift"
+    },
+    "694e0fdb0984faf074682ca8": {
+      "imageUrl": "/media/player-achievements/superserbuicon.png",
+      "rarity": "Common",
+      "description": "Eliminate 5 enemy scavs on Factory within 5 meters using the Serbu Super Shorty Shotgun",
+      "name": "Close Encounters of the Shotgun Kind"
+    },
+    "694e0d8851fee79757682ca4": {
+      "imageUrl": "/media/player-achievements/auto5icon.png",
+      "rarity": "Common",
+      "description": "Eliminate 15 enemy scavs using the Browning Auto-5 Shotgun",
+      "name": "Grandpa's Got a Gun"
+    },
+    "6910b4469b3fa14d813de155": {
+      "imageUrl": "/media/player-achievements/hipoint.png",
+      "rarity": "Legendary",
+      "description": "Eliminate 1 enemy using the Hi-Point C9 pistol",
+      "name": "You Actually Used This Thing?"
+    },
+    "693c94e3b993b9416d6501a3": {
+      "imageUrl": "/media/player-achievements/m107.png",
+      "rarity": "Rare",
+      "description": "Shoot 20 PMC's in the head using the Barrett M107A1 .50 BMG anti-material rifle",
+      "name": "Helmet Check!"
+    },
     "6948990c05f4f91bdb9a56f3": {
       "imageUrl": "/media/player-achievements/cheatericon.png",
       "rarity": "Legendary",
