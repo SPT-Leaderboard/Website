@@ -691,7 +691,6 @@ h1 {
 
 .compact-dropdown {
     position: relative;
-    z-index: 1001;
 }
 
 .compact-toggle {
@@ -705,7 +704,6 @@ h1 {
     border: 1px solid rgba(100, 255, 218, 0.25);
     border-radius: 12px;
     color: var(--text-light);
-    font-family: 'Inter', sans-serif;
     font-weight: 600;
     font-size: 0.9rem;
     cursor: pointer;
@@ -759,11 +757,6 @@ h1 {
     font-size: 1.1rem;
     filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
     transition: all 0.3s ease;
-}
-
-.compact-toggle:hover .compact-icon,
-.compact-toggle[aria-expanded="true"] .compact-icon {
-    transform: scale(1.1);
 }
 
 .compact-text {
@@ -856,7 +849,6 @@ h1 {
 
 .compact-item:hover .item-icon {
     opacity: 1;
-    transform: scale(1.15);
 }
 
 .compact-dropdown:nth-child(1) .compact-toggle {
