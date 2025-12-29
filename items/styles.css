@@ -73,10 +73,7 @@
 .item-stat-value {
     font-size: 3rem;
     font-weight: 800;
-    background: var(--neon-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: var(--primary);
     margin-bottom: 10px;
     text-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
     position: relative;
@@ -84,15 +81,11 @@
 }
 
 .item-stat-card:nth-child(2) .item-stat-value {
-    background: var(--success-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
+    color: var(--success);
 }
 
 .item-stat-card:nth-child(3) .item-stat-value {
-    background: var(--danger-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
+    color: var(--danger);
 }
 
 .item-stat-label {

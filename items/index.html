@@ -85,15 +85,15 @@
             <div class="items-header">
                 <div class="stats-overview">
                     <div class="item-stat-card">
-                        <div class="item-stat-value" id="total-items">0</div>
+                        <div class="item-stat-value odometer" id="total-items">0</div>
                         <div class="item-stat-label">Items Recorded</div>
                     </div>
                     <div class="item-stat-card">
-                        <div class="item-stat-value" id="total-extracted">0</div>
+                        <div class="item-stat-value odometer" id="total-extracted">0</div>
                         <div class="item-stat-label">Items Extracted</div>
                     </div>
                     <div class="item-stat-card">
-                        <div class="item-stat-value" id="total-died">0</div>
+                        <div class="item-stat-value odometer" id="total-died">0</div>
                         <div class="item-stat-label">Items Lost in Raid</div>
                     </div>
                 </div>
@@ -105,20 +105,16 @@
                         <select id="sort-select" class="filter-select">
                             <option value="name">Name A-Z</option>
                             <option value="name-desc">Name Z-A</option>
+                            <option value="latest">Latest</option>
                             <option value="extracted">Most Extracted</option>
                             <option value="died">Most Lost</option>
                             <option value="total">Most Total</option>
-                        </select>
-                        <select id="filter-select" class="filter-select">
-                            <option value="all">All Items</option>
-                            <option value="extracted">Extracted Only</option>
-                            <option value="died">Lost Only</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="items-grid" id="items-grid">
-                <div class="loader-dots" style="grid-column: 1 / -1;">
+                <div class="loader-dots" id="loader" style="grid-column: 1 / -1;">
                     <div class="shimmer-bg"></div>
                     <div class="dots-container">
                         <div class="dot"></div>
@@ -158,6 +154,7 @@
                 </div>
             </div>
         </footer>
+        <script src="https://github.hubspot.com/odometer/odometer.js"></script>
     </body>
 
 </html>
