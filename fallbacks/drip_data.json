@@ -1,0 +1,18 @@
+{
+  "UserPermaLink": {
+    "likes": 40,
+    "dislikes": 3,
+    "reactedBy": [
+      "someonesPermaLink",
+      "someonesPermaLink2"
+    ]
+  },
+  "User2PermaLink": {
+    "likes": 10,
+    "dislikes": 3,
+    "reactedBy": [
+      "someonesPermaLink",
+      "someonesPermaLink2"
+    ]
+  }
+}
