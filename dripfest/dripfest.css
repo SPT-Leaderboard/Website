@@ -365,7 +365,6 @@
     }
 }
 
-/* Анимации для кнопок */
 @keyframes likeAnimation {
     0% {
         transform: scale(1);
@@ -442,13 +441,6 @@
     margin: 0 auto 1rem;
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* Стили для отключенных кнопок */
 .player-actions button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
@@ -462,7 +454,6 @@
     box-shadow: none !important;
 }
 
-/* Стили для статистики в карточке */
 .player-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -479,7 +470,6 @@
     white-space: nowrap;
 }
 
-/* Адаптивность для мобильных */
 @media (max-width: 640px) {
     .player-stats {
         grid-template-columns: 1fr;
