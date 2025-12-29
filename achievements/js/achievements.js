@@ -9,14 +9,6 @@ let achievementsData = {};
 let playerAchievements = {};
 let totalPlayers = 0;
 
-async function loadJSON(url) {
-    const response = await fetch(url);
-    if (!response.ok) {
-        throw new Error(`Failed to load ${url}: ${response.status}`);
-    }
-    return await response.json();
-}
-
 // Merge old (SPT 3.11) achievements data with new data (SPT 4.0)
 function mergeAchievements(newData, seData = null) {
     return {
