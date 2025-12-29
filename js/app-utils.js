@@ -415,6 +415,7 @@ function waitForDataReady(callback, timeout = 15000) {
     }, checkInterval);
 }
 
+// Format number and add 'Bil', 'Mil, 'K' suffixes to it
 function formatSalesNum(num) {
     if (num >= 1000000000) {
         return (num / 1000000000).toFixed(1) + 'Bil';
@@ -428,6 +429,7 @@ function formatSalesNum(num) {
     return num.toString();
 }
 
+// Check if user actually owns premium
 function isPremium(player) {
     const now = Math.floor(Date.now() / 1000);
 
@@ -436,4 +438,13 @@ function isPremium(player) {
     } else {
         return false;
     }
+}
+
+// Quick util for loading data from JSON
+async function loadJSON(url) {
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`Failed to load ${url}: ${response.status}`);
+    }
+    return await response.json();
 }
