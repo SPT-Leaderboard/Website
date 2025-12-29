@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="../styles.css">
+        <link rel="stylesheet" type="text/css" href="../dripfest/dripfest.css">
+        <link rel="icon" href="../media/icon_transparent.png">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="https://github.hubspot.com/odometer/themes/odometer-theme-default.css">
+        <script src="../js/app-core.js"></script>
+        <script src="../dripfest/js/main.js"></script>
+        <script src="../js/api-monitor.js"></script>
+        <script src="../js/api-auth.js"></script>
+        <script src="../js/app-utils.js"></script>
+        <script data-cfasync="false" src="../js/app-seasons.js"></script>
+        <title>SPT Leaderboard - Drip Fest</title>
+    </head>
+
+    <body>
+        <div class="snowflake"></div>
+        <nav class="navbar" role="navigation">
+            <a href="#" aria-label="Dripfest">
+                <img src="../media/icon_transparent.png" alt="SPT Leaderboard Logo" class="navbar-logo">
+            </a>
+            <div class="navbar-compact-menu">
+                <!-- Stats -->
+                <div class="compact-dropdown">
+                    <button class="compact-toggle" aria-expanded="false" aria-haspopup="true">
+                        <span class="compact-icon"><i class="fa-solid fa-chart-column"></i></span>
+                        <span class="compact-text">Stats</span>
+                        <span class="dropdown-arrow"><i class="fa-solid fa-caret-down"></i></span>
+                    </button>
+                    <div class="compact-menu">
+                        <a href="/meta/" class="compact-item">
+                            <span class="item-icon"><i class="fa-solid fa-gun"></i></span>
+                            <span>Weapon Meta</span>
+                        </a>
+                        <a href="/insights/" class="compact-item">
+                            <span class="item-icon"><i class="fa-solid fa-globe"></i></span>
+                            <span>Global Insights</span>
+                        </a>
+                        <a href="/achievements/" class="compact-item">
+                            <span class="item-icon"><i class="fa-solid fa-trophy"></i></span>
+                            <span>Achievement Rate</span>
+                        </a>
+                        <a href="/items/" class="compact-item">
+                            <span class="item-icon"><i class="fa-solid fa-boxes-stacked"></i></span>
+                            <span>Items</span>
+                        </a>
+                        <a href="/dripfest/" class="compact-item">
+                            <span class="item-icon"><i class="fa-solid fa-vest"></i></span>
+                            <span>Drip Fest</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Settings -->
+                <div class="compact-dropdown">
+                    <button class="compact-toggle" aria-expanded="false" aria-haspopup="true">
+                        <span class="compact-icon"><i class="fa-solid fa-gear"></i></span>
+                        <span class="compact-text">System</span>
+                        <span class="dropdown-arrow"><i class="fa-solid fa-caret-down"></i></span>
+                    </button>
+                    <div class="compact-menu">
+                        <a class="compact-item" href="/api-docs/">
+                            <span class="item-icon"><i class="fa-solid fa-network-wired"></i></span>
+                            <span>API Docs</span>
+                        </a>
+                    </div>
+                </div>
+                <a href="/../" class="navbar-link navbar-link--login compact-login-btn">
+                    <span class="login-icon"><i class="fa-solid fa-angles-left"></i></span>
+                    <span>Go back</span>
+                </a>
+                <a href="/api/network/login/index.php" class="navbar-link navbar-link--login compact-login-btn">
+                    <span class="login-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></span>
+                    <span>Login</span>
+                </a>
+            </div>
+            <div class="snow-corners-transparent"></div>
+        </nav>
+        <h1 style="margin-top: 180px;" class="animate__animated animate__fadeInDown">Drip Fest</h1>
+        <div class="top-stats-bar">
+            <div class="live-data-label" id="serverStatus">Getting API Status...</div>
+        </div>
+        <div id="authStatus" class="auth-status">
+            <div class="auth-indicator">
+                <span class="auth-dot"></span>
+                <span class="auth-text">Checking...</span>
+            </div>
+        </div>
+        <main>
+            <section class="players-gallery-section">
+                <div class="players-grid" id="playersGrid">
+                    <!-- JS -->
+                </div>
+                <div class="drip-player-modal" id="playerModal">
+                    <div class="drip-modal-overlay"></div>
+                    <div class="drip-modal-content">
+                        <button class="modal-close" id="modalClose">&times;</button>
+                        <div class="modal-player-image-container">
+                            <img class="modal-player-image" id="modalImage" src="" alt="Player" />
+                        </div>
+                        <div class="modal-player-details">
+                            <h3 class="modal-player-name" id="modalName"></h3>
+                            <div class="modal-actions">
+                                <button class="action-btn dislike-btn" data-action="dislike">
+                                    <i class="fa-solid fa-heart-crack"></i>
+                                    <span class="dislike-count">0</span>
+                                </button>
+                                <button class="action-btn like-btn" data-action="like">
+                                    <i class="fa-solid fa-heart"></i>
+                                    <span class="like-count">0</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer class="modern-footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo-slogan">
+                        <img src="../media/icon_transparent.png" class="footer-logo">
+                        <p class="slogan">Built with passion. <span class="curve_underline">Powered by community.</span></p>
+                    </div>
+                    <div class="license-info">
+                        <p>© 2025 SPT Leaderboard. All rights reserved.</p>
+                        <p>This project is not affiliated with Battlestate Games or SPTarkov Project. Escape From Tarkov is a registered trademark of Battlestate Games.</p>
+                        <p>Released under <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a></p>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <ul>
+                        <li><a href="https://github.com/SPT-Leaderboard/Website/issues" target="_blank" rel="noopener">Contribute</a></li>
+                        <li><a href="https://github.com/SPT-Leaderboard/Website" target="_blank" rel="noopener">GitHub Page</a></li>
+                        <li><a href="https://forge.sp-tarkov.com/mod/2101/spt-leaderboard" target="_blank" rel="noopener">SPTarkov Mod</a></li>
+                        <li><a href="/api-docs">API Documentation</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </body>
+
+</html>
