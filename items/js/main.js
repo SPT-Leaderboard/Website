@@ -39,13 +39,16 @@ class ItemsRenderer {
             pageNumbers: document.getElementById('page-numbers'),
             searchInput: document.getElementById('item-search'),
             sortSelect: document.getElementById('sort-select'),
-            filterSelect: document.getElementById('filter-select'),
             totalItems: document.getElementById('total-items'),
             totalExtracted: document.getElementById('total-extracted'),
             totalDied: document.getElementById('total-died'),
             prevBtn: document.querySelector('.prev-btn'),
-            nextBtn: document.querySelector('.next-btn')
+            nextBtn: document.querySelector('.next-btn'),
+            loader: document.getElementById('loader')
         };
+
+        this.rafId = null;
+        this.currentItemsMap = new Map();
     }
 
     async init() {
@@ -92,6 +95,7 @@ class ItemsRenderer {
             const localeInfo = this.getItemInfo(itemId);
             const total = stats.extracted + stats.died;
             const extractedRatio = total > 0 ? (stats.extracted / total) * 100 : 0;
+            const lastUpdated = stats.last_updated || 0;
 
             return {
                 id: itemId,
@@ -103,7 +107,8 @@ class ItemsRenderer {
                 died: stats.died,
                 total: total,
                 extractedRatio: extractedRatio,
-                lastUpdated: stats.last_updated ?? null
+                lastUpdated: lastUpdated,
+                timestamp: lastUpdated
             };
         });
     }
@@ -117,6 +122,7 @@ class ItemsRenderer {
         this.elements.totalItems.textContent = this.totalItems.toLocaleString();
         this.elements.totalExtracted.textContent = this.totalExtracted.toLocaleString();
         this.elements.totalDied.textContent = this.totalDied.toLocaleString();
+        this.elements.loader.style.display = 'none';
     }
 
     getItemLocale(itemId, suffix) {
@@ -156,6 +162,8 @@ class ItemsRenderer {
                     return b.died - a.died;
                 case 'total':
                     return b.total - a.total;
+                case 'latest':
+                    return (b.timestamp || 0) - (a.timestamp || 0);
                 default:
                     return a.name.localeCompare(b.name);
             }
@@ -163,38 +171,26 @@ class ItemsRenderer {
     }
 
     filterItems(items) {
-        const filterBy = this.elements.filterSelect.value;
         const searchTerm = this.elements.searchInput.value.trim().toLowerCase();
 
-        if (!searchTerm && filterBy === 'all') {
-            return items; // Skip if no conditions
+        if (!searchTerm) {
+            return items;
         }
 
         return items.filter(item => {
-            // Use lowercase for search
-            if (searchTerm &&
-                !item.nameLower.includes(searchTerm) &&
-                !item.shortNameLower.includes(searchTerm)) {
-                return false;
-            }
-
-            switch (filterBy) {
-                case 'extracted':
-                    return item.extracted > 0;
-                case 'died':
-                    return item.died > 0;
-                default:
-                    return true;
-            }
+            return item.nameLower.includes(searchTerm) ||
+                item.shortNameLower.includes(searchTerm);
         });
     }
 
     createItemCard(item) {
-        const card = document.createElement('div');
-        card.className = 'item-card';
-
         // Filter bad items
         const badItems = new Set([
+            'Roubles',
+            'Dollars',
+            'Euros',
+            'Сity key',
+            '1.25 mm aramid insert and titanium plates',
             'Unknown Item',
             'Armor steel',
             '6.5 mm aramid insert and titanium plates',
@@ -209,13 +205,16 @@ class ItemsRenderer {
             return null;
         }
 
+        const card = document.createElement('div');
+        card.className = 'item-card';
+        card.dataset.itemId = item.id;
+
         const formattedDate = this.formatLastUpdated(item.lastUpdated);
         const isRecent = this.isRecentlyUpdated(item.lastUpdated);
 
-
         card.innerHTML = `
             <div class="item-header">
-                <img src="${this.getImageUrl(item.id)}"  alt="${item.name}"  class="item-image">
+                <img src="${this.getImageUrl(item.id)}" alt="${item.name}" class="item-image">
                 <div class="item-info">
                     <h3 class="item-name" title="${item.name}">
                         ${item.name.length > 40 ? item.name.substring(0, 40) + '...' : item.name}
@@ -266,13 +265,9 @@ class ItemsRenderer {
     renderPagination(totalPages) {
         this.elements.pageNumbers.innerHTML = '';
 
-        // prev page
         this.elements.prevBtn.disabled = this.currentPage === 1;
-
-        // next page
         this.elements.nextBtn.disabled = this.currentPage === totalPages;
 
-        // page numbers
         let startPage = Math.max(1, this.currentPage - 2);
         let endPage = Math.min(totalPages, startPage + 4);
 
@@ -305,9 +300,12 @@ class ItemsRenderer {
         const endIndex = Math.min(startIndex + CONFIG.ITEMS_PER_PAGE, sorted.length);
         const itemsToShow = sorted.slice(startIndex, endIndex);
 
-        this.elements.itemsGrid.innerHTML = '';
-        const fragment = document.createDocumentFragment();
+        // Update DOM partially
+        this.updateItemsGrid(itemsToShow);
+        this.renderPagination(this.totalPages);
+    }
 
+    updateItemsGrid(itemsToShow) {
         if (itemsToShow.length === 0) {
             this.elements.itemsGrid.innerHTML = `
                 <div class="no-items">
@@ -315,23 +313,64 @@ class ItemsRenderer {
                     <p>Try adjusting your search or filter</p>
                 </div>
             `;
-        } else {
-            itemsToShow.forEach(item => {
-                const card = this.createItemCard(item);
-                if (card) {
-                    fragment.appendChild(card);
-                }
-            });
+            this.currentItemsMap.clear();
+            return;
+        }
 
+        const newItemsMap = new Map();
+        const fragment = document.createDocumentFragment();
+
+        // Create new cards
+        itemsToShow.forEach(item => {
+            const card = this.createItemCard(item);
+            if (card) {
+                newItemsMap.set(item.id, card);
+                fragment.appendChild(card);
+            }
+        });
+
+        // Find diff
+        const itemsToRemove = [];
+        const itemsToAdd = [];
+
+        this.currentItemsMap.forEach((card, itemId) => {
+            if (!newItemsMap.has(itemId)) {
+                itemsToRemove.push(card);
+            }
+        });
+
+        newItemsMap.forEach((card, itemId) => {
+            if (!this.currentItemsMap.has(itemId)) {
+                itemsToAdd.push(card);
+            }
+        });
+
+        if (itemsToRemove.length === 0 && itemsToAdd.length > 0) {
+            this.elements.itemsGrid.appendChild(fragment);
+        }
+        else if (itemsToRemove.length > 5 || itemsToAdd.length > 5) {
             this.elements.itemsGrid.innerHTML = '';
             this.elements.itemsGrid.appendChild(fragment);
         }
+        // If not many cards to change, partially replace them
+        else {
+            // Delete old cards
+            itemsToRemove.forEach(card => {
+                if (card.parentNode === this.elements.itemsGrid) {
+                    this.elements.itemsGrid.removeChild(card);
+                }
+            });
 
-        this.renderPagination(this.totalPages);
+            // Add new if any
+            itemsToAdd.forEach(card => {
+                this.elements.itemsGrid.appendChild(card);
+            });
+        }
+
+        this.currentItemsMap = newItemsMap;
     }
 
     setupEventListeners() {
-        // bouncy debounce for search
         this.elements.searchInput.addEventListener('input', () => {
             if (this.rafId) cancelAnimationFrame(this.rafId);
 
@@ -345,11 +384,6 @@ class ItemsRenderer {
         });
 
         this.elements.sortSelect.addEventListener('change', () => {
-            this.currentPage = 1;
-            this.renderItems();
-        });
-
-        this.elements.filterSelect.addEventListener('change', () => {
             this.currentPage = 1;
             this.renderItems();
         });
@@ -368,7 +402,14 @@ class ItemsRenderer {
 
         // Auto-refresh every 30 seconds
         setInterval(async () => {
-            await this.loadData();
+            try {
+                await this.loadData();
+                this.calculateTotals();
+                this.renderStatistics();
+                this.renderItems();
+            } catch (error) {
+                console.error('Auto-refresh failed:', error);
+            }
         }, 30000);
     }
 
@@ -420,18 +461,14 @@ class ItemsRenderer {
     }
 
     destroy() {
-        this.elements.searchInput.removeEventListener('input', this.handleSearch);
-        this.elements.sortSelect.removeEventListener('change', this.handleSort);
-        this.elements.filterSelect.removeEventListener('change', this.handleFilter);
-
         clearTimeout(this.debounceTimer);
-        clearInterval(this.refreshInterval);
+        if (this.rafId) cancelAnimationFrame(this.rafId);
 
         this.imageCache.clear();
+        this.currentItemsMap.clear();
 
-        this.elements = null;
-        this.itemsData = null;
-        this.localeData = null;
+        this.elements.searchInput.value = '';
+        this.elements.sortSelect.value = 'name';
     }
 }
 
