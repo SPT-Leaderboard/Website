@@ -41,6 +41,7 @@ let oldTotalPlayTime = 0;
 // Paths
 let seasonPath = '/api/data/seasons/season';
 let seasonLocalPath = `fallbacks/`;
+let currentSeason = `/api/data/seasons/season7.json?t=${Date.now()}`;
 let seasonPathEnd = `.json?t=${Date.now()}`;
 let lastRaidsPath = `/api/data/player_raids/`;
 let profileAppearencePath = `/api/network/profile/profiles/`;
@@ -53,10 +54,12 @@ let achievementsPath = `/api/data/shared/achievement_counters.json`;
 let pmcPfpsPath = `/api/data/pmc_avatars/`;
 let globalCounters = `/api/data/shared/global_counters.json`;
 let adminsOnline = `/api/admins_online.json`;
+let dripDataPath = `/api/data/drip/drip_data.json?t=${Date.now()}`;
 
 // Paths for local files if debug is on
 if (isLocalhost) {
-    pmcPfpsPath = `fallbacks/pmc_avatars/`;
+    pmcPfpsPath = `../fallbacks/pmc_avatars/`;
+    currentSeason = `/fallbacks/season7.json`
     seasonPath = `../fallbacks/season`;
     profileAppearencePath = `fallbacks/profile_settings/`;
     weaponStatsPath = `../fallbacks/shared/weapon_counters.json?t=${Date.now()}`;
@@ -68,6 +71,7 @@ if (isLocalhost) {
     lastRaidsPath = `../fallbacks/player_raids/`;
     globalCounters = `../fallbacks/shared/global_counters.json`;
     adminsOnline = `fallbacks/admins_online.json`;
+    dripDataPath = `/fallbacks/drip_data.json`;
 }
 
 // Call main init on DOM load
