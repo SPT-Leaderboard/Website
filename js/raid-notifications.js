@@ -120,7 +120,7 @@ async function showPlayerNotification(player) {
     let finalNameClass = '';
     if (player.isWinner) {
         finalNameClass = 'player-name-gold Legendary';
-    } else if (player.isPremium) {
+    } else if (isPremium(player)) {
         finalNameClass = 'premium-name';
     } else if (nameClass) {
         finalNameClass = nameClass;

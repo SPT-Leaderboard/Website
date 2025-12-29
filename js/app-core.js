@@ -539,7 +539,7 @@ async function displayLeaderboard(data) {
             finalNameClass = accountClass; // TP
         }
 
-        // Winner - 1 priority
+        // Winner or Premium - 1 priority
         if (player.isWinner === true) {
             finalNameClass = 'player-name-gold Legendary';
         } else if (isPremium(player)) {
