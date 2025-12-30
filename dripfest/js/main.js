@@ -297,7 +297,7 @@ function initializePlayersGallery(leaderboardData) {
     // #region AJAX
     async function saveVote(permaLink, voteType) {
         try {
-            const response = await fetch('/api/network/functions/vote.php', {
+            const response = await fetch('/api/network/functions/dripfest/vote.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
