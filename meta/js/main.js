@@ -259,6 +259,7 @@ document.addEventListener('DOMContentLoaded', function () {
             "68433b58a8f9a618b11082d4": { main: "Secondary weapons", sub: "Pistols WTT", caliber: "4.6x30mm" }, // UCP
             "675ceb83e25d80bc676e15a6": { main: "Secondary weapons", sub: "Pistols WTT", caliber: "4.6x30mm" }, // Prodigy
             "6761b213607f9a6f79017d52": { main: "Secondary weapons", sub: "Pistols WTT", caliber: "9x19mm" }, // EDC X9
+            "679f2453d1970258c1df3fce": { main: "Secondary weapons", sub: "Pistols WTT", caliber: "9x19mm" }, // C-9
 
             "61a4c8884f95bc3b2c5dc96f": { main: "Secondary weapons", sub: "Revolvers", caliber: ".357 Magnum" }, // CR 50DS
             "624c2e8614da335f1e034d8c": { main: "Secondary weapons", sub: "Revolvers", caliber: "9x19mm" }, // CR 200DS
