@@ -2,6 +2,7 @@ let playerData = [];
 let dripData = {};
 let currentModalPlayer = null;
 let currentUserPermaLink = '';
+let reactionsCache = new Map();
 
 function initializePlayersGallery(leaderboardData) {
     const playersGrid = document.getElementById('playersGrid');
@@ -12,17 +13,26 @@ function initializePlayersGallery(leaderboardData) {
     const modalLikeCount = document.getElementById('modalLikeCount');
     const modalDislikeCount = document.getElementById('modalDislikeCount');
 
-    // #region Rebase reactions data
+    // #region Reactions data
     function getPlayerReactions(permaLink) {
-        const playerReactions = dripData[permaLink];
-        if (playerReactions) {
-            return {
-                likes: playerReactions.likes || 0,
-                dislikes: playerReactions.dislikes || 0,
-                reactedBy: playerReactions.reactedBy || []
-            };
+        if (reactionsCache.has(permaLink)) {
+            return reactionsCache.get(permaLink);
         }
-        return { likes: 0, dislikes: 0, reactedBy: [] };
+
+        const playerReactions = dripData[permaLink];
+        const reactions = playerReactions ? {
+            likes: playerReactions.likes || 0,
+            dislikes: playerReactions.dislikes || 0,
+            reactedBy: playerReactions.reactedBy || []
+        } : { likes: 0, dislikes: 0, reactedBy: [] };
+
+        reactionsCache.set(permaLink, reactions);
+        return reactions;
+    }
+
+    function updateReactionsCache(permaLink, newReactions) {
+        reactionsCache.set(permaLink, newReactions);
+        dripData[permaLink] = newReactions;
     }
 
     function hasUserVoted(playerPermaLink) {
@@ -31,11 +41,27 @@ function initializePlayersGallery(leaderboardData) {
         return reactions.reactedBy.includes(currentUserPermaLink);
     }
 
+    function sortPlayersByLikes(players) {
+        return [...players].sort((a, b) => {
+            const aReactions = getPlayerReactions(a.permaLink);
+            const bReactions = getPlayerReactions(b.permaLink);
+
+            if (bReactions.likes !== aReactions.likes) {
+                return bReactions.likes - aReactions.likes;
+            }
+            return aReactions.dislikes - bReactions.dislikes;
+        });
+    }
+
     // #region Render grid
     function renderPlayersGrid(players) {
         playersGrid.innerHTML = '';
 
-        players.forEach(player => {
+        const sortedPlayers = sortPlayersByLikes(players);
+
+        const fragment = document.createDocumentFragment();
+
+        sortedPlayers.forEach(player => {
             const reactions = getPlayerReactions(player.permaLink);
             player.likes = reactions.likes;
             player.dislikes = reactions.dislikes;
@@ -43,8 +69,160 @@ function initializePlayersGallery(leaderboardData) {
             player.hasVoted = hasUserVoted(player.permaLink);
 
             const playerCard = createPlayerCard(player);
-            playersGrid.appendChild(playerCard);
+            fragment.appendChild(playerCard);
         });
+
+        playersGrid.appendChild(fragment);
+    }
+
+    async function executeVote(player, voteType) {
+        if (hasUserVoted(player.permaLink)) {
+            showToast('You have already voted for this player!', 'warning');
+            return;
+        }
+
+        try {
+            const result = await saveVote(player.permaLink, voteType);
+
+            if (result && !result.error) {
+                const newReactions = {
+                    likes: result[player.permaLink]?.likes || 0,
+                    dislikes: result[player.permaLink]?.dislikes || 0,
+                    reactedBy: [...(dripData[player.permaLink]?.reactedBy || []), currentUserPermaLink].filter(Boolean)
+                };
+
+                updateReactionsCache(player.permaLink, newReactions);
+
+                updatePlayerCardUI(player.permaLink, newReactions);
+
+                if (currentModalPlayer && currentModalPlayer.permaLink === player.permaLink) {
+                    updateModalUI(newReactions);
+                }
+
+                showVoteAnimation(player, voteType);
+
+                requestAnimationFrame(() => {
+                    const allPlayers = Array.from(playersGrid.children)
+                        .map(card => ({
+                            permaLink: card.dataset.playerPermaLink,
+                            name: card.querySelector('.player-name').textContent,
+                            ...getPlayerReactions(card.dataset.playerPermaLink)
+                        }));
+
+                    smoothResortPlayers(allPlayers);
+                });
+
+                showToast(`You ${voteType}d ${player.name}!`, 'success');
+
+            } else {
+                showToast(result.error || 'Error saving vote', 'error');
+            }
+
+        } catch (error) {
+            console.error('Error handling vote:', error);
+            showToast('Network error. Please try again.', 'error');
+        }
+    }
+
+    function updatePlayerCardUI(permaLink, reactions) {
+        const card = document.querySelector(`[data-player-perma-link="${permaLink}"]`);
+        if (!card) return;
+
+        const likeCount = card.querySelector('.like-count');
+        const dislikeCount = card.querySelector('.dislike-count');
+        const likeBtn = card.querySelector('.like-btn');
+        const dislikeBtn = card.querySelector('.dislike-btn');
+        const playerInfo = card.querySelector('.player-info');
+
+        if (likeCount) likeCount.textContent = reactions.likes;
+        if (dislikeCount) dislikeCount.textContent = reactions.dislikes;
+
+        likeBtn.disabled = true;
+        dislikeBtn.disabled = true;
+        likeBtn.classList.add('disabled');
+        dislikeBtn.classList.add('disabled');
+
+        // "Already Voted"
+        if (!card.querySelector('.voted-badge')) {
+            const badge = document.createElement('div');
+            badge.className = 'voted-badge';
+            badge.textContent = 'Already Voted';
+            playerInfo.appendChild(badge);
+        }
+
+        const btnToAnimate = voteType === 'like' ? likeBtn : dislikeBtn;
+        btnToAnimate.classList.add(voteType === 'like' ? 'liked' : 'disliked');
+        setTimeout(() => {
+            btnToAnimate.classList.remove('liked', 'disliked');
+        }, 1000);
+    }
+
+    function updateModalUI(reactions) {
+        modalLikeCount.textContent = reactions.likes;
+        modalDislikeCount.textContent = reactions.dislikes;
+
+        const modalLikeBtn = modal.querySelector('.like-btn');
+        const modalDislikeBtn = modal.querySelector('.dislike-btn');
+
+        modalLikeBtn.disabled = true;
+        modalDislikeBtn.disabled = true;
+        modalLikeBtn.classList.add('disabled');
+        modalDislikeBtn.classList.add('disabled');
+    }
+
+    function smoothResortPlayers(players) {
+        const sortedPlayers = sortPlayersByLikes(players);
+        const currentCards = Array.from(playersGrid.children);
+
+        const positionMap = new Map();
+        sortedPlayers.forEach((player, index) => {
+            positionMap.set(player.permaLink, index);
+        });
+
+        currentCards.sort((a, b) => {
+            const aPos = positionMap.get(a.dataset.playerPermaLink) || 0;
+            const bPos = positionMap.get(b.dataset.playerPermaLink) || 0;
+            return aPos - bPos;
+        });
+
+        currentCards.forEach((card, index) => {
+            card.style.transition = 'transform 0.5s ease, opacity 0.3s ease';
+            card.style.transform = `translateY(${index * 20}px)`;
+            card.style.opacity = '0.8';
+
+            requestAnimationFrame(() => {
+                playersGrid.appendChild(card);
+                card.style.transform = 'translateY(0)';
+                card.style.opacity = '1';
+
+                setTimeout(() => {
+                    card.style.transition = '';
+                }, 500);
+            });
+        });
+    }
+
+    function showVoteAnimation(player, voteType) {
+        const animationEl = document.createElement('div');
+        animationEl.className = `vote-animation ${voteType}`;
+        animationEl.innerHTML = `<i class="fa-solid fa-${voteType === 'like' ? 'heart' : 'heart-crack'}"></i>`;
+        animationEl.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: ${voteType === 'like' ? '#10b981' : '#ef4444'};
+            z-index: 10000;
+            pointer-events: none;
+            animation: floatUp 1s ease-out forwards;
+        `;
+
+        document.body.appendChild(animationEl);
+
+        setTimeout(() => {
+            animationEl.remove();
+        }, 1000);
     }
 
     function createPlayerCard(player) {
@@ -57,15 +235,21 @@ function initializePlayersGallery(leaderboardData) {
 
         card.innerHTML = `
             <div class="player-image-container">
-                <img src="${pmcPfpsPath}${player.permaLink}_full.png" alt="${player.name}" 
+                <img src="${pmcPfpsPath}${player.permaLink}_full.png?t=${Date.now()}" alt="${player.name}" 
                      class="player-image" loading="lazy"
-                     onerror="this.onerror=null; this.src='${pmcPfpsPath}default.png'">
+                     onerror="this.onerror=null; this.src='${pmcPfpsPath}default.png'"
+                     onload="this.classList.remove('loading')">
                 <div class="player-image-overlay">
                     <span class="view-image-text">Zoom In</span>
                 </div>
+                <div class="loading-spinner-small"></div>
             </div>
             <div class="player-info">
                 <h3 class="player-name">${player.name}</h3>
+                <div class="player-stats">
+                    <span class="rank-badge">#${player.rank || 'N/A'}</span>
+                    <span class="score-badge">${player.totalScore || 0} SS</span>
+                </div>
                 <div class="player-actions">
                     <button class="action-btn dislike-btn ${hasVoted ? 'disabled' : ''}" 
                             data-action="dislike" ${hasVoted ? 'disabled' : ''}>
@@ -78,7 +262,7 @@ function initializePlayersGallery(leaderboardData) {
                         <span class="like-count">${player.likes || 0}</span>
                     </button>
                 </div>
-                ${hasVoted ? '<div class="voted-badge">Already Voted</div>' : ''}
+                ${hasVoted ? '<div class="voted-badge">Already Voted!</div>' : ''}
             </div>
         `;
 
@@ -89,8 +273,14 @@ function initializePlayersGallery(leaderboardData) {
         imageContainer.addEventListener('click', () => openModal(player));
 
         if (!hasVoted) {
-            likeBtn.addEventListener('click', (e) => handleVote(e, player, 'like'));
-            dislikeBtn.addEventListener('click', (e) => handleVote(e, player, 'dislike'));
+            likeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                executeVote(player, 'like');
+            });
+            dislikeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                executeVote(player, 'like');
+            });
         }
 
         return card;
@@ -98,32 +288,46 @@ function initializePlayersGallery(leaderboardData) {
 
     // #region Modals
     function openModal(player) {
+        if (!player) {
+            console.error('No player provided to openModal');
+            return;
+        }
+
         currentModalPlayer = player;
 
         const reactions = getPlayerReactions(player.permaLink);
-        player.likes = reactions.likes;
-        player.dislikes = reactions.dislikes;
-        player.hasVoted = hasUserVoted(player.permaLink);
+        const likes = reactions?.likes ?? 0;
+        const dislikes = reactions?.dislikes ?? 0;
+        const hasVoted = hasUserVoted(player.permaLink);
+
+        player.likes = likes;
+        player.dislikes = dislikes;
+        player.hasVoted = hasVoted;
+
+        modalImage.classList.add('loading');
+        modalImage.onload = () => modalImage.classList.remove('loading');
+        modalImage.onerror = () => {
+            modalImage.classList.remove('loading');
+            modalImage.src = `${pmcPfpsPath}default.png`;
+        };
 
         modalImage.src = `${pmcPfpsPath}${player.permaLink}_full.png`;
-        modalImage.alt = player.name;
-        modalName.textContent = player.name;
-        modalLikeCount.textContent = player.likes;
-        modalDislikeCount.textContent = player.dislikes;
+
+        modalName.textContent = player.name || 'Unknown Player';
+
+        modalLikeCount.textContent = likes;
+        modalDislikeCount.textContent = dislikes;
 
         const modalLikeBtn = modal.querySelector('.like-btn');
         const modalDislikeBtn = modal.querySelector('.dislike-btn');
 
-        if (player.hasVoted) {
-            modalLikeBtn.classList.add('disabled');
-            modalDislikeBtn.classList.add('disabled');
-            modalLikeBtn.disabled = true;
-            modalDislikeBtn.disabled = true;
-        } else {
-            modalLikeBtn.classList.remove('disabled');
-            modalDislikeBtn.classList.remove('disabled');
-            modalLikeBtn.disabled = false;
-            modalDislikeBtn.disabled = false;
+        if (modalLikeBtn && modalDislikeBtn) {
+            modalLikeBtn.disabled = hasVoted;
+            modalDislikeBtn.disabled = hasVoted;
+            modalLikeBtn.classList.toggle('disabled', hasVoted);
+            modalDislikeBtn.classList.toggle('disabled', hasVoted);
+            modalLikeBtn.querySelector('.like-count').textContent = likes;
+            modalDislikeBtn.querySelector('.dislike-count').textContent = dislikes;
         }
 
         modal.classList.add('active');
@@ -136,162 +340,31 @@ function initializePlayersGallery(leaderboardData) {
         currentModalPlayer = null;
     }
 
-    async function handleVote(event, player, voteType) {
-        event.stopPropagation();
-        const button = event.currentTarget;
-
-        if (hasUserVoted(player.permaLink)) {
-            showToast('You have already voted for this player!', 'warning');
-            return;
-        }
-
-        button.disabled = true;
-        button.classList.add('processing');
-
+    async function saveVote(permaLink, voteType) {
         try {
-            const result = await saveVote(player.permaLink, voteType);
+            const response = await fetch('/api/network/functions/dripfest/vote.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    playerPermaLink: permaLink,
+                    voteType: voteType,
+                    userPermaLink: currentUserPermaLink
+                })
+            });
 
-            if (result && !result.error) {
-                if (!dripData[player.permaLink]) {
-                    dripData[player.permaLink] = {
-                        likes: 0,
-                        dislikes: 0,
-                        reactedBy: []
-                    };
-                }
-
-                if (result[player.permaLink]) {
-                    dripData[player.permaLink].likes = result[player.permaLink].likes;
-                    dripData[player.permaLink].dislikes = result[player.permaLink].dislikes;
-                    dripData[player.permaLink].reactedBy = result[player.permaLink].reactedBy;
-                }
-
-                if (currentUserPermaLink && !dripData[player.permaLink].reactedBy.includes(currentUserPermaLink)) {
-                    dripData[player.permaLink].reactedBy.push(currentUserPermaLink);
-                }
-
-                const likeCountSpan = button.querySelector('.like-count') ||
-                    button.closest('.player-actions').querySelector('.like-count');
-                const dislikeCountSpan = button.querySelector('.dislike-count') ||
-                    button.closest('.player-actions').querySelector('.dislike-count');
-
-                if (likeCountSpan) likeCountSpan.textContent = dripData[player.permaLink].likes;
-                if (dislikeCountSpan) dislikeCountSpan.textContent = dripData[player.permaLink].dislikes;
-
-                if (currentModalPlayer && currentModalPlayer.permaLink === player.permaLink) {
-                    modalLikeCount.textContent = dripData[player.permaLink].likes;
-                    modalDislikeCount.textContent = dripData[player.permaLink].dislikes;
-                }
-
-                button.classList.add(voteType === 'like' ? 'liked' : 'disliked');
-
-                const playerCard = button.closest('.player-card');
-                const likeBtn = playerCard.querySelector('.like-btn');
-                const dislikeBtn = playerCard.querySelector('.dislike-btn');
-
-                likeBtn.disabled = true;
-                dislikeBtn.disabled = true;
-                likeBtn.classList.add('disabled');
-                dislikeBtn.classList.add('disabled');
-
-                const playerInfo = playerCard.querySelector('.player-info');
-                if (!playerCard.querySelector('.voted-badge')) {
-                    const badge = document.createElement('div');
-                    badge.className = 'voted-badge';
-                    badge.textContent = 'Already Voted';
-                    playerInfo.appendChild(badge);
-                }
-
-                showToast(`You ${voteType}d ${player.name}!`, 'success');
-
-                if (currentModalPlayer && currentModalPlayer.permaLink === player.permaLink) {
-                    const modalLikeBtn = modal.querySelector('.like-btn');
-                    const modalDislikeBtn = modal.querySelector('.dislike-btn');
-                    modalLikeBtn.disabled = true;
-                    modalDislikeBtn.disabled = true;
-                    modalLikeBtn.classList.add('disabled');
-                    modalDislikeBtn.classList.add('disabled');
-                }
-
-            } else {
-                showToast(result.error || 'Error saving vote', 'error');
-                button.disabled = false;
-                button.classList.remove('processing');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
 
+            const result = await response.json();
+            return result;
+
         } catch (error) {
-            console.error('Error handling vote:', error);
-            showToast('Network error. Please try again.', 'error');
-            button.disabled = false;
-            button.classList.remove('processing');
+            console.error('Error saving vote:', error);
+            return { error: error.message };
         }
-
-        setTimeout(() => {
-            button.classList.remove('liked', 'disliked', 'processing');
-        }, 1000);
-    }
-
-    // #region Like
-    function handleLike(event, player) {
-        event.stopPropagation();
-        const button = event.currentTarget;
-        const countSpan = button.querySelector('.action-count');
-
-        player.likes = (player.likes || 0) + 1;
-
-        countSpan.textContent = player.likes;
-        button.classList.add('liked');
-
-        if (!dripData[player.permaLink]) {
-            dripData[player.permaLink] = {
-                likes: 0,
-                dislikes: 0,
-                reactedBy: []
-            };
-        }
-        dripData[player.permaLink].likes = player.likes;
-
-        if (currentModalPlayer && currentModalPlayer.id === player.id) {
-            modalLikeCount.textContent = player.likes;
-        }
-
-        saveVote(player.permaLink, 'like');
-
-        setTimeout(() => {
-            button.classList.remove('liked');
-        }, 400);
-    }
-
-    // #region Dislike
-    function handleDislike(event, player) {
-        event.stopPropagation();
-
-        const button = event.currentTarget;
-        const countSpan = button.querySelector('.action-count');
-
-        player.dislikes = (player.dislikes || 0) + 1;
-
-        countSpan.textContent = player.dislikes;
-        button.classList.add('disliked');
-
-        if (!dripData[player.permaLink]) {
-            dripData[player.permaLink] = {
-                likes: 0,
-                dislikes: 0,
-                reactedBy: []
-            };
-        }
-        dripData[player.permaLink].dislikes = player.dislikes;
-
-        if (currentModalPlayer && currentModalPlayer.id === player.id) {
-            modalDislikeCount.textContent = player.dislikes;
-        }
-
-        saveVote(player.permaLink, 'dislike');
-
-        setTimeout(() => {
-            button.classList.remove('disliked');
-        }, 400);
     }
 
     // #region AJAX
@@ -338,36 +411,42 @@ function initializePlayersGallery(leaderboardData) {
     });
 
     modal.querySelector('.like-btn').addEventListener('click', () => {
-        if (currentModalPlayer) {
-            const event = {
-                currentTarget: modal.querySelector('.like-btn'),
-                stopPropagation: () => { }
-            };
-            handleLike(event, currentModalPlayer);
+        if (currentModalPlayer && !currentModalPlayer.hasVoted) {
+            executeVote(currentModalPlayer, 'like');
         }
     });
 
     modal.querySelector('.dislike-btn').addEventListener('click', () => {
-        if (currentModalPlayer) {
-            const event = {
-                currentTarget: modal.querySelector('.dislike-btn'),
-                stopPropagation: () => { }
-            };
-            handleDislike(event, currentModalPlayer);
+        if (currentModalPlayer && !currentModalPlayer.hasVoted) {
+            executeVote(currentModalPlayer, 'dislike');
         }
     });
 
     // #region Player data mapping
-    const players = leaderboardData.map((player, index) => {
-        const reactions = getPlayerReactions(player.permaLink);
+    const players = leaderboardData
+        .map((player, index) => {
+            const isBanned = player.banned === true || player.banned === 'true' || player.banned === 1;
+            const hasFewRaids = (player.totalRaids || 0) < 5;
 
-        return {
-            id: player.id || `player-${index}-${player.permaLink}`,
-            permaLink: player.permaLink,
-            name: player.name || `Player ${index + 1}`,
-            ...reactions
-        };
-    });
+            if (isBanned || hasFewRaids) {
+                return null;
+            }
+
+            return {
+                id: player.id || `player-${index}-${player.permaLink}`,
+                permaLink: player.permaLink,
+                name: player.name || `Player ${index + 1}`,
+                rank: player.rank || index + 1,
+                totalScore: player.totalScore ? player.totalScore.toFixed(3) : '0.000',
+                totalRaids: player.totalRaids || 0,
+                banned: player.banned || false
+            };
+        })
+        .filter(player => player !== null)
+        .map((player, index) => ({
+            ...player,
+            rank: index + 1
+        }));
 
     renderPlayersGrid(players);
 }
@@ -375,26 +454,39 @@ function initializePlayersGallery(leaderboardData) {
 // #region Init
 async function initializePlayers() {
     try {
-        currentUserPermaLink = await getCurrentUserPermaLink();
+        [currentUserPermaLink, playerDataResponse, dripData] = await Promise.all([
+            getCurrentUserPermaLink(),
+            loadJSON(`${currentSeason}`),
+            loadJSON(`${dripDataPath}`).catch(() => ({}))
+        ]);
 
-        const playerDataResponse = await loadJSON(`${currentSeason}`);
-        dripData = await loadJSON(`${dripDataPath}`) || {};
-
-        playerData = playerDataResponse.leaderboard;
+        playerData = playerDataResponse.leaderboard || [];
 
         initializePlayersGallery(playerData);
+
     } catch (error) {
         console.error('Error initializing players:', error);
         showToast('Failed to load player data', 'error');
+
+        // Fallback UI
+        const playersGrid = document.getElementById('playersGrid');
+        playersGrid.innerHTML = `
+            <div class="error-message">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <p>Failed to load players. Please refresh the page.</p>
+                <button onclick="initializePlayers()" class="retry-btn">Retry</button>
+            </div>
+        `;
     }
 }
 
 async function getCurrentUserPermaLink() {
     try {
         const response = await fetch('/api/network/functions/dripfest/get_current_user.php');
+
         if (response.ok) {
             const data = await response.json();
-            return data.permaLink;
+            return data.permaLink || '';
         }
 
         return '';

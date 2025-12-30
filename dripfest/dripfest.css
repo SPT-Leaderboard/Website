@@ -29,16 +29,21 @@
     border-radius: 24px;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     box-shadow: var(--shadow-md);
     display: flex;
     margin: 0;
     flex-direction: column;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 0.3s ease;
 }
 
 .player-card:hover {
     border-color: var(--primary-light);
+}
+
+.player-card {
+    animation: fadeIn 0.5s ease forwards;
 }
 
 .player-image-container {
@@ -48,6 +53,51 @@
     overflow: hidden;
     cursor: pointer;
     flex-shrink: 0;
+}
+
+.player-image.loading,
+.modal-player-image.loading {
+    background: linear-gradient(90deg,
+            var(--bg-card) 25%,
+            var(--bg-card-light) 50%,
+            var(--bg-card) 75%);
+    background-size: 200% 100%;
+    animation: loadingShimmer 1.5s infinite;
+}
+
+.loading-spinner-small {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: none;
+}
+
+.player-image-container.loading .loading-spinner-small {
+    display: block;
+}
+
+
+@keyframes floatUp {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -150%) scale(1.5);
+    }
+}
+
+.vote-animation {
+    animation: floatUp 1s ease-out forwards;
 }
 
 @media (min-width: 768px) {
@@ -252,8 +302,7 @@
     width: 100%;
     height: 90%;
     border: 1px solid var(--border-light);
-    box-shadow: var(--shadow-lg), 0 0 40px rgba(99, 102, 241, 0.2);
-    animation: contentSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: contentSlideIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @keyframes contentSlideIn {
@@ -455,10 +504,37 @@
 }
 
 .player-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
     gap: 0.5rem;
-    margin: 1rem 0;
+    margin: 0.5rem 0;
+    justify-content: center;
+}
+
+.rank-badge,
+.score-badge {
+    background: rgba(99, 102, 241, 0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    color: var(--primary-light);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.score-badge {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--success);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.voted-badge {
+    background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    display: inline-block;
+    animation: fadeIn 0.3s ease;
 }
 
 .player-stats span {

@@ -96,7 +96,16 @@
         <main>
             <section class="players-gallery-section">
                 <div class="players-grid" id="playersGrid">
-                    <!-- JS -->
+                    <div class="loader-dots" style="grid-column: 1 / -1; height: 400px">
+                        <div class="shimmer-bg"></div>
+                        <div class="dots-container">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <p class="dots-text">Processing Players...</p>
+                    </div>
                 </div>
                 <div class="drip-player-modal" id="playerModal">
                     <div class="drip-modal-overlay"></div>
@@ -110,11 +119,11 @@
                             <div class="modal-actions">
                                 <button class="action-btn dislike-btn" data-action="dislike">
                                     <i class="fa-solid fa-heart-crack"></i>
-                                    <span class="dislike-count">0</span>
+                                    <span class="dislike-count" id="modalLikeCount">0</span>
                                 </button>
                                 <button class="action-btn like-btn" data-action="like">
                                     <i class="fa-solid fa-heart"></i>
-                                    <span class="like-count">0</span>
+                                    <span class="like-count" id="modalDislikeCount">0</span>
                                 </button>
                             </div>
                         </div>
