@@ -54,7 +54,7 @@ let achievementsPath = `/api/data/shared/achievement_counters.json`;
 let pmcPfpsPath = `/api/data/pmc_avatars/`;
 let globalCounters = `/api/data/shared/global_counters.json`;
 let adminsOnline = `/api/admins_online.json`;
-let dripDataPath = `/api/data/drip/drip_data.json?t=${Date.now()}`;
+let dripDataPath = `/api/network/functions/dripfest/drip_data.json?t=${Date.now()}`;
 
 // Paths for local files if debug is on
 if (isLocalhost) {
