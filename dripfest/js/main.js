@@ -391,7 +391,7 @@ async function initializePlayers() {
 
 async function getCurrentUserPermaLink() {
     try {
-        const response = await fetch('/api/network/functions/dripfest/getCurrentUser.php');
+        const response = await fetch('/api/network/functions/dripfest/get_current_user.php');
         if (response.ok) {
             const data = await response.json();
             return data.permaLink;
