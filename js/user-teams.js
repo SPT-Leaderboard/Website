@@ -118,4 +118,3 @@ function closeTeamModal() {
 }
 
 document.addEventListener('DOMContentLoaded', initTeamModal);
-
