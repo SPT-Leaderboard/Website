@@ -88,7 +88,7 @@ function goToPage(pageNumber) {
     const commentsList = document.getElementById('comments-list');
     if (commentsList) {
         commentsList.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    } 
+    }
 }
 
 function renderCurrentPage() {

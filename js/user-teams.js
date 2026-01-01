@@ -109,32 +109,6 @@ function renderTeamPlayers() {
 
         container.appendChild(playerCard);
     });
-
-    if (currentTeamData.length === 0) {
-        const emptyState = document.createElement('div');
-        emptyState.className = 'team-empty-state';
-        emptyState.innerHTML = `
-            <div style="font-size: 1.5rem; color: var(--text-light); margin-bottom: 10px;">
-                No Team Members Found
-            </div>
-            <div style="color: var(--text-muted);">
-                This team doesn't have any registered players yet
-            </div>
-        `;
-        emptyState.style.cssText = `
-            grid-column: 1 / -1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 60px 20px;
-            text-align: center;
-            border: 2px dashed rgba(99, 102, 241, 0.3);
-            border-radius: 20px;
-            background: rgba(30, 41, 59, 0.3);
-        `;
-        container.appendChild(emptyState);
-    }
 }
 
 function closeTeamModal() {

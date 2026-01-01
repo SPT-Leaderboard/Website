@@ -411,8 +411,7 @@
     font-weight: 700;
     font-size: 18px;
     background: radial-gradient(#eb10ff, #d700ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0px 0px 5px #ebebeb9c, -1px -1px 1px #ffffff9c, 1px 0px 5px #c0f, 0px -2px 1px #ea2eff00, 1px 0px 5px #d325ff, 0px -2px 1px #fff, 0px 1px 1px #a600f88f, -1px 3px 1px #a600f854;
