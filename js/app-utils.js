@@ -303,6 +303,17 @@ function getCookie(name) {
     return '';
 }
 
+// Clean weapon name helper
+function cleanWeaponNameFunc(weaponName) {
+    let cleaned = weaponName.replace(/<color=.*?>/g, "");
+
+    cleaned = cleaned.replace(/<\/color>/g, "");
+    cleaned = cleaned.replace(/[★☆]/g, "");
+    cleaned = cleaned.replace(/"/g, "");
+
+    return cleaned.trim();
+}
+
 function formatLastPlayedRaid(unixTimestamp) {
     if (typeof unixTimestamp !== "number" || unixTimestamp <= 0) {
         return "Unknown";
