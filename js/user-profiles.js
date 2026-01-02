@@ -1407,56 +1407,6 @@ function setupModalCloseHandlers() {
     }
 }
 
-function formatLastPlayedRaid(unixTimestamp) {
-    if (typeof unixTimestamp !== "number" || unixTimestamp <= 0) {
-        return "Unknown";
-    }
-
-    const date = new Date(unixTimestamp * 1000);
-    const now = new Date();
-    const diffInSeconds = Math.floor((now - date) / 1000);
-    const diffInMinutes = Math.floor(diffInSeconds / 60);
-
-    if (diffInMinutes < 5) {
-        return "Just Now";
-    }
-
-    if (diffInMinutes < 60) {
-        return `${diffInMinutes} minutes ago`;
-    }
-
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    if (diffInHours === 1) {
-        return "1 hour ago";
-    }
-    if (diffInHours < 24) {
-        return `${diffInHours} hours ago`;
-    }
-
-    const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays === 1) {
-        return "1 day ago";
-    }
-    if (diffInDays < 30) {
-        return `${diffInDays} days ago`;
-    }
-
-    const diffInMonths = Math.floor(diffInDays / 30);
-    if (diffInMonths === 1) {
-        return "1 month ago";
-    }
-    if (diffInMonths < 12) {
-        return `${diffInMonths} months ago`;
-    }
-
-    const diffInYears = Math.floor(diffInMonths / 12);
-    if (diffInYears === 1) {
-        return "1 year ago";
-    }
-
-    return `${diffInYears} years ago`;
-}
-
 function closeLoaderAfterImagesLoad() {
     const modalContent = document.querySelector('.profile-section');
     const images = modalContent.querySelectorAll('img');

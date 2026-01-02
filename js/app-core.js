@@ -371,13 +371,6 @@ function compareLastPlayed(dateStr1, dateStr2) {
     return date1 - date2;
 }
 
-// To 00:00
-function formatSeconds(seconds) {
-    const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-    const secs = (seconds % 60).toString().padStart(2, '0');
-    return `${mins}:${secs}`;
-}
-
 /**
  * Renders player leaderboard data in a table
  * @param {Array<Object>} data - Leaderboard data with all the season entries

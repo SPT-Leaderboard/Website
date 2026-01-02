@@ -270,15 +270,14 @@ async function createQuestsHTML(quests) {
                             ${quest.accept_time > 0 ? `
                                 <div class="timeline-item">
                                     <span class="timeline-label">Accepted:</span>
-                                    <span class="timeline-value time-ago">${getTimeAgo(new Date(quest.accept_time * 1000))}</span>
+                                    <span class="timeline-value time-ago">${formatLastPlayedRaid(quest.accept_time)}</span>
                                 </div>
                             ` : quest.isCompleted ? `
                                 <div class="timeline-item">
                                     <span class="timeline-label">Completed:</span>
-                                    <span class="timeline-value time-ago">${getTimeAgo(new Date(quest.finish_time * 1000))}</span>
+                                    <span class="timeline-value time-ago">${formatLastPlayedRaid(quest.finish_time)}</span>
                                 </div>
                             ` : ''}
-                            
                             ${quest.isCompleted ? `
                                 <div class="timeline-item">
                                     <span class="timeline-label">Complete Date:</span>
@@ -390,3 +389,4 @@ function getTimeAgo(date) {
 
     return `${Math.floor(diffInSeconds / 2592000)} months ago`;
 }
+// #endregion
