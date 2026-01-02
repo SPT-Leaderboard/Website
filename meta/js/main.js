@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Weapons
             if (userData.weapons) {
                 for (const weaponName in userData.weapons) {
-                    const cleanWeaponName = weaponName.replace(/[★☆]/g, "");
+                    const cleanWeaponName = cleanWeaponNameFunc(weaponName);
 
                     const weaponInfo = userData.weapons[weaponName];
                     const stats = weaponInfo.stats;
@@ -150,6 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
             "66a545898022784400d6c836": { main: "Primary Weapons", sub: "Assault Rifles WTT", caliber: "5.56x45mm NATO", tag: "WTT" }, // Tavor X95
             "664274a4d2e5fe0439d545a6": { main: "Primary Weapons", sub: "Assault Rifles WTT", caliber: "7.62x51mm NATO", tag: "WTT" }, // G3
             "66ba249b102a9dd6040a6e7e": { main: "Primary Weapons", sub: "Assault Rifles WTT", caliber: "5.56x45mm NATO", tag: "WTT" }, // Carmel
+            "676b4e2ff185a450a0b300b4": { main: "Primary Weapons", sub: "Assault Rifles WTT", caliber: "5.56x45mm NATO", tag: "WTT" }, // Wages Of Sin
 
             "627e14b21713922ded6f2c15": { main: "Primary Weapons", sub: "Bolt-action rifles", caliber: "8.6x70mm" }, // AXMC
             "588892092459774ac91d4b11": { main: "Primary Weapons", sub: "Bolt-action rifles", caliber: "7.62x51mm NATO" }, // DVL-10
@@ -228,6 +229,7 @@ document.addEventListener('DOMContentLoaded', function () {
             "5fc3f2d5900b1d5091531e57": { main: "Primary Weapons", sub: "Submachine guns", caliber: "9x19mm" }, // Vector 9x19
             // WTT
             "687afda52dc9fd6c0e14c602": { main: "Primary Weapons", sub: "Submachine guns WTT", caliber: "9x19mm" }, // EVO 3
+            "6761b213607f9a6f79017cd8": { main: "Primary Weapons", sub: "Submachine guns WTT", caliber: "9x19mm" }, // PM-9
 
             "62e7e7bbe6da9612f743f1e0": { main: "Secondary weapons", sub: "Underbarrels", caliber: "40mm" }, // GP-25
 
@@ -392,7 +394,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const card = document.createElement('div');
             card.classList.add('weapon-card');
 
-            const cleanWeaponName = weapon.name.replace(/[★☆]/g, "");
+            const cleanWeaponName = cleanWeaponNameFunc(weapon.name);
 
             const weaponTagsHTML = weapon.tags.map(tag =>
                 `<span class="weapon-tag weapon-tag--${tag.type}">${tag.text}</span>`

@@ -231,8 +231,8 @@
 
 .weapon-rank {
     position: absolute;
-    top: -12px;
-    right: -12px;
+    top: -22px;
+    right: -19px;
     background: var(--rank-bg);
     color: white;
     border-radius: 10px;

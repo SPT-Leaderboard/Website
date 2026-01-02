@@ -1149,7 +1149,6 @@ async function renderWeaponList(playerId, modWeaponStats) {
         return;
     }
 
-
     const sortedWeapons = Object.entries(playerWeapons)
         .filter(([_, weaponData]) => weaponData.stats?.kills > 0)
         .sort((a, b) => (b[1].stats?.kills || 0) - (a[1].stats?.kills || 0));
@@ -1228,16 +1227,6 @@ function getBestWeapon(modWeaponStats) {
     }
 
     return bestWeapon;
-}
-
-// Clean weapon name helper
-function cleanWeaponNameFunc(weaponName) {
-    let cleaned = weaponName.replace(/<color=.*?>/g, "");
-
-    cleaned = cleaned.replace(/<\/color>/g, "");
-    cleaned = cleaned.replace(/[★☆]/g, "");
-
-    return cleaned.trim();
 }
 
 // Helper function to generate side images HTML
