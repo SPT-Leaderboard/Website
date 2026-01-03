@@ -17,7 +17,7 @@ let isDataReady = false;
 let isLoggedIn = false;
 
 // Current SPT version
-let currentRelease = "4.0.8";
+let currentRelease = "4.0.11";
 
 // For debugging purposes
 // Will use local paths for some files/fallbacks
@@ -41,7 +41,7 @@ let oldTotalPlayTime = 0;
 // Paths
 let seasonPath = '/api/data/seasons/season';
 let seasonLocalPath = `fallbacks/`;
-let currentSeason = `/api/data/seasons/season7.json?t=${Date.now()}`;
+let currentSeason = `/api/data/seasons/season8.json?t=${Date.now()}`;
 let seasonPathEnd = `.json?t=${Date.now()}`;
 let lastRaidsPath = `/api/data/player_raids/`;
 let profileAppearencePath = `/api/network/profile/profiles/`;
