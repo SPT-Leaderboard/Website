@@ -10,7 +10,7 @@ let seasons = []; // Storing available seasons
 let ranOnlyOnce = false; // Run only once (ie winners)
 
 // DYNAMIC: Tells whenever the live update was finished and data is ready
-// Better to use in pair with waitForDataReady(() => myFunction()); - automatic call upon data load
+// Better to use in pair with waitForDataReady(() => myFunction()); - automatic callback upon data load
 let isDataReady = false;
 
 // DYNAMIC: Indicates when user is logged in Network or not
@@ -59,7 +59,7 @@ let dripDataPath = `/api/network/functions/dripfest/drip_data.json?t=${Date.now(
 // Paths for local files if debug is on
 if (isLocalhost) {
     pmcPfpsPath = `../fallbacks/pmc_avatars/`;
-    currentSeason = `/fallbacks/season7.json`
+    currentSeason = `/fallbacks/season8.json`
     seasonPath = `../fallbacks/season`;
     profileAppearencePath = `fallbacks/profile_settings/`;
     weaponStatsPath = `../fallbacks/shared/weapon_counters.json?t=${Date.now()}`;
@@ -551,7 +551,7 @@ async function displayLeaderboard(data) {
         `
 
         // Prestige icon
-        const prestigeImg = [1, 2].includes(player.prestige)
+        const prestigeImg = [1, 2, 3, 4, 5, 6].includes(player.prestige)
             ? `<img loading="lazy" src="media/leaderboard_icons/Prestige_Icon${player.prestige}.png" style="width: 25px; height: 25px" class="prestige-icon" alt="Prestige ${player.prestige}">`
             : '';
 

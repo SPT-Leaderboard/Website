@@ -649,7 +649,7 @@ async function showPublicProfile(container, player) {
                         ` : ''}
                     
                         <div class="weapon-info ${!player?.isUsingStattrack ? 'stattrack-disabled' : ''}">
-                        <img src="media/weapon_icons/${bestWeapon?.name}.webp" alt="bestWeapon?.name" class="weapon-icon-fav">
+                        <img src="media/weapon_icons/${bestWeapon?.name}.webp" alt="bestWeapon?.name" class="weapon-icon-fav" onerror="this.src='media/default_weapon_icon.png';" />
                         <div class="weapon-name">${bestWeapon?.name ? bestWeapon.name : 'Unknown'}</div>
                         <div class="weapon-mastery">Mastery Level: <span class="level-value-wp">0</span></div>
 
