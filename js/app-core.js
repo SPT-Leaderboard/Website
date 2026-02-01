@@ -24,7 +24,7 @@ let currentRelease = "4.0.11";
 const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 
 // Is on main page?
-const isProduction = window.location.hostname.includes("sptlb.yuyui.moe");
+const isProduction = window.location.hostname.includes("sptlb.katrinfoxvr.com");
 
 // For dynamic stats counters
 let oldTotalRaids = 0;
@@ -48,7 +48,7 @@ let profileAppearencePath = `/api/network/profile/profiles/`;
 let weaponStatsPath = `/api/data/shared/weapon_counters.json?t=${Date.now()}`;
 let profileComments = `/api/data/user-comments/player_`;
 let profileCommentsEnd = `.json?t=${Date.now()}`;
-let profileUrlPath = `https://sptlb.yuyui.moe/#id=`;
+let profileUrlPath = `https://sptlb.katrinfoxvr.com/#id=`;
 let heartbeatsPath = `/api/main/heartbeat/heartbeats.json?t=${Date.now()}`;
 let achievementsPath = `/api/data/shared/achievement_counters.json`;
 let pmcPfpsPath = `/api/data/pmc_avatars/`;
@@ -387,7 +387,7 @@ async function displayLeaderboard(data) {
         let lastGame;
 
         // If user has enabled option to hide Casual Players - we hide them
-        if (player.isCasual && getCookie('casualToggle') === 'true') {
+        if (player.isCasual && getCookie('casualToggle') == true) {
             return;
         }
 
@@ -625,7 +625,7 @@ async function displaySimpleLeaderboard(data) {
         }
 
         // If user has enabled option to hide Casual Players - we hide them
-        if (player.isCasual && getCookie('casualToggle') === 'true') {
+        if (player.isCasual && getCookie('casualToggle') == true) {
             return;
         }
 

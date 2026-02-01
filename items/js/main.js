@@ -86,7 +86,7 @@ class ItemsRenderer {
         this.totalItems = Object.keys(this.itemsData).length;
         this.filteredItems = this.prepareItemsData();
 
-        // Set last fetch time to optimize
+        // Set last fetch time
         this.lastFetchTime = now;
     }
 
