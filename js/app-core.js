@@ -41,7 +41,7 @@ let oldTotalPlayTime = 0;
 // Paths
 let seasonPath = '/api/data/seasons/season';
 let seasonLocalPath = `fallbacks/`;
-let currentSeason = `/api/data/seasons/season8.json?t=${Date.now()}`;
+let currentSeason = `/api/data/seasons/season9.json?t=${Date.now()}`;
 let seasonPathEnd = `.json?t=${Date.now()}`;
 let lastRaidsPath = `/api/data/player_raids/`;
 let profileAppearencePath = `/api/network/profile/profiles/`;
@@ -59,7 +59,7 @@ let dripDataPath = `/api/network/functions/dripfest/drip_data.json?t=${Date.now(
 // Paths for local files if debug is on
 if (isLocalhost) {
     pmcPfpsPath = `../fallbacks/pmc_avatars/`;
-    currentSeason = `/fallbacks/season8.json`
+    currentSeason = `/fallbacks/season9.json`
     seasonPath = `../fallbacks/season`;
     profileAppearencePath = `fallbacks/profile_settings/`;
     weaponStatsPath = `../fallbacks/shared/weapon_counters.json?t=${Date.now()}`;
@@ -122,7 +122,7 @@ async function checkSeasonExists(seasonNumber) {
 async function initAllSeasons() {
     // Seasons start from 2
     // Clean up before initialize
-    let seasonNumber = 2;
+    let seasonNumber = 4;
     seasons = [];
 
     try {
