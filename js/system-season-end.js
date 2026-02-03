@@ -157,26 +157,26 @@ function endSeason() {
                 <h3>Interesting Facts</h3>
                 <div class="facts-grid">
                     <div class="fact-card">
-                        <div class="fact-icon"><img src="media/season_end/Mastering.png" width="20px" height="25px"></div>
+                        <div class="fact-icon"><img src="media/season_end/Mastering.png" width="20px" height="25px" alt=""></div>
                         <div class="fact-text">${stats.topKillsWeapon} was the deadliest weapon with ${stats.topKillsWeaponCount} kills</div>
                     </div>
                     <div class="fact-card">
-                        <div class="fact-icon"><img src="media/season_end/icon_unique_id.png" width="25px" height="25px"></div>
+                        <div class="fact-icon"><img src="media/season_end/icon_unique_id.png" width="25px" height="25px" alt=""></div>
                         <div class="fact-text">${stats.kappaOwners} players achieved Kappa container</div>
                     </div>
                     <div class="fact-card">
-                        <div class="fact-icon"><img src="media/season_end/icon_statscategory_combat_0.png" width="25px" height="25px"></div>
+                        <div class="fact-icon"><img src="media/season_end/icon_statscategory_combat_0.png" width="25px" height="25px" alt=""></div>
                         <div class="fact-text">Longest hit: ${stats.longestShot}m by ${stats.longestShotPlayer}</div>
                     </div>
                     <div class="fact-card">
-                        <div class="fact-icon"><img src="media/season_end/standing_icon.png" width="25px" height="25px"></div>
+                        <div class="fact-icon"><img src="media/season_end/standing_icon.png" width="25px" height="25px" alt=""></div>
                         <div class="fact-text">${stats.richestTrader} was the most profitable trader</div>
                     </div>
                 </div>
             </div>
             
             <div class="season-countdown animate__animated animate__fadeInUp animate__delay-5s">
-                <p>Preparing for update... <img src="media/loading_bar.gif" width="20px" height="20px" style="position: relative; top: 5px;"></p>
+                <p>Preparing for update... <img src="media/loading_bar.gif" width="20px" height="20px" style="position: relative; top: 5px;" alt=""></p>
             </div>
         </div>
     `;

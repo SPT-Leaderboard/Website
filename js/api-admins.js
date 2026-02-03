@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    updateAdminsStatus().then(r => setInterval(updateAdminsStatus, 30000));
+    updateAdminsStatus().then(setInterval(updateAdminsStatus, 30000));
 
     window.addEventListener('beforeunload', function () {
         const isCollapsed = container.classList.contains('collapsed');

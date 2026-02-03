@@ -590,7 +590,7 @@ function renderRaidsSummary(raids, currentPlayerId, leaderboardData) {
     // Find player
     const extraPlayerData = leaderboardData.find(player => player.id === currentPlayerId);
 
-    let recentStatsHtml = `
+    recentStatsContainer.innerHTML = `
         <div class="recent-stats-header">
             <h3>Last ${raids.length} Raids Summary</h3>
         </div>
@@ -629,8 +629,6 @@ function renderRaidsSummary(raids, currentPlayerId, leaderboardData) {
             </div>
         </div>
     `;
-
-    recentStatsContainer.innerHTML = recentStatsHtml;
 }
 
 function calculateRecentStats(raids) {

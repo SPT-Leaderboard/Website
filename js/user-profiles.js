@@ -301,8 +301,8 @@ async function showPublicProfile(container, player) {
 
     container.innerHTML = `
         <!-- left column -->
-        <img src="media/rewards/other/badgerTester.gif" class="badger" id="badger" />
-        <img src="media/rewards/other/cat.gif" class="kittyrew" id="catrew" />
+        <img src="media/rewards/other/badgerTester.gif" class="badger" id="badger"  alt=""/>
+        <img src="media/rewards/other/cat.gif" class="kittyrew" id="catrew"  alt=""/>
 
         <button id="closeButton" class="close-profile-button">×</button>
 
@@ -933,7 +933,7 @@ async function showPublicProfile(container, player) {
                 const playerStatus = heartbeatMonitor.getPlayerStatus(playerId);
                 const isOnline = playerStatus.isOnline;
 
-                let newStatusHTML = '';
+                let newStatusHTML;
 
                 if (!player.banned) {
                     if (isOnline) {
@@ -1189,10 +1189,8 @@ function getBestWeapon(modWeaponStats) {
 
     let maxKills = 0;
     let bestWeapon = null;
-    const playerWeapons = modWeaponStats;
-
     // Go through all weapons
-    for (const [weaponName, weaponData] of Object.entries(playerWeapons)) {
+    for (const [weaponName, weaponData] of Object.entries(modWeaponStats)) {
         const kills = weaponData.stats?.kills || 0;
 
         const cleanWeaponNames = cleanWeaponNameFunc(weaponName);
@@ -1213,9 +1211,9 @@ function getBestWeapon(modWeaponStats) {
 function getPlayerSideImageHTML(player) {
     // Add faction badge
     if (player.pmcSide === "Bear") {
-        return `<img src="media/Bear.png" width="70" height="70" alt="BEAR">`;
+        return `<img src="/media/Bear.png" width="70" height="70" alt="BEAR">`;
     } else if (player.pmcSide === "Usec") {
-        return `<img src="media/Usec.png" width="70" height="70" alt="USEC">`;
+        return `<img src="/media/Usec.png" width="70" height="70" alt="USEC">`;
     }
 }
 
@@ -1290,7 +1288,7 @@ function generateBadgesHTML(player) {
     // Kappa
     if (player.hasKappa) {
         badges += `<div class="badge tooltip">
-            <img src="media/kappa.png" width="35" height="35" alt="Kappa">
+            <img src="/media/kappa.png" width="35" height="35" alt="Kappa">
             <span class="tooltiptext">This player acquired Kappa!</span>
         </div>`;
     }
@@ -1317,7 +1315,7 @@ function generateBadgesHTML(player) {
 
     if (player?.trusted && !player?.dev) {
         badges += `<div class="badge tooltip">
-        <img src="media/trusted.png" width="30" height="30" alt="Trusted">
+        <img src="/media/trusted.png" width="30" height="30" alt="Trusted">
         <span class="tooltiptext">Official Tester</span>
       </div>`;
     }

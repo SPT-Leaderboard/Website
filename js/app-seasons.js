@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 //     _____ ____  ______   __    _________    ____  __________  ____  ____  ___    ____  ____ 
 //    / ___// __ \/_  __/  / /   / ____/   |  / __ \/ ____/ __ \/ __ )/ __ \/   |  / __ \/ __ \
 //    \__ \/ /_/ / / /    / /   / __/ / /| | / / / / __/ / /_/ / __  / / / / /| | / /_/ / / / /  
@@ -165,7 +166,7 @@
     //
     // Trigger a reset of all the snowflakes' positions
     //
-    function setResetFlag(e) {
+    function setResetFlag() {
         resetPosition = true;
     }
 

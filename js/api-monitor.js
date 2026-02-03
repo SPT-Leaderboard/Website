@@ -10,11 +10,11 @@ async function getServerStatus() {
         if (!response.ok) throw new Error('API is not responding');
 
         return await response.json();
-    } catch (error) {
+    } catch (err) {
         return {
             online: false,
             underWork: false,
-            workText: "Couldn't connect with API"
+            workText: `Couldn't connect with API - ${err}`
         };
     }
 }
@@ -51,14 +51,14 @@ async function updateServerStatus() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    updateServerStatus().then(r => setInterval(updateServerStatus, 30000));
+    updateServerStatus().then(setInterval(updateServerStatus, 30000));
 
     const statusElement = document.getElementById('serverStatus');
     statusElement.addEventListener('mouseenter', showTooltip);
     statusElement.addEventListener('mouseleave', hideTooltip);
 });
 
-function showTooltip(e) {
+function showTooltip() {
     if (!this.hasAttribute('data-tooltip')) return;
 
     const tooltip = document.createElement('div');

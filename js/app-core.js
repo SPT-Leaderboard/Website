@@ -383,7 +383,7 @@ async function displayLeaderboard(data) {
         }
 
         // Add profile standing
-        let badge = '';
+        let badge;
         if (player.banned) {
             badge = `
             <div class="badge-lb tooltip">
@@ -448,7 +448,7 @@ async function displayLeaderboard(data) {
         }
         // 2nd prio - Tester
         else if (player.trusted && !player.banned) {
-            accountIcon = `<img loading="lazy" src="media/trusted.png" alt="Tester" class="account-icon">`;
+            accountIcon = `<img loading="lazy" src="/media/trusted.png" alt="Tester" class="account-icon">`;
             accountColor = '#ba8bdb';
         }
         // 3rd prio - twitch players
@@ -460,11 +460,11 @@ async function displayLeaderboard(data) {
         else if (!player.banned && !player.isUsingTP) {
             switch (player.accountType) {
                 case 'edge_of_darkness':
-                    accountIcon = `<img loading="lazy" src="media/EOD.png" alt="EOD" class="account-icon">`;
+                    accountIcon = `<img loading="lazy" src="/media/EOD.png" alt="EOD" class="account-icon">`;
                     accountColor = '#be8301';
                     break;
                 case 'unheard_edition':
-                    accountIcon = `<img loading="lazy" src="media/Unheard.png" alt="Unheard" class="account-icon">`;
+                    accountIcon = `<img loading="lazy" src="/media/Unheard.png" alt="Unheard" class="account-icon">`;
                     accountColor = '#54d0e7';
                     break;
             }

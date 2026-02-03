@@ -287,7 +287,7 @@ class SettingsManager {
         }
 
         const middleIndex = Math.ceil(mods.length / 2);
-        const html = `
+        container.innerHTML = `
             <div class="banned-mods-grid">
                 <div class="mods-column">
                     ${mods.slice(0, middleIndex).map((mod, index) => `
@@ -305,8 +305,6 @@ class SettingsManager {
                 </div>
             </div>
         `;
-
-        container.innerHTML = html;
     }
 
     escapeHtml(unsafe) {

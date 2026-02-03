@@ -65,7 +65,7 @@ function renderTeamPlayers() {
                  class="player-image-team"
                  data-player-id="${player.id || ''}"
                  loading="lazy"
-                 this.src='media/default_full_pmc_avatar.png';">
+                 this.src='media/default_full_pmc_avatar.png'">
             
             <div class="team-player-stats-wrapper">
                 <div class="player-name-team" data-player-id="${player.id || ''}">

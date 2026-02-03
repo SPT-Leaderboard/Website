@@ -323,7 +323,7 @@ function formatDate(date) {
 /**
  * Formats time of SCAV/PMC total playtime on the main profile section
  * @param {number} seconds - Amount of seconds
- * @returns {Array<Object>}
+ * @returns {string}
  */
 function formatOnlineTime(seconds) {
     if (!seconds)
@@ -341,7 +341,7 @@ function formatOnlineTime(seconds) {
 
 /**
  * Format UNIX timestamp to return "Xm ago || Xd ago"
- * @returns {Array<Object>}
+ * @returns {string}
  * @param timestamp
  */
 function formatLastSeen(timestamp) {

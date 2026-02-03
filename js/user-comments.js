@@ -354,10 +354,8 @@ async function loadComments(permaLink) {
             throw new Error('Failed to load comments');
         }
 
-        const comments = await response.json();
-
         // Save locally first
-        commentsPagination.allComments = comments;
+        commentsPagination.allComments = await response.json();
 
         // Sort by time
         commentsPagination.allComments.sort((a, b) => b.timestamp - a.timestamp);

@@ -1,1 +1,6 @@
 *.txt
+*.idea*
+node_modules
+*.mjs
+package-lock.json
+package.json

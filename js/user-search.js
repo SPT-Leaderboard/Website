@@ -86,7 +86,7 @@ function searchPlayers() {
         const playerNameCell = row.querySelector('.player-name');
         if (!playerNameCell) return;
 
-        let shouldShow = false;
+        let shouldShow;
 
         if (searchType === 'id') {
             // ID

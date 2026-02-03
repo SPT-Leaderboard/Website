@@ -265,7 +265,7 @@ async function renderSingleAchievement(achievement) {
                 <h3>Latest Achievement</h3>
                 <div class="achievement-content">
                     <div class="achievement-icon Common">
-                        <img src="media/player-achievements/Standard_35_1.png" alt="Achievement Icon"/>
+                        <img src="/media/player-achievements/Standard_35_1.png" alt="Achievement Icon"/>
                         <div class="achievement-time">N/A</div>
                     </div>
                     <div class="achievement-info">
@@ -304,7 +304,7 @@ async function renderSingleAchievement(achievement) {
             <h3>Latest Achievement</h3>
             <div class="achievement-content">
                 <div class="achievement-icon Common">
-                    <img src="media/player-achievements/Standard_35_1.png" alt="Achievement Icon"/>
+                    <img src="/media/player-achievements/Standard_35_1.png" alt="Achievement Icon"/>
                     <div class="achievement-time">Error</div>
                 </div>
                 <div class="achievement-info">
