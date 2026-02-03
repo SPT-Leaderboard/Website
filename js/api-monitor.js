@@ -51,8 +51,7 @@ async function updateServerStatus() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    updateServerStatus();
-    setInterval(updateServerStatus, 30000);
+    updateServerStatus().then(r => setInterval(updateServerStatus, 30000));
 
     const statusElement = document.getElementById('serverStatus');
     statusElement.addEventListener('mouseenter', showTooltip);

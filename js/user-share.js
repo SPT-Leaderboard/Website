@@ -12,7 +12,7 @@ function copyProfile(playerId) {
             showToast('Profile link copied. Now you can share it with someone!', 'success');
         })
         .catch(err => {
-            showToast('Failed to copy profile link.', 'error');
+            showToast(`Failed to copy profile link - ${err}`, 'error');
 
             // Try alternative way of copying
             const textArea = document.createElement('textarea');

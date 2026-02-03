@@ -58,7 +58,7 @@ async function renderFriendList(player) {
 
             return `
                 <div class="friend-item" data-player-id="${friend.id || '0'}">
-                    <img src="${friend.profilePicture}" class="friend-avatar" onerror="this.src='media/default_avatar.png';">
+                    <img src="${friend.profilePicture}" class="friend-avatar" onerror="this.src='media/default_avatar.png';" alt="Friend Avatar">
                     <div class="friend-name">${friend.teamTag ? `[${friend.teamTag}]` : ``} ${friend.name}</div>
                     <div class="friend-status">${lastGame}</div>
                 </div>

@@ -10,10 +10,10 @@ const MIN_LEVEL = 1;
 
 async function initHOF(player, bestWeapon) {
     try {
-        updatePlayerProfile(player);
+        await updatePlayerProfile(player);
 
         if (player.isUsingStattrack) {
-            updatePlayerProfileMastery(player, bestWeapon);
+            await updatePlayerProfileMastery(player, bestWeapon);
         }
 
         // rewardSystem.js

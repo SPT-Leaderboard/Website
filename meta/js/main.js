@@ -405,7 +405,7 @@ document.addEventListener('DOMContentLoaded', function () {
             ).join('');
 
             // Create player card
-            const playersHTML = weapon.topPlayers.map((player, playerIndex) => {
+            const playersHTML = weapon.topPlayers.map((player) => {
                 const headshotsPercent = player.kills > 0
                     ? ((player.headshots / player.kills) * 100).toFixed(1)
                     : 0;

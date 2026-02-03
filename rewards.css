@@ -1,105 +1,76 @@
 .streets-bg {
-    background: url(media/rewards/card_background/streets1.png);
-    background-position: center;
+    background: url(media/rewards/card_background/streets1.png) center;
     background-size: cover;
 }
 
 .streets2-bg {
-    background: url(media/rewards/card_background/streets2.png);
-    background-position: center;
+    background: url(media/rewards/card_background/streets2.png) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .streets3-bg {
-    background: url(media/rewards/card_background/streets3.png);
-    background-position: center;
+    background: url(media/rewards/card_background/streets3.png) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .purple-bg {
-    background: url(media/rewards/card_background/purple.png);
-    background-position: center;
+    background: url(media/rewards/card_background/purple.png) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .labs-bg {
-    background: url(media/rewards/card_background/labs.png);
-    background-position: center;
+    background: url(media/rewards/card_background/labs.png) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .waves-bg {
-    background: url(media/rewards/card_background/waves.gif);
-    background-position: center;
+    background: url(media/rewards/card_background/waves.gif) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .sunset-bg {
-    background: url(media/rewards/card_background/sunset.gif);
-    background-position: center;
+    background: url(media/rewards/card_background/sunset.gif) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .grenades-bg {
-    background: url(media/rewards/card_background/grenades.gif);
-    background-position: center;
+    background: url(media/rewards/card_background/grenades.gif) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .labs-bg {
-    background: url(media/rewards/card_background/labs.png);
-    background-position: center;
+    background: url(media/rewards/card_background/labs.png) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .usec-background {
-    background: url(media/rewards/main_background/Usec.jpg);
-    background-position: center;
+    background: url(media/rewards/main_background/Usec.jpg) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .bear-background {
-    background: url(media/rewards/main_background/Bear.jpg);
-    background-position: center;
+    background: url(media/rewards/main_background/Bear.jpg) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .labs-background {
-    background: url(media/rewards/main_background/labs.jpg);
-    background-position: center;
+    background: url(media/rewards/main_background/labs.jpg) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .goons-background {
-    background: url(media/rewards/main_background/Goons.jpg);
-    background-position: center;
+    background: url(media/rewards/main_background/Goons.jpg) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .raider-background {
-    background: url(media/rewards/main_background/raider.jpg);
-    background-position: center;
+    background: url(media/rewards/main_background/raider.jpg) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .lighthouse-background {
-    background: url(media/rewards/main_background/Lighthouse.jpg);
-    background-position: center;
+    background: url(media/rewards/main_background/Lighthouse.jpg) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 /* PFP Styles */
@@ -133,24 +104,18 @@
 
 /* Prestige Only backgrounds for behind card profile */
 .prestige-killa {
-    background: url(media/rewards/prestige_only/killa.webp);
-    background-position: center;
+    background: url(media/rewards/prestige_only/killa.webp) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .prestige-tagilla {
-    background: url(media/rewards/prestige_only/tagilla.png);
-    background-position: center;
+    background: url(media/rewards/prestige_only/tagilla.png) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .prestige-both {
-    background: url(media/rewards/prestige_only/both.png);
-    background-position: center;
+    background: url(media/rewards/prestige_only/both.png) no-repeat center;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 /* Themes */
@@ -221,7 +186,7 @@
 
     0%,
     100% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
     }
 
     50% {
@@ -256,7 +221,7 @@
     font-size: 0.9rem;
     font-weight: 500;
     margin-top: 0.5rem;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 }
 
 .theme-premium .user-main-card {
@@ -317,10 +282,8 @@
 .theme-premium.player-name {
     border-radius: 5px;
     border: 2px solid #ffffff30;
-    background: url(/media/rewards/other/premium-float.gif);
-    background-repeat: no-repeat;
+    background: url(/media/rewards/other/premium-float.gif) no-repeat center;
     background-size: cover;
-    background-position: center;
 }
 
 .theme-premium .lb-profile-picture {
@@ -389,7 +352,7 @@
 
     0%,
     100% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
     }
 
     50% {
@@ -414,7 +377,7 @@
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0px 0px 5px #ebebeb9c, -1px -1px 1px #ffffff9c, 1px 0px 5px #c0f, 0px -2px 1px #ea2eff00, 1px 0px 5px #d325ff, 0px -2px 1px #fff, 0px 1px 1px #a600f88f, -1px 3px 1px #a600f854;
+    text-shadow: 0 0 5px #ebebeb9c, -1px -1px 1px #ffffff9c, 1px 0 5px #c0f, 0 -2px 1px #ea2eff00, 1px 0 5px #d325ff, 0 -2px 1px #fff, 0 1px 1px #a600f88f, -1px 3px 1px #a600f854;
 }
 
 .theme-premium .trader-card {
@@ -583,7 +546,7 @@
 
     0%,
     100% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
     }
 
     50% {
@@ -729,9 +692,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('/media/rewards/other/snow-effect.gif');
+    background: url('/media/rewards/other/snow-effect.gif') center;
     background-size: cover;
-    background-position: center;
     opacity: 0.3;
     pointer-events: none;
 }

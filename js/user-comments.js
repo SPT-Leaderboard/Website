@@ -106,7 +106,7 @@ function renderCurrentPage() {
     if (pageComments.length === 0) {
         displayNoComments();
     } else {
-        pageComments.forEach((comment, index) => {
+        pageComments.forEach((comment) => {
             const commentElement = createCommentElement(comment);
             commentsList.appendChild(commentElement);
         });
@@ -374,17 +374,6 @@ async function loadComments(permaLink) {
         console.error('Error loading comments:', error);
         displayNoComments();
     }
-}
-
-// Display comments in the UI now using pagination
-function displayComments(comments) {
-    commentsPagination.allComments = comments;
-    commentsPagination.allComments.sort((a, b) => b.timestamp - a.timestamp);
-    commentsPagination.totalPages = Math.ceil(commentsPagination.allComments.length / commentsPagination.commentsPerPage);
-    commentsPagination.currentPage = 1;
-
-    renderCurrentPage();
-    updatePaginationUI();
 }
 
 // Function to create individual comment element

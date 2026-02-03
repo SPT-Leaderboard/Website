@@ -44,7 +44,3 @@ function updateTimer() {
         playAppropriateTrack(diff);
     }
 }
-
-function dateToUnixTimestamp(year, month, day, hour, minute, second) {
-    return Date.UTC(year, month, day, hour, minute, second);
-}

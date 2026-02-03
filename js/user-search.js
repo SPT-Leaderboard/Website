@@ -26,10 +26,6 @@ const AppState = (() => {
             return searchActive;
         },
 
-        isAutoUpdateEnabled() {
-            return autoUpdateEnabled;
-        },
-
         setSearchType(type) {
             searchType = type;
             this.updateSearchUI();
@@ -66,7 +62,7 @@ function normalizeText(text) {
 }
 
 function normalizeId(id) {
-    return id.toString().replace(/[^\d]/g, '');
+    return id.toString().replace(/\D/g, '');
 }
 
 function searchPlayers() {

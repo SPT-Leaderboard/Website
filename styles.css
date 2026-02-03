@@ -19,7 +19,6 @@
     --warning: #f59e0b;
 
     --dark: #1e293b;
-    --darker: #0f172a;
     --dark-medium: #334155;
 
     --light: #f8fafc;
@@ -95,8 +94,8 @@
     border-radius: 50%;
     width: 10px;
     height: 10px;
-    left: 0px;
-    top: 0px;
+    left: 0;
+    top: 0;
 }
 
 .snow-crust {
@@ -415,7 +414,7 @@ h1 {
     display: none;
     font-size: 16px;
     font-weight: 600;
-    text-shadow: 1px 0px 1px rgb(255 255 255 / 70%);
+    text-shadow: 1px 0 1px rgb(255 255 255 / 70%);
     color: #f0f0f0;
     background: #ffffff0e;
     border: 1px solid var(--gray-ultradark);
@@ -492,7 +491,6 @@ h1 {
 }
 
 .navbar-link {
-    font-family: 'Noto Sans';
     background-color: rgba(255, 255, 255, 0.05);
     color: var(--text-light);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -582,8 +580,7 @@ h1 {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 10px 16px;
-    padding-right: 40px;
+    padding: 10px 40px 10px 16px;
     border-radius: 8px;
     background: linear-gradient(145deg, rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.7));
     border: 1px solid var(--accent-teal);
@@ -1019,7 +1016,6 @@ h1 {
 
 .search-indicator {
     position: absolute;
-    right: 16px;
     top: 50%;
     transform: translateY(-50%);
     width: 8px;
@@ -1123,8 +1119,7 @@ table {
     background-color: rgb(57 89 131 / 29%);
     width: 100%;
     max-width: 95%;
-    margin: auto;
-    margin-bottom: 60px;
+    margin: auto auto 60px;
     border-collapse: separate;
     border-spacing: 0;
     border-radius: 16px;
@@ -1148,7 +1143,7 @@ th {
     color: var(--text-light);
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     font-family: 'Inter', sans-serif;
     font-size: 0.85em;
     backdrop-filter: blur(15px);
@@ -1187,7 +1182,7 @@ td {
     border: 2px solid;
     font-weight: 600;
     font-size: 0.85em;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -1377,7 +1372,7 @@ td:nth-child(2) {
     color: white;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -2262,7 +2257,6 @@ button:hover,
             rgba(255, 255, 255, 0.05),
             rgba(255, 255, 255, 0.02));
     padding: 20px;
-    border-left: 4px solid var(--accent-teal);
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
@@ -2503,8 +2497,7 @@ input[type="checkbox"]:checked:hover {
     background: linear-gradient(135deg,
             rgba(57, 89, 131, 0.25),
             rgba(30, 41, 59, 0.35));
-    backdrop-filter: blur(20px) saturate(180%);
-    border-left: 5px solid var(--primary);
+    backdrop-filter: blur(20px) saturate(180%);;
     padding: 25px 30px;
     border-radius: 16px;
     box-shadow:
@@ -2587,7 +2580,7 @@ input[type="checkbox"]:checked:hover {
     border-radius: 20px;
     font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     text-transform: uppercase;
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
@@ -2670,7 +2663,7 @@ input[type="checkbox"]:checked:hover {
 .signature-title {
     font-size: 0.85rem;
     opacity: 0.6;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 }
 
 /* Previous winners */
@@ -2814,7 +2807,7 @@ input[type="checkbox"]:checked:hover {
     font-size: 0.95em;
     font-weight: 600;
     color: var(--accent-teal);
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     display: flex;
     justify-content: space-between;
     place-self: center;
@@ -3293,7 +3286,7 @@ input[type="checkbox"]:checked:hover {
     font-weight: 600;
     color: var(--text-light);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 }
 
 .showcase-items-mini {
@@ -3481,7 +3474,7 @@ input[type="checkbox"]:checked:hover {
     color: rgba(255, 255, 255, 0.7);
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 }
 
 .user-main-card .pfp {
@@ -3516,7 +3509,7 @@ input[type="checkbox"]:checked:hover {
     font-weight: 600;
     color: #cdcdcd;
     padding: 5px 10px;
-    margin: 25px 0px 0px;
+    margin: 25px 0 0;
 }
 
 .user-main-card .badges {
@@ -3536,8 +3529,8 @@ input[type="checkbox"]:checked:hover {
     width: 150px;
     height: 150px;
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
     display: inline-grid;
 }
 
@@ -3613,7 +3606,6 @@ input[type="checkbox"]:checked:hover {
     max-height: 700px;
     object-fit: contain;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
 }
 
@@ -3877,7 +3869,7 @@ input[type="checkbox"]:checked:hover {
             rgba(255, 215, 0, 0.4) 30%,
             rgba(218, 165, 32, 0.3) 60%,
             rgba(255, 253, 253, 0.05));
-    box-shadow: inset 0px 0px 55px rgba(255, 215, 0, 0.3);
+    box-shadow: inset 0 0 55px rgba(255, 215, 0, 0.3);
     background-clip: padding-box;
 }
 
@@ -3886,7 +3878,7 @@ input[type="checkbox"]:checked:hover {
             rgba(192, 192, 192, 0.5) 30%,
             rgba(169, 169, 169, 0.3) 60%,
             rgba(255, 253, 253, 0.05));
-    box-shadow: inset 0px 0px 55px rgba(192, 192, 192, 0.3);
+    box-shadow: inset 0 0 55px rgba(192, 192, 192, 0.3);
     background-clip: padding-box;
 }
 
@@ -3895,7 +3887,7 @@ input[type="checkbox"]:checked:hover {
             rgba(205, 127, 50, 0.45) 30%,
             rgba(139, 69, 19, 0.35) 60%,
             rgba(255, 253, 253, 0.05));
-    box-shadow: inset 0px 0px 55px rgba(205, 127, 50, 0.25);
+    box-shadow: inset 0 0 55px rgba(205, 127, 50, 0.25);
     background-clip: padding-box;
 }
 
@@ -3918,7 +3910,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .weapon-item:hover {
-    box-shadow: inset 0px 0px 35px rgba(255, 255, 255, 0.05)
+    box-shadow: inset 0 0 35px rgba(255, 255, 255, 0.05)
 }
 
 .weapon-infos {
@@ -3961,7 +3953,7 @@ input[type="checkbox"]:checked:hover {
     width: fit-content;
     font-size: 0.85rem;
     padding: 3px;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     display: flex;
     align-items: center;
 }
@@ -4680,7 +4672,7 @@ input[type="checkbox"]:checked:hover {
     display: block;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 }
 
 .profile-stat-value {
@@ -5061,7 +5053,6 @@ input[type="checkbox"]:checked:hover {
     border: 1px solid #ffffff20;
     box-shadow: var(--shadow-md);
     backdrop-filter: blur(15px) saturate(130%);
-    transition: all 0.3s ease;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
@@ -5902,8 +5893,6 @@ input[type="checkbox"]:checked:hover {
 /* Player Rank */
 .rank-display {
     position: absolute;
-    top: 90px;
-    right: 30px;
     top: 70px;
     right: 10px;
     z-index: 10;
@@ -6089,7 +6078,7 @@ input[type="checkbox"]:checked:hover {
 
 @keyframes goldenGlow {
     0% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
         box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
     }
 
@@ -6099,7 +6088,7 @@ input[type="checkbox"]:checked:hover {
     }
 
     100% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
         box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
     }
 }
@@ -6119,7 +6108,7 @@ input[type="checkbox"]:checked:hover {
 
 @keyframes gradientShift {
     0% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
     }
 
     50% {
@@ -6127,7 +6116,7 @@ input[type="checkbox"]:checked:hover {
     }
 
     100% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
     }
 }
 
@@ -6393,8 +6382,7 @@ input[type="checkbox"]:checked:hover {
     height: 65px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid;
-    border-color: rgba(255, 255, 255, 0.2);
+    border: 3px solid rgba(255, 255, 255, 0.2);
     box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.3),
         inset 0 1px 1px rgba(255, 255, 255, 0.1);
@@ -8057,7 +8045,7 @@ input[type="checkbox"]:checked:hover {
 
     0%,
     100% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
     }
 
     50% {
@@ -8140,7 +8128,7 @@ input[type="checkbox"]:checked:hover {
 
 .progress-bar-pre {
     height: 100%;
-    width: 0%;
+    width: 0;
     background: linear-gradient(90deg,
             var(--accent-teal) 0%,
             var(--accent-blue) 50%,
@@ -8155,7 +8143,7 @@ input[type="checkbox"]:checked:hover {
 
 @keyframes progressGradient {
     0% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
     }
 
     50% {
@@ -8163,7 +8151,7 @@ input[type="checkbox"]:checked:hover {
     }
 
     100% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
     }
 }
 
@@ -8454,7 +8442,7 @@ input[type="checkbox"]:checked:hover {
     font-size: 0.95rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
     margin-bottom: 8px;
     display: flex;
     align-items: center;

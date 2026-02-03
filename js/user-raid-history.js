@@ -287,9 +287,9 @@ function getRaidStatus(raid) {
 }
 
 function shouldDisplayStats(raid) {
-    return !(raid.raidKills == 0 &&
-        raid.scavsKilled == 0 &&
-        raid.bossesKilled == 0 &&
+    return !(raid.raidKills === 0 &&
+        raid.scavsKilled === 0 &&
+        raid.bossesKilled === 0 &&
         raid.raidDamage < 300 &&
         raid.lastRaidHits < 10 &&
         raid.lastRaidEXP < 500);

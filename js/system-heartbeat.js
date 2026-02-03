@@ -7,7 +7,6 @@
 class HeartbeatMonitor {
     constructor() {
         this.heartbeatData = {};
-        this.lastUpdateTime = 0;
         this.onlineThreshold = 300;
     }
 
@@ -17,7 +16,7 @@ class HeartbeatMonitor {
             if (!response.ok) throw new Error('Failed to load heartbeats');
 
             this.heartbeatData = await response.json();
-            this.lastUpdateTime = Date.now();
+            
             return true;
         } catch (error) {
             console.error('Error loading heartbeats:', error);

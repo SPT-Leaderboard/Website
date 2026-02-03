@@ -4,8 +4,6 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ / 
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
-const shownPlayerNotifications = new Set();
-const playerLastRaidTimes = new Map();
 const playerNotificationData = new Map();
 const notificationStack = [];
 let lastNotificationTime = 0;
@@ -98,11 +96,9 @@ async function showPlayerNotification(player) {
     }
 
     // PROMO
-    let teamTagClass = '';
     let nameClass = '';
     if (player.teamTag === "SPTLB") {
         nameClass = 'promo-name';
-        teamTagClass = 'promo-name'
     }
 
     let rankClass = '';

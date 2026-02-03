@@ -21,12 +21,12 @@ const AutoUpdater = (() => {
         clearInterval(updateTimer);
         updateTimeDisplay();
 
-        updateTimer = setInterval(() => {
+        updateTimer = setInterval(async () => {
             timeLeft--;
             updateTimeDisplay();
 
             if (timeLeft <= 0) {
-                loadSeasonData(seasons[0]);
+                await loadSeasonData(seasons[0]);
                 timeLeft = updateInterval;
             }
         }, 1000);
@@ -76,24 +76,16 @@ const AutoUpdater = (() => {
             }
         },
 
-        setInterval(seconds) {
-            updateInterval = seconds;
-            timeLeft = seconds;
-            if (autoUpdateEnabled) {
-                startUpdateTimer();
-            }
-        },
-
         getStatus() {
             return autoUpdateEnabled;
         },
 
-        forceUpdate() {
+        async forceUpdate() {
             if (autoUpdateEnabled) {
                 timeLeft = updateInterval;
                 updateTimeDisplay();
             }
-            loadSeasonData(seasons[0]);
+            await loadSeasonData(seasons[0]);
         }
     };
 })();

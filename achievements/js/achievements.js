@@ -61,7 +61,7 @@ function renderAchievements(stats, searchTerm = '') {
 
     // Filter achievements
     const filteredAchievements = Object.entries(achievementsData.achievementCompiled)
-        .filter(([id, achievement]) => {
+        .filter(([ achievement]) => {
             if (!achievement) return false;
 
             const name = achievement.name || '';

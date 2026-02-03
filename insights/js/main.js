@@ -8,10 +8,6 @@ let playersData = [];
 let mapsData = {};
 let charts = {}; // to store all charts
 
-// DOM
-const tabs = document.querySelectorAll('.tab');
-const tabContents = document.querySelectorAll('.tab-content');
-
 // Initialize all charts
 function initCharts() {
     // Destroy existing charts if they exist
@@ -97,8 +93,7 @@ function initCharts() {
             ['Head', 'Chest', 'Stomach', 'Left Arm', 'Right Arm', 'Left Leg', 'Right Leg'],
             [0, 0, 0, 0, 0, 0, 0],
             'Average Hits per Player',
-            false,
-            'Hit Distribution by Body Part'
+            false
         ),
         traderPopularityChart: createChart(
             'traderPopularityChart',
@@ -106,8 +101,7 @@ function initCharts() {
             ['Prapor', 'Therapist', 'Skier', 'Peacekeeper', 'Mechanic', 'Ragman', 'Jaeger', 'Fence', 'Lightkeeper'],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             'Players (LL > 2)',
-            true,
-            'Trader Popularity (Loyalty Level > 2)'
+            true
         ),
         salesSumChart: createChart(
             'salesSumChart',
@@ -115,8 +109,7 @@ function initCharts() {
             ['<1M', '1-5M', '5-10M', '10-50M', '50M+'],
             [0, 0, 0, 0, 0],
             'Players',
-            false,
-            'Total Trader Sales Sum'
+            false
         ),
         playstyleChart: createChart(
             'playstyleChart',
@@ -124,8 +117,7 @@ function initCharts() {
             ['PvE Focused', 'Mixed', 'PvP (PMC Kills) Focused'],
             [0, 0, 0],
             'Players',
-            false,
-            'Playstyle Distribution (PvP vs PvE)'
+            false
         ),
         bossKillsChart: createChart(
             'bossKillsChart',
@@ -133,8 +125,7 @@ function initCharts() {
             ['0 Kills', '1-150 Kills', '150-500 Kills', '500+ Kills'],
             [0, 0, 0, 0],
             'Players',
-            false,
-            'Boss Kills Distribution'
+            false
         )
     };
 }

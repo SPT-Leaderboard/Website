@@ -48,7 +48,7 @@ async function loadQuestData(quests) {
 
         const compiledQuests = await response.json();
         currentQuests = processQuestsData(quests, compiledQuests.questsCompiled);
-        displayQuestsWithControls(currentQuests, questsContainer);
+        await displayQuestsWithControls(currentQuests, questsContainer);
 
     } catch (error) {
         console.error('Error loading quest data:', error);
@@ -332,21 +332,15 @@ async function getQuestImageUrl(questId, imageFileName, attempts = 0) {
 }
 
 // #region Controls
-function setSort(sortType) {
-    currentSort = sortType;
-    refreshQuestsDisplay();
-    updateActiveButtons();
-}
-
-function setFilter(filterType) {
+async function setFilter(filterType) {
     currentFilter = filterType;
-    refreshQuestsDisplay();
+    await refreshQuestsDisplay();
     updateActiveButtons();
 }
 
-function handleSearch(searchTerm) {
+async function handleSearch(searchTerm) {
     currentSearch = searchTerm.toLowerCase().trim();
-    refreshQuestsDisplay();
+    await refreshQuestsDisplay();
 }
 
 async function refreshQuestsDisplay() {

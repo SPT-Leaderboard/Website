@@ -114,7 +114,7 @@ function getRank(rating, maxRating = 2000, res = 32) {
     const rankInGroup = ((level - 1) % 6) + 1;
 
     // Map the images (6 images per 10 ranks show smoothly)
-    const imageIndex = Math.min(6, Math.floor((rankInGroup + 1) / 2));
+    let imageIndex = Math.min(6, Math.floor((rankInGroup + 1) / 2));
     if (rankInGroup === 9) imageIndex = 5;
     if (rankInGroup === 10) imageIndex = 6;
 
@@ -171,7 +171,6 @@ function getRank(rating, maxRating = 2000, res = 32) {
     const [r, g, b] = getGroupColor(levelGroup, groupProgress);
 
     // Dynamic coloring (wow)
-    const color = `rgba(${r}, ${g}, ${b}, ${0.2 + groupProgress * 0.3})`;
     const borderColor = `rgba(${Math.max(r - 30, 0)}, ${Math.max(g - 30, 0)}, ${Math.max(b - 30, 0)}, 0.6)`;
     const textColor = `hsl(${Math.round((r + g + b) / 3)}, 100%, 95%)`;
 
@@ -195,73 +194,6 @@ function getRank(rating, maxRating = 2000, res = 32) {
         textColor: textColor
     };
 }
-
-// Keepalive
-class KeepAliveService {
-    constructor() {
-        this.keepAliveInterval = null;
-        this.isActive = false;
-        this.retryCount = 0;
-        this.maxRetries = 3;
-    }
-
-    start() {
-        if (this.isActive) return;
-
-        this.isActive = true;
-        this.sendKeepAlive();
-
-        this.keepAliveInterval = setInterval(() => {
-            this.sendKeepAlive();
-        }, 60000);
-    }
-
-    stop() {
-        this.isActive = false;
-        if (this.keepAliveInterval) {
-            clearInterval(this.keepAliveInterval);
-            this.keepAliveInterval = null;
-        }
-        this.retryCount = 0;
-    }
-
-    async sendKeepAlive() {
-        try {
-            const response = await fetch('../api/main/heartbeat/keepalive.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'same-origin'
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error: ${response.status}`);
-            }
-
-            this.retryCount = 0;
-        } catch (error) {
-            console.error('Keepalive error:', error);
-            this.retryCount++;
-
-            if (this.retryCount >= this.maxRetries) {
-                console.warn('Max retries reached, stopping keepalive');
-                this.stop();
-                this.handleConnectionLost();
-            }
-        }
-    }
-
-    handleConnectionLost() {
-        console.error('Connection lost');
-    }
-}
-
-//const keepAliveService = new KeepAliveService();
-
-//document.addEventListener('DOMContentLoaded', () => {
-//    keepAliveService.start();
-//});
 
 /**
  * Returns text based on player ranking for displayWinners() e.g player.rank = 1 -> '👑 First place 👑'
@@ -409,8 +341,8 @@ function formatOnlineTime(seconds) {
 
 /**
  * Format UNIX timestamp to return "Xm ago || Xd ago"
- * @param {number} seconds - UNIX Timestamp
  * @returns {Array<Object>}
+ * @param timestamp
  */
 function formatLastSeen(timestamp) {
     if (!timestamp) return 'Long time ago';
@@ -501,11 +433,7 @@ function formatSalesNum(num) {
 function isPremium(player) {
     const now = Math.floor(Date.now() / 1000);
 
-    if (player.isPremium && player.premiumUntil && player.premiumUntil > now) {
-        return true;
-    } else {
-        return false;
-    }
+    return !!(player.isPremium && player.premiumUntil && player.premiumUntil > now);
 }
 
 // Quick util for loading data from JSON

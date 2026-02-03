@@ -4,11 +4,6 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ /
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
-const RARITY_ORDER = {
-    'Legendary': 0,
-    'Rare': 1,
-    'Common': 2
-};
 
 // To prevent any flicker
 let isProfileOpened = false;
@@ -50,12 +45,10 @@ async function openProfile(playerId, bypass = false) {
     }
 
     // Showing public profile
-    showPublicProfile(modalContent, player);
     window.location.hash = `id=${encodeURIComponent(player.id)}`;
     modal.style.display = "flex";
     modal.classList.add('active');
-
-    return;
+    await showPublicProfile(modalContent, player);
 }
 
 // Disqualified profile HTML
@@ -417,7 +410,7 @@ async function showPublicProfile(container, player) {
                     </div>
                     <div class="exp-bar-container">
                         <div class="exp-bar">
-                            <div class="exp-progress" style="width: 0%;"></div>
+                            <div class="exp-progress" style="width: 0;"></div>
                         </div>
                         <div class="exp-numbers">
                             <span class="current-exp">0</span>
@@ -655,7 +648,7 @@ async function showPublicProfile(container, player) {
 
                         <div class="exp-bar-container-weapon">
                             <div class="exp-bar">
-                                <div class="exp-progress-wp" style="width: 0%;"></div>
+                                <div class="exp-progress-wp" style="width: 0;"></div>
                             </div>
                             <div class="exp-numbers">
                                 <span class="current-exp-wp">0</span>
@@ -832,31 +825,31 @@ async function showPublicProfile(container, player) {
     // Render stats and init the profile
     // Skip this if player is not using Stattrack
     if (player.isUsingStattrack) {
-        renderWeaponList(player.permaLink, player.stattrack_weapons || {});
+        await renderWeaponList(player.permaLink, player.stattrack_weapons || {});
     }
 
     if (player.raidHitsHistory) {
         updateBodyHitsVisualization(player.raidHitsHistory);
     }
 
-    processPlayerAchievements(player, {
+    await processPlayerAchievements(player, {
         renderAll: true,
         container: document.getElementById('achievements-container')
     });
 
     //user-raid-history.js
     //Use permalink to display where the raid was played at
-    initLastRaids(player.id, player.permaLink);
+    await initLastRaids(player.id, player.permaLink);
     //battlepass-calculator.js
-    initHOF(player, bestWeapon);
+    await initHOF(player, bestWeapon);
     //user-quests.js
-    loadQuestData(player.completed_quests);
+    await loadQuestData(player.completed_quests);
     //user-hideout.js
     loadHideoutData(player.hideout);
     //user-comments.js
     initComments(player.permaLink, player.id);
     //user-friends.js
-    renderFriendList(player);
+    await renderFriendList(player);
 
     //
     // Auto Status Updater
@@ -930,19 +923,6 @@ async function showPublicProfile(container, player) {
 
             this.timeElement.textContent = `Time: ${formattedTime}`;
         }
-
-        setTime(newTime) {
-            const timeStr = newTime.replace('Time: ', '');
-            let [hours, minutes, seconds] = timeStr.split(':').map(Number);
-
-            this.currentTime = {
-                hours: hours,
-                minutes: minutes,
-                seconds: seconds
-            };
-
-            this.updateDisplay();
-        }
     }
 
     function startStatusUpdater(playerId, permaLink, statusElement) {
@@ -974,7 +954,7 @@ async function showPublicProfile(container, player) {
 
                 if (statusElement.innerHTML !== newStatusHTML) {
                     statusElement.innerHTML = newStatusHTML;
-                    initLastRaids(player.id, permaLink);
+                    await initLastRaids(player.id, permaLink);
 
                     const raidInfoElement = document.querySelector('.raid-details');
                     if (isOnline && playerStatus.raidDetails !== null && raidInfoElement) {
@@ -1342,7 +1322,7 @@ function generateBadgesHTML(player) {
       </div>`;
     }
 
-    if (player?.suspicious == true && !player.isCasual) {
+    if (player?.suspicious === true && !player.isCasual) {
         badges += `<div class="badge tooltip">
          <em class="fa-solid fa-triangle-exclamation" style="color:rgb(255, 214, 100);"></em>
          <span class="tooltiptext">Marked as suspicious by SkillIssueDetector™ (Beta)</span>
@@ -1394,46 +1374,6 @@ function setupModalCloseHandlers() {
             document.body.style.overflow = 'auto';
         }, 10);
     }
-}
-
-function closeLoaderAfterImagesLoad() {
-    const modalContent = document.querySelector('.profile-section');
-    const images = modalContent.querySelectorAll('img');
-
-    // If no images, close loader (there should always be)
-    if (images.length === 0) {
-        closeLoader();
-        return;
-    }
-
-    let loadedCount = 0;
-    const totalImages = images.length;
-
-    const checkImageLoad = (img) => {
-        if (img.complete) {
-            loadedCount++; // Image already loaded
-        } else {
-            img.addEventListener('load', () => {
-                loadedCount++;
-                checkAllLoaded();
-            });
-            img.addEventListener('error', () => {
-                loadedCount++; // On error count image as loaded
-                checkAllLoaded();
-            });
-        }
-
-        // Check if all images are loaded just in case
-        checkAllLoaded();
-    };
-
-    const checkAllLoaded = () => {
-        if (loadedCount === totalImages) {
-            setTimeout(closeLoader, 300);
-        }
-    };
-
-    images.forEach(checkImageLoad);
 }
 
 // Close loader when everything's done loading

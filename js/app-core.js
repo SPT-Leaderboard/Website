@@ -5,7 +5,6 @@
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
 let leaderboardData = []; // For keeping current season data
-let heartbeatData = {}; // Remember heartbeats
 let seasons = []; // Storing available seasons
 let ranOnlyOnce = false; // Run only once (ie winners)
 
@@ -16,15 +15,9 @@ let isDataReady = false;
 // DYNAMIC: Indicates when user is logged in Network or not
 let isLoggedIn = false;
 
-// Current SPT version
-let currentRelease = "4.0.11";
-
 // For debugging purposes
 // Will use local paths for some files/fallbacks
 const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-
-// Is on main page?
-const isProduction = window.location.hostname.includes("sptlb.katrinfoxvr.com");
 
 // For dynamic stats counters
 let oldTotalRaids = 0;
@@ -139,7 +132,7 @@ async function initAllSeasons() {
         // Sort from newest to oldest
         seasons.sort((a, b) => b - a);
 
-        prepareSeasonData()
+        await prepareSeasonData()
         populateSeasonDropdown();
     }
 }
@@ -157,7 +150,7 @@ async function prepareSeasonData() {
         // Load previous winners and run it only once
         if (!ranOnlyOnce) {
             ranOnlyOnce = true;
-            loadPreviousSeasonWinners();
+            await loadPreviousSeasonWinners();
         }
 
         saveCurrentStats();
@@ -320,7 +313,7 @@ async function loadSeasonData(season) {
 
         if (leaderboardData.length === 0 || (leaderboardData.length === 1 && Object.keys(leaderboardData[0]).length === 0)) {
             emptyLeaderboardNotification.style.display = 'block';
-            resetStats();
+            await resetStats();
             return;
         }
 
@@ -338,37 +331,14 @@ async function loadSeasonData(season) {
     } finally {
         // Data is fully ready
         if (SettingsHelper.get('lbToggle')) {
-            displaySimpleLeaderboard(leaderboardData);
+            await displaySimpleLeaderboard(leaderboardData);
         } else {
-            displayLeaderboard(leaderboardData);
+            await displayLeaderboard(leaderboardData);
         }
 
         // Mark data is ready for our callback
         isDataReady = true;
     }
-}
-
-// Compare last played dates (supports both Unix timestamps and "dd.mm.yyyy" format)
-function compareLastPlayed(dateStr1, dateStr2) {
-    const parseDate = dateStr => {
-        if (/^\d+$/.test(dateStr)) {
-            return new Date(parseInt(dateStr) * 1000);
-        }
-
-        if (/^\d{1,2}\.\d{1,2}\.\d{4}$/.test(dateStr)) {
-            const [d, m, y] = dateStr.split('.').map(Number);
-            return new Date(y, m - 1, d);
-        }
-
-        return null;
-    };
-
-    const date1 = parseDate(dateStr1);
-    const date2 = parseDate(dateStr2);
-
-    if (!date1 || !date2) return 0;
-
-    return date1 - date2;
 }
 
 /**
@@ -387,7 +357,7 @@ async function displayLeaderboard(data) {
         let lastGame;
 
         // If user has enabled option to hide Casual Players - we hide them
-        if (player.isCasual && getCookie('casualToggle') == true) {
+        if (player.isCasual && getCookie('casualToggle') === true) {
             return;
         }
 
@@ -545,7 +515,7 @@ async function displayLeaderboard(data) {
         const rank = getRank(playerRating);
         const rankHTML = `
             <div class="badge-lb tooltip">
-                <img loading="lazy" src="${rank.image}" height="20"> 
+                <img loading="lazy" src="${rank.image}" height="20" alt="Rank Image"> 
                 <span class="tooltiptext">${rank.fullName}</span>
             </div>
         `
@@ -562,7 +532,7 @@ async function displayLeaderboard(data) {
             <td class="rank ${rankClass}">${player.rank} ${player.medal}</td>
             <td class="teamtag ${teamTagClass}" data-team="${player.teamTag ? player.teamTag : ``}">${player.teamTag ? `[${player.teamTag}]` : ``}</td>
             <td class="player-name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''} data-player-id="${player.id || '0'}">
-                <div class="lb-row-wrapper">${`<img loading="lazy" class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';" />`}
+                <div class="lb-row-wrapper">${`<img loading="lazy" class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';"  alt="Avatar"/>`}
                 ${accountIcon} <span class="${finalNameClass}">${player.name}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div></div>
             </td>
             <td>${lastGame || 'N/A'}</td>
@@ -625,7 +595,7 @@ async function displaySimpleLeaderboard(data) {
         }
 
         // If user has enabled option to hide Casual Players - we hide them
-        if (player.isCasual && getCookie('casualToggle') == true) {
+        if (player.isCasual && getCookie('casualToggle') === true) {
             return;
         }
 
@@ -859,7 +829,6 @@ function convertTimeToSeconds(time) {
  *
  */
 async function calculatePlaces(data) {
-    // Обработка банов и кэжуальных игроков
     data.forEach((player) => {
         if (player.banned) {
             player.totalScore = 0;
@@ -879,7 +848,6 @@ async function calculatePlaces(data) {
         if (player.isCasual) {
             player.rank = "Casual";
             player.medal = '';
-            return;
         }
     });
 
@@ -893,7 +861,7 @@ async function calculatePlaces(data) {
 
     let rankCounter = 1;
 
-    data.forEach((player, index) => {
+    data.forEach((player) => {
         if (player.banned || player.isCasual) {
             return;
         }
