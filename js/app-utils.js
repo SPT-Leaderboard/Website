@@ -381,19 +381,48 @@ function capitalize(str, locale = 'en-EN') {
     return str[0].toLocaleUpperCase(locale) + str.slice(1).toLocaleLowerCase(locale);
 }
 
-async function getCustomProfileSettings(permaLink) {
+// Отправка JSON данных
+async function postData(url, data) {
     try {
-        const response = await fetch(`${profileAppearencePath}${permaLink}.json?t=${Date.now()}`);
-
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token // если нужна авторизация
+            },
+            body: JSON.stringify(data) // преобразуем объект в JSON
+        });
+        
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        const data = await response.json();
-
-        return data[permaLink] || null;
+        
+        const result = await response.json();
+        return result;
     } catch (error) {
-        console.error('Failed to load profile settings:', error);
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function getCustomProfileSettings(profileId) {
+    try {
+        const response = await fetch(profileAppearencePath, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'profileId': profileId
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error:', error);
         return null;
     }
 }

@@ -118,7 +118,7 @@ async function showPublicProfile(container, player) {
     `
 
     isProfileOpened = true;
-    const playerData = await getCustomProfileSettings(player.permaLink);
+    const playerData = await getCustomProfileSettings(player.id);
 
     // Disable rendering of the leaderboard when profile is open
     const leaderboardTable = document.getElementById('leaderboardTable');
@@ -135,9 +135,9 @@ async function showPublicProfile(container, player) {
         player.bp_pfpstyle = playerData.pfpStyle ?? 'default';
         player.bp_pfpbordercolor = playerData.pfpBorder ?? 'default';
         player.bp_decal = playerData.decal ?? 'default';
-        player.profileAboutMe = playerData.aboutMe ?? '';
+        player.profileAboutMe = playerData.about_me ?? '';
         player.discordUser = playerData.discordUser ?? '';
-        player.customPfp = playerData.pfp ?? '';
+        player.customPfp = playerData.profilePicture ?? '';
         player.customName = playerData.name ?? '';
     }
 

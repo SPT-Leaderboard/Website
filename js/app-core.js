@@ -37,7 +37,7 @@ let seasonLocalPath = `fallbacks/`;
 let currentSeason = `/api/data/seasons/season9.json?t=${Date.now()}`;
 let seasonPathEnd = `.json?t=${Date.now()}`;
 let lastRaidsPath = `/api/data/player_raids/`;
-let profileAppearencePath = `/api/network/profile/profiles/`;
+let profileAppearencePath = `/api/network/functions/get_player_customization.php`;
 let weaponStatsPath = `/api/data/shared/weapon_counters.json?t=${Date.now()}`;
 let profileComments = `/api/data/user-comments/player_`;
 let profileCommentsEnd = `.json?t=${Date.now()}`;
@@ -54,7 +54,7 @@ if (isLocalhost) {
     pmcPfpsPath = `../fallbacks/pmc_avatars/`;
     currentSeason = `/fallbacks/season9.json`
     seasonPath = `../fallbacks/season`;
-    profileAppearencePath = `fallbacks/profile_settings/`;
+    profileAppearencePath = `http://localhost:3000/api/network/functions/get_player_customization.php`;
     weaponStatsPath = `../fallbacks/shared/weapon_counters.json?t=${Date.now()}`;
     profileComments = `fallbacks/user-comments/player_`;
     profileCommentsEnd = `.json?t=${Date.now()}`;
