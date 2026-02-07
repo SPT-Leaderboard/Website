@@ -2497,7 +2497,8 @@ input[type="checkbox"]:checked:hover {
     background: linear-gradient(135deg,
             rgba(57, 89, 131, 0.25),
             rgba(30, 41, 59, 0.35));
-    backdrop-filter: blur(20px) saturate(180%);;
+    backdrop-filter: blur(20px) saturate(180%);
+    ;
     padding: 25px 30px;
     border-radius: 16px;
     box-shadow:
@@ -2551,7 +2552,6 @@ input[type="checkbox"]:checked:hover {
 .announcement-icon {
     flex-shrink: 0;
     position: relative;
-    padding: 10px;
     background: rgba(99, 102, 241, 0.1);
     border-radius: 12px;
     border: 1px solid rgba(99, 102, 241, 0.3);
