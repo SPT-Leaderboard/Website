@@ -410,9 +410,9 @@ async function getCustomProfileSettings(profileId) {
         const response = await fetch(profileAppearencePath, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'profileId': profileId
-            }
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ profileId: profileId })
         });
         
         if (!response.ok) {
