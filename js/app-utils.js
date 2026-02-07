@@ -396,7 +396,7 @@ async function getCustomProfileSettings(profileId) {
         }
         
         const result = await response.json();
-        return result;
+        return result.settings;
     } catch (error) {
         console.error('Error:', error);
         return null;
