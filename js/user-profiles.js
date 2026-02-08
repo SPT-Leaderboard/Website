@@ -118,7 +118,8 @@ async function showPublicProfile(container, player) {
     `
 
     isProfileOpened = true;
-    const playerData = await getCustomProfileSettings(player.id);
+    const playerDataResponse = await getCustomProfileSettings(player.id);
+    const playerData = playerDataResponse.settings ?? null;
 
     // Disable rendering of the leaderboard when profile is open
     const leaderboardTable = document.getElementById('leaderboardTable');
@@ -140,6 +141,8 @@ async function showPublicProfile(container, player) {
         player.customPfp = playerData.profilePicture ?? '';
         player.customName = playerData.name ?? '';
     }
+
+    player.showcase = playerDataResponse.showcase ?? null;
 
     // Disable auto updating on the background
     AutoUpdater.setEnabled(false);
@@ -374,18 +377,20 @@ async function showPublicProfile(container, player) {
                             <span class="showcase-title">Item Showcase</span>
                         </div>
                         <div class="showcase-items-mini">
-                            ${Object.values(player.showcase).map(item => `
-                                <div class="showcase-item-mini" data-rarity="${item.rarity}">
-                                    <div class="item-mini-icon">
-                                        <img src="${item.icon_path.replace(/^\/\.\.\//, '/')}" alt="${item.name}">
-                                        <div class="item-mini-glow"></div>
+                            ${Object.values(player.showcase || {})
+                                .filter(item => item !== null && item !== undefined && item.item_id)
+                                .map(item => `
+                                    <div class="showcase-item-mini" data-rarity="${item.rarity}">
+                                        <div class="item-mini-icon">
+                                            <img src="${item.icon_path.replace(/^\/\.\.\//, '/')}" alt="${item.name}">
+                                            <div class="item-mini-glow"></div>
+                                        </div>
+                                        <div class="item-mini-tooltip">
+                                            <span class="item-mini-name">${item.name}</span>
+                                            <span class="item-mini-price">${item.base_price} LC</span>
+                                        </div>
                                     </div>
-                                    <div class="item-mini-tooltip">
-                                        <span class="item-mini-name">${item.name}</span>
-                                        <span class="item-mini-price">${item.base_price} LC</span>
-                                    </div>
-                                </div>
-                            `).join('')}
+                                `).join('')}
                         </div>
                     </div>
                 </div>
