@@ -1,3 +1,9 @@
+//     _____ ____  ______   __    _________    ____  __________  ____  ____  ___    ____  ____ 
+//    / ___// __ \/_  __/  / /   / ____/   |  / __ \/ ____/ __ \/ __ )/ __ \/   |  / __ \/ __ \
+//    \__ \/ /_/ / / /    / /   / __/ / /| | / / / / __/ / /_/ / __  / / / / /| | / /_/ / / / /  
+//   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ / 
+//  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
+
 // Update timer and preload audio for season end
 let audioElements = {};
 let lastPlayed = null;
@@ -48,7 +54,6 @@ function endSeason() {
 
         // Start showing player names after a short delay
         showAllPlayerNames(leaderboardData);
-
     });
 
     const roundedBillions = Math.round(stats.totalSalesSum / 1_000_000_000);

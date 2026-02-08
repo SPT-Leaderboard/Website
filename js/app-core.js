@@ -357,7 +357,7 @@ async function displayLeaderboard(data) {
         let lastGame;
 
         // If user has enabled option to hide Casual Players - we hide them
-        if (player.isCasual && getCookie('casualToggle') === true) {
+        if (player.isCasual && SettingsHelper.get('casualToggle')) {
             return;
         }
 
@@ -595,7 +595,7 @@ async function displaySimpleLeaderboard(data) {
         }
 
         // If user has enabled option to hide Casual Players - we hide them
-        if (player.isCasual && getCookie('casualToggle') === true) {
+        if (player.isCasual && SettingsHelper.get('casualToggle')) {
             return;
         }
 

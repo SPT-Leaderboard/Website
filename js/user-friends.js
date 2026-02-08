@@ -18,7 +18,7 @@ async function checkFriends(player) {
         for (const playerId in leaderboardData) {
             const p = leaderboardData[playerId];
 
-            // Don't put yourself in friend list
+            // Don't put yourself in friend list, dumbass
             if (p.id === player.id) continue;
 
             if ((friendLink && p.permaLink === friendLink) ||
@@ -74,6 +74,7 @@ async function renderFriendList(player) {
         document.querySelectorAll('.friend-item').forEach(element => {
             element.addEventListener('click', () => {
                 // We're using a bypass here (2nd argument) to open a profile within a profile, because otherwise it wouldn't open.
+                // Really FUCKY, and GARBAGE implementation, but I have NO idea why it triggers multiple times.
                 openProfile(element.dataset.playerId, true);
             });
         });

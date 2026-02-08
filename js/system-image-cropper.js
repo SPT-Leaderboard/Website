@@ -74,7 +74,7 @@ async function autoCropTransparent(imageElement) {
                 if (found) break;
             }
 
-            // left to right
+            // right to left
             found = false;
             for (let x = width - 1; x >= 0; x--) {
                 for (let y = 0; y < height; y++) {
