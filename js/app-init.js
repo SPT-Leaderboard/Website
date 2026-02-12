@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
         progressBar.style.width = progress + '%';
 
         if (progress < 25) {
-            statusText.textContent = "Booting system core...";
+            statusText.textContent = "Loading system core...";
         } else if (progress < 50) {
             statusText.textContent = "Loading essentials...";
         } else if (progress < 75) {
@@ -106,8 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (progress < 100) {
             statusText.textContent = "Almost ready...";
         } else {
-            waitForDataReady(() => completeLoading());
             statusText.textContent = "Awaiting data from API...";
+            waitForDataReady(() => completeLoading());
         }
     }
 
@@ -136,9 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize and load all resources
     async function init() {
         try {
-            statusText.textContent = "Establishing connection...";
+            statusText.textContent = "Starting up...";
 
-            const MAX_CONCURRENT = 20;
+            const MAX_CONCURRENT = 15;
             for (let i = 0; i < filteredResources.length; i += MAX_CONCURRENT) {
                 const chunk = filteredResources.slice(i, i + MAX_CONCURRENT);
                 await Promise.all(chunk.map((resource, idx) =>

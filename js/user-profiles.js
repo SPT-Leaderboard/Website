@@ -4,9 +4,10 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ /
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
-
-// To prevent any flicker
 let isProfileOpened = false;
+let savedScrollPosition = 0;
+let targetPlayerElement = null;
+let currentHighlightedPlayerId = null;
 
 async function openProfile(playerId, bypass = false) {
     // Don't open profile again for whatever reason if profile is already open
@@ -118,8 +119,23 @@ async function showPublicProfile(container, player) {
     `
 
     isProfileOpened = true;
+    if (currentHighlightedPlayerId) {
+        const prevPlayer = document.querySelector(`[data-player-id="${currentHighlightedPlayerId}"]`);
+        if (prevPlayer) {
+            prevPlayer.classList.remove('highlight-player');
+        }
+    }
+
+    savedScrollPosition = window.scrollY;
+    targetPlayerElement = document.querySelector(`[data-player-id="${player.id}"]`);
+
+    if (targetPlayerElement) {
+        targetPlayerElement.classList.add('highlight-player');
+        currentHighlightedPlayerId = player.id;
+    }
+
     const playerDataResponse = await getCustomProfileSettings(player.id);
-    const playerData = playerDataResponse.settings ?? null;
+    const playerData = playerDataResponse?.settings || null;
 
     // Disable rendering of the leaderboard when profile is open
     const leaderboardTable = document.getElementById('leaderboardTable');
@@ -142,7 +158,8 @@ async function showPublicProfile(container, player) {
         player.customName = playerData.name ?? '';
     }
 
-    player.showcase = playerDataResponse.showcase ?? null;
+    // Assign a showcase we got from API
+    player.showcase = playerDataResponse?.showcase || null;
 
     // Disable auto updating on the background
     AutoUpdater.setEnabled(false);
@@ -378,8 +395,8 @@ async function showPublicProfile(container, player) {
                         </div>
                         <div class="showcase-items-mini">
                             ${Object.values(player.showcase || {})
-                                .filter(item => item !== null && item !== undefined && item.item_id)
-                                .map(item => `
+                .filter(item => item !== null && item !== undefined && item.item_id)
+                .map(item => `
                                     <div class="showcase-item-mini" data-rarity="${item.rarity}">
                                         <div class="item-mini-icon">
                                             <img src="${item.icon_path.replace(/^\/\.\.\//, '/')}" alt="${item.name}">
@@ -1375,8 +1392,28 @@ function setupModalCloseHandlers() {
             isProfileOpened = false;
             history.replaceState(null, null, ' ');
             document.body.style.overflow = 'auto';
+
+            restoreScrollPosition();
         }, 10);
     }
+}
+
+function restoreScrollPosition() {
+    if (targetPlayerElement && document.contains(targetPlayerElement)) {
+        targetPlayerElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+        });
+    }
+    else if (savedScrollPosition) {
+        window.scrollTo({
+            top: savedScrollPosition,
+            behavior: 'smooth'
+        });
+    }
+
+    savedScrollPosition = 0;
 }
 
 // Close loader when everything's done loading

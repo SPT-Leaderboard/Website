@@ -391,21 +391,17 @@ async function getCustomProfileSettings(profileId) {
             body: JSON.stringify({ profileId: profileId })
         });
         
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        if (!response.ok) return null;
         
-        const result = await response.json();
-        return result;
-    } catch (error) {
-        console.error('Error:', error);
+        return await response.json();
+    } catch {
         return null;
     }
 }
 
 function waitForDataReady(callback, timeout = 15000) {
     const startTime = Date.now();
-    const checkInterval = 300;
+    const checkInterval = 500;
 
     const intervalId = setInterval(() => {
         if (isDataReady) {
