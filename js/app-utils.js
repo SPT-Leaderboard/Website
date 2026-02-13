@@ -445,8 +445,3 @@ async function loadJSON(url) {
     }
     return await response.json();
 }
-
-function truncateName(name, maxLength) {
-    if (!name) return '';
-    return name.length > maxLength ? name.substring(0, maxLength) + '...' : name;
-}

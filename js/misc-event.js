@@ -1,10 +1,11 @@
+//     _____ ____  ______   __    _________    ____  __________  ____  ____  ___    ____  ____ 
+//    / ___// __ \/_  __/  / /   / ____/   |  / __ \/ ____/ __ \/ __ )/ __ \/   |  / __ \/ __ \
+//    \__ \/ /_/ / / /    / /   / __/ / /| | / / / / __/ / /_/ / __  / / / / /| | / /_/ / / / /  
+//   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ / 
+//  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
+
 let currentTable = 'boss';
 const switchInterval = 30000;
-
-function formatKills(kills) {
-    if (!kills && kills !== 0) return '0';
-    return kills.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
 
 function getTopBossHunters() {
     if (!leaderboardData || !Array.isArray(leaderboardData)) {
@@ -153,7 +154,6 @@ function updateBossHunters() {
     animateLeaderboardItems('topHuntersList');
 }
 
-// Обновление таблицы PMC хантеров
 function updatePmcHunters() {
     const container = document.getElementById('topPmcHuntersList');
     const top5 = getTopPmcHunters();
@@ -223,3 +223,14 @@ waitForDataReady(() => {
         updatePmcHunters();
     }, 60000);
 });
+
+// util
+function truncateName(name, maxLength) {
+    if (!name) return '';
+    return name.length > maxLength ? name.substring(0, maxLength) + '...' : name;
+}
+
+function formatKills(kills) {
+    if (!kills && kills !== 0) return '0';
+    return kills.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
