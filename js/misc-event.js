@@ -100,7 +100,7 @@ function updateWarProgress() {
     if (scavKills > pmcKills * 1.5) {
         status = 'SCAVs are dominating.';
     } else if (pmcKills > scavKills * 1.5) {
-        status = 'PMC are controllig the situation.';
+        status = 'PMCs are controlling the situation.';
     } else if (Math.abs(scavKills - pmcKills) < total * 0.1) {
         status = 'Conflict reportedly goes even for both sides.';
     } else {
