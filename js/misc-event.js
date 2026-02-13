@@ -47,7 +47,6 @@ function getTopPmcHunters() {
                 kills: kills
             });
         }
-
     });
 
     return hunters

@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             statusText.textContent = "Starting up...";
 
-            const MAX_CONCURRENT = 15;
+            const MAX_CONCURRENT = 20;
             for (let i = 0; i < filteredResources.length; i += MAX_CONCURRENT) {
                 const chunk = filteredResources.slice(i, i + MAX_CONCURRENT);
                 await Promise.all(chunk.map((resource, idx) =>

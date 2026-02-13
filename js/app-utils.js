@@ -390,9 +390,9 @@ async function getCustomProfileSettings(profileId) {
             },
             body: JSON.stringify({ profileId: profileId })
         });
-        
+
         if (!response.ok) return null;
-        
+
         return await response.json();
     } catch {
         return null;
