@@ -113,7 +113,7 @@ async function checkSeasonExists(seasonNumber) {
  * @returns {Promise<void>}
  */
 async function initAllSeasons() {
-    // Seasons start from 2
+    // Seasons start from 4
     // Clean up before initialize
     let seasonNumber = 4;
     seasons = [];

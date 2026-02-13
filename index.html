@@ -46,6 +46,7 @@
         <script src="js/api-admins.js"></script>
         <script src="js/app-utils.js"></script>
         <script src="js/app-init.js"></script>
+        <script src="js/misc-event.js"></script>
         <script data-cfasync="false" src="js/app-seasons.js"></script>
         <script src="js/app-welcome-screen.js"></script>
         <title>SPT Leaderboard</title>
@@ -383,7 +384,7 @@
         <div id="bannedModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <h2>Globally Banned Mods by Leaderboard</h2>
+                <h2>Globally Banned Mods by Leaderboard (Ranked only)</h2>
                 <div id="bannedModsContainer"></div>
             </div>
         </div>
@@ -500,25 +501,41 @@
             <div class="winners-container">
             </div>
         </div>
-        <div class="announcement-wrapper animate__animated animate__fadeIn">
-            <div class="snow-crust"></div>
-            <div class="announcement-icon">
-                <img src="media/player-achievements/67a0e5f786681d1e210705f0.png" alt="SPT Logo" class="celebration-icon">
-            </div>
-            <div class="announcement-content">
-                <div class="announcement-badge">Overhaul</div>
-                <h2 class="announcement-title">Weeklies, inventory and profile updates!</h2>
-                <div class="announcement-text">
-                    We've enhanced inventory interactions, sorting, and dynamic inventory updates, and also reduced weekly drops required EXP to 150k EXP! We have also added more quest keys to Tarkov Market!
-                    And remember - <a href="https://discord.gg/psV2PY8brW" target="_blank" class="announcement-link"> our Discord Server is always open for you! </a> Join us for exclusive events, or just to hang out.
+        <div class="announcement-container animate__animated animate__fadeIn">
+            <div class="announcement-wrapper">
+                <div class="video-background-event">
+                    <video autoplay muted loop playsinline>
+                        <source src="/media/event/bg_event.mp4" type="video/mp4">
+                    </video>
                 </div>
-                <!--
-                <div class="announcement-signature">
-                    <span class="signature-line">With love,</span>
-                    <span class="signature-name">Head Developer</span>
-                    <span class="signature-title">SPT Leaderboard Team</span>
+                <div class="snow-crust"></div>
+                <!--<div class="announcement-icon">
+                    <img src="media/player-achievements/67a0e5f786681d1e210705f0.png" alt="SPT Logo" class="celebration-icon">
+                </div>-->
+                <div class="announcement-content">
+                    <div class="announcement-badge">EVENT</div>
+                    <h2 class="announcement-title">Unknown Convoy Intercepted</h2>
+                    <div class="announcement-text">"PMC USEC has intercepted an unauthorized convoy outside Norvinsk in a brief engagement. Hostiles, also identified as Smugglers, abandoned vehicles under TerraGroup insignia and fled into the evacuation zone. Cargo bays contained sealed TerraGroup cases and was secured by USEC, passed to Volkov." Now moving through Tarkov Market with a first batch already in rotation with <strong style="color: #ffd966;">extremely limited stock</strong>. <br><br> Join our <a href="https://discord.gg/psV2PY8brW" target="_blank" class="announcement-link">Discord Server</a></div>
+                    <div class="announcement-text">
+                        <div class="event-summary">
+                            <p>After an engagement with Smugglers, boss activity heightened across all locations. All PMCs are authorized to engage with immediate effect. Command center is tracking elimination rates in real-time.</p>
+                        </div>
+                        <div class="leaderboard-mini">
+                            <div class="leaderboard-header">
+                                <span class="leaderboard-title">CURRENT BOSS HUNTERS</span>
+                            </div>
+                            <div id="topHuntersList" class="leaderboard-list">
+                                <!-- JS -->
+                                <div class="leaderboard-loading">Tracking signals...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="announcement-signature">
+                        <!--<span class="signature-line"></span>-->
+                        <span class="signature-name">Unauthorized Source</span>
+                        <span class="signature-title"></span>
+                    </div>
                 </div>
-                -->
             </div>
         </div>
         <p id="status"></p>
