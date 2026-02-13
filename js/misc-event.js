@@ -83,7 +83,7 @@ function updateWarProgress() {
         document.getElementById('pmcProgress').style.width = '50%';
         document.getElementById('scavCount').textContent = '0';
         document.getElementById('pmcCount').textContent = '0';
-        document.getElementById('warStatus').textContent = 'War has just begun...';
+        document.getElementById('warStatus').textContent = 'Conflict has just began...';
         return;
     }
 
@@ -102,9 +102,9 @@ function updateWarProgress() {
     } else if (pmcKills > scavKills * 1.5) {
         status = 'PMC are controllig the situation.';
     } else if (Math.abs(scavKills - pmcKills) < total * 0.1) {
-        status = 'War is equal.';
+        status = 'Conflict reportedly goes even for both sides.';
     } else {
-        status = 'War cannot settle down yet.';
+        status = 'Conflict cannot settle down yet.';
     }
 
     document.getElementById('warStatus').textContent = `${status} | Total Losses: ${formatKills(total)}`;
