@@ -1445,9 +1445,12 @@ button:hover,
 }
 
 @keyframes pulseHighlight {
-    0%, 100% {
+
+    0%,
+    100% {
         box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
     }
+
     50% {
         box-shadow: 0 0 30px rgba(99, 102, 241, 0.7);
     }
@@ -2526,10 +2529,21 @@ input[type="checkbox"]:checked:hover {
     left: 0;
     width: 100%;
     height: 100%;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.video-background-event video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.02);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
     object-fit: cover;
-    object-position: center;
     filter: blur(15px) brightness(0.5);
-    transform: scale(1.02);
     z-index: 0;
 }
 
@@ -8644,6 +8658,100 @@ input[type="checkbox"]:checked:hover {
     font-size: 1.05rem;
 }
 
+.war-progress-container {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.war-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.faction-event {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.scave-faction {
+    color: #ff9f4b;
+    text-shadow: 0 0 10px rgba(255, 159, 75, 0.3);
+}
+
+.pmce-faction {
+    color: #4b9fff;
+    text-shadow: 0 0 10px rgba(75, 159, 255, 0.3);
+}
+
+.war-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 2px;
+}
+
+.progress-bar-war {
+    display: flex;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 100px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 10px 0 15px 0;
+}
+
+.progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: width 0.5s ease;
+}
+
+.scav-progress {
+    background: linear-gradient(90deg, #ff7e2e, #ffb347);
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.pmc-progress {
+    background: linear-gradient(90deg, #2e7eff, #47b3ff);
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.progress-count {
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    padding: 0 10px;
+    white-space: nowrap;
+}
+
+.war-status {
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    font-style: italic;
+}
+
+.leaderboard-switch-container {
+    position: relative;
+    min-height: 230px;
+}
+
 .leaderboard-mini {
     background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
@@ -8652,6 +8760,22 @@ input[type="checkbox"]:checked:hover {
     padding: 18px;
     margin-top: 15px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.leaderboard-mini.fade-out {
+    opacity: 0;
+    transform: scale(0.98);
+    pointer-events: none;
+}
+
+.leaderboard-mini.fade-in {
+    opacity: 1;
+    transform: scale(1);
 }
 
 .leaderboard-header {
@@ -8672,17 +8796,45 @@ input[type="checkbox"]:checked:hover {
     text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
 }
 
-.leaderboard-update {
+.switch-indicator {
     font-size: 0.7rem;
     color: rgba(255, 255, 255, 0.4);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px 10px;
+    border-radius: 20px;
 }
 
-.leaderboard-list {
+.table-switch-indicator {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding-top: 10px;
+}
+
+.switch-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.switch-dot.active {
+    width: 20px;
+    border-radius: 10px;
+    background: #fbbf24;
+    box-shadow: 0 0 10px #fbbf24;
+}
+
+.switch-label {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .leaderboard-item {
@@ -8706,8 +8858,8 @@ input[type="checkbox"]:checked:hover {
 .leaderboard-rank {
     font-weight: 800;
     font-size: 1.1rem;
-    width: 32px;
-    color: rgba(255, 255, 255, 0.3);
+    width: 45px;
+    color: rgba(255, 255, 255, 0.5);
     font-family: 'Inter', monospace;
 }
 
@@ -8716,37 +8868,49 @@ input[type="checkbox"]:checked:hover {
     font-weight: 600;
     color: white;
     letter-spacing: 0.3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 10px;
 }
 
 .leaderboard-kills {
-    font-weight: 700;
-    font-size: 1rem;
-    padding: 4px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     background: linear-gradient(135deg, #dc2626, #991b1b);
-    border-radius: 30px;
+    border-radius: 10px;
+    padding: 4px 15px 4px 15px;
     color: white;
     box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
-    position: relative;
-    overflow: hidden;
 }
 
-.leaderboard-kills span {
-    position: relative;
-    z-index: 2;
-    margin-left: 0;
-    transition: margin-left 0.3s ease;
+#pmcHuntersTable .leaderboard-kills {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.kills-number {
+    font-weight: 700;
+    font-size: 1rem;
 }
 
 .leaderboard-loading {
     text-align: center;
-    padding: 20px;
-    color: rgba(255, 255, 255, 0.4);
+    padding: 30px 20px;
+    color: rgba(255, 255, 255, 0.5);
     font-style: italic;
-    letter-spacing: 1px;
     animation: pulse-event 1.5s infinite;
 }
 
 @keyframes pulse-event {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 0.8; }
+
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
 }

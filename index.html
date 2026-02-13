@@ -517,17 +517,50 @@
                     <h2 class="announcement-title">Unknown Convoy Intercepted</h2>
                     <div class="announcement-text">"PMC USEC has intercepted an unauthorized convoy outside Norvinsk in a brief engagement. Hostiles, also identified as Smugglers, abandoned vehicles under TerraGroup insignia and fled into the evacuation zone. Cargo bays contained sealed TerraGroup cases and was secured by USEC, passed to Volkov." Now moving through Tarkov Market with a first batch already in rotation with <strong style="color: #ffd966;">extremely limited stock</strong>. <br><br> Join our <a href="https://discord.gg/psV2PY8brW" target="_blank" class="announcement-link">Discord Server</a></div>
                     <div class="announcement-text">
-                        <div class="event-summary">
-                            <p>After an engagement with Smugglers, boss activity heightened across all locations - along them SCAVs. All PMCs are authorized to engage with immediate effect. Command center is tracking eliminations in real-time.</p>
+                        <div class="war-progress-container">
+                            <div class="war-header">
+                                <div class="faction-event scave-faction">
+                                    <span class="faction-name">SCAVS</span>
+                                </div>
+                                <div class="war-title">FACTION WAR</div>
+                                <div class="faction-event pmce-faction">
+                                    <span class="faction-name">PMC</span>
+                                </div>
+                            </div>
+                            <div class="progress-bar-war">
+                                <div class="progress scav-progress" id="scavProgress" style="width: 50%;">
+                                    <span class="progress-count" id="scavCount">0</span>
+                                </div>
+                                <div class="progress pmc-progress" id="pmcProgress" style="width: 50%;">
+                                    <span class="progress-count" id="pmcCount">0</span>
+                                </div>
+                            </div>
+                            <div class="war-status" id="warStatus"> Calculating battle intensity... </div>
                         </div>
-                        <div class="leaderboard-mini">
-                            <div class="leaderboard-header">
-                                <span class="leaderboard-title">CURRENT BOSS HUNTERS</span>
+                        <div class="leaderboard-switch-container">
+                            <div class="leaderboard-mini" id="bossHuntersTable">
+                                <div class="leaderboard-header">
+                                    <span class="leaderboard-title">CURRENT BOSS HUNTERS</span>
+                                    <span class="switch-indicator">BOSS KILLS</span>
+                                </div>
+                                <div id="topHuntersList" class="leaderboard-list">
+                                    <div class="leaderboard-loading">Tracking signals...</div>
+                                </div>
                             </div>
-                            <div id="topHuntersList" class="leaderboard-list">
-                                <!-- JS -->
-                                <div class="leaderboard-loading">Tracking signals...</div>
+                            <div class="leaderboard-mini" id="pmcHuntersTable" style="display: none;">
+                                <div class="leaderboard-header">
+                                    <span class="leaderboard-title">CURRENT PMC HUNTERS</span>
+                                    <span class="switch-indicator">PMC KILLS</span>
+                                </div>
+                                <div id="topPmcHuntersList" class="leaderboard-list">
+                                    <div class="leaderboard-loading">Tracking signals...</div>
+                                </div>
                             </div>
+                        </div>
+                        <div class="table-switch-indicator">
+                            <span class="switch-dot active" data-table="boss"></span>
+                            <span class="switch-label">switching every 30s</span>
+                            <span class="switch-dot" data-table="pmc"></span>
                         </div>
                     </div>
                     <div class="announcement-signature">
