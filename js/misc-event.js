@@ -93,8 +93,8 @@ function updateWarProgress() {
     document.getElementById('scavProgress').style.width = scavPercent + '%';
     document.getElementById('pmcProgress').style.width = pmcPercent + '%';
 
-    document.getElementById('scavCount').textContent = formatKills(scavKills);
-    document.getElementById('pmcCount').textContent = formatKills(pmcKills);
+    document.getElementById('scavCount').textContent = scavKills.toLocaleString('en-EN');
+    document.getElementById('pmcCount').textContent = pmcKills.toLocaleString('en-EN');
 
     let status;
     if (scavKills > pmcKills * 1.5) {
@@ -107,7 +107,7 @@ function updateWarProgress() {
         status = 'Conflict cannot settle down yet.';
     }
 
-    document.getElementById('warStatus').textContent = `${status} | Total Losses: ${formatKills(total)}`;
+    document.getElementById('warStatus').textContent = `${status} | Total Losses: ${total.toLocaleString('en-EN')}`;
 }
 
 function escapeHtml(text) {
@@ -147,7 +147,7 @@ function updateBossHunters() {
                 ${escapeHtml(truncateName(player.name, 20))}
             </div>
             <div class="leaderboard-kills">
-                <span class="kills-number">${formatKills(player.kills)}</span>
+                <span class="kills-number">${player.kills.toLocaleString('en-EN')}</span>
             </div>
         </div>
     `).join('');
@@ -170,7 +170,7 @@ function updatePmcHunters() {
                 ${escapeHtml(truncateName(player.name, 20))}
             </div>
             <div class="leaderboard-kills">
-                <span class="kills-number">${formatKills(player.kills)}</span>
+                <span class="kills-number">${player.kills.toLocaleString('en-EN')}</span>
             </div>
         </div>
     `).join('');
@@ -228,9 +228,4 @@ waitForDataReady(() => {
 function truncateName(name, maxLength) {
     if (!name) return '';
     return name.length > maxLength ? name.substring(0, maxLength) + '...' : name;
-}
-
-function formatKills(kills) {
-    if (!kills && kills !== 0) return '0';
-    return kills.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
