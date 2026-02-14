@@ -445,3 +445,68 @@ async function loadJSON(url) {
     }
     return await response.json();
 }
+
+class KeepAliveService {
+    constructor() {
+        this.keepAliveInterval = null;
+        this.isActive = false;
+        this.retryCount = 0;
+        this.maxRetries = 3;
+    }
+
+    start() {
+        if (this.isActive) return;
+
+        this.isActive = true;
+        this.sendKeepAlive();
+
+        this.keepAliveInterval = setInterval(() => {
+            this.sendKeepAlive();
+        }, 30000);
+    }
+
+    stop() {
+        this.isActive = false;
+        if (this.keepAliveInterval) {
+            clearInterval(this.keepAliveInterval);
+            this.keepAliveInterval = null;
+        }
+        this.retryCount = 0;
+    }
+
+    async sendKeepAlive() {
+        try {
+            const response = await fetch('../api/main/heartbeat/keepalive.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'same-origin'
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error: ${response.status}`);
+            }
+
+            this.retryCount = 0;
+        } catch (error) {
+            console.error('Keepalive error:', error);
+            this.retryCount++;
+
+            if (this.retryCount >= this.maxRetries) {
+                this.stop();
+                this.handleConnectionLost();
+            }
+        }
+    }
+
+    handleConnectionLost() {
+        console.error('Connection lost');
+    }
+}
+
+const keepAliveService = new KeepAliveService();
+
+document.addEventListener('DOMContentLoaded', () => {
+    keepAliveService.start();
+});
