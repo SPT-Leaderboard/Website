@@ -15,7 +15,7 @@ function getTopBossHunters() {
     const hunters = [];
 
     leaderboardData.forEach((player) => {
-        if (player.banned || player.IsCasual || !player.name) return;
+        if (player.banned || player.isCasual || !player.name) return;
 
         const kills = parseInt(player.event_pmc_boss_kills) || 0;
         if (kills > 0) {
@@ -39,7 +39,7 @@ function getTopPmcHunters() {
     const hunters = [];
 
     leaderboardData.forEach((player) => {
-        if (player.banned || player.IsCasual || !player.name) return;
+        if (player.banned || player.isCasual || !player.name) return;
 
         const kills = parseInt(player.event_scav_pmc_kills) || 0;
         if (kills > 0) {
@@ -64,7 +64,7 @@ function getWarStats() {
     let pmcKills = 0;
 
     leaderboardData.forEach((player) => {
-        if (player.banned || player.IsCasual) return;
+        if (player.banned || player.isCasual) return;
 
         scavKills += parseInt(player.event_scav_pmc_kills) || 0;
         pmcKills += parseInt(player.event_pmc_boss_kills) || 0;
