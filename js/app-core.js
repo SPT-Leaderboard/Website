@@ -1034,13 +1034,13 @@ function animateNumber(elementId, targetValue, decimals = 0, startValue = null) 
         return (decimals > 0 ? value.toFixed(decimals) : Math.round(value)) + suffix;
     };
 
-    // Set initial value to avoid jumping from default
     element.innerHTML = formatValue(startValue);
 
     // Trigger odometer animation by setting target after short delay
+    // slight delay to allow Odometer to detect change
     setTimeout(() => {
         element.innerHTML = formatValue(targetValue);
-    }, 50); // slight delay to allow Odometer to detect change
+    }, 50);
 }
 
 // Save current stats to localStorage

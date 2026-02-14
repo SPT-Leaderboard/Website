@@ -159,7 +159,36 @@ async function showPublicProfile(container, player) {
     }
 
     // Assign a showcase we got from API
-    player.showcase = playerDataResponse?.showcase || null;
+    if (isLocalhost) {
+        player.showcase = {
+            "1": {
+                "item_id": "679b9819a2f2dd4da9023512",
+                "name": "Labrys access keycard",
+                "icon_path": "/../api/network/media/market/679b9819a2f2dd4da9023512.png",
+                "rarity": "rare",
+                "base_price": 19500,
+                "slot": 1
+            },
+            "2": {
+                "item_id": "678f84bb9e85556ca60f0362",
+                "name": "Tagillas welding mask \"ZABEY\"",
+                "icon_path": "/../api/network/media/market/678f84bb9e85556ca60f0362.webp",
+                "rarity": "common",
+                "base_price": 65000,
+                "slot": 2
+            },
+            "3": {
+                "item_id": "59faff1d86f7746c51718c9c",
+                "name": "Physical Bitcoin",
+                "icon_path": "/../api/network/media/market/59faff1d86f7746c51718c9c.webp",
+                "rarity": "epic",
+                "base_price": 72033,
+                "slot": 3
+            }
+        }
+    } else {
+        player.showcase = playerDataResponse?.showcase || null;
+    }
 
     // Disable auto updating on the background
     AutoUpdater.setEnabled(false);

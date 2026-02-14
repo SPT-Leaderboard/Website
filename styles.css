@@ -3435,27 +3435,27 @@ input[type="checkbox"]:checked:hover {
 
 .showcase-item-mini[data-rarity="common"] .item-mini-glow {
     background: linear-gradient(135deg, rgba(200, 200, 200, 0.1), rgba(150, 150, 150, 0.1));
-    box-shadow: inset 0 0 10px rgba(200, 200, 200, 0.1);
-}
-
-.showcase-item-mini[data-rarity="uncommon"] .item-mini-glow {
-    background: linear-gradient(135deg, rgba(100, 255, 100, 0.1), rgba(50, 200, 50, 0.1));
-    box-shadow: inset 0 0 10px rgba(100, 255, 100, 0.1);
+    box-shadow: inset 0 0 25px rgba(200, 200, 200, 0.8);
 }
 
 .showcase-item-mini[data-rarity="rare"] .item-mini-glow {
     background: linear-gradient(135deg, rgba(100, 150, 255, 0.2), rgba(50, 100, 200, 0.2));
-    box-shadow: inset 0 0 15px rgba(100, 150, 255, 0.2);
+    box-shadow: inset 0 0 25px rgba(100, 150, 255, 0.8);
 }
 
 .showcase-item-mini[data-rarity="epic"] .item-mini-glow {
     background: linear-gradient(135deg, rgba(180, 80, 255, 0.25), rgba(140, 40, 200, 0.25));
-    box-shadow: inset 0 0 20px rgba(180, 80, 255, 0.25);
+    box-shadow: inset 0 0 25px rgba(180, 80, 255, 0.8);
 }
 
 .showcase-item-mini[data-rarity="legendary"] .item-mini-glow {
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 165, 0, 0.3));
-    box-shadow: inset 0 0 25px rgba(255, 215, 0, 0.3);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 165, 0, 0.5));
+    box-shadow: inset 0 0 25px rgba(255, 215, 0, 0.8);
+}
+
+.showcase-item-mini[data-rarity="limited"] .item-mini-glow {
+    background: linear-gradient(135deg, rgba(255, 0, 0, 0.3), rgba(255, 51, 0, 0.5));
+    box-shadow: inset 0 0 25px rgba(255, 38, 0, 0.8);
 }
 
 .showcase-item-mini:hover .item-mini-glow {
