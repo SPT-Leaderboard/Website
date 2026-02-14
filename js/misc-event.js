@@ -5,7 +5,7 @@
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
 let currentTable = 'boss';
-const switchInterval = 30000;
+const switchInterval = 10000;
 
 function getTopBossHunters() {
     if (!leaderboardData || !Array.isArray(leaderboardData)) {
