@@ -5,6 +5,7 @@
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
 const playerNotificationData = new Map();
+const processedNewPlayers = new Set();
 const notificationStack = [];
 let lastNotificationTime = 0;
 const NOTIFICATION_DELAY = 1600;
@@ -451,6 +452,13 @@ function createBanNotification(player) {
 }
 
 async function showNewPlayerWelcome(player) {
+    if (processedNewPlayers.has(player.id)) {
+        console.debug(`[NOTIFY] New player ${player.name} already processed in this session`);
+        return;
+    }
+
+    processedNewPlayers.add(player.id);
+
     try {
         const firstBloodSound = new Audio('media/sounds/killstreak/firstblood.wav');
         firstBloodSound.volume = 0.08;
@@ -515,14 +523,13 @@ async function showNewPlayerWelcome(player) {
 }
 
 function wasNewPlayerRecentlyShown(playerId) {
-    const cookieValue = document.cookie
-        .split('; ')
-        .find(row => row.startsWith(`newPlayer_${playerId}=`));
+    const cookies = document.cookie.split(';').map(cookie => cookie.trim());
+    const cookieValue = cookies.find(row => row.startsWith(`newPlayer_${playerId}=`));
     return !!cookieValue;
 }
 
 function setNewPlayerCookie(playerId) {
     const now = new Date();
-    now.setTime(now.getTime() + (24 * 60 * 60 * 1000)); // 24 часа
-    document.cookie = `newPlayer_${playerId}=1; expires=${now.toUTCString()}; path=/`;
+    now.setTime(now.getTime() + (24 * 60 * 60 * 1000));
+    document.cookie = `newPlayer_${playerId}=1; expires=${now.toUTCString()}; path=/; SameSite=Lax; ${location.protocol === 'https:' ? 'Secure;' : ''}`;
 }
