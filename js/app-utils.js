@@ -571,3 +571,4 @@ class KeepAliveService {
 }
 
 const keepAliveService = new KeepAliveService();
+window.keepAliveService.start();

@@ -26,6 +26,7 @@ function initWelcomeScreen() {
                 welcomePopup.style.display = 'none';
             }, 300);
         });
-
     }
 }
+
+initWelcomeScreen();
