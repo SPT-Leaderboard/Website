@@ -36,7 +36,9 @@ function playAppropriateTrack(diff) {
     }
 }
 
-function endSeason() {
+async function endSeason() {
+    await preloadAudio();
+
     const stats = calculateGlobalStats(leaderboardData);
     const endMusic = new Audio(`media/sounds/season/season_end_final.mp3`);
     endMusic.play();
@@ -331,7 +333,7 @@ function calculateGlobalStats(players) {
     };
 }
 
-function preloadAudio() {
+async function preloadAudio() {
     const files = [
         { name: 'season/season_end1', time: 145000 }, // 2:25
         { name: 'season/season_end2', time: 85000 },  // 1:25
@@ -488,7 +490,3 @@ function fadeOutAllElements(darkOverlay, memoryTitle, namesContainer) {
         }, 2000);
     }, 1000);
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    preloadAudio();
-});

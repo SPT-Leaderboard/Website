@@ -89,6 +89,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     await initAllSeasons();
     await loadAchievementsData();
 
+    // app-utils.js
+    initNavbar();
 });
 
 /**

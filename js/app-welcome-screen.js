@@ -4,8 +4,7 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ /
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
-// Welcome popup
-document.addEventListener('DOMContentLoaded', function () {
+function initWelcomeScreen() {
     const continueBtn = document.getElementById('continueBtn');
     const welcomePopup = document.getElementById('welcomePopup');
 
@@ -29,4 +28,4 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
     }
-});
+}

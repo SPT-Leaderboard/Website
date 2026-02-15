@@ -111,18 +111,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Show error state
     function showError(error) {
         statusText.textContent = "Connection interrupted. Retrying...";
         errorMessage.textContent = error.message || "Network connection failed";
         errorContainer.classList.add('visible');
     }
 
-    // Complete loading successfully
+    // Complete loading
     function completeLoading() {
         statusText.textContent = "Welcome to SPTLB!";
 
         loader.classList.add('complete');
+
+        // Show welcome screen (app-welcome-screen.js)
+        initWelcomeScreen();
 
         setTimeout(() => {
             loader.classList.add('hidden');
@@ -133,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1300);
     }
 
-    // Initialize and load all resources
     async function init() {
         try {
             statusText.textContent = "Starting up...";
@@ -161,6 +162,5 @@ document.addEventListener('DOMContentLoaded', () => {
         init();
     });
 
-    // Start the loading process
     init();
 });

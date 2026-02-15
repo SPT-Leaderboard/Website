@@ -4,10 +4,6 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ /
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
-document.addEventListener('DOMContentLoaded', () => {
-    initNavbar();
-});
-
 function getPrettyMapName(entry) {
     const mapAliases = {
         "bigmap": "Customs",
@@ -174,7 +170,6 @@ function getRank(rating, maxRating = 2000, res = 32) {
     const borderColor = `rgba(${Math.max(r - 30, 0)}, ${Math.max(g - 30, 0)}, ${Math.max(b - 30, 0)}, 0.6)`;
     const textColor = `hsl(${Math.round((r + g + b) / 3)}, 100%, 95%)`;
 
-    // Gradient
     const gradient = `linear-gradient(135deg, 
         rgba(${r}, ${g}, ${b}, 0.4), 
         rgba(${Math.max(r - 50, 0)}, ${Math.max(g - 50, 0)}, ${Math.max(b - 50, 0)}, 0.6))`;
@@ -241,9 +236,8 @@ function cleanWeaponNameFunc(weaponName) {
 
     cleaned = cleaned.replace(/<\/color>/g, "");
     cleaned = cleaned.replace(/[★☆]/g, "");
-    cleaned = cleaned.replace(/"/g, "");
 
-    return cleaned.trim();
+    return cleaned.replace(/"/g, "").trim();
 }
 
 function formatLastPlayedRaid(unixTimestamp) {
@@ -447,66 +441,133 @@ async function loadJSON(url) {
 }
 
 class KeepAliveService {
-    constructor() {
-        this.keepAliveInterval = null;
-        this.isActive = false;
-        this.retryCount = 0;
-        this.maxRetries = 3;
-    }
+    #keepAliveInterval = null;
+    #isActive = false;
+    #retryCount = 0;
+    #maxRetries = 3;
+    #heartbeatInterval = 30000;
+    #heartbeatEndpoint = 'api/main/heartbeat/keepalive.php';
 
     start() {
-        if (this.isActive) return;
+        if (this.#isActive) {
+            console.warn('KeepAliveService is already running');
+            return;
+        }
 
-        this.isActive = true;
-        this.sendKeepAlive();
+        this.#isActive = true;
+        this.#retryCount = 0;
 
-        this.keepAliveInterval = setInterval(() => {
-            this.sendKeepAlive();
-        }, 30000);
+        this.#sendHeartbeat();
+        this.#keepAliveInterval = setInterval(
+            () => this.#sendHeartbeat(),
+            this.#heartbeatInterval
+        );
+
+        console.info('KeepAliveService started');
     }
 
     stop() {
-        this.isActive = false;
-        if (this.keepAliveInterval) {
-            clearInterval(this.keepAliveInterval);
-            this.keepAliveInterval = null;
+        if (!this.#isActive) {
+            return;
         }
-        this.retryCount = 0;
+
+        this.#isActive = false;
+
+        if (this.#keepAliveInterval) {
+            clearInterval(this.#keepAliveInterval);
+            this.#keepAliveInterval = null;
+        }
+
+        this.#retryCount = 0;
+        console.info('KeepAliveService stopped');
     }
 
-    async sendKeepAlive() {
+    async #sendHeartbeat() {
+        if (!this.#isActive) {
+            return;
+        }
+
         try {
-            const response = await fetch('../api/main/heartbeat/keepalive.php', {
+            const response = await fetch(this.#heartbeatEndpoint, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
-                credentials: 'same-origin'
+                credentials: 'same-origin',
+                cache: 'no-store'
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error: ${response.status}`);
+                throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
             }
 
-            this.retryCount = 0;
+            const data = await response.json();
+
+            if (data.status !== 'OK') {
+                throw new Error('Invalid server response');
+            }
+
+            this.#retryCount = 0;
+
         } catch (error) {
-            console.error('Keepalive error:', error);
-            this.retryCount++;
-
-            if (this.retryCount >= this.maxRetries) {
-                this.stop();
-                this.handleConnectionLost();
-            }
+            console.error('Heartbeat failed:', error.message);
+            await this.#handleHeartbeatFailure();
         }
     }
 
-    handleConnectionLost() {
-        console.error('Connection lost');
+    async #handleHeartbeatFailure() {
+        this.#retryCount++;
+
+        if (this.#retryCount >= this.#maxRetries) {
+            await this.#handleConnectionLost();
+            return;
+        }
+
+        const backoffDelay = Math.min(1000 * Math.pow(2, this.#retryCount), 30000);
+
+        console.warn(
+            `Retry ${this.#retryCount}/${this.#maxRetries} in ${backoffDelay}ms`
+        );
+
+        setTimeout(() => {
+            if (this.#isActive) {
+                this.#sendHeartbeat();
+            }
+        }, backoffDelay);
+    }
+
+    async #handleConnectionLost() {
+        this.stop();
+
+        const event = new CustomEvent('connectionLost', {
+            detail: {
+                message: 'Connection to server lost',
+                timestamp: Date.now()
+            }
+        });
+
+        window.dispatchEvent(event);
+        console.error('Connection to server lost');
+    }
+
+    isActive() {
+        return this.#isActive;
+    }
+
+    setHeartbeatInterval(interval) {
+        if (interval < 10000) {
+            throw new Error('Heartbeat interval must be at least 10 seconds');
+        }
+
+        this.#heartbeatInterval = interval;
+
+        // Restart
+        if (this.#isActive) {
+            this.stop();
+            this.start();
+        }
     }
 }
 
 const keepAliveService = new KeepAliveService();
-
-document.addEventListener('DOMContentLoaded', () => {
-    keepAliveService.start();
-});
