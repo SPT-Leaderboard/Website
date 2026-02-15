@@ -570,5 +570,5 @@ class KeepAliveService {
     }
 }
 
-const keepAliveService = new KeepAliveService();
+window.keepAliveService = new KeepAliveService();
 window.keepAliveService.start();

@@ -34,15 +34,15 @@ let oldTotalPlayTime = 0;
 // Paths
 let seasonPath = '/api/data/seasons/season';
 let seasonLocalPath = `fallbacks/`;
-let currentSeason = `/api/data/seasons/season9.json?t=${Date.now()}`;
-let seasonPathEnd = `.json?t=${Date.now()}`;
+let currentSeason = `/api/data/seasons/season9.json`;
+let seasonPathEnd = `.json`;
 let lastRaidsPath = `/api/data/player_raids/`;
 let profileAppearencePath = `/api/network/functions/get_player_customization.php`;
 let weaponStatsPath = `/api/data/shared/weapon_counters.json?t=${Date.now()}`;
 let profileComments = `/api/data/user-comments/player_`;
 let profileCommentsEnd = `.json?t=${Date.now()}`;
 let profileUrlPath = `https://sptlb.katrinfoxvr.com/#id=`;
-let heartbeatsPath = `/api/main/heartbeat/heartbeats.json?t=${Date.now()}`;
+let heartbeatsPath = `/api/main/heartbeat/heartbeats.json`;
 let achievementsPath = `/api/data/shared/achievement_counters.json`;
 let pmcPfpsPath = `/api/data/pmc_avatars/`;
 let globalCounters = `/api/data/shared/global_counters.json`;
@@ -59,7 +59,7 @@ if (isLocalhost) {
     profileComments = `fallbacks/user-comments/player_`;
     profileCommentsEnd = `.json?t=${Date.now()}`;
     profileUrlPath = `127.0.0.1:5500/#id=`;
-    heartbeatsPath = `fallbacks/heartbeats.json?t=${Date.now()}`;
+    heartbeatsPath = `fallbacks/heartbeats.json`;
     achievementsPath = `../fallbacks/shared/achievement_counters.json`;
     lastRaidsPath = `../fallbacks/player_raids/`;
     globalCounters = `../fallbacks/shared/global_counters.json`;
@@ -308,7 +308,7 @@ async function loadSeasonData(season) {
 
     try {
         // Try loading data from server first
-        let response = await fetch(`${seasonPath}${season}${seasonPathEnd}`);
+        let response = await fetch(`${seasonPath}${season}${seasonPathEnd}?t=${Date.now()}`);
 
         const data = await response.json();
         leaderboardData = data.leaderboard || [];
