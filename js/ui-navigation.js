@@ -10,7 +10,6 @@ class SettingsManager {
         this.settings = {
             showTimer: true,
             showWinners: true,
-            showStaff: true,
             lbToggle: false,
             casualToggle: false,
             cacheBypassToggle: false
@@ -55,7 +54,6 @@ class SettingsManager {
         const map = {
             showTimer: 'timerToggle',
             showWinners: 'winnersToggle',
-            showStaff: 'staffToggle',
             lbToggle: 'lbToggle',
             casualToggle: 'casualToggle',
             cacheBypassToggle: 'cacheBypassToggle'
@@ -66,8 +64,7 @@ class SettingsManager {
     getTargetElement(settingKey) {
         const map = {
             showTimer: document.getElementById('seasonTimer'),
-            showWinners: document.getElementById('winners'),
-            showStaff: document.getElementById('admins-container')
+            showWinners: document.getElementById('winners')
         };
         return map[settingKey] || null;
     }
@@ -84,8 +81,7 @@ class SettingsManager {
     // Toggle events
     setupEventListeners() {
         const toggles = [
-            'timerToggle', 'winnersToggle', 'staffToggle',
-            'lbToggle', 'casualToggle', 'cacheBypassToggle'
+            'timerToggle', 'winnersToggle', 'lbToggle', 'casualToggle', 'cacheBypassToggle'
         ];
 
         toggles.forEach(toggleId => {
@@ -117,7 +113,6 @@ class SettingsManager {
         const map = {
             timerToggle: 'showTimer',
             winnersToggle: 'showWinners',
-            staffToggle: 'showStaff',
             lbToggle: 'lbToggle',
             casualToggle: 'casualToggle',
             cacheBypassToggle: 'cacheBypassToggle'

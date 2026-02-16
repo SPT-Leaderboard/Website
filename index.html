@@ -43,7 +43,6 @@
         <script src="js/ui-live-data-flow.js"></script>
         <script src="js/ui-navigation.js"></script>
         <script src="js/ui-toasts.js"></script>
-        <script src="js/api-admins.js"></script>
         <script src="js/app-utils.js"></script>
         <script src="js/app-init.js"></script>
         <script src="js/misc-event.js"></script>
@@ -136,10 +135,6 @@
                                 <span class="item-icon"><i class="fa-solid fa-list-check"></i></span>
                                 <span>Settings</span>
                             </button>
-                            <a class="compact-item" href="api-docs/">
-                                <span class="item-icon"><i class="fa-solid fa-network-wired"></i></span>
-                                <span>API Docs</span>
-                            </a>
                         </div>
                     </div>
                     <a href="/api/network/login/index.php" class="navbar-link navbar-link--login compact-login-btn">
@@ -454,11 +449,6 @@
                     </div>
                     <div class="setting-item">
                         <label class="setting-label">
-                            <input type="checkbox" id="staffToggle" checked="checked"> Show Staff Online </label>
-                        <p class="setting-description">Display or hide current Staff activity on the page.</p>
-                    </div>
-                    <div class="setting-item">
-                        <label class="setting-label">
                             <input type="checkbox" id="casualToggle"> Hide Casual Players </label>
                         <p class="setting-description">Display or hide casual players on the leaderboard.</p>
                     </div>
@@ -466,18 +456,6 @@
                 <div class="modal-footer">
                     <button id="saveSettings" class="save-btn">Save Settings</button>
                 </div>
-            </div>
-        </div>
-        <div id="admins-container">
-            <div class="header">
-                <h3><i class="fa-solid fa-user-shield"></i> Staff Online</h3>
-                <button class="toggle-btn" id="toggle-admins">
-                    <i class="fa-solid fa-chevron-down"></i>
-                </button>
-            </div>
-            <div class="content-wrapper"></div>
-            <div class="loading-overlay" id="loading-overlay-admin">
-                <div class="loading-spinner"></div>
             </div>
         </div>
         <div class="top-stats-bar">
@@ -643,7 +621,6 @@
                         <li><a href="https://github.com/SPT-Leaderboard/Website/issues" target="_blank" rel="noopener">Contribute</a></li>
                         <li><a href="https://github.com/SPT-Leaderboard/Website" target="_blank" rel="noopener">GitHub Page</a></li>
                         <li><a href="https://forge.sp-tarkov.com/mod/2101/spt-leaderboard" target="_blank" rel="noopener">SPTarkov Mod</a></li>
-                        <li><a href="/api-docs">API Documentation</a></li>
                     </ul>
                 </div>
             </div>
