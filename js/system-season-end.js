@@ -41,7 +41,7 @@ async function endSeason() {
 
     const stats = calculateGlobalStats(leaderboardData);
     const endMusic = new Audio(`media/sounds/season/season_end_final.mp3`);
-    endMusic.play();
+    await endMusic.play();
 
     // When season end sound is over, play music and show video additional overlay + start showing names
     endMusic.addEventListener('ended', () => {

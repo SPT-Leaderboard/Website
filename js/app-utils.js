@@ -335,6 +335,7 @@ function formatOnlineTime(seconds) {
 
 /**
  * Format UNIX timestamp to return "Xm ago || Xd ago"
+ * Deprecated?
  * @returns {string}
  * @param timestamp
  */
@@ -457,13 +458,14 @@ class KeepAliveService {
         this.#isActive = true;
         this.#retryCount = 0;
 
-        this.#sendHeartbeat();
-        this.#keepAliveInterval = setInterval(
-            () => this.#sendHeartbeat(),
-            this.#heartbeatInterval
-        );
+        this.#sendHeartbeat().then(r => {
+            this.#keepAliveInterval = setInterval(
+                () => this.#sendHeartbeat(),
+                this.#heartbeatInterval
+            );
 
-        console.info('KeepAliveService started');
+            console.info('KeepAliveService started');
+        });
     }
 
     stop() {
@@ -499,13 +501,13 @@ class KeepAliveService {
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
+                console.error(`HTTP error ${response.status}: ${response.statusText}`);
             }
 
             const data = await response.json();
 
             if (data.status !== 'OK') {
-                throw new Error('Invalid server response');
+                console.error('Invalid server response');
             }
 
             this.#retryCount = 0;
@@ -551,6 +553,7 @@ class KeepAliveService {
         console.error('Connection to server lost');
     }
 
+    // Unused
     isActive() {
         return this.#isActive;
     }

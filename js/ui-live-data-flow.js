@@ -4,13 +4,12 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ / 
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
-// Usage:
 // AutoUpdater.setEnabled(false);
 // AutoUpdater.setInterval(10);
 // AutoUpdater.forceUpdate();
 
 const AutoUpdater = (() => {
-    let updateInterval = 8; // seconds
+    let updateInterval = 8;
     let timeLeft = updateInterval;
     let autoUpdateEnabled = true;
     let updateTimer;

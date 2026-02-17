@@ -252,15 +252,15 @@ function populateSeasonDropdown() {
         hiddenSelect.dispatchEvent(event);
 
         // Load season data
-        loadSeasonData(season);
-
-        // Update auto-update state
-        if (season === seasons[0]) {
-            AppState.setAutoUpdate(true);
-        } else {
-            AppState.setAutoUpdate(false);
-            showToast('Live Data Flow was automatically disabled', 'info', 8000);
-        }
+        loadSeasonData(season).then(r => {
+            // Update auto-update state
+            if (season === seasons[0]) {
+                AppState.setAutoUpdate(true);
+            } else {
+                AppState.setAutoUpdate(false);
+                showToast('Live Data Flow was automatically disabled', 'info', 8000);
+            }
+        });
     }
 
     // Toggle dropdown
@@ -540,7 +540,7 @@ async function displayLeaderboard(data) {
             <td>${lastGame || 'N/A'}</td>
             <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class="fa-solid fa-share-from-square"></i> </button></td>
             <td>${badge}</td>
-            <td>${`${player.pmcRaids} / ${player.scavRaids ?? 0} (${player.pmcRaids + player.scavRaids ?? 0})`}</td>
+            <td>${player.pmcRaids} / ${player.scavRaids ?? 0} (${player.pmcRaids + player.scavRaids ?? 0})</td>
             <td class="${player.survivedToDiedRatioClass}">${player.survivalRate}%</td>
             <td class="${player.killToDeathRatioClass}">${player.killToDeathRatio}</td>
             <td class="${player.averageLifeTimeClass}">${formatSeconds(player.averageLifeTime)}</td>
@@ -623,8 +623,7 @@ async function displaySimpleLeaderboard(data) {
         }
 
         // Add profile standing
-        // Add profile standing
-        let badge = '';
+        let badge;
         if (player.banned) {
             badge = `
             <div class="badge-lb tooltip">
@@ -689,7 +688,7 @@ async function displaySimpleLeaderboard(data) {
             <td>${lastGame || 'N/A'}</td>
             <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class="fa-solid fa-share-from-square"></i> </button></td>
             <td>${badge}</td>
-            <td>${`${player.pmcRaids} / ${player.scavRaids ?? 0} (${player.pmcRaids + player.scavRaids ?? 0})`}</td>
+            <td>${player.pmcRaids} / ${player.scavRaids ?? 0} (${player.pmcRaids + player.scavRaids ?? 0})</td>
             <td>${player.survivalRate}%</td>
             <td>${player.killToDeathRatio}</td>
             <td>${formatSeconds(player.averageLifeTime)}</td>

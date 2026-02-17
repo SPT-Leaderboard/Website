@@ -46,7 +46,7 @@ async function renderFriendList(player) {
         }
 
         // Then render friendlist
-        const html = friends.map(friend => {
+        container.innerHTML = friends.map(friend => {
             const playerStatus = window.heartbeatMonitor.getPlayerStatus(friend.id);
             const lastOnlineTime = heartbeatMonitor.isOnline(friend.id)
                 ? '<span class="player-status-lb-online">Online</span>'
@@ -64,8 +64,6 @@ async function renderFriendList(player) {
                 </div>
             `;
         }).join('');
-
-        container.innerHTML = html;
     } catch (error) {
         container.innerHTML = '<div class="no-friends">There was an error loading friends</div>';
         console.error('Error loading friends:', error);

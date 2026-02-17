@@ -13,7 +13,7 @@ class HeartbeatMonitor {
     async fetchHeartbeats() {
         try {
             const response = await fetch(`${heartbeatsPath}?t=${Date.now()}`);
-            if (!response.ok) throw new Error('Failed to load heartbeats');
+            if (!response.ok) console.error('Failed to load heartbeats');
 
             this.heartbeatData = await response.json();
             

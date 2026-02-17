@@ -248,7 +248,7 @@ async function submitComment(commentText, receiverId, permaLink, submitBtn, comm
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.error || 'Failed to send comment');
+            console.error(data.error || 'Failed to send comment');
         }
 
         commentInput.value = '';
@@ -351,7 +351,7 @@ async function loadComments(permaLink) {
                 displayNoComments();
                 return;
             }
-            throw new Error('Failed to load comments');
+            console.error('Failed to load comments');
         }
 
         // Save locally first

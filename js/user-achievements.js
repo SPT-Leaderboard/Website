@@ -19,7 +19,7 @@ async function loadAchievementsData() {
         ]);
 
         if (!achievementsResponse.ok || !playersResponse.ok) {
-            throw new Error('Failed to load achievements data');
+            console.error('Failed to load achievements data');
         }
 
         const [newAchievements, seAchievements, playersData] = await Promise.all([
@@ -406,7 +406,7 @@ async function loadAchievementImage(achievement, achievementId) {
             if (cdnSuccess) {
                 return cdnUrl;
             } else {
-                throw new Error('CDN недоступен');
+                console.error('CDN error - unavailable image');
             }
         } catch (error) {
             // Whoops, get the local image

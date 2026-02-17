@@ -257,7 +257,8 @@ class SettingsManager {
     async getBannedMods() {
         try {
             const response = await fetch(`/api/network/functions/get_banned_mods.php`);
-            if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
+            if (!response.ok) console.error(`HTTP error! ${response.status}`);
+            
             return await response.json();
         } catch (error) {
             console.error('Fetch error:', error);
@@ -561,6 +562,7 @@ class SettingsHelper {
         return null;
     }
 
+    // Unused for now
     static set(key, value) {
         if (window.settingsManager) {
             window.settingsManager.settings[key] = value;

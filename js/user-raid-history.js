@@ -103,7 +103,7 @@ async function initLastRaids(playerId, permaLink) {
         const response = await fetch(playerRaidsPath);
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            console.error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();

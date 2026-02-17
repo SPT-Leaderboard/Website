@@ -17,7 +17,7 @@ async function checkAuth() {
             }
         });
 
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) console.error(`HTTP error! status: ${response.status}`);
 
         const data = await response.json();
 
@@ -65,5 +65,5 @@ function updateAuthStatus(status, message, notifications = 0) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    setTimeout(checkAuth, 3000);
+    checkAuth();
 });

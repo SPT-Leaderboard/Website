@@ -1,4 +1,3 @@
-/* eslint-disable no-redeclare */
 //     _____ ____  ______   __    _________    ____  __________  ____  ____  ___    ____  ____ 
 //    / ___// __ \/_  __/  / /   / ____/   |  / __ \/ ____/ __ \/ __ )/ __ \/   |  / __ \/ __ \
 //    \__ \/ /_/ / / /    / /   / __/ / /| | / / / / __/ / /_/ / __  / / / / /| | / /_/ / / / /  
@@ -23,10 +22,21 @@
     // Handle accessibility
     var enableAnimations = true;
 
+    function isWinter() {
+        var currentDate = new Date();
+        var month = currentDate.getMonth();
+
+        return (month === 11 || month === 0 || month === 1);
+    }
+
     //
     // It all starts here...
     //
     function setup() {
+        if (!isWinter()) {
+            return;
+        }
+
         if (enableAnimations) {
             if (document.readyState === 'loading') {
                 window.addEventListener("DOMContentLoaded", generateSnowflakes, false);
