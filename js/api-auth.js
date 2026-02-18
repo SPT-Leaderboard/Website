@@ -4,41 +4,84 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ / 
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
+let authCheckInterval = null;
+let autoLoginAttempts = 0;
+const MAX_AUTO_LOGIN_ATTEMPTS = 3;
+
 async function checkAuth() {
     try {
         updateAuthStatus('checking', 'Checking...');
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
 
         const response = await fetch('/api/network/login/check_auth.php', {
             method: 'GET',
             credentials: 'include',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                'Cache-Control': 'no-cache'
-            }
+                'Cache-Control': 'no-cache',
+                'Accept': 'application/json'
+            },
+            signal: controller.signal
         });
 
-        if (!response.ok) console.error(`HTTP error! status: ${response.status}`);
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+            console.error(`HTTP error! status: ${response.status}`);
+        }
 
         const data = await response.json();
 
         if (data.authenticated && data.username) {
-            updateAuthStatus('authenticated', data.username, data.unreadCount);
+            updateAuthStatus('authenticated', data.username, data.unreadCount || 0);
             isLoggedIn = true;
+            autoLoginAttempts = 0;
+
+            if (data.autoLogin) {
+                showNotification('Auto-login successful', 'Welcome back!', 'success');
+            }
+
+            startPeriodicAuthCheck();
+
+        } else if (data.maintenance) {
+            updateAuthStatus('maintenance', 'Maintenance', 0);
+            isLoggedIn = false;
         } else {
+            // unauth
             updateAuthStatus('not-authenticated', 'Unauthorized', 0);
             isLoggedIn = false;
+
+            if (autoLoginAttempts < MAX_AUTO_LOGIN_ATTEMPTS) {
+                autoLoginAttempts++;
+                // console.log(`Auto-login attempt ${autoLoginAttempts}/${MAX_AUTO_LOGIN_ATTEMPTS}`);
+
+                // retry
+                setTimeout(() => checkAuth(), 2000);
+            }
         }
 
     } catch (error) {
-        console.error('Auth check failed:', error);
-        updateAuthStatus('error', 'Authentication error', 0);
+        if (error.name === 'AbortError') {
+            console.error('Auth check timeout');
+            updateAuthStatus('error', 'Request timeout', 0);
+        } else {
+            console.error('Auth check failed:', error);
+            updateAuthStatus('error', 'Connection error', 0);
+        }
+
         isLoggedIn = false;
+
+        // retry
+        setTimeout(() => checkAuth(), 5000);
     }
 }
 
 function updateAuthStatus(status, message, notifications = 0) {
     const authElement = document.getElementById('authStatus');
     const notificationElement = document.getElementById('networkNotifies');
+    const usernameDisplay = document.getElementById('usernameDisplay');
 
     if (!authElement) return;
 
@@ -49,13 +92,24 @@ function updateAuthStatus(status, message, notifications = 0) {
 
     authElement.className = `auth-status ${status}`;
 
+    if (usernameDisplay) {
+        if (status === 'authenticated') {
+            usernameDisplay.textContent = message;
+            usernameDisplay.style.display = 'inline';
+        } else {
+            usernameDisplay.style.display = 'none';
+        }
+    }
+
     if (notificationElement) {
         if (notifications > 0) {
             notificationElement.textContent = notifications > 99 ? '99+' : notifications;
             notificationElement.style.display = 'flex';
+            notificationElement.setAttribute('data-count', notifications);
         } else {
             notificationElement.textContent = '';
             notificationElement.style.display = 'none';
+            notificationElement.removeAttribute('data-count');
         }
     }
 
@@ -64,6 +118,61 @@ function updateAuthStatus(status, message, notifications = 0) {
     }, 100);
 }
 
+function startPeriodicAuthCheck() {
+    if (authCheckInterval) {
+        clearInterval(authCheckInterval);
+    }
+
+    authCheckInterval = setInterval(() => {
+        silentAuthCheck();
+    }, 300000);
+
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            silentAuthCheck();
+        }
+    });
+}
+
+async function silentAuthCheck() {
+    try {
+        const response = await fetch('/api/network/login/check_auth.php', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Cache-Control': 'no-cache'
+            }
+        });
+
+        if (!response.ok) return;
+
+        const data = await response.json();
+
+        if (data.authenticated && data.username) {
+            const notificationElement = document.getElementById('networkNotifies');
+            if (notificationElement) {
+                if (data.unreadCount > 0) {
+                    notificationElement.textContent = data.unreadCount > 99 ? '99+' : data.unreadCount;
+                    notificationElement.style.display = 'flex';
+                } else {
+                    notificationElement.style.display = 'none';
+                }
+            }
+        } else if (isLoggedIn) {
+            checkAuth();
+        }
+    } catch (error) {
+        console.error('Silent auth check failed:', error);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     checkAuth();
+
+    window.addEventListener('beforeunload', function () {
+        if (authCheckInterval) {
+            clearInterval(authCheckInterval);
+        }
+    });
 });
