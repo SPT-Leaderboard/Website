@@ -1436,10 +1436,10 @@ button:hover,
 }
 
 .player-name.highlight-player {
-    background: linear-gradient(90deg, rgba(99, 102, 241, 0.25), rgba(139, 92, 246, 0.35));
+    background: linear-gradient(90deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
     border-radius: 8px;
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
-    border-left: 4px solid var(--accent-teal);
+    box-shadow: 0 0 5px rgba(99, 102, 241, 0.4);
+    border: 1px solid var(--accent-teal);
     position: relative;
     animation: pulseHighlight 2s infinite;
 }
@@ -1448,11 +1448,11 @@ button:hover,
 
     0%,
     100% {
-        box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        box-shadow: 0 0 5px var(--accent-teal);
     }
 
     50% {
-        box-shadow: 0 0 30px rgba(99, 102, 241, 0.7);
+        box-shadow: 0 0 10px var(--accent-teal);
     }
 }
 
