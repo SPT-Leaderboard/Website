@@ -27,11 +27,11 @@ const HIDEOUT_MODULES = {
     "SolarPower": { name: "Solar Power", image: "solarpower.png", maxLevel: 1 },
     "BoozeGenerator": { name: "Booze Generator", image: "boozegen.png", maxLevel: 1 },
     "BitcoinFarm": { name: "Bitcoin Farm", image: "bitcoinfarm.png", maxLevel: 3 },
-    "EmergencyWall": { name: "Emergency Wall", image: "wall.png", maxLevel: 6 },
     "Gym": { name: "Gym", image: "gym.png", maxLevel: 1 },
     "WeaponStand": { name: "Weapon Rack", image: "weapon_stand.png", maxLevel: 3 },
     "EquipmentPresetsStand": { name: "Equipment Presets", image: "presets-stand.png", maxLevel: 3 },
-    "CircleOfCultists": { name: "Circle of Cultists", image: "Cultist Zone.png", maxLevel: 1 }
+    "CircleOfCultists": { name: "Circle of Cultists", image: "Cultist Zone.png", maxLevel: 1 },
+    "ChristmasIllumination": { name: "Christmas Tree", image: "christmas_illumination.png", maxLevel: 1 }
 };
 
 function loadHideoutData(hideoutData) {
@@ -84,7 +84,7 @@ function createModuleCard(moduleKey, level, isBuilt) {
     const module = HIDEOUT_MODULES[moduleKey];
 
     if (!module) {
-        console.warn(`Unknown hideout module: ${moduleKey}`);
+        // console.warn(`Unknown hideout module: ${moduleKey}`);
         return '';
     }
 
