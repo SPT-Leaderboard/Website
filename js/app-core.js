@@ -875,19 +875,23 @@ async function calculatePlaces(data) {
 
 // Get skill rank label
 function getRankLabel(totalScore) {
-    if (totalScore < 15) return 'L-';
-    if (totalScore < 25) return 'L';
-    if (totalScore < 35) return 'L+';
-    if (totalScore < 45) return 'M-';
-    if (totalScore < 55) return 'M';
-    if (totalScore < 65) return 'M+';
-    if (totalScore < 72) return 'H-';
-    if (totalScore < 78) return 'H';
-    if (totalScore < 84) return 'H+';
-    if (totalScore < 90) return 'P-';
-    if (totalScore < 94) return 'P';
-    if (totalScore < 97) return 'P+';
-    return 'G';
+    const thresholds = [
+        { value: 15, label: 'L-' },
+        { value: 25, label: 'L' },
+        { value: 35, label: 'L+' },
+        { value: 45, label: 'M-' },
+        { value: 55, label: 'M' },
+        { value: 65, label: 'M+' },
+        { value: 72, label: 'H-' },
+        { value: 78, label: 'H' },
+        { value: 84, label: 'H+' },
+        { value: 90, label: 'P-' },
+        { value: 94, label: 'P' },
+        { value: 97, label: 'P+' }
+    ];
+
+    const result = thresholds.find(t => totalScore < t.value);
+    return result ? result.label : 'G';
 }
 
 // Calculate all stats + dynamic update support

@@ -239,7 +239,7 @@ h1 {
     font-size: 2.5rem;
     margin-bottom: 20px;
     font-weight: 700;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     text-transform: uppercase;
     letter-spacing: 2px;
     text-shadow:
@@ -458,6 +458,7 @@ h1 {
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     font-weight: 600;
     z-index: 1000;
+    font-family: 'Bender Bold';
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -576,11 +577,11 @@ h1 {
 }
 
 .dropdown-toggle {
+    font-family: 'Bender Bold';
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    text-align: center;
     width: 100%;
-    padding: 10px 40px 10px 16px;
+    padding: 10px;
     border-radius: 8px;
     background: linear-gradient(145deg, rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.7));
     border: 1px solid var(--accent-teal);
@@ -654,14 +655,14 @@ h1 {
 }
 
 .dropdown-item {
-    padding: 10px 16px;
+    padding: 10px;
     color: var(--text-light);
     cursor: pointer;
     transition: all 0.2s ease;
     position: relative;
     font-size: 0.9rem;
     display: flex;
-    align-items: center;
+    place-content: center;
     gap: 10px;
 }
 
@@ -691,6 +692,7 @@ h1 {
 }
 
 .compact-toggle {
+    font-family: 'Bender Bold';
     display: flex;
     align-items: center;
     gap: 8px;
@@ -803,6 +805,7 @@ h1 {
 }
 
 .compact-item {
+    font-family: 'Bender Bold';
     display: flex;
     align-items: center;
     gap: 10px;
@@ -817,7 +820,6 @@ h1 {
     transition: all 0.2s ease;
     width: 100%;
     text-align: left;
-    font-family: 'Inter', sans-serif;
 }
 
 .compact-item:last-child {
@@ -828,7 +830,7 @@ h1 {
     background: linear-gradient(90deg,
             rgba(100, 255, 218, 0.1),
             transparent);
-    color: var(--accent-teal);
+    color: var(--text-white);
     padding-left: 18px;
 }
 
@@ -848,37 +850,8 @@ h1 {
     opacity: 1;
 }
 
-.compact-dropdown:nth-child(1) .compact-toggle {
-    border-color: rgba(66, 153, 225, 0.3);
-}
-
-.compact-dropdown:nth-child(1) .compact-toggle:hover,
-.compact-dropdown:nth-child(1) .compact-toggle[aria-expanded="true"] {
-    border-color: rgba(66, 153, 225, 0.5);
-    box-shadow: 0 4px 15px rgba(66, 153, 225, 0.15);
-}
-
-.compact-dropdown:nth-child(2) .compact-toggle {
-    border-color: rgba(72, 187, 120, 0.3);
-}
-
-.compact-dropdown:nth-child(2) .compact-toggle:hover,
-.compact-dropdown:nth-child(2) .compact-toggle[aria-expanded="true"] {
-    border-color: rgba(72, 187, 120, 0.5);
-    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.15);
-}
-
-.compact-dropdown:nth-child(3) .compact-toggle {
-    border-color: rgba(159, 122, 234, 0.3);
-}
-
-.compact-dropdown:nth-child(3) .compact-toggle:hover,
-.compact-dropdown:nth-child(3) .compact-toggle[aria-expanded="true"] {
-    border-color: rgba(159, 122, 234, 0.5);
-    box-shadow: 0 4px 15px rgba(159, 122, 234, 0.15);
-}
-
 .compact-login-btn {
+    font-family: inherit;
     background: rgba(100, 255, 219, 0.25);
     border: 1px solid rgba(100, 255, 219, 0.3);
     display: flex;
@@ -887,7 +860,6 @@ h1 {
     padding: 8px 16px;
     border-radius: 12px;
     color: var(--text-light);
-    font-family: 'Inter', sans-serif;
     font-weight: 600;
     font-size: 0.9rem;
     cursor: pointer;
@@ -1438,22 +1410,9 @@ button:hover,
 .player-name.highlight-player {
     background: linear-gradient(90deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
     border-radius: 8px;
-    box-shadow: 0 0 5px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
     border: 1px solid var(--accent-teal);
     position: relative;
-    animation: pulseHighlight 2s infinite;
-}
-
-@keyframes pulseHighlight {
-
-    0%,
-    100% {
-        box-shadow: 0 0 5px var(--accent-teal);
-    }
-
-    50% {
-        box-shadow: 0 0 10px var(--accent-teal);
-    }
 }
 
 .player-name i {
@@ -1471,7 +1430,6 @@ button:hover,
 .player-mode {
     background: rgba(255, 255, 255, 0.096);
     color: white;
-    font-family: monospace;
     border: 1px solid #ffffff3b;
     border-radius: 5px;
     width: fit-content;
@@ -2922,7 +2880,6 @@ input[type="checkbox"]:checked:hover {
     justify-content: center;
     align-items: center;
     z-index: 10000;
-    font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
 .paragraph-welcome {
@@ -3604,7 +3561,7 @@ input[type="checkbox"]:checked:hover {
 .pmc-level {
     position: relative;
     bottom: 40px;
-    font-family: monospace;
+    font-family: 'Bender Bold', sans-serif;
     background-color: #ffffff14;
     justify-self: center;
     padding: 5px;

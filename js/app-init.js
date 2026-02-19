@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Resources to load
     const resources = [
         { name: "Connectivity with API", url: "/api/main/online.json", weight: 25 },
-        { name: "Connectivity with Network", url: "/api/network/explore/messages.json", weight: 25 },
         { name: "Snowy Theme", url: "js/app-seasons.js", weight: 10 },
         { name: "Core Logic", url: "js/app-core.js", weight: 25 },
         { name: "Core Utils", url: "js/app-utils.js", weight: 10 },
