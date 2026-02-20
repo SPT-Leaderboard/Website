@@ -1658,7 +1658,6 @@ button:hover,
         1px 1px 1px rgba(120, 90, 0, 0.3),
         0 0 1px rgba(255, 215, 0, 0.5);
     border-radius: 6px;
-    padding: 4px 8px;
     display: inline-block;
     letter-spacing: 1px;
 }
