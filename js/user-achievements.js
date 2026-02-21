@@ -348,6 +348,7 @@ async function renderAllAchievements(achievements) {
 
             html += `
             <div class="user-achievements profile-section">
+            <div class="achievement-progress-bg" style="width: ${ach.globalPercentage || 0}%;"></div>
                 <div class="achievement-content">
                     <div class="achievement-icon ${ach.rarity || 'Common'}">
                         <img src="${imageUrl}" alt="Achievement Icon"

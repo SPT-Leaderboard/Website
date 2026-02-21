@@ -116,7 +116,7 @@ async function showPublicProfile(container, player) {
                 <div class="dot"></div>
                 <div class="dot"></div>
             </div>
-            <p class="dots-text">Loading Profile...</p>
+            <p class="dots-text">Loading...</p>
         </div>
     `
 
@@ -566,7 +566,7 @@ async function showPublicProfile(container, player) {
                         </div>
                         <div class="stat-card">
                             <div class="stat-value">${player.longestShot.toLocaleString('en-EN')}m</div>
-                            <div class="stat-label">Average Engagement Distance</div>
+                            <div class="stat-label">Avg Engage Distance</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-value">${player.pmcKills.toLocaleString('en-EN')}</div>
@@ -578,11 +578,11 @@ async function showPublicProfile(container, player) {
                         </div>
                         <div class="stat-card">
                           <div class="stat-value">${player.bossesKilled.toLocaleString('en-EN')}</div>
-                          <div class="stat-label">Bosses Killed</div>
+                          <div class="stat-label">Boss Kills</div>
                         </div>
                         <div class="stat-card">
                           <div class="stat-value">${player.damage.toLocaleString('en-EN')}</div>
-                          <div class="stat-label">Damage Dealt</div>
+                          <div class="stat-label">Dmg Dealt</div>
                         </div>
                     </div>
 

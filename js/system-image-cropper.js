@@ -19,10 +19,9 @@ async function autoCropTransparent(imageElement) {
         function processImage() {
             const width = imageElement.naturalWidth;
             const height = imageElement.naturalHeight;
-
-            // temp canvas
             const tempCanvas = document.createElement('canvas');
             const tempCtx = tempCanvas.getContext('2d');
+            
             tempCanvas.width = width;
             tempCanvas.height = height;
             tempCtx.drawImage(imageElement, 0, 0);
