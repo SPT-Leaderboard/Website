@@ -1146,11 +1146,12 @@ td {
 
 /* Play status on leaderboard for heartbeats */
 .player-status-lb {
+    display: flex;
+    justify-self: anchor-center;
+    place-items: center;
     padding: 4px 12px;
-    border-radius: 20px;
-    display: inline-block;
+    border-radius: 10px;
     text-align: center;
-    min-width: 120px;
     border: 2px solid;
     font-weight: 600;
     font-size: 0.85em;
@@ -1288,11 +1289,11 @@ td {
 
 /* Blink for online */
 #blink {
-    display: inline-block;
+    display: flex;
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    margin-right: 8px;
+    margin-left: 5px;
     animation: blink 2s infinite;
 }
 
@@ -3691,6 +3692,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .raid-details {
+    position: relative;
     display: flex;
     flex-direction: column;
     min-width: 120px;
@@ -3699,19 +3701,39 @@ input[type="checkbox"]:checked:hover {
     padding: 6px 12px;
     color: #f3f3f3;
     width: fit-content;
-    border-top: 2px solid #ffa05b;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    border-bottom: 2px solid #ffa05b;
-    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: 'Bender Bold';
+    border-radius: 10px;
     backdrop-filter: blur(5px);
-    background: linear-gradient(180deg, rgba(71, 62, 62, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     transition: all 0.2s ease-in-out;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    z-index: 1;
 }
 
 .raid-details span {
     margin: 2px 8px;
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.raid-details::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background-image: var(--map-bg);
+    background-size: cover;
+    background-position: center;
+    filter: blur(15px) brightness(0.4);
+    z-index: -1;
+    transition: transform 0.3s ease;
+}
+
+.raid-details {
+    animation: slideIn 0.3s ease;
 }
 
 .status-indicator {
@@ -5911,7 +5933,6 @@ input[type="checkbox"]:checked:hover {
 /* Player Rank */
 .rank-display {
     position: absolute;
-    top: 70px;
     right: 10px;
     z-index: 10;
     display: flex;

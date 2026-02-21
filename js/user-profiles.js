@@ -9,7 +9,7 @@ let savedScrollPosition = 0;
 let targetPlayerElement = null;
 let currentHighlightedPlayerId = null;
 
-async function openProfile(playerId, bypass = false) {
+function openProfile(playerId, bypass = false) {
     // Don't open profile again for whatever reason if profile is already open
     // Only let this happen if user opens a player from friend list or raid history
     if (isProfileOpened && !bypass) {
@@ -49,10 +49,11 @@ async function openProfile(playerId, bypass = false) {
     window.location.hash = `id=${encodeURIComponent(player.id)}`;
     modal.style.display = "flex";
     modal.classList.add('active');
-    await showPublicProfile(modalContent, player);
+
+    showPublicProfile(modalContent, player);
 }
 
-// Disqualified profile HTML
+// #region Banned Profile
 function showDisqualProfile(container, player) {
     const profileModal = document.querySelector(".profile-modal-content");
     const mainBackground = document.getElementById("playerProfileModal");
@@ -100,8 +101,9 @@ function showDisqualProfile(container, player) {
     </div>
     `;
 }
+// #endregion
 
-// Public profile
+// #region Public Profile
 async function showPublicProfile(container, player) {
 
     // Show loader
@@ -259,11 +261,22 @@ async function showPublicProfile(container, player) {
     // If player is in raid - show details of the raid
     let raidInfo = '';
     if (isOnline && playerStatus.raidDetails !== null) {
+        const mapName = playerStatus.raidDetails.map;
+        const prettyMapName = getPrettyMapName(mapName);
+        const side = playerStatus.raidDetails.side;
+
         raidInfo = `
-        <section class="raid-details" aria-label="Raid information">
-            <span class="raid-map" aria-label="Map name">Map: ${getPrettyMapName(playerStatus.raidDetails.map)}</span>
-            <span class="raid-side" aria-label="Player side">Side: ${playerStatus.raidDetails.side}</span>
-            <span class="raid-time" aria-label="Game time">Time: ${playerStatus.raidDetails.gameTime}</span>
+        <section class="raid-details" 
+                 style="--map-bg: url('media/leaderboard_icons/maps/${prettyMapName}.png')">
+            <span class="raid-map">
+                ${prettyMapName}
+            </span>
+            <span class="raid-side">
+                ${side}
+            </span>
+            <span class="raid-time">
+                ${playerStatus.raidDetails.gameTime}
+            </span>
         </section>
     `;
     }
@@ -629,20 +642,14 @@ async function showPublicProfile(container, player) {
 
             <!-- Player image -->
             <div class="playermodel profile-section" id="playermodel">
-                <h3>Player Pre-Raid Preview</h3>
-                
                 <div class="rank-display">
                     <div class="rank-icon-container">
                         <div class="circular-progress" 
-                            style="--progress: ${rank.progress};
-                                    --progress-color: ${rank.borderColor};">
+                            style="--progress: ${rank.progress}; --progress-color: ${rank.borderColor};">
                             <img src="${rank.image}" alt="${rank.fullName}" class="rank-icon">
                         </div>
                     </div>
-                    <span class="rank-name" 
-                        style="background: ${rank.gradient};
-                                border-color: ${rank.borderColor};
-                                color: ${rank.textColor};">
+                    <span class="rank-name" style="background: ${rank.gradient}; border-color: ${rank.borderColor}; color: ${rank.textColor};">
                         ${rank.fullName}
                     </span>
                 </div>
@@ -908,68 +915,72 @@ async function showPublicProfile(container, player) {
     let statusUpdater;
     const statusElement = container.querySelector('.player-status span');
 
-    // I have no clue, this is bullshit but it works
+    // I have no clue, this is bullshit but it works.
+    // upd 2/22/2026: *kinda* fixed, but still, would like to make it the other way. This is by any means is some voodoo possessed shit.
     class RaidTimeAnimator {
         constructor(timeElement, timeMultiplier = 7) {
             this.timeElement = timeElement;
             this.timeMultiplier = timeMultiplier;
-            this.intervalId = null;
+            this.animationFrame = null;
+            this.lastUpdate = null;
             this.currentTime = null;
+            this.startTime = null;
         }
 
         start(initialTime) {
-            this.stop(); // Stop last animation
+            this.stop();
 
-            // parse format HH:MM:SS
+            // Parse format HH:MM:SS
             const timeStr = initialTime.replace('Time: ', '');
-            let [hours, minutes, seconds] = timeStr.split(':').map(Number);
+            const [hours, minutes, seconds] = timeStr.split(':').map(Number);
 
-            this.currentTime = {
-                hours: hours,
-                minutes: minutes,
-                seconds: seconds
-            };
+            // Convert
+            this.currentTime = hours * 3600 + minutes * 60 + seconds;
+            this.startTime = Date.now();
 
-            // 500ms update
-            this.intervalId = setInterval(() => this.update(), 500);
-            this.updateDisplay(); // First display
+            this.animate();
+        }
+
+        animate() {
+            if (!this.currentTime) return;
+
+            const now = Date.now();
+
+            if (this.lastUpdate) {
+                // Calculate delta time
+                const deltaSeconds = (now - this.lastUpdate) / 1000;
+
+                this.currentTime += deltaSeconds * this.timeMultiplier;
+            }
+
+            this.lastUpdate = now;
+            this.updateDisplay();
+
+            this.animationFrame = requestAnimationFrame(() => this.animate());
         }
 
         stop() {
-            if (this.intervalId) {
-                clearInterval(this.intervalId);
-                this.intervalId = null;
+            if (this.animationFrame) {
+                cancelAnimationFrame(this.animationFrame);
+                this.animationFrame = null;
             }
-        }
-
-        update() {
-            if (!this.currentTime) return;
-
-            this.currentTime.seconds += this.timeMultiplier;
-
-            // Some time correction
-            if (this.currentTime.seconds >= 60) {
-                this.currentTime.minutes += Math.floor(this.currentTime.seconds / 60);
-                this.currentTime.seconds = this.currentTime.seconds % 60;
-            }
-            if (this.currentTime.minutes >= 60) {
-                this.currentTime.hours += Math.floor(this.currentTime.minutes / 60);
-                this.currentTime.minutes = this.currentTime.minutes % 60;
-            }
-            if (this.currentTime.hours >= 24) {
-                this.currentTime.hours = this.currentTime.hours % 24;
-            }
-
-            this.updateDisplay();
+            this.lastUpdate = null;
         }
 
         updateDisplay() {
             if (!this.currentTime) return;
 
+            // Handle day overflow
+            const totalSeconds = Math.floor(this.currentTime) % (24 * 3600);
+
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
             const formattedTime = [
-                Math.floor(this.currentTime.hours).toString().padStart(2, '0'),
-                Math.floor(this.currentTime.minutes).toString().padStart(2, '0'),
-                Math.floor(this.currentTime.seconds).toString().padStart(2, '0')
+                hours.toString().padStart(2, '0'),
+                minutes.toString().padStart(2, '0'),
+                seconds.toString().padStart(2, '0')
             ].join(':');
 
             this.timeElement.textContent = `Time: ${formattedTime}`;
@@ -1003,33 +1014,67 @@ async function showPublicProfile(container, player) {
                     newStatusHTML = `<span class="last-online-time">Banned</span>`;
                 }
 
+                // Only update if status changed
                 if (statusElement.innerHTML !== newStatusHTML) {
                     statusElement.innerHTML = newStatusHTML;
                     await initLastRaids(player.id, permaLink);
+                }
 
-                    const raidInfoElement = document.querySelector('.raid-details');
-                    if (isOnline && playerStatus.raidDetails !== null && raidInfoElement) {
+                // Handle raid details independently (they update more frequent)
+                const raidInfoElement = document.querySelector('.raid-details');
+
+                if (isOnline && playerStatus.raidDetails !== null) {
+                    // Safety
+                    if (!raidInfoElement) {
+                        const newRaidInfo = document.createElement('section');
+                        newRaidInfo.className = 'raid-details';
+                        newRaidInfo.setAttribute('aria-label', 'Raid information');
+
+                        const statusContainer = document.querySelector('.player-status');
+                        if (statusContainer) {
+                            statusContainer.appendChild(newRaidInfo);
+                        }
+                    }
+
+                    if (raidInfoElement) {
                         raidInfoElement.style.display = 'flex';
-                        raidInfoElement.innerHTML = `
+
+                        // Update map and side (these don't change often)
+                        const mapSpan = raidInfoElement.querySelector('.raid-map');
+                        const sideSpan = raidInfoElement.querySelector('.raid-side');
+                        const timeSpan = raidInfoElement.querySelector('.raid-time');
+
+                        if (mapSpan && mapSpan.textContent !== `Map: ${getPrettyMapName(playerStatus.raidDetails.map)}`) {
+                            mapSpan.textContent = `Map: ${getPrettyMapName(playerStatus.raidDetails.map)}`;
+                        }
+
+                        if (sideSpan && sideSpan.textContent !== `Side: ${playerStatus.raidDetails.side}`) {
+                            sideSpan.textContent = `Side: ${playerStatus.raidDetails.side}`;
+                        }
+
+                        // Time animation here and more magic
+                        if (!timeSpan) {
+                            raidInfoElement.innerHTML = `
                             <span class="raid-map">Map: ${getPrettyMapName(playerStatus.raidDetails.map)}</span>
                             <span class="raid-side">Side: ${playerStatus.raidDetails.side}</span>
                             <span class="raid-time">Time: ${playerStatus.raidDetails.gameTime}</span>
                         `;
 
-                        // Init the thing
-                        const timeElement = raidInfoElement.querySelector('.raid-time');
-                        if (timeElement) {
+                            const newTimeSpan = raidInfoElement.querySelector('.raid-time');
                             if (!raidTimeAnimator) {
-                                raidTimeAnimator = new RaidTimeAnimator(timeElement, 7);
+                                raidTimeAnimator = new RaidTimeAnimator(newTimeSpan, 7);
                             }
                             raidTimeAnimator.start(playerStatus.raidDetails.gameTime);
+                        } else if (!raidTimeAnimator) {
+                            raidTimeAnimator = new RaidTimeAnimator(timeSpan, 7);
+                            raidTimeAnimator.start(playerStatus.raidDetails.gameTime);
                         }
-                    } else if (raidInfoElement) {
-                        raidInfoElement.style.display = 'none';
-                        // Stop animation
-                        if (raidTimeAnimator) {
-                            raidTimeAnimator.stop();
-                        }
+                    }
+                } else if (raidInfoElement) {
+                    raidInfoElement.style.display = 'none';
+                    if (raidTimeAnimator) {
+                        raidTimeAnimator.stop();
+                        raidTimeAnimator = null;
                     }
                 }
             } catch (error) {
@@ -1060,11 +1105,10 @@ async function showPublicProfile(container, player) {
             statusUpdater.stopTimeAnimator();
         }
     });
-
-    // End of public profile function
 }
+//#endregion
 
-// Body hits functions
+// #region Body Hits
 function updateBodyHitsVisualization(raidHitsHistory) {
     // Sum up all player hits
     const totalHits = {
@@ -1168,7 +1212,9 @@ function updateBodyHitsVisualization(raidHitsHistory) {
     const avgElement = document.querySelector('.avg-headshots span');
     avgElement.textContent = `Avg. Headshot % Last 10 Games: ${headshotPercentage}%`;
 }
+// #endregion
 
+// #region Weapons
 async function renderWeaponList(playerId, modWeaponStats) {
     const weaponsContainer = document.getElementById('weapons-container');
     weaponsContainer.innerHTML = '';
@@ -1257,6 +1303,11 @@ function getBestWeapon(modWeaponStats) {
 
     return bestWeapon;
 }
+// #endregion
+
+////////////////
+// section: Utils
+////////////////
 
 // Helper function to generate side images HTML
 function getPlayerSideImageHTML(player) {
@@ -1386,10 +1437,6 @@ function generateBadgesHTML(player) {
     return badges;
 }
 
-////////////////
-// section: Utils
-////////////////
-
 // Close profile on ESC or a button
 function setupModalCloseHandlers() {
     const closeBtn = document.getElementById("closeButton");
@@ -1450,7 +1497,6 @@ function closeLoader() {
     const loader = document.getElementById('main-profile-loader');
     loader.classList.add('fade-out');
 
-    // Delete loader after fade out
     setTimeout(() => {
         loader.remove();
     }, 300); // 300ms - animation lenght (CSS)

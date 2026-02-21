@@ -78,7 +78,6 @@ class SettingsManager {
         }
     }
 
-    // Toggle events
     setupEventListeners() {
         const toggles = [
             'timerToggle', 'winnersToggle', 'lbToggle', 'casualToggle', 'cacheBypassToggle'
@@ -588,7 +587,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.settingsManager = new SettingsManager();
 });
 
-// Enable helper so we can get settings at any time
 window.SettingsHelper = SettingsHelper;
 
 // Backwards compability

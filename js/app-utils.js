@@ -13,7 +13,7 @@ function getPrettyMapName(entry) {
         "laboratory": "Labs",
         "RezervBase": "Reserve",
         "shoreline": "Shoreline",
-        "woods": "Woods",
+        "Woods": "Woods",
         "lighthouse": "Lighthouse",
         "TarkovStreets": "Streets of Tarkov",
         "Sandbox": "Ground Zero - Low",

@@ -457,7 +457,6 @@ function processPlayersData() {
 // Process maps data
 function processMapsData() {
 
-    // Filter so we only show maps
     const validMapIds = [
         "factory4_day",
         "factory4_night",
@@ -530,13 +529,11 @@ function formatPlayTime(seconds) {
     return parts.join(' ');
 }
 
-// To update chart data
 function updateChart(chart, newData) {
     chart.data.datasets[0].data = newData;
     chart.update();
 }
 
-// Random color
 function getRandomColor() {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -546,5 +543,4 @@ function getRandomColor() {
     return color;
 }
 
-// Initialize
 document.addEventListener('DOMContentLoaded', fetchData);

@@ -4,7 +4,6 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ / 
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
-// Global variables to store our data
 let achievementsData = {};
 let playerAchievements = {};
 let totalPlayers = 0;
@@ -19,7 +18,7 @@ function mergeAchievements(newData, seData = null) {
     };
 }
 
-// Calculate achievement statistics
+
 function calculateAchievementStats() {
     const achievementStats = {};
 
@@ -54,7 +53,6 @@ function calculateAchievementStats() {
     return achievementStats;
 }
 
-// Render achievements
 function renderAchievements(stats, searchTerm = '') {
     const container = document.getElementById('achievements-container');
     const searchTermLower = searchTerm.toLowerCase();
@@ -103,7 +101,6 @@ function renderAchievements(stats, searchTerm = '') {
         const card = document.createElement('div');
         card.className = 'achievement-card';
 
-        // Border color based on rarity
         let borderColor = '#444';
         if (rarity === 'common') borderColor = '#d1d1d1ff';
         else if (rarity === 'rare') borderColor = '#1565c0';
@@ -138,7 +135,6 @@ function renderAchievements(stats, searchTerm = '') {
 // Main function to load and process data
 async function initAchievements() {
     try {
-        // Load JSON files in parallel
         const [newAchievements, seAchievements, playersData] = await Promise.all([
             loadJSON('../achievements/js/compiledAchData.json'),
             loadJSON('../achievements/js/compiledAchSEData.json'),
@@ -148,21 +144,16 @@ async function initAchievements() {
         // Merge achievements - new data overwrites old data for same IDs (just to be sure if its changed recently)
         achievementsData = mergeAchievements(newAchievements, seAchievements);
 
-        // Store player achievements data
         playerAchievements = playersData;
         totalPlayers = Object.keys(playerAchievements.achievements || {}).length;
 
-        // Calculate achievement statistics
         const achievementStats = calculateAchievementStats();
-
-        // Render achievements
         renderAchievements(achievementStats);
     } catch (error) {
         console.error('Error loading achievements data:', error);
     }
 }
 
-// Initialize when DOM is loaded
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAchievements);
 } else {

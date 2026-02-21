@@ -32,8 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const filteredResources = isLocalhost ? resources.slice(2) : resources;
-
-    // Track loading progress
     let loadedResources = 0;
     let totalWeight = filteredResources.reduce((sum, resource) => sum + resource.weight, 0);
     let loadingMessages = [
@@ -89,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Update progress bar and status text
     function updateProgress() {
         const progress = Math.round((loadedResources / totalWeight) * 100);
         progressBar.style.width = progress + '%';
@@ -116,7 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
         errorContainer.classList.add('visible');
     }
 
-    // Complete loading
     function completeLoading() {
         statusText.textContent = "Welcome to SPTLB!";
 
@@ -153,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Set up retry button
     retryButton.addEventListener('click', () => {
         errorContainer.classList.remove('visible');
         progressBar.style.width = '0%';

@@ -354,16 +354,12 @@ async function loadComments(permaLink) {
             console.error('Failed to load comments');
         }
 
-        // Save locally first
         commentsPagination.allComments = await response.json();
-
-        // Sort by time
         commentsPagination.allComments.sort((a, b) => b.timestamp - a.timestamp);
 
         // Get page count
         commentsPagination.totalPages = Math.ceil(commentsPagination.allComments.length / commentsPagination.commentsPerPage);
 
-        // Display first page
         commentsPagination.currentPage = 1;
         renderCurrentPage();
         updatePaginationUI();
@@ -374,7 +370,6 @@ async function loadComments(permaLink) {
     }
 }
 
-// Function to create individual comment element
 function createCommentElement(comment) {
     const commentDiv = document.createElement('div');
     commentDiv.className = 'comment';

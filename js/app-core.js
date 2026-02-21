@@ -251,7 +251,6 @@ function populateSeasonDropdown() {
         const event = new Event('change');
         hiddenSelect.dispatchEvent(event);
 
-        // Load season data
         loadSeasonData(season).then(r => {
             // Update auto-update state
             if (season === seasons[0]) {
@@ -275,13 +274,11 @@ function populateSeasonDropdown() {
         }
     }
 
-    // Close dropdown
     function closeDropdown() {
         dropdownToggle.setAttribute('aria-expanded', 'false');
         dropdownMenu.classList.remove('show');
     }
 
-    // Event listeners
     dropdownToggle.addEventListener('click', toggleDropdown);
 
     // Close dropdown when clicking outside
@@ -291,7 +288,6 @@ function populateSeasonDropdown() {
         }
     });
 
-    // Initialize
     selectSeason(seasons[0]);
     populateItems();
 }
@@ -307,7 +303,6 @@ async function loadSeasonData(season) {
     isDataReady = false;
 
     try {
-        // Try loading data from server first
         let response = await fetch(`${seasonPath}${season}${seasonPathEnd}?t=${Date.now()}`);
 
         const data = await response.json();
@@ -319,7 +314,6 @@ async function loadSeasonData(season) {
             return;
         }
 
-        // Calculate places before initializing the leaderboard
         calculatePlaces(leaderboardData);
 
         // Run through this real quick before displaying
@@ -352,18 +346,15 @@ async function displayLeaderboard(data) {
     const tempTableBody = document.createElement('tbody');
     tempTableBody.style.display = 'none';
 
-    // Process players sequentially for proper ordering
     const fragment = document.createDocumentFragment();
     data.forEach(player => {
         const row = document.createElement('tr');
         let lastGame;
 
-        // If user has enabled option to hide Casual Players - we hide them
         if (player.isCasual && SettingsHelper.get('casualToggle')) {
             return;
         }
 
-        // Do not render perma banned players
         if (player.permBanned) return;
 
         // Check HeartbeatMonitor
@@ -596,12 +587,10 @@ async function displaySimpleLeaderboard(data) {
             return;
         }
 
-        // If user has enabled option to hide Casual Players - we hide them
         if (player.isCasual && SettingsHelper.get('casualToggle')) {
             return;
         }
 
-        // Do not render perma banned players
         if (player.permBanned) return;
 
         // Check HeartbeatMonitor

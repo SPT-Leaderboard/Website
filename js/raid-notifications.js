@@ -7,9 +7,9 @@
 const playerNotificationData = new Map();
 const processedNewPlayers = new Set();
 const notificationStack = [];
-let lastNotificationTime = 0;
 const NOTIFICATION_DELAY = 1600;
 const MAX_NOTIFICATIONS = 5;
+let lastNotificationTime = 0;
 
 async function showPlayerNotification(player) {
     if (!player.absoluteLastTime) {
@@ -23,6 +23,7 @@ async function showPlayerNotification(player) {
         return;
     }
 
+    // Due to some unknown to me fuckery invoking showPlayerNotification multiple times, we have to add a check here, or the page would explode.
     if (player.isNew && wasNewPlayerRecentlyShown(player.id)) {
         console.debug(`[NOTIFY] Skipping new player ${player.name}, already shown.`);
         return;

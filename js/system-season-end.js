@@ -372,7 +372,8 @@ function showAllPlayerNames(players) {
     `;
 
     // "In Memory of..."
-    // Lazy to move it to CSS.. So here you go, enjoy
+    // Lazy to move it to CSS.. So here you go, enjoy.
+    // TODO: Move it to CSS.
     const memoryTitle = document.createElement('div');
     memoryTitle.id = 'memoryTitle';
     memoryTitle.textContent = 'In memory of our Fallen and Risen. Your sacrifice will not be forgotten.';
