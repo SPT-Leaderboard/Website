@@ -209,13 +209,15 @@ async function fetchData() {
         initCharts();
 
         // Fetch data from all
-        const [season1Response, season2Response, season3Response, season4Response, season5Response, season6Response, globalsResponse] = await Promise.all([
+        const [season1Response, season2Response, season3Response, season4Response, season5Response, season6Response, season7Response, season8Response, globalsResponse] = await Promise.all([
             fetch('../api/data/seasons/season2.json'),
             fetch('../api/data/seasons/season3.json'),
             fetch('../api/data/seasons/season4.json'),
             fetch('../api/data/seasons/season5.json'),
             fetch('../api/data/seasons/season6.json'),
             fetch('../api/data/seasons/season7.json'),
+            fetch('../api/data/seasons/season8.json'),
+            fetch('../api/data/seasons/season9.json'),
             fetch('../api/data/shared/global_counters.json')
         ]);
 
@@ -225,10 +227,12 @@ async function fetchData() {
         const season4Data = await season4Response.json();
         const season5Data = await season5Response.json();
         const season6Data = await season6Response.json();
+        const season7Data = await season7Response.json();
+        const season8Data = await season8Response.json();
         mapsData = await globalsResponse.json();
 
         // Combine
-        playersData = [...season1Data.leaderboard, ...season2Data.leaderboard, ...season3Data.leaderboard, ...season4Data.leaderboard, ...season5Data.leaderboard, ...season6Data.leaderboard];
+        playersData = [...season1Data.leaderboard, ...season2Data.leaderboard, ...season3Data.leaderboard, ...season4Data.leaderboard, ...season5Data.leaderboard, ...season6Data.leaderboard, ...season7Data.leaderboard, , ...season8Data.leaderboard];
 
         // Display
         processPlayersData();
