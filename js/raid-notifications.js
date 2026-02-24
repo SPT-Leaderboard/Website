@@ -158,7 +158,7 @@ async function showPlayerNotification(player) {
                 console.log('Could not play profit sound:', e);
             }
 
-            profitText = `${player.name} just got out with ${profit.toLocaleString('en-EN')} ₽!`;
+            profitText = `${player.name} just got out with ${profit.toLocaleString()} ₽!`;
             shouldShowProfit = true;
             console.log(`Showing profit for ${player.name}: +${profit} ₽`);
         }
@@ -172,7 +172,7 @@ async function showPlayerNotification(player) {
                 console.log('Could not play sound:', e);
             }
 
-            profitText = `${player.name} just lost ${Math.abs(profit).toLocaleString('en-EN')} ₽!`;
+            profitText = `${player.name} just lost ${Math.abs(profit).toLocaleString()} ₽!`;
             hasLostProfit = true;
             shouldShowProfit = true;
             console.log(`Showing loss for ${player.name}: ${profit} ₽`);

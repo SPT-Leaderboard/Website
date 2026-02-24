@@ -129,7 +129,6 @@ class HeartbeatMonitor {
     }
 }
 
-// Make this app global where included
 window.heartbeatMonitor = new HeartbeatMonitor();
 
 setInterval(() => {

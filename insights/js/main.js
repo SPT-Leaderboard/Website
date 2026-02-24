@@ -209,6 +209,7 @@ async function fetchData() {
         initCharts();
 
         // Fetch data from all
+        // This is just making me laugh like a maniac every time I see this.. lmao
         const [season1Response, season2Response, season3Response, season4Response, season5Response, season6Response, season7Response, season8Response, globalsResponse] = await Promise.all([
             fetch('../api/data/seasons/season2.json'),
             fetch('../api/data/seasons/season3.json'),
