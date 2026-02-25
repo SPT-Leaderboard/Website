@@ -91,11 +91,11 @@ async function endSeason() {
                             <div class="stat-label">WARRIORS</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">${stats.totalRaids.toLocaleString()}</div>
+                            <div class="stat-value">${stats.totalRaids.toLocaleString('en-EN')}</div>
                             <div class="stat-label">RAIDS</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">${stats.totalKills.toLocaleString()}</div>
+                            <div class="stat-value">${stats.totalKills.toLocaleString('en-EN')}</div>
                             <div class="stat-label">KILLS</div>
                         </div>
                         <div class="stat-card">
@@ -141,7 +141,7 @@ async function endSeason() {
                         <div class="player-title">MOST KILLS</div>
                         <div class="player-se-name">${stats.topKills.name}</div>
                         <div class="player-stats-se">
-                            <span>${stats.topKills.pmcKills.toLocaleString()} PMC kills</span>
+                            <span>${stats.topKills.pmcKills.toLocaleString('en-EN')} PMC kills</span>
                         </div>
                         <div class="player-additional">
                             ${stats.topKills.weaponMastery ? `Favorite weapon: ${stats.topKills.weaponMastery}` : ''}
@@ -347,10 +347,6 @@ async function preloadAudio() {
         audio.volume = 0.4;
         audioElements[name] = audio;
     });
-
-    // Ambience with no timer
-    audioElements['season/season_end_ambience'] = new Audio(`media/sounds/season/season_end_ambience.mp3`);
-    audioElements['season/season_end_ambience'].loop = true;
 }
 
 function showAllPlayerNames(players) {
