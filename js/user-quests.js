@@ -254,7 +254,7 @@ async function createQuestsHTML(quests) {
                              class="quest-image"
                              loading="lazy">
                         <div class="quest-info">
-                            <h3 class="quest-name">${quest.name}</h3>
+                            <div class="quest-name">${quest.name}</div>
                             <div class="quest-status status-${quest.status}">
                                 ${quest.statusText}
                             </div>

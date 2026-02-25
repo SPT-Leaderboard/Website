@@ -97,7 +97,7 @@ function createModuleCard(moduleKey, level, isBuilt) {
                 <img src="media/player_hideout/${module.image}" alt="${module.name}">
             </div>
             <div class="module-info">
-                <h3 class="module-name">${module.name}</h3>
+                <div class="module-name">${module.name}</div>
                 <div class="module-status ${status}">
                     ${statusText}
                 </div>
