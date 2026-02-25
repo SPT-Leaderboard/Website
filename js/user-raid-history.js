@@ -341,7 +341,7 @@ function createBackgroundImage(raid) {
 }
 
 function formatDateTime(timestamp) {
-    return new Date(timestamp * 1000).toLocaleString('en-EN');
+    return new Date(timestamp * 1000).toLocaleString();
 }
 
 function createMapSection(raid, raidStatus) {
@@ -439,7 +439,7 @@ function createStatsGrid(raid) {
     const statsHTML = RAID_STAT_KEYS.map(({ key, label, format }) => {
         const value = raid[key] || 0;
         const formattedValue = format === 'number'
-            ? value.toLocaleString('en-EN')
+            ? value.toLocaleString()
             : value;
 
         return `
@@ -549,7 +549,7 @@ function renderMapStats(raids) {
 
                             <div class="map-stat-item">
                                 <div class="map-stat-label">Avg. EXP</div>
-                                <div class="map-stat-value">${map.avgEXP.toLocaleString('en-EN')}</div>
+                                <div class="map-stat-value">${map.avgEXP.toLocaleString()}</div>
                             </div>
 
                             <div class="map-stat-item">
@@ -657,10 +657,10 @@ function calculateRecentStats(raids) {
     return {
         survivalRate: Math.round((stats.survived / stats.runs) * 100),
         avgKills: (stats.totalKills / stats.runs).toFixed(1),
-        totalKills: stats.totalKills.toLocaleString('en-EN'),
-        avgDamage: Math.round(stats.totalDamage / stats.runs).toLocaleString('en-EN'),
-        totalEXP: stats.totalEXP.toLocaleString('en-EN'),
-        totalLC: stats.totalLC.toLocaleString('en-EN'),
+        totalKills: stats.totalKills.toLocaleString(),
+        avgDamage: Math.round(stats.totalDamage / stats.runs).toLocaleString(),
+        totalEXP: stats.totalEXP.toLocaleString(),
+        totalLC: stats.totalLC.toLocaleString(),
         totalProfit: stats.totalProfit
     };
 }
@@ -737,7 +737,7 @@ function formatProfit(profit) {
     } else if (absoluteProfit >= 1000) {
         return (profit / 1000).toFixed(0) + 'K';
     }
-    return profit.toLocaleString('en-EN');
+    return profit.toLocaleString();
 }
 
 function getTimeProgress(currentTime, minTime = 1, maxTime = 4300) {
