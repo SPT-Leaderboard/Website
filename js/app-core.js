@@ -965,7 +965,7 @@ function calculateOverallStats(data) {
     animateNumber('onlinePlayers', onlinePlayers, 0, previousStats.onlinePlayers);
     animateNumber('totalPlayTime', totalPlayTime, 0, previousStats.totalPlayTime);
 
-    // Welcome images yes
+    // Welcome screen yes
     if (localStorage.getItem('welcomeClosed') !== 'true') {
         animateNumber('Raids', totalRaids, 0, previousStats.raids);
         animateNumber('Kills', Math.round(totalKills), 0, previousStats.kills);
@@ -987,6 +987,11 @@ function resetStats() {
     animateNumber('averageSurvival', 0, 2);
 }
 
+/**
+ * Animates the number(s) if called using odometer.js
+ * 
+ * @returns {Promise<void>}
+ */
 function animateNumber(elementId, targetValue, decimals = 0, startValue = null) {
     const element = document.getElementById(elementId);
     if (!element) return;
@@ -1000,41 +1005,12 @@ function animateNumber(elementId, targetValue, decimals = 0, startValue = null) 
         currentDisplayValue = currentDisplayValue.replace('%', '');
     }
 
-    let currentValue;
-
-    try {
-        currentValue = parseFloat(currentDisplayValue);
-        if (isNaN(currentValue)) {
-            currentValue = startValue !== null ? startValue : 0;
-        }
-    } catch (e) {
-        currentValue = startValue !== null ? startValue : 0;
-    }
-
-    // Special case handling for KDR
-    if (elementId === 'averageKDR' && currentValue > 100 && targetValue < 100) {
-        currentValue = startValue !== null ? startValue : targetValue;
-    }
-
-    startValue = startValue !== null ? startValue : currentValue
-
-    // Ensure no huge mismatch between values
-    if (targetValue === 0 && startValue > 1000) {
-        startValue = 0;
-    }
-
-    // Format value with decimals and suffix
     const formatValue = value => {
         return (decimals > 0 ? value.toFixed(decimals) : Math.round(value)) + suffix;
     };
 
     element.innerHTML = formatValue(startValue);
-
-    // Trigger odometer animation by setting target after short delay
-    // slight delay to allow Odometer to detect change
-    setTimeout(() => {
-        element.innerHTML = formatValue(targetValue);
-    }, 50);
+    element.innerHTML = formatValue(targetValue);
 }
 
 // Save current stats to localStorage
