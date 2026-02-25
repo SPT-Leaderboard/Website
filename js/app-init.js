@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: "Core Utils", url: "js/app-utils.js", weight: 10 },
         { name: "API Monitor", url: "js/api-monitor.js", weight: 25 },
         { name: "User Profiles", url: "js/user-profiles.js", weight: 30 },
-        { name: "User Friend Lists", url: "js/user-friends.js", weight: 15 },
         { name: "User Teams", url: "js/user-teams.js", weight: 10 },
         { name: "Raid Notifications", url: "js/raid-notifications.js", weight: 15 },
         { name: "User Heartbeats", url: "js/system-heartbeat.js", weight: 15 },
