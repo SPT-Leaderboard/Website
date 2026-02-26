@@ -54,7 +54,6 @@ async function endSeason() {
 
         videoBackground.style.opacity = '0.5';
 
-        // Start showing player names after a short delay
         showAllPlayerNames(leaderboardData);
     });
 
