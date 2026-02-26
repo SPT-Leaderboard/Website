@@ -208,34 +208,23 @@ async function fetchData() {
     try {
         initCharts();
 
-        // Fetch data from all
-        // This is just making me laugh like a maniac every time I see this.. lmao
-        const [season1Response, season2Response, season3Response, season4Response, season5Response, season6Response, season7Response, season8Response, globalsResponse] = await Promise.all([
-            fetch('../api/data/seasons/season2.json'),
-            fetch('../api/data/seasons/season3.json'),
-            fetch('../api/data/seasons/season4.json'),
-            fetch('../api/data/seasons/season5.json'),
-            fetch('../api/data/seasons/season6.json'),
-            fetch('../api/data/seasons/season7.json'),
-            fetch('../api/data/seasons/season8.json'),
-            fetch('../api/data/seasons/season9.json'),
-            fetch('../api/data/shared/global_counters.json')
-        ]);
+        // Fetch data from all sources
+        const seasonNumbers = [2, 3, 4, 5, 6, 7, 8, 9];
+        const seasonPromises = seasonNumbers.map(num =>
+            fetch(`../api/data/seasons/season${num}.json`)
+        );
 
-        const season1Data = await season1Response.json();
-        const season2Data = await season2Response.json();
-        const season3Data = await season3Response.json();
-        const season4Data = await season4Response.json();
-        const season5Data = await season5Response.json();
-        const season6Data = await season6Response.json();
-        const season7Data = await season7Response.json();
-        const season8Data = await season8Response.json();
-        mapsData = await globalsResponse.json();
+        const globalsPromise = fetch('../api/data/shared/global_counters.json');
+        const allResponses = await Promise.all([...seasonPromises, globalsPromise]);
 
         // Combine
-        playersData = [...season1Data.leaderboard, ...season2Data.leaderboard, ...season3Data.leaderboard, ...season4Data.leaderboard, ...season5Data.leaderboard, ...season6Data.leaderboard, ...season7Data.leaderboard, , ...season8Data.leaderboard];
+        const seasonsData = await Promise.all(
+            allResponses.slice(0, -1).map(response => response.json())
+        );
 
-        // Display
+        mapsData = await allResponses[allResponses.length - 1].json();
+        playersData = seasonsData.flatMap(season => season.leaderboard || []);
+
         processPlayersData();
         processMapsData();
     } catch (error) {
