@@ -8,6 +8,8 @@ let isProfileOpened = false;
 let savedScrollPosition = 0;
 let targetPlayerElement = null;
 let currentHighlightedPlayerId = null;
+let statusUpdater = null;
+let commentsManager = null;
 
 function openProfile(playerId, bypass = false) {
     // Don't open profile again for whatever reason if profile is already open
@@ -18,25 +20,20 @@ function openProfile(playerId, bypass = false) {
 
     const modal = document.getElementById("playerProfileModal");
     const modalContent = document.getElementById("modalPlayerInfo");
-
     modalContent.innerHTML = "";
 
-    // If data-player-id="0"
     if (!playerId || playerId === "0") {
         showToast(`Couldn't open this profile`, 'error', 8000)
         return;
     }
 
-    // Finding Player in data
     const player = leaderboardData.find((p) => p.id === playerId);
 
-    // Couldn't find
     if (!player) {
         showToast(`Couldn't find player`, 'error', 8000)
         return;
     }
 
-    // If disqualified
     if (player.banned) {
         modal.style.display = "flex";
         modal.classList.add('active');
@@ -45,7 +42,6 @@ function openProfile(playerId, bypass = false) {
         return;
     }
 
-    // Showing public profile
     window.location.hash = `id=${encodeURIComponent(player.id)}`;
     modal.style.display = "flex";
     modal.classList.add('active');
@@ -197,11 +193,7 @@ async function showPublicProfile(container, player) {
 
     // Convert registration date of a player
     const regDate = player.registrationDate
-        ? new Date(player.registrationDate * 1000).toLocaleDateString("en-EN", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-        })
+        ? new Date(player.registrationDate * 1000).toLocaleDateString()
         : "Unknown";
 
     // Generate badges
@@ -211,7 +203,8 @@ async function showPublicProfile(container, player) {
     let bestWeapon = null;
     player.isUsingStattrack = false;
 
-    // Use try catch as stattrack_weapons[player.permaLink] might not exist on a player at all
+    // Use trycatch as stattrack_weapons[player.permaLink] might not exist on a player at all
+    // TEMP: Used to indicate recent errors in Stattrack data saving to the profile
     try {
         if (player?.permaLink && player.stattrack_weapons[player.permaLink]) {
             bestWeapon = await getBestWeapon(player.stattrack_weapons[player.permaLink]);
@@ -240,7 +233,6 @@ async function showPublicProfile(container, player) {
 
     const theme = player.profileTheme?.toLowerCase() || 'default';
 
-    // Assign themes
     if (isPremium(player) && theme === 'premium') {
         profileModal.classList.add('theme-premium');
     } else if (!isPremium(player) && theme === 'premium') {
@@ -259,6 +251,8 @@ async function showPublicProfile(container, player) {
     const isOnline = playerStatus.isOnline;
 
     // If player is in raid - show details of the raid
+    // Later on used automatically by RaidTimeAnimator
+    // See user-community.js
     let raidInfo = '';
     if (isOnline && playerStatus.raidDetails !== null) {
         const mapName = playerStatus.raidDetails.map;
@@ -269,13 +263,13 @@ async function showPublicProfile(container, player) {
         <section class="raid-details" 
                  style="--map-bg: url('media/leaderboard_icons/maps/${prettyMapName}.png')">
             <span class="raid-map">
-                ${prettyMapName}
+                Map: ${prettyMapName}
             </span>
             <span class="raid-side">
-                ${side}
+                Side: ${side}
             </span>
             <span class="raid-time">
-                ${playerStatus.raidDetails.gameTime}
+                Time: ${playerStatus.raidDetails.gameTime}
             </span>
         </section>
     `;
@@ -389,6 +383,8 @@ async function showPublicProfile(container, player) {
 
                 <div class="aboutMe">${aboutText}</div>
 
+                <div class="friend-button-container"></div>
+
                 <div class="player-overview">
                     <div class="player-overview-side player-overview-pmc">PMC</div>
                     <div class="stat-item">
@@ -436,20 +432,18 @@ async function showPublicProfile(container, player) {
                             <span class="showcase-title">Item Showcase</span>
                         </div>
                         <div class="showcase-items-mini">
-                            ${Object.values(player.showcase || {})
-                .filter(item => item !== null && item !== undefined && item.item_id)
-                .map(item => `
-                                    <div class="showcase-item-mini" data-rarity="${item.rarity}">
-                                        <div class="item-mini-icon">
-                                            <img src="${item.icon_path.replace(/^\/\.\.\//, '/')}" alt="${item.name}">
-                                            <div class="item-mini-glow"></div>
-                                        </div>
-                                        <div class="item-mini-tooltip">
-                                            <span class="item-mini-name">${item.name}</span>
-                                            <span class="item-mini-price">${item.base_price} LC</span>
-                                        </div>
+                            ${Object.values(player.showcase || {}).filter(item => item !== null && item !== undefined && item.item_id).map(item => `
+                                <div class="showcase-item-mini" data-rarity="${item.rarity}">
+                                    <div class="item-mini-icon">
+                                        <img src="${item.icon_path.replace(/^\/\.\.\//, '/')}" alt="${item.name}">
+                                        <div class="item-mini-glow"></div>
                                     </div>
-                                `).join('')}
+                                    <div class="item-mini-tooltip">
+                                        <span class="item-mini-name">${item.name}</span>
+                                        <span class="item-mini-price">${item.base_price} LC</span>
+                                    </div>
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
                 </div>
@@ -561,27 +555,27 @@ async function showPublicProfile(container, player) {
                 <div class="raid-summary profile-section">
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <div class="stat-value">${player.currentWinstreak.toLocaleString('en-EN')}</div>
+                            <div class="stat-value">${player.currentWinstreak.toLocaleString()}</div>
                             <div class="stat-label">Current Raid Streak</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">${player.longestShot.toLocaleString('en-EN')}m</div>
+                            <div class="stat-value">${player.longestShot.toLocaleString()}m</div>
                             <div class="stat-label">Avg Engage Distance</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">${player.pmcKills.toLocaleString('en-EN')}</div>
+                            <div class="stat-value">${player.pmcKills.toLocaleString()}</div>
                             <div class="stat-label">PMC Kills</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">${player.scavsKilled.toLocaleString('en-EN')}</div>
+                            <div class="stat-value">${player.scavsKilled.toLocaleString()}</div>
                             <div class="stat-label">SCAV Kills</div>
                         </div>
                         <div class="stat-card">
-                          <div class="stat-value">${player.bossesKilled.toLocaleString('en-EN')}</div>
+                          <div class="stat-value">${player.bossesKilled.toLocaleString()}</div>
                           <div class="stat-label">Boss Kills</div>
                         </div>
                         <div class="stat-card">
-                          <div class="stat-value">${player.damage.toLocaleString('en-EN')}</div>
+                          <div class="stat-value">${player.damage.toLocaleString()}</div>
                           <div class="stat-label">Dmg Dealt</div>
                         </div>
                     </div>
@@ -869,13 +863,7 @@ async function showPublicProfile(container, player) {
     `;
 
     // Crop the image
-    setTimeout(async () => {
-        try {
-            await loadAndCropPlayerImage(player);
-        } catch (error) {
-            console.error('Failed to process player image:', error);
-        }
-    }, 100);
+    await loadAndCropPlayerImage(player);
 
     // Setup close handlers first
     setupModalCloseHandlers();
@@ -896,7 +884,7 @@ async function showPublicProfile(container, player) {
     });
 
     //user-raid-history.js
-    //Use permalink to display where the raid was played at
+    //Use permalink to point out different profiles (but same player)
     await initLastRaids(player.id, player.permaLink);
     //battlepass-calculator.js
     await initHOF(player, bestWeapon);
@@ -904,207 +892,27 @@ async function showPublicProfile(container, player) {
     await loadQuestData(player.completed_quests);
     //user-hideout.js
     loadHideoutData(player.hideout);
-    //user-comments.js
-    initComments(player.permaLink, player.id);
-    //user-friends.js
-    await renderFriendList(player);
+    //user-community.js
+    const commentsManager = new CommentsManager({
+        commentsPerPage: 5
+    });
+    commentsManager.init(player.permaLink, player.id);
 
-    //
-    // Auto Status Updater
-    //
-    let statusUpdater;
-    const statusElement = container.querySelector('.player-status span');
+    const friendManager = new FriendManager();
+    await friendManager.init(player);
+    window.currentFriendManager = friendManager;
+
+    const equipmentDisplay = new PlayerEquipmentDisplay(player.id);
+    const viewmodelContainer = document.querySelector('.playermodel-image');
+    if (viewmodelContainer) {
+        const overlay = equipmentDisplay.createViewModelOverlay();
+        viewmodelContainer.appendChild(overlay);
+    }
 
     // I have no clue, this is bullshit but it works.
-    // upd 2/22/2026: *kinda* fixed, but still, would like to make it the other way. This is by any means is some voodoo possessed shit.
-    class RaidTimeAnimator {
-        constructor(timeElement, timeMultiplier = 7) {
-            this.timeElement = timeElement;
-            this.timeMultiplier = timeMultiplier;
-            this.animationFrame = null;
-            this.lastUpdate = null;
-            this.currentTime = null;
-            this.startTime = null;
-        }
-
-        start(initialTime) {
-            this.stop();
-
-            // Parse format HH:MM:SS
-            const timeStr = initialTime.replace('Time: ', '');
-            const [hours, minutes, seconds] = timeStr.split(':').map(Number);
-
-            // Convert
-            this.currentTime = hours * 3600 + minutes * 60 + seconds;
-            this.startTime = Date.now();
-
-            this.animate();
-        }
-
-        animate() {
-            if (!this.currentTime) return;
-
-            const now = Date.now();
-
-            if (this.lastUpdate) {
-                // Calculate delta time
-                const deltaSeconds = (now - this.lastUpdate) / 1000;
-
-                this.currentTime += deltaSeconds * this.timeMultiplier;
-            }
-
-            this.lastUpdate = now;
-            this.updateDisplay();
-
-            this.animationFrame = requestAnimationFrame(() => this.animate());
-        }
-
-        stop() {
-            if (this.animationFrame) {
-                cancelAnimationFrame(this.animationFrame);
-                this.animationFrame = null;
-            }
-            this.lastUpdate = null;
-        }
-
-        updateDisplay() {
-            if (!this.currentTime) return;
-
-            // Handle day overflow
-            const totalSeconds = Math.floor(this.currentTime) % (24 * 3600);
-
-            const hours = Math.floor(totalSeconds / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = totalSeconds % 60;
-
-            const formattedTime = [
-                hours.toString().padStart(2, '0'),
-                minutes.toString().padStart(2, '0'),
-                seconds.toString().padStart(2, '0')
-            ].join(':');
-
-            this.timeElement.textContent = `Time: ${formattedTime}`;
-        }
-    }
-
-    function startStatusUpdater(playerId, permaLink, statusElement) {
-        let raidTimeAnimator = null;
-
-        const updateStatus = async () => {
-            try {
-                const playerStatus = heartbeatMonitor.getPlayerStatus(playerId);
-                const isOnline = playerStatus.isOnline;
-
-                let newStatusHTML;
-
-                if (!player.banned) {
-                    if (isOnline) {
-                        if (playerStatus.raidDetails !== null) {
-                            newStatusHTML = `<span class="player-status-lb ${playerStatus.statusClass}">In raid <div id="blink"></div></span>`;
-                        } else {
-                            newStatusHTML = `<span class="player-status-lb ${playerStatus.statusClass}">${playerStatus.statusText} <div id="blink"></div></span>`;
-                        }
-                    } else {
-                        const lastOnlineTime = window.heartbeatMonitor.getLastOnlineTime(
-                            playerStatus.lastUpdate || player.lastPlayed
-                        );
-                        newStatusHTML = `<span class="last-online-time">Last seen ${lastOnlineTime}</span>`;
-                    }
-                } else {
-                    newStatusHTML = `<span class="last-online-time">Banned</span>`;
-                }
-
-                // Only update if status changed
-                if (statusElement.innerHTML !== newStatusHTML) {
-                    statusElement.innerHTML = newStatusHTML;
-                    await initLastRaids(player.id, permaLink);
-                }
-
-                // Handle raid details independently (they update more frequent)
-                const raidInfoElement = document.querySelector('.raid-details');
-
-                if (isOnline && playerStatus.raidDetails !== null) {
-                    // Safety
-                    if (!raidInfoElement) {
-                        const newRaidInfo = document.createElement('section');
-                        newRaidInfo.className = 'raid-details';
-                        newRaidInfo.setAttribute('aria-label', 'Raid information');
-
-                        const statusContainer = document.querySelector('.player-status');
-                        if (statusContainer) {
-                            statusContainer.appendChild(newRaidInfo);
-                        }
-                    }
-
-                    if (raidInfoElement) {
-                        raidInfoElement.style.display = 'flex';
-
-                        // Update map and side (these don't change often)
-                        const mapSpan = raidInfoElement.querySelector('.raid-map');
-                        const sideSpan = raidInfoElement.querySelector('.raid-side');
-                        const timeSpan = raidInfoElement.querySelector('.raid-time');
-
-                        if (mapSpan && mapSpan.textContent !== `Map: ${getPrettyMapName(playerStatus.raidDetails.map)}`) {
-                            mapSpan.textContent = `Map: ${getPrettyMapName(playerStatus.raidDetails.map)}`;
-                        }
-
-                        if (sideSpan && sideSpan.textContent !== `Side: ${playerStatus.raidDetails.side}`) {
-                            sideSpan.textContent = `Side: ${playerStatus.raidDetails.side}`;
-                        }
-
-                        // Time animation here and more magic
-                        if (!timeSpan) {
-                            raidInfoElement.innerHTML = `
-                            <span class="raid-map">Map: ${getPrettyMapName(playerStatus.raidDetails.map)}</span>
-                            <span class="raid-side">Side: ${playerStatus.raidDetails.side}</span>
-                            <span class="raid-time">Time: ${playerStatus.raidDetails.gameTime}</span>
-                        `;
-
-                            const newTimeSpan = raidInfoElement.querySelector('.raid-time');
-                            if (!raidTimeAnimator) {
-                                raidTimeAnimator = new RaidTimeAnimator(newTimeSpan, 7);
-                            }
-                            raidTimeAnimator.start(playerStatus.raidDetails.gameTime);
-                        } else if (!raidTimeAnimator) {
-                            raidTimeAnimator = new RaidTimeAnimator(timeSpan, 7);
-                            raidTimeAnimator.start(playerStatus.raidDetails.gameTime);
-                        }
-                    }
-                } else if (raidInfoElement) {
-                    raidInfoElement.style.display = 'none';
-                    if (raidTimeAnimator) {
-                        raidTimeAnimator.stop();
-                        raidTimeAnimator = null;
-                    }
-                }
-            } catch (error) {
-                console.error('Error updating status:', error);
-            }
-        };
-
-        updateStatus();
-        const intervalId = setInterval(updateStatus, 5000);
-
-        return {
-            intervalId: intervalId,
-            stopTimeAnimator: () => {
-                if (raidTimeAnimator) {
-                    raidTimeAnimator.stop();
-                }
-            }
-        };
-    }
-
-    statusUpdater = startStatusUpdater(player.id, player.permaLink, statusElement);
-
-    // Close button stuff
-    const closeButton = document.getElementById('closeButton');
-    closeButton.addEventListener('click', () => {
-        if (statusUpdater) {
-            clearInterval(statusUpdater.intervalId);
-            statusUpdater.stopTimeAnimator();
-        }
-    });
+    // upd 2/22/2026: *kinda* fixed, but still, would like to make it the other way.
+    // This is by any means is some voodoo possessed shit.
+    statusUpdater = startStatusUpdater(player, container);
 }
 //#endregion
 
@@ -1304,12 +1112,108 @@ function getBestWeapon(modWeaponStats) {
     return bestWeapon;
 }
 // #endregion
+// #region Profile Watcher
+function startStatusUpdater(player, container) {
+    let raidTimeAnimator = null;
+    const statusElement = container.querySelector('.player-status span');
 
-////////////////
-// section: Utils
-////////////////
+    const updateStatus = async () => {
+        try {
+            const playerStatus = heartbeatMonitor.getPlayerStatus(player.id);
+            const isOnline = playerStatus.isOnline;
 
-// Helper function to generate side images HTML
+            let newStatusHTML;
+
+            if (!player.banned) {
+                if (isOnline) {
+                    if (playerStatus.raidDetails !== null) {
+                        newStatusHTML = `<span class="player-status-lb ${playerStatus.statusClass}">In raid <div id="blink"></div></span>`;
+                    } else {
+                        newStatusHTML = `<span class="player-status-lb ${playerStatus.statusClass}">${playerStatus.statusText} <div id="blink"></div></span>`;
+                    }
+                } else {
+                    const lastOnlineTime = window.heartbeatMonitor.getLastOnlineTime(
+                        playerStatus.lastUpdate || player.lastPlayed
+                    );
+                    newStatusHTML = `<span class="last-online-time">Last seen ${lastOnlineTime}</span>`;
+                }
+            } else {
+                newStatusHTML = `<span class="last-online-time">Banned</span>`;
+            }
+
+            // Perform magic update here if heartbeat has changed
+            if (statusElement.innerHTML !== newStatusHTML) {
+                statusElement.innerHTML = newStatusHTML;
+                await loadAndCropPlayerImage(player);
+                await loadQuestData(player.completed_quests);
+                await initLastRaids(player.id, player.permaLink);
+
+                loadHideoutData(player.hideout);
+            }
+
+            const raidInfoElement = document.querySelector('.raid-details');
+
+            if (isOnline && playerStatus.raidDetails !== null) {
+                if (raidInfoElement) {
+                    raidInfoElement.style.display = 'flex';
+
+                    const mapSpan = raidInfoElement.querySelector('.raid-map');
+                    const sideSpan = raidInfoElement.querySelector('.raid-side');
+                    const timeSpan = raidInfoElement.querySelector('.raid-time');
+
+                    if (mapSpan && mapSpan.textContent !== `Map: ${getPrettyMapName(playerStatus.raidDetails.map)}`) {
+                        mapSpan.textContent = `Map: ${getPrettyMapName(playerStatus.raidDetails.map)}`;
+                    }
+
+                    if (sideSpan && sideSpan.textContent !== `Side: ${playerStatus.raidDetails.side}`) {
+                        sideSpan.textContent = `Side: ${playerStatus.raidDetails.side}`;
+                    }
+
+                    // Time animation here and more magic
+                    if (!timeSpan) {
+                        raidInfoElement.innerHTML = `
+                            <span class="raid-map">Map: ${getPrettyMapName(playerStatus.raidDetails.map)}</span>
+                            <span class="raid-side">Side: ${playerStatus.raidDetails.side}</span>
+                            <span class="raid-time">Time: ${playerStatus.raidDetails.gameTime}</span>
+                        `;
+
+                        const newTimeSpan = raidInfoElement.querySelector('.raid-time');
+                        if (!raidTimeAnimator) {
+                            raidTimeAnimator = new RaidTimeAnimator(newTimeSpan, 7);
+                        }
+                        raidTimeAnimator.start(playerStatus.raidDetails.gameTime);
+                    } else if (!raidTimeAnimator) {
+                        raidTimeAnimator = new RaidTimeAnimator(timeSpan, 7);
+                        raidTimeAnimator.start(playerStatus.raidDetails.gameTime);
+                    }
+                }
+            } else if (raidInfoElement) {
+                raidInfoElement.style.display = 'none';
+                if (raidTimeAnimator) {
+                    raidTimeAnimator.stop();
+                    raidTimeAnimator = null;
+                }
+            }
+        } catch (error) {
+            console.error('Error updating status:', error);
+        }
+    };
+
+    updateStatus();
+    const intervalId = setInterval(updateStatus, 5000);
+
+    return {
+        intervalId: intervalId,
+        stopTimeAnimator: () => {
+            if (raidTimeAnimator) {
+                raidTimeAnimator.stop();
+            }
+        }
+    };
+}
+// #endregion
+
+// #region Utils
 function getPlayerSideImageHTML(player) {
     // Add faction badge
     if (player.pmcSide === "Bear") {
@@ -1319,7 +1223,6 @@ function getPlayerSideImageHTML(player) {
     }
 }
 
-// Helper function to generate badges HTML
 function generateBadgesHTML(player) {
     let badges = "";
 
@@ -1437,7 +1340,6 @@ function generateBadgesHTML(player) {
     return badges;
 }
 
-// Close profile on ESC or a button
 function setupModalCloseHandlers() {
     const closeBtn = document.getElementById("closeButton");
     const modal = document.getElementById("playerProfileModal");
@@ -1461,6 +1363,18 @@ function setupModalCloseHandlers() {
         // Enable rendering of the leaderboard when profile is closed
         const leaderboardTable = document.getElementById('leaderboardTable');
         leaderboardTable.classList.remove('hidden');
+
+        // Clean up
+        if (statusUpdater) {
+            clearInterval(statusUpdater.intervalId);
+            statusUpdater.stopTimeAnimator();
+            statusUpdater = null;
+        }
+
+        if (commentsManager) {
+            commentsManager.destroy();
+            commentsManager = null;
+        }
 
         setTimeout(() => {
             AutoUpdater.setEnabled(true);
@@ -1492,7 +1406,6 @@ function restoreScrollPosition() {
     savedScrollPosition = 0;
 }
 
-// Close loader when everything's done loading
 function closeLoader() {
     const loader = document.getElementById('main-profile-loader');
     loader.classList.add('fade-out');
