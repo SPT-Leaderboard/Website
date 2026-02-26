@@ -257,7 +257,7 @@ class SettingsManager {
         try {
             const response = await fetch(`/api/network/functions/get_banned_mods.php`);
             if (!response.ok) console.error(`HTTP error! ${response.status}`);
-            
+
             return await response.json();
         } catch (error) {
             console.error('Fetch error:', error);

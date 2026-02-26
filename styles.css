@@ -1146,7 +1146,7 @@ td {
 
 /* Play status on leaderboard for heartbeats */
 .player-status-lb {
-    display: flex;
+    display: inline-flex;
     justify-self: anchor-center;
     place-items: center;
     padding: 4px 12px;
@@ -3201,7 +3201,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .profile-section:hover {
-    box-shadow:0 12px 40px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.15);
 }
 
 .profile-section h3 {
@@ -3274,6 +3274,214 @@ input[type="checkbox"]:checked:hover {
 .player-overview-pmc {
     color: #4ecdc4;
     background: linear-gradient(145deg, rgba(78, 205, 196, 0.15), rgba(78, 205, 196, 0.08));
+}
+
+/* friend add */
+.friend-button-wrapper {
+    position: relative;
+}
+
+.friend-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: rgb(31 31 31);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+    overflow: hidden;
+}
+
+.friend-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 18px;
+    border: none;
+    background: transparent;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-item i {
+    width: 18px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.dropdown-item.unfriend-action:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: rgb(255, 120, 120);
+}
+
+.dropdown-item.unfriend-action:hover i {
+    color: rgb(255, 120, 120);
+}
+
+/* Friend Button Container */
+.friend-button-container {
+    margin: 15px 0 10px;
+    position: relative;
+    grid-column: 1 / -1;
+}
+
+.friend-button.login-required {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    color: rgba(165, 180, 252, 0.9);
+}
+
+.friend-button.login-required:hover {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.4);
+    color: white;
+}
+
+/* Error Button */
+.friend-button.error {
+    background: rgba(239, 68, 68, 0.1);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: rgba(239, 68, 68, 0.9);
+    cursor: default;
+}
+
+/* Friend Button Styles */
+.friend-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+    position: relative;
+    overflow: hidden;
+}
+
+.friend-button i {
+    font-size: 14px;
+}
+
+.friend-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.04),
+            transparent);
+    transition: left 0.5s ease;
+}
+
+.friend-button:hover::before {
+    left: 100%;
+}
+
+/* Add Friend Button */
+.friend-button.add {
+    background: linear-gradient(135deg,
+            rgba(99, 102, 241, 0.2),
+            rgba(79, 70, 229, 0.25));
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.friend-button.add:hover:not(:disabled) {
+    border-color: rgba(99, 102, 241, 0.5);
+}
+
+.friend-button.add.loading {
+    opacity: 0.8;
+    cursor: wait;
+    background: linear-gradient(135deg,
+            rgba(99, 102, 241, 0.15),
+            rgba(79, 70, 229, 0.2));
+}
+
+.friend-button.add.success {
+    background: linear-gradient(135deg,
+            rgba(16, 185, 129, 0.2),
+            rgba(5, 150, 105, 0.25));
+    border-color: rgba(16, 185, 129, 0.3);
+    pointer-events: none;
+}
+
+/* Unfriend Button */
+.friend-button.unfriend {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    justify-content: space-between;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.friend-button.unfriend .fa-chevron-down {
+    font-size: 12px;
+    opacity: 0.7;
+    transition: transform 0.2s ease;
+}
+
+/* Pending Button */
+.friend-button.pending {
+    background: rgba(245, 158, 11, 0.1);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: rgba(245, 158, 11, 0.9);
+    cursor: default;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Showcases */
@@ -3496,13 +3704,9 @@ input[type="checkbox"]:checked:hover {
 }
 
 .user-main-card .pfp {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    grid-row: 1 / span 2;
     align-self: start;
 }
 
@@ -3682,6 +3886,492 @@ input[type="checkbox"]:checked:hover {
     display: inline-block;
 }
 
+/* Equipment */
+.mainvm {
+    background: rgba(39, 39, 39, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+}
+
+/* Equipment Display */
+.equipment-display {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 280px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 100;
+}
+
+.equipment-slot {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background: rgba(30, 30, 40, 0.3);
+    border-radius: 8px;
+    border-left: 3px solid #4a90e2;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.equipment-slot:hover {
+    background: rgba(51, 51, 51, 0.6);
+}
+
+.slot-icon {
+    font-size: 24px;
+    min-width: 40px;
+    text-align: center;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.slot-content {
+    flex: 1;
+}
+
+.slot-name {
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+    font-family: 'Bender Regular';
+}
+
+.slot-item {
+    font-size: 14px;
+    color: #fff;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.slot-item.empty {
+    color: #666;
+    font-style: italic;
+}
+
+.equipment-gear-row {
+    display: flex;
+    gap: 8px;
+}
+
+.equipment-gear-row .equipment-slot {
+    flex: 1;
+    flex-direction: column;
+    text-align: center;
+    padding: 8px;
+    border-left: none;
+    border-bottom: 3px solid #4a90e2;
+}
+
+.equipment-gear-row .equipment-slot:hover {
+    transform: translateY(-2px);
+    border-bottom-color: #7ec8ff;
+}
+
+.equipment-gear-row .slot-icon {
+    font-size: 20px;
+    min-width: auto;
+}
+
+.attachment-indicator {
+    margin-top: 5px;
+    font-size: 11px;
+    color: #ffd700;
+}
+
+.attachment-indicator span {
+    background: rgba(255, 215, 0, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Weapon Hover Tooltip */
+.tooltip-close {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px 10px;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.tooltip-close:hover {
+    color: #fff;
+}
+
+.weapon-hover {
+    position: fixed;
+    width: 350px;
+    max-height: 500px;
+    padding: 15px;
+    z-index: 10000;
+    animation: fadeIn 0.2s ease;
+    pointer-events: auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: rgba(20, 20, 20, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.weapon-hover-header {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.weapon-type {
+    font-size: 12px;
+    color: #888;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.weapon-hover-attachments {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    max-height: 350px;
+    padding-right: 5px;
+}
+
+.attachment-group {
+    border-left: 2px solid #d2c6ff40;
+    padding-left: 10px;
+}
+
+.attachment-group-title {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.attachment-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    font-size: 13px;
+    color: #ddd;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.attachment-item:last-child {
+    border-bottom: none;
+}
+
+.attachment-amount {
+    color: #ffd700;
+    font-size: 11px;
+    background: rgba(255, 215, 0, 0.1);
+    padding: 1px 4px;
+    border-radius: 3px;
+}
+
+.attachment-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 32px;
+    background: #2a2a3a;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid #4a4a6a;
+}
+
+.attachment-icon img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 3px;
+}
+
+/* Viewmodel Overlay */
+.viewmodel-equipment-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 50;
+}
+
+/* Head wear */
+.viewmodel-head-column {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 180px;
+}
+
+.viewmodel-head-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgb(15 15 15 / 21%);
+    backdrop-filter: blur(5px);
+    padding: 6px 12px 6px 6px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 12px;
+    color: #fff;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+    pointer-events: auto;
+}
+
+.viewmodel-head-item:hover {
+    background: rgba(49, 49, 49, 0.8);
+    z-index: 100;
+}
+
+/* Glass and armour */
+.viewmodel-armor-column {
+    position: absolute;
+    top: 18%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 180px;
+}
+
+.viewmodel-armor-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgb(15 15 15 / 20%);
+    backdrop-filter: blur(5px);
+    padding: 6px 12px 6px 6px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 12px;
+    color: #fff;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+    pointer-events: auto;
+}
+
+.viewmodel-armor-item:hover {
+    transform: scale(1.05);
+    background: rgba(40, 40, 50, 0.95);
+    border-color: #ffffff7c;
+    z-index: 100;
+}
+
+/* Weapon */
+.viewmodel-weapon-column {
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 8px;
+    align-items: center;
+    width: auto;
+    max-width: 300px;
+}
+
+.viewmodel-weapon-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgb(15 15 15 / 20%);
+    backdrop-filter: blur(5px);
+    padding: 8px 16px 8px 8px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 13px;
+    color: #fff;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+    pointer-events: auto;
+    cursor: pointer;
+    min-width: 225px;
+}
+
+.viewmodel-weapon-item:hover {
+    background: rgba(40, 40, 50, 0.95);
+    z-index: 100;
+}
+
+.viewmodel-icon-square {
+    width: 40px;
+    height: 40px;
+    min-width: 36px;
+    background: #2a2a3a;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid #4a4a6a;
+}
+
+.viewmodel-icon-square img {
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
+}
+
+.viewmodel-icon-rectangle {
+    height: 36px;
+    min-width: 60px;
+    background: #2a2a3a;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid #4a4a6a;
+    padding: 0 4px;
+}
+
+.viewmodel-icon-rectangle img {
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+}
+
+.viewmodel-item-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    max-width: 120px;
+}
+
+.viewmodel-attachment-count {
+    font-size: 10px;
+    background: #ffffff17;
+    color: #000;
+    padding: 2px 5px;
+    border-radius: 10px;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.attachment-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.attachment-name {
+    font-weight: 500;
+}
+
+.attachment-details {
+    display: flex;
+    gap: 8px;
+    font-size: 10px;
+    color: #888;
+}
+
+.attachment-amount {
+    color: #72cbff;
+    font-size: 11px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.attachment-icon-loading {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #4a90e2;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.viewmodel-backpack {
+    position: absolute;
+    bottom: 0;
+    right: -15%;
+    transform: translateX(-50%);
+    background: rgb(15 15 15 / 50%);
+    backdrop-filter: blur(5px);
+    padding: 6px 15px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 13px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    pointer-events: auto;
+    transition: all 0.2s ease;
+    z-index: 60;
+}
+
+.viewmodel-backpack:hover {
+    background: rgba(40, 40, 50, 0.95);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* Online Status */
 .player-status {
     display: flex;
@@ -3713,7 +4403,7 @@ input[type="checkbox"]:checked:hover {
     margin: 2px 8px;
     position: relative;
     z-index: 2;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .raid-details::before {
@@ -3726,7 +4416,7 @@ input[type="checkbox"]:checked:hover {
     background-image: var(--map-bg);
     background-size: cover;
     background-position: center;
-    filter: blur(15px) brightness(0.4);
+    filter: blur(3px) brightness(0.7);
     z-index: -1;
     transition: transform 0.3s ease;
 }
@@ -5426,7 +6116,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .quest-name {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--text-light);
     margin-bottom: 5px;
@@ -6301,7 +6991,6 @@ input[type="checkbox"]:checked:hover {
 
 .weapon-name {
     font-size: 1.1em;
-    margin-top: 15px;
     font-weight: bold;
     color: #fff;
 }
@@ -7386,12 +8075,6 @@ input[type="checkbox"]:checked:hover {
     animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 .error-message {
     color: #f87171;
     font-size: 13px;
@@ -7753,6 +8436,7 @@ input[type="checkbox"]:checked:hover {
 
 .comments-header h3 {
     color: var(--text-light);
+    text-transform: none;
     font-size: 1rem;
     margin: 0;
     font-weight: 600;
