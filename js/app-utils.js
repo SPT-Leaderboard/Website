@@ -335,7 +335,7 @@ function formatOnlineTime(seconds) {
 
 /**
  * Format UNIX timestamp to return "Xm ago || Xd ago"
- * Deprecated?
+ * @deprecated Use formatLastPlayedRaid() instead
  * @returns {string}
  * @param timestamp
  */
@@ -436,7 +436,7 @@ function isPremium(player) {
 async function loadJSON(url) {
     const response = await fetch(url);
     if (!response.ok) {
-        throw new Error(`Failed to load ${url}: ${response.status}`);
+        console.error(`Failed to load ${url}: ${response.status}`);
     }
     return await response.json();
 }

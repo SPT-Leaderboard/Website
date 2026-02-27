@@ -333,7 +333,7 @@ async function renderAllAchievements(achievements) {
 
         const imageUrls = await Promise.allSettled(imagePromises);
 
-        let html = '';
+        let html;
 
         for (let i = 0; i < achievements.length; i++) {
             const ach = achievements[i];
@@ -407,7 +407,7 @@ async function loadAchievementImage(achievement, achievementId) {
             if (cdnSuccess) {
                 return cdnUrl;
             } else {
-                console.error('CDN error - unavailable image');
+                return getLocalImagePath(achievement);
             }
         } catch (error) {
             // Whoops, get the local image
@@ -431,7 +431,6 @@ function getLocalImagePath(achievement) {
         }
     }
 
-    // Fallback
     return "media/player-achievements/Standard_35_1.png";
 }
 

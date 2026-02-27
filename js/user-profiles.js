@@ -10,6 +10,7 @@ let targetPlayerElement = null;
 let currentHighlightedPlayerId = null;
 let statusUpdater = null;
 let commentsManager = null;
+let friendManager = null;
 
 function openProfile(playerId, bypass = false) {
     // Don't open profile again for whatever reason if profile is already open
@@ -893,21 +894,17 @@ async function showPublicProfile(container, player) {
     //user-hideout.js
     loadHideoutData(player.hideout);
     //user-community.js
-    const commentsManager = new CommentsManager({
+    commentsManager = new CommentsManager({
         commentsPerPage: 5
     });
     commentsManager.init(player.permaLink, player.id);
 
-    const friendManager = new FriendManager();
+    // Friends
+    friendManager = new FriendManager();
     await friendManager.init(player);
-    window.currentFriendManager = friendManager;
 
+    // Equipment displayer
     const equipmentDisplay = new PlayerEquipmentDisplay(player.id);
-    const viewmodelContainer = document.querySelector('.playermodel-image');
-    if (viewmodelContainer) {
-        const overlay = equipmentDisplay.createViewModelOverlay();
-        viewmodelContainer.appendChild(overlay);
-    }
 
     // I have no clue, this is bullshit but it works.
     // upd 2/22/2026: *kinda* fixed, but still, would like to make it the other way.
@@ -1374,6 +1371,10 @@ function setupModalCloseHandlers() {
         if (commentsManager) {
             commentsManager.destroy();
             commentsManager = null;
+        }
+
+        if (friendManager) {
+            friendManager = null;
         }
 
         setTimeout(() => {
