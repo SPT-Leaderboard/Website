@@ -217,7 +217,7 @@ function populateSeasonDropdown() {
 
         seasons.forEach(season => {
             const item = document.createElement('div');
-            item.className = `dropdown-item ${season === currentSeason ? 'selected' : ''}`;
+            item.className = `season-dropdown-item ${season === currentSeason ? 'selected' : ''}`;
             item.setAttribute('role', 'option');
             item.setAttribute('data-value', season);
             item.textContent = `Season ${season}`;
@@ -237,7 +237,7 @@ function populateSeasonDropdown() {
         dropdownSelected.textContent = `Season ${season}`;
 
         // Update selected state
-        document.querySelectorAll('.dropdown-item').forEach(item => {
+        document.querySelectorAll('.season-dropdown-item').forEach(item => {
             item.classList.remove('selected');
             if (item.getAttribute('data-value') === season) {
                 item.classList.add('selected');

@@ -653,7 +653,7 @@ h1 {
     background: var(--accent-blue);
 }
 
-.dropdown-item {
+.season-dropdown-item {
     padding: 10px;
     color: var(--text-light);
     cursor: pointer;
@@ -665,12 +665,12 @@ h1 {
     gap: 10px;
 }
 
-.dropdown-item:hover {
+.season-dropdown-item:hover {
     background: rgba(100, 255, 218, 0.1);
     color: var(--accent-teal);
 }
 
-.dropdown-item.selected {
+.season-dropdown-item.selected {
     background: rgba(100, 255, 218, 0.15);
     color: var(--accent-teal);
     font-weight: 500;
