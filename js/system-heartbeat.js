@@ -16,7 +16,7 @@ class HeartbeatMonitor {
             if (!response.ok) console.error('Failed to load heartbeats');
 
             this.heartbeatData = await response.json();
-            
+
             return true;
         } catch (error) {
             console.error('Error loading heartbeats:', error);
@@ -110,6 +110,9 @@ class HeartbeatMonitor {
             'in_raid': 'player-status-lb-raid',
             'in_transit': 'player-status-lb-transit',
             'in_stash': 'player-status-lb-stash',
+            'in_flea': 'player-status-lb-flea',
+            'in_modding': 'player-status-lb-modding',
+            'in_trading': 'player-status-lb-trading',
             'raid_end': 'player-status-lb-finished'
         };
         return classes[statusType] || 'player-status-lb-offline';
@@ -123,6 +126,9 @@ class HeartbeatMonitor {
             'in_raid': 'In Raid',
             'in_transit': 'In Transit',
             'in_stash': 'Gearing Up',
+            'in_flea': 'Browsing Flea',
+            'in_modding': 'Modding Weapon',
+            'in_trading': 'Trading',
             'raid_end': 'Finished Raid'
         };
         return texts[statusType] || 'Offline';

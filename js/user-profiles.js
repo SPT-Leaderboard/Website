@@ -362,7 +362,6 @@ async function showPublicProfile(container, player) {
         <img src="media/rewards/other/cat.gif" class="kittyrew" id="catrew"  alt=""/>
 
         <button id="closeButton" class="close-profile-button">×</button>
-
         <div class="left-column">
 
             <div class="user-main-card profile-section" id="main-profile-card">
@@ -905,7 +904,16 @@ async function showPublicProfile(container, player) {
 
     // Equipment displayer
     const equipmentDisplay = new PlayerEquipmentDisplay(player.id);
-
+    const viewmodelContainer = document.querySelector('.playermodel-image');
+    if (viewmodelContainer) {
+        try {
+            const overlay = await equipmentDisplay.createViewModelOverlay();
+            viewmodelContainer.appendChild(overlay);
+        } catch (error) {
+            console.error('Failed to load equipment display:', error);
+        }
+    }
+    
     // I have no clue, this is bullshit but it works.
     // upd 2/22/2026: *kinda* fixed, but still, would like to make it the other way.
     // This is by any means is some voodoo possessed shit.

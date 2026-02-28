@@ -496,7 +496,7 @@ class KeepAliveService {
                     'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                credentials: 'same-origin',
+                credentials: 'include',
                 cache: 'no-store'
             });
 

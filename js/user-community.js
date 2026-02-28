@@ -1070,9 +1070,11 @@ class PlayerEquipmentDisplay {
 
     createAttachmentHtml(item) {
         const itemId = item.template_id;
-        const iconUrl = `https://assets.tarkov.dev/${itemId}-512.webp`;
         const cleanName = this.cleanShortName(item.name);
         const cleanShortName = this.cleanShortName(item.name);
+
+        // Create a unique ID for this attachment to reference later
+        const attachmentId = `attachment-${itemId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
         let details = [];
         if (cleanName.includes('mm')) {
@@ -1081,12 +1083,15 @@ class PlayerEquipmentDisplay {
         }
 
         return `
-            <div class="attachment-item" data-item-id="${itemId}">
+            <div class="attachment-item" data-item-id="${itemId}" data-attachment-id="${attachmentId}">
                 <div class="attachment-icon">
-                    <img src="${iconUrl}" 
-                         alt="${cleanShortName}"
-                         loading="lazy"
-                         onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'attachment-icon-loading\\'></div>'; setTimeout(() => this.src='fallback-image-url.png', 1000);">
+                    <div class="attachment-icon-placeholder" 
+                         data-attachment-id="${attachmentId}"
+                         data-item-id="${itemId}"
+                         data-item-name="${cleanName}"
+                         style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                        <div class="loading-spinner" style="width: 20px; height: 20px; border: 2px solid #444; border-top-color: #888; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    </div>
                 </div>
                 <div class="attachment-info">
                     <span class="attachment-name">${cleanShortName}</span>
@@ -1099,6 +1104,114 @@ class PlayerEquipmentDisplay {
                 ${item.amount > 1 ? `<span class="attachment-amount">x${item.amount}</span>` : ''}
             </div>
         `;
+    }
+
+    loadAttachmentImages(tooltipElement) {
+        const placeholders = tooltipElement.querySelectorAll('.attachment-icon-placeholder');
+
+        placeholders.forEach(placeholder => {
+            const itemId = placeholder.dataset.itemId;
+            const itemName = placeholder.dataset.itemName;
+            const attachmentId = placeholder.dataset.attachmentId;
+
+            this.loadAttachmentImage(itemId, itemName, attachmentId, placeholder);
+        });
+    }
+
+    async loadAttachmentImage(itemId, itemName, attachmentId, placeholderElement) {
+        // Try CDN first
+        const cdnUrl = `https://assets.tarkov.dev/${itemId}-512.webp`;
+        const localUrl = `media/weapon_attachments/${this.cleanShortName(itemName)}`;
+
+        try {
+            const cdnSuccess = await this.testImageLoad(cdnUrl, 1000);
+
+            const img = document.createElement('img');
+            img.alt = this.cleanShortName(itemName);
+            img.loading = 'lazy';
+
+            img.onerror = async () => {
+                try {
+                    const localSuccess = await this.testImageLoad(localUrl, 1000);
+                    if (localSuccess) {
+                        img.src = localUrl;
+                    } else {
+                        this.showFallbackIcon(placeholderElement);
+                    }
+                } catch {
+                    this.showFallbackIcon(placeholderElement);
+                }
+            };
+
+            // Set src 
+            if (cdnSuccess) {
+                img.src = cdnUrl;
+            } else {
+                // Try local
+                try {
+                    const localSuccess = await this.testImageLoad(localUrl, 1000);
+                    if (localSuccess) {
+                        img.src = localUrl;
+                    } else {
+                        this.showFallbackIcon(placeholderElement);
+                        return;
+                    }
+                } catch {
+                    this.showFallbackIcon(placeholderElement);
+                    return;
+                }
+            }
+
+            // Replace placeholder
+            img.onload = () => {
+                placeholderElement.innerHTML = ''; // Clear loading spinner
+                placeholderElement.appendChild(img);
+                placeholderElement.classList.remove('attachment-icon-placeholder');
+                placeholderElement.classList.add('attachment-icon-loaded');
+            };
+
+        } catch (error) {
+            console.error(`PlayerEquipmentDisplay Error! ${error}`)
+        }
+    }
+
+
+    async testAttachmentIcon(iconLink, iconLink2) {
+        try {
+            const cdnSuccess = await testImageLoad(iconLink, 1000);
+
+            if (cdnSuccess) {
+                return iconLink;
+            } else {
+                return iconLink2;
+            }
+        } catch (error) {
+            return iconLink2;
+        }
+    }
+
+    async testImageLoad(url, timeout = 2000) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            let timer;
+
+            img.onload = () => {
+                clearTimeout(timer);
+                resolve(true);
+            };
+
+            img.onerror = () => {
+                clearTimeout(timer);
+                resolve(false);
+            };
+
+            timer = setTimeout(() => {
+                img.src = '';
+                resolve(false);
+            }, timeout);
+
+            img.src = url;
+        });
     }
 
     // Main call
@@ -1274,6 +1387,9 @@ class PlayerEquipmentDisplay {
 
         const tooltip = this.createTooltip(weapon, attachments);
         this.showTooltip(targetElement, tooltip);
+
+        // Load attachment images AFTER tooltip
+        this.loadAttachmentImages(tooltip);
     }
 
     createTooltip(weapon, attachments) {

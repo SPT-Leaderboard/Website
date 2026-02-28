@@ -1200,7 +1200,6 @@ td {
 }
 
 @keyframes blinkGlow {
-
     0%,
     100% {
         opacity: 0.4;
@@ -1286,6 +1285,27 @@ td {
     border-color: #4b5563;
 }
 
+/* On flea */
+.player-status-lb-flea {
+    background: rgba(236, 72, 153, 0.2);
+    color: #f472b6;
+    border-color: #ec4899;
+}
+
+/* Modding weapons */
+.player-status-lb-modding {
+    background: rgba(139, 92, 246, 0.2);
+    color: #c4b5fd;
+    border-color: #8b5cf6;
+}
+
+/* Trading */
+.player-status-lb-trading {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fcd34d;
+    border-color: #f59e0b;
+}
+
 /* Blink for online */
 #blink {
     display: flex;
@@ -1338,6 +1358,23 @@ td {
     box-shadow: 0 0 12px rgba(192, 132, 252, 0.6);
 }
 
+/* On flea */
+.player-status-lb-flea #blink {
+    background: linear-gradient(135deg, #f9a8d4 0%, #ec4899 100%);
+    box-shadow: 0 0 12px rgba(236, 72, 153, 0.6);
+}
+
+/* Modding weapons */
+.player-status-lb-modding #blink {
+    background: linear-gradient(135deg, #c084fc 0%, #8b5cf6 100%);
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+}
+
+/* Trading */
+.player-status-lb-trading #blink {
+    background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%);
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+}
 
 td:nth-child(2) {
     font-size: 1em;

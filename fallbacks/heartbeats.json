@@ -2,7 +2,7 @@
     "68eb48184e06d31a54b8efb2": {
         "id": "68eb48184e06d31a54b8efb2",
         "timestamp": 1960859595,
-        "type": "in_stash",
+        "type": "in_trading",
         "map": null,
         "side": null,
         "gameTime": null
@@ -10,7 +10,7 @@
     "697b6a727500c26884fb1218": {
         "id": "697b6a727500c26884fb1218",
         "timestamp": 2171704818,
-        "type": "in_raid",
+        "type": "in_trading",
         "map": "factory4_night",
         "side": "Usec",
         "gameTime": "16:41:52"
@@ -26,7 +26,7 @@
     "6983334a3530903b581515ff": {
         "id": "6983334a3530903b581515ff",
         "timestamp": 1971704828,
-        "type": "in_menu",
+        "type": "in_flea",
         "map": "Loading...",
         "side": "Loading...",
         "gameTime": "Loading..."
