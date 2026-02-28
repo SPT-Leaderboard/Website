@@ -4229,8 +4229,6 @@ input[type="checkbox"]:checked:hover {
 .viewmodel-weapon-column {
     position: absolute;
     bottom: 0;
-    left: 25%;
-    transform: translateX(-50%);
     display: flex;
     flex-direction: column-reverse;
     gap: 8px;
@@ -4287,6 +4285,7 @@ input[type="checkbox"]:checked:hover {
     min-width: 60px;
     background: #2a2a3a;
     border-radius: 6px;
+    max-width: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -4363,8 +4362,7 @@ input[type="checkbox"]:checked:hover {
 .viewmodel-backpack {
     position: absolute;
     bottom: 0;
-    right: -15%;
-    transform: translateX(-50%);
+    right: 0;
     background: rgb(15 15 15 / 50%);
     backdrop-filter: blur(5px);
     padding: 6px 15px;
