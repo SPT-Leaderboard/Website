@@ -34,6 +34,10 @@
     //
     function setup() {
         if (!isWinter()) {
+            var originalSnowflake = document.querySelector(".snowflake");
+            if (originalSnowflake) {
+                originalSnowflake.remove();
+            }
             return;
         }
 
