@@ -40,9 +40,13 @@ class FriendManager {
     }
 
     async checkFriendStatus() {
-        const response = await fetch('/api/network/functions/community/is-friend.php', {
+        const response = await fetch('/api/network/functions/community/is_friend.php', {
             method: 'POST',
+            credentials: 'include',
             headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Cache-Control': 'no-cache',
+                'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ profileId: this.currentPlayer.id })
@@ -50,7 +54,9 @@ class FriendManager {
 
         if (!response.ok) return 'error';
 
-        return await response.json();
+        const data = await response.json();
+
+        return data.status; // "canAdd", "isFriend", "requestPending", "cannotAdd"
     }
 
     renderLoginButton() {
@@ -69,42 +75,42 @@ class FriendManager {
     renderFriendButton(status) {
         let buttonHtml;
 
-        if (status.isFriend) {
+        if (status === 'isFriend') {
             buttonHtml = `
-                <div class="friend-button-wrapper">
-                    <button class="friend-button unfriend" data-player-id="${this.currentPlayer.id}">
-                        <i class="fa-solid fa-user-check stat-positive"></i>
-                        <span>Friends</span>
-                        <i class="fa-solid fa-chevron-down"></i>
+            <div class="friend-button-wrapper">
+                <button class="friend-button unfriend" data-player-id="${this.currentPlayer.id}">
+                    <i class="fa-solid fa-user-check stat-positive"></i>
+                    <span>Friends</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="friend-dropdown">
+                    <button class="dropdown-item unfriend-action">
+                        <i class="fa-solid fa-user-minus"></i> Unfriend
                     </button>
-                    <div class="friend-dropdown">
-                        <button class="dropdown-item unfriend-action">
-                            <i class="fa-solid fa-user-minus"></i> Unfriend
-                        </button>
-                    </div>
                 </div>
-            `;
-        } else if (status.requestPending) {
+            </div>
+        `;
+        } else if (status === 'requestPending') {
             buttonHtml = `
-                <button class="friend-button pending" disabled>
-                    <i class="fa-solid fa-hourglass-half"></i>
-                    <span>Friend Request Pending</span>
-                </button>
-            `;
-        } else if (status.canAdd) {
+            <button class="friend-button pending" disabled>
+                <i class="fa-solid fa-hourglass-half"></i>
+                <span>Friend Request Pending</span>
+            </button>
+        `;
+        } else if (status === 'canAdd') {
             buttonHtml = `
-                <button class="friend-button add" data-player-id="${this.currentPlayer.id}">
-                    <i class="fa-solid fa-user-plus"></i>
-                    <span>Add Friend</span>
-                </button>
-            `;
+            <button class="friend-button add" data-player-id="${this.currentPlayer.id}">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>Add Friend</span>
+            </button>
+        `;
         } else {
             buttonHtml = `
-                <button class="friend-button disabled" disabled>
-                    <i class="fa-solid fa-ban"></i>
-                    <span>Cannot Add</span>
-                </button>
-            `;
+            <button class="friend-button disabled" disabled>
+                <i class="fa-solid fa-ban"></i>
+                <span>Cannot Add</span>
+            </button>
+        `;
         }
 
         this.buttonContainer.innerHTML = buttonHtml;
@@ -166,9 +172,13 @@ class FriendManager {
             button.classList.add('loading');
             button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
 
-            const response = await fetch('/api/network/functions/community/send-friend-request.php', {
+            const response = await fetch('/api/network/functions/community/send_friend_request.php', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Cache-Control': 'no-cache',
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ profileId: this.currentPlayer.id })
@@ -209,7 +219,11 @@ class FriendManager {
         try {
             const response = await fetch('/api/network/functions/community/get_friends.php', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Cache-Control': 'no-cache',
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ profileId: this.currentPlayer.id })
@@ -1032,6 +1046,7 @@ class PlayerEquipmentDisplay {
             stock: [],
             grip: [],
             ammo: [],
+            tactical: [],
             other: []
         };
 
@@ -1041,24 +1056,34 @@ class PlayerEquipmentDisplay {
             if (a.name.includes('riflescope') ||
                 a.name.includes('scope') ||
                 a.name.includes('optic') ||
-                a.name.includes('holographic')) {
+                a.name.includes('holographic') ||
+                a.name.includes('reflex sight')) {
                 groups.scope.push(item);
-            } else if (a.name.includes('magazine')) {
+            }
+            else if (a.name.includes('magazine')) {
                 groups.magazine.push(item);
-            } else if (a.name.includes('barrel') ||
+            }
+            else if (a.name.includes('tactical')) {
+                groups.tactical.push(item);
+            }
+            else if (a.name.includes('barrel') ||
                 a.name.includes('receiver') ||
                 a.name.includes('flash hider') ||
-                a.name.includes('silencer')) {
+                a.name.includes('silencer') ||
+                a.name.includes('suppressor')) {
                 groups.barrel.push(item);
-            } else if (a.name.includes('stock') ||
+            }
+            else if (a.name.includes('stock') ||
                 a.name.includes('buttpad') ||
                 a.name.includes('cheek') ||
                 a.name.includes('fold')) {
                 groups.stock.push(item);
-            } else if (a.name.includes('grip') ||
+            }
+            else if (a.name.includes('grip') ||
                 a.name.includes('foregrip')) {
                 groups.grip.push(item);
-            } else if (a.name.includes('mm')) {
+            }
+            else if (a.name.includes('mm')) {
                 groups.ammo.push(item);
             } else {
                 groups.other.push(item);
