@@ -358,7 +358,6 @@ async function showPublicProfile(container, player) {
 
     container.innerHTML = `
         <!-- left column -->
-        <img src="media/rewards/other/badgerTester.gif" class="badger" id="badger"  alt=""/>
         <img src="media/rewards/other/cat.gif" class="kittyrew" id="catrew"  alt=""/>
 
         <button id="closeButton" class="close-profile-button">×</button>
@@ -691,7 +690,7 @@ async function showPublicProfile(container, player) {
                             <div class="stattrack-overlay">
                                 <div class="stattrack-message">This player is not using <a href="https://hub.sp-tarkov.com/files/file/2501-stattrack/">Stattrack Mod</a> by AcidPhantasm</div>
                             </div>
-                        ` : ''}
+                        ` : ``}
                     
                         <div class="weapon-info ${!player?.isUsingStattrack ? 'stattrack-disabled' : ''}">
                         <img src="media/weapon_icons/${bestWeapon?.name}.webp" alt="bestWeapon?.name" class="weapon-icon-fav" onerror="this.src='media/default_weapon_icon.png';" />

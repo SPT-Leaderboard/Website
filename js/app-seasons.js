@@ -1,8 +1,8 @@
-//     _____ ____  ______   __    _________    ____  __________  ____  ____  ___    ____  ____ 
+//     _____ ____  ______   __    _________    ____  __________  ____  ____  ___    ____  ____
 //    / ___// __ \/_  __/  / /   / ____/   |  / __ \/ ____/ __ \/ __ )/ __ \/   |  / __ \/ __ \
-//    \__ \/ /_/ / / /    / /   / __/ / /| | / / / / __/ / /_/ / __  / / / / /| | / /_/ / / / /  
-//   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ / 
-//  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
+//    \__ \/ /_/ / / /    / /   / __/ / /| | / / / / __/ / /_/ / __  / / / / /| | / /_/ / / / /
+//   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ /
+//  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
 // This code is inhereted from NCVV. I don't want to remake this. :)
 (function () {
@@ -33,14 +33,6 @@
     // It all starts here...
     //
     function setup() {
-        if (!isWinter()) {
-            var originalSnowflake = document.querySelector(".snowflake");
-            if (originalSnowflake) {
-                originalSnowflake.remove();
-            }
-            return;
-        }
-
         if (enableAnimations) {
             if (document.readyState === 'loading') {
                 window.addEventListener("DOMContentLoaded", generateSnowflakes, false);
@@ -102,6 +94,14 @@
     // The function responsible for creating the snowflake
     //
     function generateSnowflakes() {
+
+        if (!isWinter()) {
+            var originalSnowflake = document.querySelector(".snowflake");
+            if (originalSnowflake) {
+                originalSnowflake.remove();
+            }
+            return;
+        }
 
         // get our snowflake element from the DOM and store it
         var originalSnowflake = document.querySelector(".snowflake");

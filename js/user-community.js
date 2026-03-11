@@ -244,41 +244,38 @@ class FriendManager {
         const realFriendIds = await this.fetchRealFriends();
         this.realFriends = new Set(realFriendIds);
 
-        // permaLink/teamTag
-        return new Promise((resolve) => {
-            const friends = [];
-            const friendLink = this.currentPlayer.permaLink;
-            const teamTag = this.currentPlayer.teamTag;
+        try {
+            const response = await fetch('/api/network/functions/community/get_friends.php', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ profileId: this.currentPlayer.id })
+            });
 
-            if (!friendLink && !teamTag) {
-                resolve([]);
-                return;
-            }
+            if (!response.ok) return [];
 
-            for (const playerId in leaderboardData) {
-                const p = leaderboardData[playerId];
+            const data = await response.json();
 
-                // Don't put yourself in friend list
-                if (p.id === this.currentPlayer.id) continue;
-
-                if ((friendLink && p.permaLink === friendLink) ||
-                    (teamTag && p.teamTag === teamTag)) {
-
-                    friends.push({
-                        ...p,
-                        isRealFriend: this.realFriends.has(p.id)
-                    });
-                }
-            }
+            const friends = (data.friends || []).map(friend => ({
+                ...friend,
+                isRealFriend: this.realFriends.has(friend.id)
+            }));
 
             friends.sort((a, b) => {
                 if (a.isRealFriend && !b.isRealFriend) return -1;
                 if (!a.isRealFriend && b.isRealFriend) return 1;
-                return 0;
+
+                return (a.name || '').localeCompare(b.name || '');
             });
 
-            resolve(friends);
-        });
+            return friends;
+        } catch (error) {
+            console.error('Error checking friends:', error);
+            return [];
+        }
     }
 
     async renderFriendList() {
@@ -297,39 +294,45 @@ class FriendManager {
             this.section.style.display = 'block';
 
             this.container.innerHTML = friends.map(friend => {
-                const playerStatus = heartbeatMonitor?.getPlayerStatus(friend.id);
-                const lastOnlineTime = heartbeatMonitor.isOnline(friend.id)
-                    ? '<span class="player-status-lb-online">Online</span>'
-                    : window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || friend.lastPlayed);
+                const playerStatus = heartbeatMonitor?.getPlayerStatus?.(friend.id) || {};
+                const isOnline = heartbeatMonitor?.isOnline?.(friend.id) || false;
 
-                const lastGame = heartbeatMonitor.isOnline(friend.id)
-                    ? `<span style="min-width: 0;" class="player-status-lb ${playerStatus.statusClass}">${playerStatus.statusText} <div id="blink"></div></span>`
+                let lastOnlineTime = '';
+                if (isOnline) {
+                    lastOnlineTime = '<span class="player-status-lb-online">Online</span>';
+                } else {
+                    const lastUpdate = playerStatus.lastUpdate || friend.lastPlayed || Date.now();
+                    lastOnlineTime = window.heartbeatMonitor?.getLastOnlineTime?.(lastUpdate) || 'Offline';
+                }
+
+                const lastGame = isOnline
+                    ? `<span style="min-width: 0;" class="player-status-lb ${playerStatus.statusClass || ''}">${playerStatus.statusText || 'Online'} <div id="blink"></div></span>`
                     : `<span class="last-online-time">${lastOnlineTime}</span>`;
 
                 const friendClass = friend.isRealFriend ? 'real-friend' : 'local-friend';
                 const friendBadge = !friend.isRealFriend ? '<i class="fa-solid fa-users-between-lines local-badge" title="Local friend"></i>' : '';
 
                 return `
-                    <div class="friend-item ${friendClass}" data-player-id="${friend.id || '0'}">
-                        <div class="friend-avatar-wrapper">
-                            <img src="${friend.profilePicture}" class="friend-avatar" onerror="this.src='media/default_avatar.png';" alt="Friend Avatar">
-                            ${friendBadge}
+                <div class="friend-item ${friendClass}" data-player-id="${friend.id || '0'}">
+                    <div class="friend-avatar-wrapper">
+                        <img src="${friend.profilePicture || 'media/default_avatar.png'}" class="friend-avatar" onerror="this.src='media/default_avatar.png';" alt="Friend Avatar">
+                        ${friendBadge}
+                    </div>
+                    <div class="friend-info">
+                        <div class="friend-name">
+                            ${friend.teamTag ? `[${friend.teamTag}]` : ''} ${friend.name || 'Unknown'}
                         </div>
-                        <div class="friend-info">
-                            <div class="friend-name">
-                                ${friend.teamTag ? `[${friend.teamTag}]` : ``} ${friend.name}
-                            </div>
-                            <div class="friend-status-text">
-                                ${lastGame}
-                            </div>
-                        </div>
-                        <div class="friend-status-indicator">
-                            ${friend.isRealFriend ?
-                        '<i class="fa-solid fa-check-circle real-friend-badge" title="Real friend"></i>' :
-                        ''}
+                        <div class="friend-status-text">
+                            ${lastGame}
                         </div>
                     </div>
-                `;
+                    <div class="friend-status-indicator">
+                        ${friend.isRealFriend ?
+                        '<i class="fa-solid fa-check-circle real-friend-badge" title="Real friend"></i>' :
+                        ''}
+                    </div>
+                </div>
+            `;
             }).join('');
 
             this.attachFriendListListeners();
@@ -337,11 +340,11 @@ class FriendManager {
         } catch (error) {
             console.error('Error loading friends:', error);
             this.container.innerHTML = `
-                <div class="friends-error">
-                    <i class="fa-solid fa-exclamation-triangle"></i>
-                    Error loading friends
-                </div>
-            `;
+            <div class="friends-error">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                Error loading friends
+            </div>
+        `;
         }
     }
 
@@ -759,7 +762,7 @@ class CommentsManager {
         }
 
         try {
-            const response = await fetch(`${this.apiEndpoints.loadComments}${this.permaLink}`);
+            const response = await fetch(`${this.apiEndpoints.loadComments}${this.permaLink}.json`);
 
             if (!response.ok) {
                 if (response.status === 404) {
