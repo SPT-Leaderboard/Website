@@ -20,51 +20,55 @@ let isLoggedIn = false;
 const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 
 // For dynamic stats counters
-let oldTotalRaids = 0;
-let oldTotalKills = 0;
-let oldTotalDeaths = 0;
-let oldTotalDamage = 0;
-let oldTotalKDR = 0;
-let oldTotalSurvival = 0;
-let oldValidPlayers = 0;
-let oldTotalPlayers = 0;
-let oldOnlinePlayers = 0;
-let oldTotalPlayTime = 0;
+const PrevStats = {
+    raids: 0,
+    kills: 0,
+    deaths: 0,
+    damage: 0,
+    kdr: 0,
+    survival: 0,
+    validPlayers: 0,
+    totalPlayers: 0,
+    onlinePlayers: 0,
+    playTime: 0
+};
 
 // Paths
-let seasonPath = '/api/data/seasons/season';
-let seasonLocalPath = `fallbacks/`;
-let currentSeason = `/api/data/seasons/season9.json`;
-let seasonPathEnd = `.json`;
-let lastRaidsPath = `/api/data/player_raids/`;
-let profileAppearencePath = `/api/network/functions/get_player_customization.php`;
-let weaponStatsPath = `/api/data/shared/weapon_counters.json?t=${Date.now()}`;
-let profileComments = `/api/data/user-comments/player_`;
-let profileCommentsEnd = `.json?t=${Date.now()}`;
-let profileUrlPath = `https://sptlb.katrinfoxvr.com/#id=`;
-let heartbeatsPath = `/api/main/heartbeat/heartbeats.json`;
-let achievementsPath = `/api/data/shared/achievement_counters.json`;
-let pmcPfpsPath = `/api/data/pmc_avatars/`;
-let globalCounters = `/api/data/shared/global_counters.json`;
-let adminsOnline = `/api/admins_online.json`;
-let dripDataPath = `/api/network/functions/dripfest/drip_data.json?t=${Date.now()}`;
+const ApiPaths = {
+    seasonPath: '/api/data/seasons/season',
+    seasonLocalPath: 'fallbacks/',
+    currentSeason: '/api/data/seasons/season9.json',
+    seasonPathEnd: '.json',
+    lastRaidsPath: '/api/data/player_raids/',
+    profileAppearencePath: '/api/network/functions/get_player_customization.php',
+    weaponStatsPath: `/api/data/shared/weapon_counters.json?t=${Date.now()}`,
+    profileComments: '/api/data/user-comments/player_',
+    profileCommentsEnd: '.json',
+    profileUrlPath: 'https://sptlb.katrinfoxvr.com/#id=',
+    heartbeatsPath: '/api/main/heartbeat/heartbeats.json',
+    achievementsPath: '/api/data/shared/achievement_counters.json',
+    pmcPfpsPath: '/api/data/pmc_avatars/',
+    globalCounters: '/api/data/shared/global_counters.json',
+    adminsOnline: '/api/admins_online.json',
+    dripDataPath: `/api/network/functions/dripfest/drip_data.json?t=${Date.now()}`
+};
 
 // Paths for local files if debug is on
 if (isLocalhost) {
-    pmcPfpsPath = `../fallbacks/pmc_avatars/`;
-    currentSeason = `/fallbacks/season9.json`
-    seasonPath = `../fallbacks/season`;
-    profileAppearencePath = `http://localhost:3000/api/network/functions/get_player_customization.php`;
-    weaponStatsPath = `../fallbacks/shared/weapon_counters.json?t=${Date.now()}`;
-    profileComments = `fallbacks/user-comments/player_`;
-    profileCommentsEnd = `.json?t=${Date.now()}`;
-    profileUrlPath = `127.0.0.1:5500/#id=`;
-    heartbeatsPath = `fallbacks/heartbeats.json`;
-    achievementsPath = `../fallbacks/shared/achievement_counters.json`;
-    lastRaidsPath = `../fallbacks/player_raids/`;
-    globalCounters = `../fallbacks/shared/global_counters.json`;
-    adminsOnline = `fallbacks/admins_online.json`;
-    dripDataPath = `/fallbacks/drip_data.json`;
+    ApiPaths.pmcPfpsPath = `../fallbacks/pmc_avatars/`;
+    ApiPaths.currentSeason = `/fallbacks/season9.json`;
+    ApiPaths.seasonPath = `../fallbacks/season`;
+    ApiPaths.profileAppearencePath = `http://localhost:3000/api/network/functions/get_player_customization.php`;
+    ApiPaths.weaponStatsPath = `../fallbacks/shared/weapon_counters.json?t=${Date.now()}`;
+    ApiPaths.profileComments = `fallbacks/user-comments/player_`;
+    ApiPaths.profileCommentsEnd = `.json?t=${Date.now()}`;
+    ApiPaths.profileUrlPath = `127.0.0.1:5500/#id=`;
+    ApiPaths.heartbeatsPath = `fallbacks/heartbeats.json`;
+    ApiPaths.achievementsPath = `../fallbacks/shared/achievement_counters.json`;
+    ApiPaths.lastRaidsPath = `../fallbacks/player_raids/`;
+    ApiPaths.globalCounters = `../fallbacks/shared/global_counters.json`;
+    ApiPaths.adminsOnline = `fallbacks/admins_online.json`;
+    ApiPaths.dripDataPath = `/fallbacks/drip_data.json`;
 }
 
 // Call main init on DOM load
@@ -74,13 +78,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (savedStats) {
         try {
             const stats = JSON.parse(savedStats);
-            oldTotalRaids = stats.raids || 0;
-            oldTotalKills = stats.kills || 0;
-            oldTotalDeaths = stats.deaths || 0;
-            oldTotalDamage = stats.damage || 0;
-            oldTotalKDR = stats.kdr || 0;
-            oldTotalSurvival = stats.survival || 0;
-            oldValidPlayers = stats.players || 0;
+            PrevStats.raids = stats.raids || 0;
+            PrevStats.kills = stats.kills || 0;
+            PrevStats.deaths = stats.deaths || 0;
+            PrevStats.damage = stats.damage || 0;
+            PrevStats.kdr = stats.kdr || 0;
+            PrevStats.survival = stats.survival || 0;
+            PrevStats.validPlayers = stats.players || 0;
         } catch (e) {
             console.error('Failed to parse saved stats', e);
         }
@@ -94,25 +98,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 /**
- * Checks if a season with the given number exists on the server
- * @param {number} seasonNumber - The season number to check
- * @returns {Promise<boolean>} - True if season exists, false otherwise
+ * Checks if a season JSON file exists on the server by making a fetch request.
+ * Uses the configured season API path to construct the URL and suppresses error toasts on failure.
+ * @param {number} seasonNumber - The season number to check (e.g. 4, 5, 6)
+ * @returns {Promise<boolean>} Resolves to true if the season file exists and returns valid data, false otherwise
  */
 async function checkSeasonExists(seasonNumber) {
-    try {
-        // Check server first
-        const serverUrl = `${seasonPath}${seasonNumber}${seasonPathEnd}`;
-        const serverResponse = await fetch(serverUrl);
-
-        return serverResponse.ok;
-    } catch (error) {
-        return false;
-    }
+    const serverUrl = `${ApiPaths.seasonPath}${seasonNumber}${ApiPaths.seasonPathEnd}`;
+    const data = await apiFetch(serverUrl, { showErrorToast: false, cacheBust: false });
+    return data !== null;
 }
 
 /**
- * Detects all available seasons by calling checkSeasonExists(seasonNumber) until 404 is received
+ * Discovers all available seasons by probing the server starting from season 4.
+ * Increments the season number and calls {@link checkSeasonExists} until a missing season is found,
+ * then sorts the results from newest to oldest, prepares the latest season's data,
+ * and populates the season dropdown UI.
  * @returns {Promise<void>}
+ * @throws {Error} When an unexpected network or parsing error occurs during season probing
  */
 async function initAllSeasons() {
     // Seasons start from 4
@@ -140,7 +143,10 @@ async function initAllSeasons() {
 }
 
 /**
- * Proceeds the all seasons been initialized function
+ * Loads the latest season's leaderboard data and performs one-time initialization tasks.
+ * Called after {@link initAllSeasons} has populated the seasons array. Loads the newest
+ * season via {@link loadSeasonData}, triggers previous-season winner display on the first
+ * invocation, and persists current stats to localStorage.
  * @returns {Promise<void>}
  */
 async function prepareSeasonData() {
@@ -170,23 +176,16 @@ async function loadPreviousSeasonWinners() {
 
     const previousSeason = seasons[1];
 
-    try {
-        let response = await fetch(`${seasonPath}${previousSeason}${seasonPathEnd}`);
-        if (!response.ok && response.status === 404) {
-            response = await fetch(`${seasonLocalPath}${previousSeason}.json`);
-            if (!response.ok) return;
-        } else if (!response.ok) {
-            return;
-        }
-
-        const data = await response.json();
-        const previousSeasonData = data.leaderboard || [];
-
-        calculatePlaces(previousSeasonData);
-        displayWinners(previousSeasonData);
-    } catch (error) {
-        console.error('Error loading previous season:', error);
+    // Try server first, fall back to local
+    let data = await apiFetch(`${ApiPaths.seasonPath}${previousSeason}${ApiPaths.seasonPathEnd}`, { showErrorToast: false });
+    if (!data) {
+        data = await apiFetch(`${ApiPaths.seasonLocalPath}${previousSeason}.json`, { showErrorToast: false });
     }
+    if (!data) return;
+
+    const previousSeasonData = data.leaderboard || [];
+    calculatePlaces(previousSeasonData);
+    displayWinners(previousSeasonData);
 }
 
 /**
@@ -293,9 +292,14 @@ function populateSeasonDropdown() {
 }
 
 /**
- * Loads and processes data for specified season called by other functions
- * @param {number} season - Season number to load
+ * Fetches leaderboard data for a given season from the server, processes it, and renders it.
+ * Calculates player rankings via {@link calculatePlaces}, applies color indicators,
+ * checks recent player activity, computes overall stats, and initializes the profile watch list.
+ * Delegates rendering to either {@link displaySimpleLeaderboard} or {@link displayLeaderboard}
+ * based on the user's toggle setting. Sets the global {@link isDataReady} flag when complete.
+ * @param {number} season - The season number to load (e.g. 9)
  * @returns {Promise<void>}
+ * @throws {Error} When the fetch request or data processing fails unexpectedly
  */
 async function loadSeasonData(season) {
     const emptyLeaderboardNotification = document.getElementById('emptyLeaderboardNotification');
@@ -303,9 +307,14 @@ async function loadSeasonData(season) {
     isDataReady = false;
 
     try {
-        let response = await fetch(`${seasonPath}${season}${seasonPathEnd}?t=${Date.now()}`);
+        const data = await apiFetch(`${ApiPaths.seasonPath}${season}${ApiPaths.seasonPathEnd}`);
 
-        const data = await response.json();
+        if (!data) {
+            emptyLeaderboardNotification.style.display = 'block';
+            await resetStats();
+            return;
+        }
+
         leaderboardData = data.leaderboard || [];
 
         if (leaderboardData.length === 0 || (leaderboardData.length === 1 && Object.keys(leaderboardData[0]).length === 0)) {
@@ -338,8 +347,14 @@ async function loadSeasonData(season) {
 }
 
 /**
- * Renders player leaderboard data in a table
- * @param {Array<Object>} data - Leaderboard data with all the season entries
+ * Renders the full leaderboard table with profile pictures, rank icons, account type badges,
+ * prestige icons, boost indicators, team tags, and online status for each player.
+ * Banned and permanently banned players are excluded or visually distinguished.
+ * Builds rows in a document fragment for performance, then swaps the table body in one operation.
+ * Attaches click handlers for opening player profiles and team views.
+ * @param {Array<Object>} data - Array of player objects for the current season, each containing
+ *   properties such as id, name, rank, totalScore, pmcRaids, survivalRate, killToDeathRatio,
+ *   averageLifeTime, sptVer, banned, isCasual, teamTag, profilePicture, and more
  * @returns {Promise<void>}
  */
 async function displayLeaderboard(data) {
@@ -522,11 +537,11 @@ async function displayLeaderboard(data) {
         const rankLabel = player.isCasual ? 'Casual' : getRankLabel(player.totalScore);
 
         row.innerHTML = `
-            <td class="rank ${rankClass}">${player.rank} ${player.medal}</td>
-            <td class="teamtag ${teamTagClass}" data-team="${player.teamTag ? player.teamTag : ``}">${player.teamTag ? `[${player.teamTag}]` : ``}</td>
+            <td class="rank ${rankClass}">${player.rank} ${escapeHtml(player.medal)}</td>
+            <td class="teamtag ${teamTagClass}" data-team="${escapeHtml(player.teamTag ? player.teamTag : ``)}">${player.teamTag ? `[${escapeHtml(player.teamTag)}]` : ``}</td>
             <td class="player-name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''} data-player-id="${player.id || '0'}">
                 <div class="lb-row-wrapper">${`<img loading="lazy" class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';"  alt="Avatar"/>`}
-                ${accountIcon} <span class="${finalNameClass}">${player.name}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div></div>
+                ${accountIcon} <span class="${finalNameClass}">${escapeHtml(player.name)}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div></div>
             </td>
             <td>${lastGame || 'N/A'}</td>
             <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class="fa-solid fa-share-from-square"></i> </button></td>
@@ -563,8 +578,14 @@ async function displayLeaderboard(data) {
 }
 
 /**
- * Renders player leaderboard data in a table (no PFPs, or extra text/tags/icons)
- * @param {Array<Object>} data - Leaderboard data with all the season entries
+ * Renders a simplified leaderboard table without profile pictures, account type icons,
+ * prestige badges, or rank decorations. Omits players inactive for more than 15 days
+ * (except the top 50) when auto-update is enabled. Builds rows in a document fragment
+ * for performance, then swaps the table body in one operation. Attaches click handlers
+ * for opening player profiles and team views.
+ * @param {Array<Object>} data - Array of player objects for the current season, each containing
+ *   properties such as id, name, rank, totalScore, pmcRaids, survivalRate, killToDeathRatio,
+ *   averageLifeTime, sptVer, banned, isCasual, teamTag, absoluteLastTime, and more
  * @returns {Promise<void>}
  */
 async function displaySimpleLeaderboard(data) {
@@ -670,9 +691,9 @@ async function displaySimpleLeaderboard(data) {
         const rankLabel = player.isCasual ? 'Casual' : getRankLabel(player.totalScore);
         row.innerHTML = `
             <td class="rank">${player.rank}</td>
-            <td class="teamtag" data-team="${player.teamTag ? player.teamTag : ``}">${player.teamTag ? `[${player.teamTag}]` : ``}</td>
+            <td class="teamtag" data-team="${escapeHtml(player.teamTag ? player.teamTag : ``)}">${player.teamTag ? `[${escapeHtml(player.teamTag)}]` : ``}</td>
             <td class="player-name" style="height: 33px;" data-player-id="${player.id || '0'}">
-                <span">${player.name}</span>
+                <span">${escapeHtml(player.name)}</span>
             </td>
             <td>${lastGame || 'N/A'}</td>
             <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class="fa-solid fa-share-from-square"></i> </button></td>
@@ -813,10 +834,13 @@ function convertTimeToSeconds(time) {
 }
 
 /**
- * Sorts data by totalScore of the player calculated on the server
- * @param {Array<Object>} data - Leaderboard data with all the season entries
- * @returns {void}
- *
+ * Sorts leaderboard data by totalScore (descending) and assigns rank numbers and medal emojis.
+ * Banned players have their stats zeroed out, are pushed to the bottom of the sort order,
+ * and receive a "BANNED" rank label. Casual players receive a "Casual" rank label and are
+ * excluded from numbered ranking. Mutates the input array in place.
+ * @param {Array<Object>} data - Array of player objects to rank. Each object is mutated with
+ *   updated rank (number|string), medal (string), and for banned players, zeroed stat fields
+ * @returns {Promise<void>}
  */
 async function calculatePlaces(data) {
     data.forEach((player) => {
@@ -887,16 +911,16 @@ function getRankLabel(totalScore) {
 function calculateOverallStats(data) {
     // Save old values before calculating new ones
     const previousStats = {
-        raids: oldTotalRaids,
-        kills: oldTotalKills,
-        deaths: oldTotalDeaths,
-        damage: oldTotalDamage,
-        kdr: oldTotalKDR,
-        survival: oldTotalSurvival,
-        players: oldValidPlayers,
-        totalPlayers: oldTotalPlayers,
-        onlinePlayers: oldOnlinePlayers,
-        totalPlayTime: oldTotalPlayTime
+        raids: PrevStats.raids,
+        kills: PrevStats.kills,
+        deaths: PrevStats.deaths,
+        damage: PrevStats.damage,
+        kdr: PrevStats.kdr,
+        survival: PrevStats.survival,
+        players: PrevStats.validPlayers,
+        totalPlayers: PrevStats.totalPlayers,
+        onlinePlayers: PrevStats.onlinePlayers,
+        totalPlayTime: PrevStats.playTime
     };
 
     // Reset counters
@@ -943,16 +967,16 @@ function calculateOverallStats(data) {
     const totalPlayers = data.length;
 
     // Update old values for next animation
-    oldTotalRaids = totalRaids;
-    oldTotalKills = totalKills;
-    oldTotalDeaths = totalDeaths;
-    oldTotalDamage = totalDamage;
-    oldTotalKDR = averageKDR;
-    oldTotalSurvival = averageSurvival;
-    oldValidPlayers = validPlayers;
-    oldTotalPlayers = totalPlayers;
-    oldOnlinePlayers = onlinePlayers;
-    oldTotalPlayTime = totalPlayTime;
+    PrevStats.raids = totalRaids;
+    PrevStats.kills = totalKills;
+    PrevStats.deaths = totalDeaths;
+    PrevStats.damage = totalDamage;
+    PrevStats.kdr = averageKDR;
+    PrevStats.survival = averageSurvival;
+    PrevStats.validPlayers = validPlayers;
+    PrevStats.totalPlayers = totalPlayers;
+    PrevStats.onlinePlayers = onlinePlayers;
+    PrevStats.playTime = totalPlayTime;
 
     // Animate from previous values
     animateNumber('totalRaids', totalRaids, 0, previousStats.raids);
@@ -1016,16 +1040,16 @@ function animateNumber(elementId, targetValue, decimals = 0, startValue = null) 
 // Save current stats to localStorage
 function saveCurrentStats() {
     const stats = {
-        raids: oldTotalRaids,
-        kills: oldTotalKills,
-        deaths: oldTotalDeaths,
-        damage: oldTotalDamage,
-        kdr: oldTotalKDR,
-        survival: oldTotalSurvival,
-        players: oldValidPlayers,
-        totalPlayers: oldTotalPlayers,
-        onlinePlayers: oldOnlinePlayers,
-        totalPlayTime: oldTotalPlayTime
+        raids: PrevStats.raids,
+        kills: PrevStats.kills,
+        deaths: PrevStats.deaths,
+        damage: PrevStats.damage,
+        kdr: PrevStats.kdr,
+        survival: PrevStats.survival,
+        players: PrevStats.validPlayers,
+        totalPlayers: PrevStats.totalPlayers,
+        onlinePlayers: PrevStats.onlinePlayers,
+        totalPlayTime: PrevStats.playTime
     };
 
     localStorage.setItem('leaderboardStats', JSON.stringify(stats));

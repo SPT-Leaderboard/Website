@@ -4,6 +4,23 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ /
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
+/**
+ * Escapes HTML special characters in a string to prevent XSS injection.
+ * @param {string} str - The string to escape
+ * @returns {string} The escaped string with &, <, >, ", and ' replaced by HTML entities.
+ *   Returns the input unchanged if it is not a string.
+ */
+function escapeHtml(str) {
+    if (typeof str !== 'string') return str;
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+
 function getPrettyMapName(entry) {
     const mapAliases = {
         "bigmap": "Customs",
@@ -98,7 +115,32 @@ function initNavbar() {
     });
 }
 
-// Ranks
+/**
+ * Calculates a player's rank details from their rating, including rank name, level,
+ * image path, and dynamically interpolated color values for UI rendering.
+ * Ranks are divided into 5 groups of 10 levels (50 total), with 6 rank images per group.
+ * @param {number} rating - The player's current rating score
+ * @param {number} [maxRating=2000] - The maximum possible rating (used to normalize rank calculation)
+ * @param {number} [res=32] - The image resolution suffix in pixels (e.g. 32 for @32px.png)
+ * @returns {{
+ *   image: string,
+ *   name: string,
+ *   fullName: string,
+ *   level: number,
+ *   rankInGroup: number,
+ *   levelGroup: number,
+ *   progress: number,
+ *   gradient: string,
+ *   borderColor: string,
+ *   textColor: string
+ * }} Rank data object with display properties
+ * @example
+ * const rank = getRank(500);
+ * // rank.name => "Corporal"
+ * // rank.level => 13
+ * // rank.image => "media/player_ranks/Rank2/1@32px.png"
+ * // rank.progress => 25
+ */
 function getRank(rating, maxRating = 2000, res = 32) {
     const totalRanks = 50;
     const rankIndex = Math.min(totalRanks - 1, Math.floor((rating / maxRating) * totalRanks));
@@ -191,8 +233,9 @@ function getRank(rating, maxRating = 2000, res = 32) {
 }
 
 /**
- * Returns text based on player ranking for displayWinners() e.g player.rank = 1 -> '👑 First place 👑'
- * @param {Array<Object>} rank - 3 winners determined by displayWinners() - player.rank
+ * Returns a placement label for the top 3 leaderboard winners.
+ * @param {number} rank - The player's placement (1, 2, or 3)
+ * @returns {string} A display string (e.g. "First place"), or empty string for ranks outside top 3
  */
 function getRankText(rank) {
     switch (rank) {
@@ -240,6 +283,11 @@ function cleanWeaponNameFunc(weaponName) {
     return cleaned.replace(/"/g, "").trim();
 }
 
+/**
+ * Formats a Unix timestamp into a human-readable relative time string (e.g. "5 minutes ago", "2 days ago").
+ * @param {number} unixTimestamp - Unix timestamp in seconds
+ * @returns {string} A relative time string, or "Unknown" if the timestamp is invalid or non-positive
+ */
 function formatLastPlayedRaid(unixTimestamp) {
     if (typeof unixTimestamp !== "number" || unixTimestamp <= 0) {
         return "Unknown";
@@ -290,14 +338,22 @@ function formatLastPlayedRaid(unixTimestamp) {
     return `${diffInYears} years ago`;
 }
 
-// To 00:00
+/**
+ * Formats a duration in seconds to a MM:SS string with zero-padding.
+ * @param {number} seconds - Total number of seconds
+ * @returns {string} Formatted time string (e.g. "05:30")
+ */
 function formatSeconds(seconds) {
     const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
     const secs = (seconds % 60).toString().padStart(2, '0');
     return `${mins}:${secs}`;
 }
 
-// format date
+/**
+ * Formats a Date object into a readable string like "January 5 2026, 14:30".
+ * @param {Date|null|undefined} date - The Date object to format
+ * @returns {string} Formatted date string, or "Unknown" if the date is falsy
+ */
 function formatDate(date) {
     if (!date)
         return `Unknown`;
@@ -315,9 +371,9 @@ function formatDate(date) {
 }
 
 /**
- * Formats time of SCAV/PMC total playtime on the main profile section
- * @param {number} seconds - Amount of seconds
- * @returns {string}
+ * Formats a duration in seconds into a compact hours-and-minutes string for profile playtime display.
+ * @param {number} seconds - Total number of seconds of playtime
+ * @returns {string} Formatted string (e.g. "3h 25m"), or "0m" if seconds is falsy
  */
 function formatOnlineTime(seconds) {
     if (!seconds)
@@ -355,6 +411,12 @@ function formatLastSeen(timestamp) {
     return `${days}d ago`;
 }
 
+/**
+ * Formats a duration in seconds into a compact multi-unit string (e.g. "2mo 5d 3h 15m").
+ * Minutes are omitted when months are present to keep the output concise.
+ * @param {number} seconds - Total number of seconds
+ * @returns {string} Formatted duration string, or "0m" if all units are zero
+ */
 function formatTime(seconds) {
     const months = Math.floor(seconds / (3600 * 24 * 30));
     const days = Math.floor((seconds % (3600 * 24 * 30)) / (3600 * 24));
@@ -376,6 +438,11 @@ function capitalize(str, locale = 'en-EN') {
     return str[0].toLocaleUpperCase(locale) + str.slice(1).toLocaleLowerCase(locale);
 }
 
+/**
+ * Fetches custom profile appearance settings for a player from the server.
+ * @param {string} profileId - The player's profile ID
+ * @returns {Promise<Object|null>} The profile appearance settings object, or null on failure
+ */
 async function getCustomProfileSettings(profileId) {
     try {
         const response = await fetch(profileAppearencePath, {

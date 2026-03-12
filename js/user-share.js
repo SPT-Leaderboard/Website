@@ -5,7 +5,7 @@
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
 function copyProfile(playerId) {
-    const profileUrl = `${profileUrlPath}${encodeURIComponent(playerId)}`;
+    const profileUrl = `${ApiPaths.profileUrlPath}${encodeURIComponent(playerId)}`;
 
     navigator.clipboard.writeText(profileUrl)
         .then(() => {

@@ -4,26 +4,34 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ / 
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
+/**
+ * @class HeartbeatMonitor
+ * @description Polls the server for player heartbeat data at regular intervals (10s) and
+ * provides online/offline status, activity state (in raid, in menu, trading, etc.),
+ * and "last online" time formatting for each tracked player.
+ */
 class HeartbeatMonitor {
     constructor() {
         this.heartbeatData = {};
         this.onlineThreshold = 300;
     }
 
+    /**
+     * Fetches the latest heartbeat data for all players from the server API.
+     * @returns {Promise<boolean>} True if data was successfully fetched, false otherwise
+     */
     async fetchHeartbeats() {
-        try {
-            const response = await fetch(`${heartbeatsPath}?t=${Date.now()}`);
-            if (!response.ok) console.error('Failed to load heartbeats');
+        const data = await apiFetch(`${ApiPaths.heartbeatsPath}`, { showErrorToast: false });
+        if (!data) return false;
 
-            this.heartbeatData = await response.json();
-
-            return true;
-        } catch (error) {
-            console.error('Error loading heartbeats:', error);
-            return false;
-        }
+        this.heartbeatData = data;
+        return true;
     }
 
+    /**
+     * Counts the number of players whose last heartbeat is within the online threshold.
+     * @returns {number} The number of currently online players
+     */
     getOnlineCount() {
         const currentTime = Date.now() / 1000;
         let onlineCount = 0;
@@ -40,6 +48,11 @@ class HeartbeatMonitor {
         return onlineCount;
     }
 
+    /**
+     * Checks whether a specific player is currently online based on their last heartbeat timestamp.
+     * @param {string} id - The player's unique ID
+     * @returns {boolean} True if the player's last heartbeat is within the online threshold
+     */
     isOnline(id) {
         const heartbeat = this.heartbeatData[id];
         if (!heartbeat) return false;
@@ -51,6 +64,12 @@ class HeartbeatMonitor {
         return timeDiff <= this.onlineThreshold;
     }
 
+    /**
+     * Returns the full status object for a player including online state, activity type,
+     * CSS class, display text, and raid details if applicable.
+     * @param {string} playerId - The player's unique ID
+     * @returns {{isOnline: boolean, status: string, statusClass: string, statusText: string, isRecentlyInRaid: boolean, lastUpdate: number|null, raidDetails: Object|null}} Player status object
+     */
     getPlayerStatus(playerId) {
         const heartbeat = this.heartbeatData[playerId];
         const currentTime = Date.now() / 1000;
@@ -89,6 +108,11 @@ class HeartbeatMonitor {
         };
     }
 
+    /**
+     * Formats a Unix timestamp into a human-readable "time ago" string.
+     * @param {number|null} timestamp - Unix timestamp in seconds
+     * @returns {string} Relative time string (e.g. "5m ago", "3h ago", "2d ago") or "Never online"
+     */
     getLastOnlineTime(timestamp) {
         if (!timestamp) return "Never online";
 

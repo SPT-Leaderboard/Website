@@ -33,7 +33,7 @@ function displayWinners(data) {
         winnersContainer.innerHTML += `
             <div class="winner-card ">
             <div class="snow-corners${randomInteger}"></div>
-                <p class="winner-name">${player.medal} ${player.name}</p>
+                <p class="winner-name">${escapeHtml(player.medal)} ${escapeHtml(player.name)}</p>
                 <p class="winner-rank">${getRankText(player.rank)}</p>
                 <p class="winner-skill">Skill score: ${player.totalScore.toFixed(2)}</p>
                 <p class="winner-stats">Raids: ${player.pmcRaids} | KDR: ${player.killToDeathRatio}</p>

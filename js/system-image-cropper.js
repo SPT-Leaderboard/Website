@@ -118,11 +118,11 @@ async function autoCropTransparent(imageElement) {
 }
 
 async function loadAndCropPlayerImage(player) {
-    let imageUrl = `${pmcPfpsPath}${player.permaLink}_full.png`;
+    let imageUrl = `${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png`;
 
     // Bypass CF cache
     if (SettingsHelper.get('cacheBypassToggle')) {
-        imageUrl = `${pmcPfpsPath}${player.permaLink}_full.png?t=${Date.now()}`;
+        imageUrl = `${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png?t=${Date.now()}`;
     }
 
     const fallbackUrl = 'media/default_full_pmc_avatar.png';

@@ -12,21 +12,15 @@ let isDataLoaded = false;
 
 async function loadAchievementsData() {
     try {
-        const [achievementsResponse, achievementsSEResponse, playersResponse] = await Promise.all([
-            fetch('achievements/js/compiledAchData.json'),
-            fetch('achievements/js/compiledAchSEData.json'),
-            fetch(`${achievementsPath}`)
+        const [newAchievements, seAchievements, playersData] = await Promise.all([
+            apiFetch('achievements/js/compiledAchData.json'),
+            apiFetch('achievements/js/compiledAchSEData.json'),
+            apiFetch(`${ApiPaths.achievementsPath}`)
         ]);
 
-        if (!achievementsResponse.ok || !playersResponse.ok) {
+        if (!newAchievements || !playersData) {
             console.error('Failed to load achievements data');
         }
-
-        const [newAchievements, seAchievements, playersData] = await Promise.all([
-            achievementsResponse.json(),
-            achievementsSEResponse.json(),
-            playersResponse.json()
-        ]);
 
         achievementsData = {
             achievementCompiled: {

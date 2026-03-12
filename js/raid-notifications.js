@@ -277,11 +277,11 @@ async function showPlayerNotification(player) {
         notification.innerHTML = `
         <div class="notification-content-r">
             <div class="notification-header-r">
-                <img src="${player.profilePicture}" alt="${player.name}'s avatar" onclick="openProfile(${player.id})" class="notification-avatar-r" onerror="this.src='media/default_avatar.png';">
+                <img src="${player.profilePicture}" alt="${escapeHtml(player.name)}'s avatar" onclick="openProfile(${player.id})" class="notification-avatar-r" onerror="this.src='media/default_avatar.png';">
                 <div class="notification-text-r">
-                    <span class="${finalNameClass} ${player.isWinner ? 'only-name' : 'notification-name-r'}" 
+                    <span class="${finalNameClass} ${player.isWinner ? 'only-name' : 'notification-name-r'}"
                         style="${accountColor && !finalNameClass.includes('gradient') ? `color:${accountColor};` : ''} margin-bottom: 4px; font-weight: 700;">
-                        ${accountIcon}${player.teamTag ? `[${player.teamTag}] ` : ''}${player.name}
+                        ${accountIcon}${player.teamTag ? `[${escapeHtml(player.teamTag)}] ` : ''}${escapeHtml(player.name)}
                     </span>
                     <span class="notification-info-r">
                         Finished raid • ${formatLastPlayedRaid(player.absoluteLastTime)} • ${!player.isCasual ? `<span class="${rankClass}">Rank #${player.rank}</span>` : `Casual Mode`}
@@ -291,11 +291,11 @@ async function showPlayerNotification(player) {
             <div class="raid-overview-notify">
                 <span class="raid-result-r ${player.lastRaidRanThrough ? 'run-through' : player.discFromRaid ? 'disconnected' : player.isTransition ? 'transit' : player.lastRaidSurvived ? 'survived' : 'died'}">
                     ${player.lastRaidRanThrough ? `<i class="fa-solid fa-person-walking"></i> Runner` : player.discFromRaid ? `<i class="fa-solid fa-arrow-right-from-bracket"></i> Left` : player.isTransition ? `<i class="fa-solid fa-arrows-rotate fa-spin"></i>  Transit (${player.lastRaidMap}
-                    <i class='fa-solid fa-person-walking-arrow-right'></i>  ${player.lastRaidTransitionTo || 'Unknown'})` : player.lastRaidSurvived ? `<i class="fa-solid fa-person-walking"></i> Survived` : `
+                    <i class='fa-solid fa-person-walking-arrow-right'></i>  ${escapeHtml(player.lastRaidTransitionTo || 'Unknown')})` : player.lastRaidSurvived ? `<i class="fa-solid fa-person-walking"></i> Survived` : `
                     <i class="fa-solid fa-skull-crossbones"></i> Killed in Action`}
                 </span>
                 <span class="raid-meta-notify">
-                    ${player.lastRaidMap || 'Unknown'} • ${player.lastRaidAs || 'N/A'} ${player.lastRaidSurvived ? `` : `• Killed by ${player.agressorName}`} • ${player.lastRaidEXP} EXP
+                    ${player.lastRaidMap || 'Unknown'} • ${player.lastRaidAs || 'N/A'} ${player.lastRaidSurvived ? `` : `• Killed by ${escapeHtml(player.agressorName)}`} • ${player.lastRaidEXP} EXP
                 </span>
                 ${(kills > 5 && !shouldShowProfit) ? `
                     <span class="notification-last-raid-streak">
@@ -410,10 +410,10 @@ function createBanNotification(player) {
     notification.innerHTML = `
         <div class="notification-content-r">
             <div class="notification-header-r">
-                <img src="media/default_avatar.png" alt="${player.name}'s avatar" class="notification-avatar-r">
+                <img src="media/default_avatar.png" alt="${escapeHtml(player.name)}'s avatar" class="notification-avatar-r">
                 <div class="notification-text">
                     <span class="notification-name-r">
-                        ${player.teamTag ? `[${player.teamTag}]` : ``} ${player.name}
+                        ${player.teamTag ? `[${escapeHtml(player.teamTag)}]` : ``} ${escapeHtml(player.name)}
                     </span>
                 </div>
             </div>
@@ -422,12 +422,12 @@ function createBanNotification(player) {
                     Was ${player.permBanned ? `permanently` : ``} banned from Leaderboard.
                 </span>
                 <span class="ban-text">
-                    Reason: ${player.banReason}<br>
+                    Reason: ${escapeHtml(player.banReason)}<br>
                     Banned at: ${formattedBanDate}<br>
                     Banned until: ${formattedBanExpires}
                 </span>
                 <span class="ban-issued">
-                    Banned by ${player.tookAction}
+                    Banned by ${escapeHtml(player.tookAction)}
                 </span>
             </div>
         </div>
@@ -481,7 +481,7 @@ async function showNewPlayerWelcome(player) {
         <div class="notification-content-r">
             <div class="notification-header-r">
                 <div class="new-player-avatar-wrapper">
-                    <img src="${player.profilePicture}" alt="${player.name}'s avatar" class="notification-avatar-r new-player-avatar" onerror="this.src='media/default_avatar.png';" />
+                    <img src="${player.profilePicture}" alt="${escapeHtml(player.name)}'s avatar" class="notification-avatar-r new-player-avatar" onerror="this.src='media/default_avatar.png';" />
                     <div class="new-player-badge">NEW</div>
                 </div>
                 <div class="notification-text">
@@ -489,7 +489,7 @@ async function showNewPlayerWelcome(player) {
                         Welcome to SPT Leaderboard!
                     </span>
                     <span class="notification-info-r new-player-subtitle">
-                        ${player.name} just joined SPTLB
+                        ${escapeHtml(player.name)} just joined SPTLB
                     </span>
                 </div>
             </div>

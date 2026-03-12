@@ -5,6 +5,12 @@
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
 // #region Settings Modal
+/**
+ * @class SettingsManager
+ * @description Manages application settings (toggle visibility of timer, winners, leaderboard
+ * modes, cache bypass), persists them to localStorage, and controls all modal dialogs
+ * (info, TOS, settings, banned mods). Auto-saves on toggle change.
+ */
 class SettingsManager {
     constructor() {
         this.settings = {
@@ -254,17 +260,15 @@ class SettingsManager {
     }
 
     async getBannedMods() {
-        try {
-            const response = await fetch(`/api/network/functions/get_banned_mods.php`);
-            if (!response.ok) console.error(`HTTP error! ${response.status}`);
-
-            return await response.json();
-        } catch (error) {
-            console.error('Fetch error:', error);
-            return { error: error.message };
-        }
+        const data = await apiFetch(`/api/network/functions/get_banned_mods.php`, { showErrorToast: false });
+        if (!data) return { error: 'Failed to fetch banned mods' };
+        return data;
     }
 
+    /**
+     * Renders the list of banned mods into a two-column grid layout in the banned mods modal.
+     * @param {Array<string>} mods - Array of banned mod name strings to display
+     */
     displayBannedMods(mods) {
         const container = document.getElementById('bannedModsContainer');
         if (!container) {
@@ -553,7 +557,17 @@ class PlayerWidget {
     }
 }
 
+/**
+ * @class SettingsHelper
+ * @description Static utility class providing convenient access to the global SettingsManager
+ * instance. Allows reading and writing individual settings without direct SettingsManager references.
+ */
 class SettingsHelper {
+    /**
+     * Retrieves a setting value from the global SettingsManager instance.
+     * @param {string} key - The setting key name
+     * @returns {*|null} The setting value, or null if SettingsManager is not initialized
+     */
     static get(key) {
         if (window.settingsManager) {
             return window.settingsManager.getSetting(key);
@@ -571,6 +585,10 @@ class SettingsHelper {
         return false;
     }
 
+    /**
+     * Retrieves all settings as a shallow copy from the global SettingsManager instance.
+     * @returns {Object|null} Copy of all settings, or null if SettingsManager is not initialized
+     */
     static getAll() {
         if (window.settingsManager) {
             return window.settingsManager.getAllSettings();

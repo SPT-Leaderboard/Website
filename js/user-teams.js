@@ -57,11 +57,11 @@ function renderTeamPlayers() {
         playerCard.className = 'player-card-team';
         playerCard.style.animationDelay = `${index * 0.15}s`;
 
-        const imagePath = `${pmcPfpsPath}${player.permaLink}_full.png`;
+        const imagePath = `${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png`;
 
         playerCard.innerHTML = `
             <img src="${imagePath}" 
-                 alt="${player.name || 'Player'}" 
+                 alt="${escapeHtml(player.name || 'Player')}"
                  class="player-image-team"
                  data-player-id="${player.id || ''}"
                  loading="lazy"
@@ -69,7 +69,7 @@ function renderTeamPlayers() {
             
             <div class="team-player-stats-wrapper">
                 <div class="player-name-team" data-player-id="${player.id || ''}">
-                    ${player.name || 'Unknown Player'}
+                    ${escapeHtml(player.name || 'Unknown Player')}
                 </div>
             </div>
             <div class="player-level-team">LVL ${player.pmcLevel || 0}</div>
