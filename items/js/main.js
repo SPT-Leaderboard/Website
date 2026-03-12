@@ -460,6 +460,8 @@ class ItemsRenderer {
         return diffHours < 5;
     }
 
+    // Deprecated
+    // Never called due static page
     destroy() {
         clearTimeout(this.debounceTimer);
         if (this.rafId) cancelAnimationFrame(this.rafId);
