@@ -1,10 +1,14 @@
-//     _____ ____  ______   __    _________    ____  __________  ____  ____  ___    ____  ____ 
+//     _____ ____  ______   __    _________    ____  __________  ____  ____  ___    ____  ____
 //    / ___// __ \/_  __/  / /   / ____/   |  / __ \/ ____/ __ \/ __ )/ __ \/   |  / __ \/ __ \
-//    \__ \/ /_/ / / /    / /   / __/ / /| | / / / / __/ / /_/ / __  / / / / /| | / /_/ / / / /  
-//   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ / 
-//  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
+//    \__ \/ /_/ / / /    / /   / __/ / /| | / / / / __/ / /_/ / __  / / / / /| | / /_/ / / / /
+//   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ /
+//  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
-// #region Friends Manager
+/**
+ * @class FriendManager
+ * @description Manages the friend system for player profiles, including friend status checks,
+ * friend request sending, friend list rendering, and real-friend vs local-friend tagging.
+ */
 class FriendManager {
     constructor() {
         this.container = document.getElementById('friends-container');
@@ -14,14 +18,38 @@ class FriendManager {
         this.isLoggedIn = isLoggedIn;
         this.friends = [];
         this.realFriends = new Set();
+        this._onDocumentClick = null;
     }
 
+    /**
+     * Initializes the friend manager for a given player, sets up click-away listeners,
+     * renders the friend button, and loads the friend list.
+     * @param {Object} player - The player object whose profile is being viewed
+     * @param {string} player.id - The player's unique ID
+     */
     async init(player) {
         this.currentPlayer = player;
         this.buttonContainer = document.querySelector('.friend-button-container');
 
+        // Attach global click-away listener once
+        this._onDocumentClick = (e) => {
+            const dropdown = this.buttonContainer?.querySelector('.friend-dropdown');
+            const button = this.buttonContainer?.querySelector('.friend-button.unfriend');
+            if (dropdown && button && !button.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        };
+        document.addEventListener('click', this._onDocumentClick);
+
         await this.handleFriendButton();
         await this.renderFriendList();
+    }
+
+    destroy() {
+        if (this._onDocumentClick) {
+            document.removeEventListener('click', this._onDocumentClick);
+            this._onDocumentClick = null;
+        }
     }
 
     async handleFriendButton() {
@@ -39,29 +67,38 @@ class FriendManager {
         }
     }
 
+    /**
+     * Checks the friendship status between the logged-in user and the current player.
+     * @returns {Promise<string>} One of "canAdd", "isFriend", "requestPending", "cannotAdd", or "error"
+     */
     async checkFriendStatus() {
-        const response = await fetch('/api/network/functions/community/is_friend.php', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Cache-Control': 'no-cache',
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ profileId: this.currentPlayer.id })
-        });
+        try {
+            const data = await apiFetch('/api/network/functions/community/is_friend.php', {
+                method: 'POST',
+                cacheBust: false,
+                showErrorToast: false,
+                timeout: 10000,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                body: { profileId: this.currentPlayer.id }
+            });
 
-        if (!response.ok) return 'error';
+            if (data === null) {
+                return 'cannotAdd';
+            }
 
-        const data = await response.json();
-
-        return data.status; // "canAdd", "isFriend", "requestPending", "cannotAdd"
+            return data.status; // "canAdd", "isFriend", "requestPending", "cannotAdd"
+        } catch (error) {
+            console.error('Error checking friend status:', error);
+            return 'cannotAdd';
+        }
     }
 
     renderLoginButton() {
         this.buttonContainer.innerHTML = `
-            <button class="friend-button login-required" onclick="currentFriendManager.goToLoginPage()">
+            <button class="friend-button login-required" onclick="ProfileState.friendManager.goToLoginPage()">
                 <i class="fa-solid fa-sign-in-alt"></i>
                 <span>Login to add friends</span>
             </button>
@@ -72,6 +109,10 @@ class FriendManager {
         window.location.href = '/api/login/';
     }
 
+    /**
+     * Renders the appropriate friend action button based on the current friendship status.
+     * @param {string} status - ("isFriend", "requestPending", "canAdd", or other)
+     */
     renderFriendButton(status) {
         let buttonHtml;
 
@@ -150,15 +191,6 @@ class FriendManager {
                 this.removeFriend();
             });
         }
-
-        document.addEventListener('click', (e) => {
-            const dropdown = this.buttonContainer?.querySelector('.friend-dropdown');
-            const button = this.buttonContainer?.querySelector('.friend-button.unfriend');
-
-            if (dropdown && button && !button.contains(e.target) && !dropdown.contains(e.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
     }
 
     toggleDropdown() {
@@ -166,35 +198,39 @@ class FriendManager {
         dropdown.classList.toggle('show');
     }
 
+    /**
+     * Sends a friend request to the current player via the API
+     */
     async sendFriendRequest() {
         try {
             const button = this.buttonContainer.querySelector('.friend-button.add');
             button.classList.add('loading');
             button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
 
-            const response = await fetch('/api/network/functions/community/send_friend_request.php', {
+            const data = await apiFetch('/api/network/functions/community/send_friend_request.php', {
                 method: 'POST',
-                credentials: 'include',
+                cacheBust: false,
+                showErrorToast: false,
+                timeout: 10000,
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Cache-Control': 'no-cache',
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Accept': 'application/json'
                 },
-                body: JSON.stringify({ profileId: this.currentPlayer.id })
+                body: { profileId: this.currentPlayer.id }
             });
 
-            const data = response.json();
-
-            if (data.success) {
+            if (data && data.success) {
                 button.classList.remove('loading');
                 button.classList.add('success');
                 button.innerHTML = '<i class="fa-solid fa-check"></i> Request Sent!';
-            }
 
-            setTimeout(() => {
-                this.handleFriendButton();
-            }, 2000);
+                setTimeout(() => {
+                    this.handleFriendButton();
+                }, 2000);
+            } else {
+                throw new Error(data?.message || 'Request failed');
+            }
 
         } catch (error) {
             console.error('Error sending friend request:', error);
@@ -214,7 +250,10 @@ class FriendManager {
         }
     }
 
-    // TODO: Render their actual friendlist and tag locals 
+    /**
+     * Fetches the list of "real" (non-local) friend IDs for the current player from the server.
+     * @returns {Promise<Array<string>>} Array of friend IDs, or empty array on failure
+     */
     async fetchRealFriends() {
         try {
             const response = await fetch('/api/network/functions/community/get_friends.php', {
@@ -240,6 +279,11 @@ class FriendManager {
         }
     }
 
+    /**
+     * Fetches and merges the player's friend list, tagging each friend as real or local.
+     * Results are sorted with real friends first, then alphabetically by name.
+     * @returns {Promise<Array<Object>>} Sorted array of friend objects with `isRealFriend` flag
+     */
     async checkFriends() {
         const realFriendIds = await this.fetchRealFriends();
         this.realFriends = new Set(realFriendIds);
@@ -278,6 +322,10 @@ class FriendManager {
         }
     }
 
+    /**
+     * Fetches the friend list, renders friend items with online status and avatars into
+     * the friend container, and attaches click listeners for profile navigation.
+     */
     async renderFriendList() {
         if (!this.container || !this.section) return;
 
@@ -364,7 +412,17 @@ class FriendManager {
 // #endregion
 
 // #region Comments Manager
+/**
+ * @class CommentsManager
+ * @description Handles the profile comment system including posting, loading, paginating,
+ * and rendering comments on a player's profile page. Supports login-gated submissions and
+ * real-time UI updates when new comments are posted.
+ */
 class CommentsManager {
+    /**
+     * @param {Object} [config={}] - Configuration options
+     * @param {number} [config.commentsPerPage=5] - Number of comments to display per page
+     */
     constructor(config = {}) {
         this.pagination = {
             allComments: [],
@@ -396,6 +454,12 @@ class CommentsManager {
         };
     }
 
+    /**
+     * Initializes the comments system for a specific player profile. Binds DOM elements,
+     * disables the form if not logged in, sets up pagination, and loads existing comments.
+     * @param {string} permaLink - The player's permanent link identifier used to fetch comments
+     * @param {string} playerId - The player's unique ID (used as receiverId when posting)
+     */
     init(permaLink, playerId) {
         this.permaLink = permaLink;
         this.playerId = playerId;
@@ -487,7 +551,11 @@ class CommentsManager {
         }
     }
 
-    // Navigate to specific page
+    /**
+     * Navigates to a specific comment page, re-renders the visible comments,
+     * and smoothly scrolls the comment list into view.
+     * @param {number} pageNumber - The 1-based page number to navigate to
+     */
     goToPage(pageNumber) {
         if (pageNumber < 1 || pageNumber > this.pagination.totalPages) {
             return;
@@ -642,7 +710,10 @@ class CommentsManager {
         }
     }
 
-    // Submit comment to server
+    /**
+     * Submits the comment text to the server, adds the returned comment to the UI
+     * on success, and shows success/error feedback on the submit button.
+     */
     async submitComment() {
         const originalText = this.elements.commentSubmit.innerHTML;
 
@@ -695,7 +766,15 @@ class CommentsManager {
         }
     }
 
-    // Add new comment to UI without reloading
+    /**
+     * Prepends a new comment to the internal comments array and re-renders the first page.
+     * Applies a brief highlight animation to the newly added comment element.
+     * @param {Object} comment - The comment data object returned from the server
+     * @param {string} comment.id - Comment ID
+     * @param {string} comment.text - Comment body text
+     * @param {string} comment.author - Author display name
+     * @param {number} comment.timestamp - Unix timestamp of the comment
+     */
     addCommentToUI(comment) {
         this.pagination.allComments.unshift(comment);
         this.pagination.totalPages = Math.ceil(this.pagination.allComments.length / this.pagination.commentsPerPage);
@@ -737,7 +816,10 @@ class CommentsManager {
         }, 2000);
     }
 
-    // Show error message
+    /**
+     * Temporarily shows an error message on the submit button with a red styling for 3 seconds.
+     * @param {string} errorMessage - The error text to display
+     */
     showCommentError(errorMessage) {
         if (!this.elements.commentSubmit) return;
 
@@ -754,7 +836,10 @@ class CommentsManager {
         }, 3000);
     }
 
-    // Load comments from server
+    /**
+     * Fetches comments from the server JSON endpoint, sorts them by timestamp descending,
+     * and renders the first page with pagination controls.
+     */
     async loadComments() {
         if (!this.apiEndpoints.loadComments) {
             console.error('Load comments endpoint not configured');
@@ -788,22 +873,30 @@ class CommentsManager {
         }
     }
 
-    // Create individual comment element
+    /**
+     * Creates a DOM element for a single comment with avatar, author name, date, and text.
+     * @param {Object} comment - The comment data object
+     * @param {number} comment.timestamp - Unix timestamp (seconds) of the comment
+     * @param {string} comment.text - The comment body (HTML-entity-encoded)
+     * @param {string} [comment.author] - Author name (defaults to "Anonymous")
+     * @param {string} [comment.avatar] - URL to the author's avatar image
+     * @returns {HTMLDivElement} The constructed comment DOM element
+     */
     createCommentElement(comment) {
         const commentDiv = document.createElement('div');
         commentDiv.className = 'comment';
 
         const commentDate = new Date(comment.timestamp * 1000);
         const formattedDate = this.formatDate(commentDate);
-        const decodedText = this.decodeHtmlEntities(comment.text);
+        const decodedText = escapeHtml(this.decodeHtmlEntities(comment.text));
 
         commentDiv.innerHTML = `
             <div class="comment-header">
-                <img src="${comment.avatar || 'media/default_avatar.png'}" 
+                <img src="${comment.avatar || 'media/default_avatar.png'}"
                      alt="User Avatar" class="user-avatar"
                      onerror="this.src='media/default_avatar.png'">
                 <div class="user-info">
-                    <div class="user-name">${comment.author || 'Anonymous'}</div>
+                    <div class="user-name">${escapeHtml(comment.author || 'Anonymous')}</div>
                     <div class="comment-date">${formattedDate}</div>
                 </div>
             </div>
@@ -842,14 +935,17 @@ class CommentsManager {
         return date.toLocaleDateString();
     }
 
-    // Decode HTML entities
+    /**
+     * Decodes safe HTML entities (apostrophes, quotes, ampersands) back to characters.
+     * Intentionally does NOT decode &lt; and &gt; to prevent XSS.
+     * @param {string} text - The HTML-entity-encoded string
+     * @returns {string} The decoded string with safe entities restored
+     */
     decodeHtmlEntities(text) {
         const entities = {
             '&#39;': "'",
             '&quot;': '"',
-            '&amp;': '&',
-            '&lt;': '<',
-            '&gt;': '>'
+            '&amp;': '&'
         };
 
         return text.replace(/&#?\w+;/g, match => entities[match] || match);
@@ -901,8 +997,19 @@ class CommentsManager {
 }
 // #endregion
 
+
 // #region Profile Heartbeat Animator
+/**
+ * @class RaidTimeAnimator
+ * @description Animates in-game raid time on a player's profile using requestAnimationFrame.
+ * Advances a displayed HH:MM:SS clock at an accelerated rate (default 7x real-time) to
+ * simulate the in-raid time progression between heartbeat updates.
+ */
 class RaidTimeAnimator {
+    /**
+     * @param {HTMLElement} timeElement - The DOM element whose textContent will be updated with the animated time
+     * @param {number} [timeMultiplier=7] - Speed multiplier for time advancement (e.g. 7 = 7x real-time)
+     */
     constructor(timeElement, timeMultiplier = 7) {
         this.timeElement = timeElement;
         this.timeMultiplier = timeMultiplier;
@@ -911,6 +1018,10 @@ class RaidTimeAnimator {
         this.currentTime = null;
     }
 
+    /**
+     * Starts the time animation from an initial HH:MM:SS string. Stops any existing animation first.
+     * @param {string} initialTime - Time string in "Time: HH:MM:SS" or "HH:MM:SS" format
+     */
     start(initialTime) {
         this.stop();
 
@@ -970,6 +1081,12 @@ class RaidTimeAnimator {
 // #endregion
 
 // #region Profile Player Equipment
+/**
+ * @class PlayerEquipmentDisplay
+ * @description Renders a player's equipped gear (headwear, armor, weapons, backpack) as
+ * a visual overlay with CDN-sourced item icons. Supports weapon attachment tooltips with
+ * grouped attachment categories (scope, magazine, barrel, stock, grip, ammo, tactical).
+ */
 class PlayerEquipmentDisplay {
     constructor(playerId) {
         this.playerId = playerId;
@@ -980,6 +1097,11 @@ class PlayerEquipmentDisplay {
         this.loadPromise = null;
     }
 
+    /**
+     * Fetches the player's equipment data from the server API. Deduplicates concurrent
+     * calls by returning the existing promise if a load is already in progress.
+     * @returns {Promise<Object>} The equipment data keyed by slot type, or empty object on failure
+     */
     async loadEquipmentData() {
         if (this.isLoading) return this.loadPromise;
 
@@ -1011,7 +1133,11 @@ class PlayerEquipmentDisplay {
         }
     }
 
-    //(fixing duplication issue)
+    /**
+     * Returns the first item from the array that has a unique template_id (deduplication fix).
+     * @param {Array<Object>} items - Array of equipment items
+     * @returns {Object|null} The first unique item, or null if the array is empty
+     */
     getUniqueFirstItem(items) {
         if (!items || items.length === 0) return null;
         const seen = new Set();
@@ -1024,7 +1150,11 @@ class PlayerEquipmentDisplay {
         return items[0];
     }
 
-    //(fixing duplication issue)
+    /**
+     * Filters an array of items to only include those with unique template_ids.
+     * @param {Array<Object>} items - Array of equipment items
+     * @returns {Array<Object>} Deduplicated array preserving original order
+     */
     getUniqueItems(items) {
         const seen = new Set();
         return items.filter(item => {
@@ -1041,6 +1171,11 @@ class PlayerEquipmentDisplay {
         return shortName.replace(/<[^>]*>/g, '');
     }
 
+    /**
+     * Groups weapon attachments into categories based on name keywords.
+     * @param {Array<Object>} attachments - Array of attachment items with `name` properties
+     * @returns {{scope: Array, magazine: Array, barrel: Array, stock: Array, grip: Array, ammo: Array, tactical: Array, other: Array}} Grouped attachments
+     */
     groupAttachmentsByType(attachments) {
         const groups = {
             scope: [],
@@ -1096,6 +1231,14 @@ class PlayerEquipmentDisplay {
         return groups;
     }
 
+    /**
+     * Generates the HTML string for a single attachment item with a loading spinner placeholder.
+     * @param {Object} item - The attachment item object
+     * @param {string} item.template_id - The item's template ID for CDN image lookup
+     * @param {string} item.name - The item's display name
+     * @param {number} [item.amount] - Stack count (displayed if > 1)
+     * @returns {string} HTML string for the attachment element
+     */
     createAttachmentHtml(item) {
         const itemId = item.template_id;
         const cleanName = this.cleanShortName(item.name);
@@ -1113,7 +1256,7 @@ class PlayerEquipmentDisplay {
         return `
             <div class="attachment-item" data-item-id="${itemId}" data-attachment-id="${attachmentId}">
                 <div class="attachment-icon">
-                    <div class="attachment-icon-placeholder" 
+                    <div class="attachment-icon-placeholder"
                          data-attachment-id="${attachmentId}"
                          data-item-id="${itemId}"
                          data-item-name="${cleanName}"
@@ -1134,6 +1277,10 @@ class PlayerEquipmentDisplay {
         `;
     }
 
+    /**
+     * Finds all attachment placeholder elements within a tooltip and triggers async image loading for each.
+     * @param {HTMLElement} tooltipElement - The tooltip DOM element containing attachment placeholders
+     */
     loadAttachmentImages(tooltipElement) {
         const placeholders = tooltipElement.querySelectorAll('.attachment-icon-placeholder');
 
@@ -1146,6 +1293,14 @@ class PlayerEquipmentDisplay {
         });
     }
 
+    /**
+     * Loads an attachment image, trying the CDN first, then falling back to a local URL.
+     * Replaces the loading spinner placeholder with the loaded image on success.
+     * @param {string} itemId - The item's template ID
+     * @param {string} itemName - The item's display name (used for local fallback path)
+     * @param {string} attachmentId - Unique ID for this attachment DOM element
+     * @param {HTMLElement} placeholderElement - The placeholder element to replace with the loaded image
+     */
     async loadAttachmentImage(itemId, itemName, attachmentId, placeholderElement) {
         // Try CDN first
         const cdnUrl = `https://assets.tarkov.dev/${itemId}-512.webp`;
@@ -1171,7 +1326,7 @@ class PlayerEquipmentDisplay {
                 }
             };
 
-            // Set src 
+            // Set src
             if (cdnSuccess) {
                 img.src = cdnUrl;
             } else {
@@ -1242,7 +1397,11 @@ class PlayerEquipmentDisplay {
         });
     }
 
-    // Main call
+    /**
+     * Creates and returns the complete equipment overlay DOM element containing head gear,
+     * armor, weapons, and backpack columns. Loads equipment data if not already cached.
+     * @returns {Promise<HTMLDivElement>} The constructed overlay element
+     */
     async createViewModelOverlay() {
         await this.ensureDataLoaded();
 
@@ -1257,7 +1416,10 @@ class PlayerEquipmentDisplay {
         return overlay;
     }
 
-    // Headwear, FaceCover, Earpiece, Eyewear column
+    /**
+     * Builds and appends the head gear column (Headwear, FaceCover, Earpiece, Eyewear) to the overlay.
+     * @param {HTMLElement} overlay - The parent overlay element to append the column to
+     */
     createHeadColumn(overlay) {
         const headItems = [
             { type: 'Headwear', displayName: 'Helmet' },
@@ -1282,7 +1444,10 @@ class PlayerEquipmentDisplay {
         overlay.appendChild(headColumn);
     }
 
-    // TacticalVest, ArmorVest
+    /**
+     * Builds and appends the armor column (TacticalVest, ArmorVest) to the overlay.
+     * @param {HTMLElement} overlay - The parent overlay element to append the column to
+     */
     createArmorColumn(overlay) {
         const armorItems = [
             { type: 'TacticalVest', displayName: 'Tactical Vest' },
@@ -1305,7 +1470,11 @@ class PlayerEquipmentDisplay {
         overlay.appendChild(armorColumn);
     }
 
-    // Holster, FirstPrimaryWeapon, SecondPrimaryWeapon
+    /**
+     * Builds and appends the weapon column (Holster, Primary, Secondary) with click-to-expand
+     * attachment tooltips for weapons that have attachments.
+     * @param {HTMLElement} overlay - The parent overlay element to append the column to
+     */
     createWeaponColumn(overlay) {
         const weaponItems = [
             { type: 'Holster', displayName: 'Holster', className: 'holster' },
@@ -1334,7 +1503,7 @@ class PlayerEquipmentDisplay {
 
             weaponDiv.innerHTML = `
                 <div class="viewmodel-icon-rectangle">
-                    <img src="${iconUrl}" 
+                    <img src="${iconUrl}"
                          alt="${this.cleanShortName(weapon.shortName)}"
                          loading="lazy"
                          onerror="this.onerror=null; this.src='fallback-image-url.png';">
@@ -1356,7 +1525,10 @@ class PlayerEquipmentDisplay {
         overlay.appendChild(weaponColumn);
     }
 
-    // backpack
+    /**
+     * Builds and appends the backpack item element to the overlay.
+     * @param {HTMLElement} overlay - The parent overlay element to append the backpack to
+     */
     createBackpackItem(overlay) {
         const backpackItems = this.equipment['Backpack'] || [];
         const uniqueItem = this.getUniqueFirstItem(backpackItems);
@@ -1371,7 +1543,7 @@ class PlayerEquipmentDisplay {
 
         backpackDiv.innerHTML = `
             <div class="viewmodel-icon-square">
-                <img src="${iconUrl}" 
+                <img src="${iconUrl}"
                      alt="${this.cleanShortName(uniqueItem.shortName)}"
                      loading="lazy"
                      onerror="this.onerror=null; this.src='fallback-image-url.png';">
@@ -1382,7 +1554,15 @@ class PlayerEquipmentDisplay {
         overlay.appendChild(backpackDiv);
     }
 
-    // single viewmodel
+    /**
+     * Creates a single viewmodel item element with a CDN-sourced icon image.
+     * @param {Object} item - The equipment item object
+     * @param {string} item.template_id - The item's template ID for CDN image lookup
+     * @param {string} item.shortName - The item's display name (may contain HTML color tags)
+     * @param {string} displayName - Human-readable label for the slot (e.g. "Helmet", "Armor Vest")
+     * @param {string} [iconType='square'] - Icon container CSS class suffix ("square" or "rectangle")
+     * @returns {HTMLDivElement} The constructed viewmodel item element
+     */
     createViewModelItem(item, displayName, iconType = 'square') {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'viewmodel-head-item';
@@ -1393,7 +1573,7 @@ class PlayerEquipmentDisplay {
 
         itemDiv.innerHTML = `
             <div class="viewmodel-icon-${iconType}">
-                <img src="${iconUrl}" 
+                <img src="${iconUrl}"
                      alt="${this.cleanShortName(item.shortName)}"
                      loading="lazy"
                      onerror="this.onerror=null; this.src='fallback-image-url.png';">
@@ -1404,7 +1584,13 @@ class PlayerEquipmentDisplay {
         return itemDiv;
     }
 
-    // tooltip
+    /**
+     * Toggles the weapon attachment tooltip for a given weapon element. Closes if already
+     * open on the same target, otherwise creates and positions a new tooltip.
+     * @param {HTMLElement} targetElement - The weapon DOM element that was clicked
+     * @param {Object} weapon - The weapon item object
+     * @param {Array<Object>} attachments - Array of attachment items to display in the tooltip
+     */
     toggleTooltip(targetElement, weapon, attachments) {
         if (this.activeTooltip && this.activeTooltip.target === targetElement) {
             this.closeTooltip();
@@ -1420,6 +1606,12 @@ class PlayerEquipmentDisplay {
         this.loadAttachmentImages(tooltip);
     }
 
+    /**
+     * Creates the tooltip DOM element with grouped attachment listings and a close button.
+     * @param {Object} weapon - The weapon item object (used for the tooltip header)
+     * @param {Array<Object>} attachments - Array of attachment items to display
+     * @returns {HTMLDivElement} The constructed tooltip element (not yet positioned or appended)
+     */
     createTooltip(weapon, attachments) {
         const tooltip = document.createElement('div');
         tooltip.className = 'weapon-hover mainvm';
@@ -1460,6 +1652,12 @@ class PlayerEquipmentDisplay {
         return tooltip;
     }
 
+    /**
+     * Appends the tooltip to the document body and positions it adjacent to the target element,
+     * adjusting for viewport boundaries. Registers an outside-click handler to auto-close.
+     * @param {HTMLElement} targetElement - The element the tooltip is anchored to
+     * @param {HTMLDivElement} tooltip - The tooltip element to position and display
+     */
     showTooltip(targetElement, tooltip) {
         document.body.appendChild(tooltip);
 
