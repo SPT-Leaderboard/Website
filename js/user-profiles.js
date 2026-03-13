@@ -4,18 +4,27 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ /
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
-let isProfileOpened = false;
-let savedScrollPosition = 0;
-let targetPlayerElement = null;
-let currentHighlightedPlayerId = null;
-let statusUpdater = null;
-let commentsManager = null;
-let friendManager = null;
+const ProfileState = {
+    isProfileOpened: false,
+    savedScrollPosition: 0,
+    targetPlayerElement: null,
+    currentHighlightedPlayerId: null,
+    statusUpdater: null,
+    commentsManager: null,
+    friendManager: null
+};
 
+/**
+ * Opens a player's profile modal by looking up the player in leaderboardData.
+ * Routes to the disqualified profile view if the player is banned, otherwise shows the full public profile.
+ * @param {string} playerId - The unique identifier of the player to display.
+ * @param {boolean} [bypass=false] - If true, allows reopening a profile even if one is already open (from friend list or raid history).
+ * @returns {void}
+ */
 function openProfile(playerId, bypass = false) {
     // Don't open profile again for whatever reason if profile is already open
     // Only let this happen if user opens a player from friend list or raid history
-    if (isProfileOpened && !bypass) {
+    if (ProfileState.isProfileOpened && !bypass) {
         return;
     }
 
@@ -35,14 +44,6 @@ function openProfile(playerId, bypass = false) {
         return;
     }
 
-    if (player.banned) {
-        modal.style.display = "flex";
-        modal.classList.add('active');
-        showDisqualProfile(modalContent, player);
-        setupModalCloseHandlers(modal, player);
-        return;
-    }
-
     window.location.hash = `id=${encodeURIComponent(player.id)}`;
     modal.style.display = "flex";
     modal.classList.add('active');
@@ -50,57 +51,16 @@ function openProfile(playerId, bypass = false) {
     showPublicProfile(modalContent, player);
 }
 
-// #region Banned Profile
-function showDisqualProfile(container, player) {
-    const profileModal = document.querySelector(".profile-modal-content");
-    const mainBackground = document.getElementById("playerProfileModal");
-    const profileModalBG = document.getElementById("modalPlayerInfo");
-
-    profileModalBG.style.backgroundColor = "";
-    profileModalBG.style.backgroundImage = "";
-
-    mainBackground.style.backgroundImage = "";
-    mainBackground.style.backgroundColor = "";
-
-    mainBackground.classList.remove(
-        "usec-background",
-        "labs-background",
-        "bear-background",
-        "prestige-tagilla",
-        "prestige-killa",
-        "prestige-both"
-    );
-
-    profileModal.classList.remove(
-        "theme-dark",
-        "theme-light",
-        "theme-gradient",
-        "theme-default",
-        "theme-redshade",
-        "theme-steelshade",
-        "theme-premium"
-    );
-
-    container.innerHTML = `
-    <div class="private-profile-overlay">
-    <button id="closeButton" class="close-profile-button">×</button>
-        <div class="private-profile-content">
-            <img src="https://media1.tenor.com/m/N4XSv7AAXXMAAAAd/thanos-endgame.gif" class="ban-icon" alt="Banned">
-            <h3>Profile Banned</h3>
-            <p>This player has been suspended.</p>
-            <div class="ban-details">
-                <p><strong>Profile ID:</strong> ${player.id}</p>
-                <p><strong>Reason:</strong> ${player.banReason}</p>
-                ${player.permBanned ? `<p><strong>Banned until:</strong> Permanent</p>` : `<p><strong>Banned until:</strong> ${formatDate(new Date(player.banExpires * 1000))}</p>`}
-                <p><strong>${player.tookAction === "harmony" ? `Admin:` : `Moderator:`}</strong> ${player.tookAction}</p>
-            </div>
-        </div>
-    </div>
-    `;
-}
-// #endregion
-
 // #region Public Profile
+/**
+ * Fetches custom profile settings and renders the full public profile view.
+ * Highlights the player row on the leaderboard, hides the leaderboard table,
+ * applies the player's theme/prestige styling, and builds all profile sections
+ * (header, stats, raid history, friends, comments, showcase, etc.).
+ * @param {HTMLElement} container - The modal content element to render into.
+ * @param {Object} player - The player data object from leaderboardData.
+ * @returns {Promise<void>}
+ */
 async function showPublicProfile(container, player) {
 
     // Show loader
@@ -117,20 +77,20 @@ async function showPublicProfile(container, player) {
         </div>
     `
 
-    isProfileOpened = true;
-    if (currentHighlightedPlayerId) {
-        const prevPlayer = document.querySelector(`[data-player-id="${currentHighlightedPlayerId}"]`);
+    ProfileState.isProfileOpened = true;
+    if (ProfileState.currentHighlightedPlayerId) {
+        const prevPlayer = document.querySelector(`[data-player-id="${ProfileState.currentHighlightedPlayerId}"]`);
         if (prevPlayer) {
             prevPlayer.classList.remove('highlight-player');
         }
     }
 
-    savedScrollPosition = window.scrollY;
-    targetPlayerElement = document.querySelector(`[data-player-id="${player.id}"]`);
+    ProfileState.savedScrollPosition = window.scrollY;
+    ProfileState.targetPlayerElement = document.querySelector(`[data-player-id="${player.id}"]`);
 
-    if (targetPlayerElement) {
-        targetPlayerElement.classList.add('highlight-player');
-        currentHighlightedPlayerId = player.id;
+    if (ProfileState.targetPlayerElement) {
+        ProfileState.targetPlayerElement.classList.add('highlight-player');
+        ProfileState.currentHighlightedPlayerId = player.id;
     }
 
     const playerDataResponse = await getCustomProfileSettings(player.id);
@@ -195,6 +155,9 @@ async function showPublicProfile(container, player) {
     // Convert registration date of a player
     const regDate = player.registrationDate
         ? new Date(player.registrationDate * 1000).toLocaleDateString()
+        : "Unknown";
+    const lbRegDate = player.registeredOnLeaderboard
+        ? new Date(player.registeredOnLeaderboard * 1000).toLocaleDateString()
         : "Unknown";
 
     // Generate badges
@@ -261,19 +224,19 @@ async function showPublicProfile(container, player) {
         const side = playerStatus.raidDetails.side;
 
         raidInfo = `
-        <section class="raid-details" 
-                 style="--map-bg: url('media/leaderboard_icons/maps/${prettyMapName}.png')">
-            <span class="raid-map">
-                Map: ${prettyMapName}
-            </span>
-            <span class="raid-side">
-                Side: ${side}
-            </span>
-            <span class="raid-time">
-                Time: ${playerStatus.raidDetails.gameTime}
-            </span>
-        </section>
-    `;
+            <section class="raid-details"
+                    style="--map-bg: url('media/leaderboard_icons/maps/${prettyMapName}.png')">
+                <span class="raid-map">
+                    Map: ${prettyMapName}
+                </span>
+                <span class="raid-side">
+                    Side: ${side}
+                </span>
+                <span class="raid-time">
+                    Time: ${playerStatus.raidDetails.gameTime}
+                </span>
+            </section>
+        `;
     }
 
     // Get HTML part of profile side
@@ -360,20 +323,86 @@ async function showPublicProfile(container, player) {
         <!-- left column -->
         <img src="media/rewards/other/cat.gif" class="kittyrew" id="catrew"  alt=""/>
 
-        <button id="closeButton" class="close-profile-button">×</button>
+        <button id="closeButton" class="close-profile-button">&times;</button>
         <div class="left-column">
 
             <div class="user-main-card profile-section" id="main-profile-card">
-                <div class="pfp"><img src="${player.customPfp ? player.customPfp : player.profilePicture}" class="player-avatar" id="profile-avatar" alt="${player.name}" onerror="this.src='media/default_avatar.png';" /></div>
+                <div class="pfp"><img src="${player.customPfp ? player.customPfp : player.profilePicture}" class="player-avatar" id="profile-avatar" alt="${escapeHtml(player.name)}" onerror="this.src='media/default_avatar.png';" /></div>
                 <div class="profile-header">
                     <div class="name-wrapper">
                         <div class="${finalNameClass} ${player.isWinner ? `` : `name`}" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''}>
-                            ${player.teamTag ? `[${player.teamTag}]` : ``}
-                            ${player.customName ? player.customName : player.name}
+                            ${player.teamTag ? `[${escapeHtml(player.teamTag)}]` : ``}
+                            ${escapeHtml(player.customName ? player.customName : player.name)}
                         </div>
-                        <div class="registerDate">Joined: ${regDate}</div>
+                    <div class="registration-info">
+                        <div class="register-date-trigger" id="registrationTrigger">
+                            <i class="fa-regular fa-calendar"></i>
+                            <span>Joined: ${regDate}</span>
+                            <i class="fa-solid fa-chevron-down info-chevron" id="chevronIcon"></i>
+                        </div>
+                        
+                        <div class="registration-dropdown glass-dropdown" id="registrationDropdown">
+                            <div class="dropdown-header">
+                                <i class="fa-regular fa-id-card"></i>
+                                <span>Account Information</span>
+                            </div>
+                            
+                            <div class="dropdown-content">
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fa-regular fa-calendar-check"></i>
+                                        <span>Registered (SPT):</span>
+                                    </div>
+                                    <div class="info-value" id="reg-full-date">${regDate} (${formatLastPlayedRaid(player.registrationDate)})</div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fa-regular fa-clock"></i>
+                                        <span>Registered (SPTLB):</span>
+                                    </div>
+                                    <div class="info-value" id="account-age">${lbRegDate} (${formatLastPlayedRaid(player.registeredOnLeaderboard)})</div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fa-regular fa-hourglass-half"></i>
+                                        <span>Last Game:</span>
+                                    </div>
+                                    <div class="info-value" id="last-game">${formatLastPlayedRaid(player.lastPlayed)}</div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fa-regular fa-id-card"></i>
+                                        <span>Profile ID:</span>
+                                    </div>
+                                    <div class="info-value" id="player-id">${player.id || 'N/A'}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fa-solid fa-link"></i>
+                                        <span>PermaLink:</span>
+                                    </div>
+                                    <div class="info-value" id="perma-link">${player.permaLink}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item status-section">
+                                <div class="info-label">
+                                    <i class="fa-solid fa-user"></i>
+                                    <span>Status:</span>
+                                </div>
+                                <div class="status-badge ${getStatusClass(player)}" id="account-status-badge">
+                                    ${getStatusIcon(player)}
+                                    <span>${getStatusText(player)}</span>
+                                </div>
+                            </div>
+                            ${renderDetailedStatus(player)}
+                        </div>
                     </div>
-                    ${player.discordUser ? `<div class="player-discord"><i class="fa-brands fa-discord"></i> ${player.discordUser}</div>` : ``}
+                    </div>
+                    ${player.discordUser ? `<div class="player-discord"><i class="fa-brands fa-discord"></i> ${escapeHtml(player.discordUser)}</div>` : ``}
                     <div class="player-status">
                         <span>${lastGame}</span>
                     </div>
@@ -434,11 +463,11 @@ async function showPublicProfile(container, player) {
                             ${Object.values(player.showcase || {}).filter(item => item !== null && item !== undefined && item.item_id).map(item => `
                                 <div class="showcase-item-mini" data-rarity="${item.rarity}">
                                     <div class="item-mini-icon">
-                                        <img src="${item.icon_path.replace(/^\/\.\.\//, '/')}" alt="${item.name}">
+                                        <img src="${item.icon_path.replace(/^\/\.\.\//, '/')}" alt="${escapeHtml(item.name)}">
                                         <div class="item-mini-glow"></div>
                                     </div>
                                     <div class="item-mini-tooltip">
-                                        <span class="item-mini-name">${item.name}</span>
+                                        <span class="item-mini-name">${escapeHtml(item.name)}</span>
                                         <span class="item-mini-price">${item.base_price} LC</span>
                                     </div>
                                 </div>
@@ -449,7 +478,6 @@ async function showPublicProfile(container, player) {
                 ` : ''}
 
                 <div class="badges">${badgesHTML}</div>
-                <div class="registerDate">Joined: ${regDate}</div>
                 <div class="pmc-side-wrapper">
                     ${profileSideHTML}
                     <div class="pmc-level">${player.pmcLevel} LVL</div>
@@ -526,7 +554,7 @@ async function showPublicProfile(container, player) {
                 <div class="weapon-stats-container" id="maps-container">
                 </div>
             </div>
-            
+
             <div class="user-achievements profile-section">
                 ${await renderSingleAchievement(latestAchievement)}
             </div>
@@ -543,7 +571,7 @@ async function showPublicProfile(container, player) {
                     <!-- JS -->
                 </div>
             </div>
-            
+
         </div>
 
         <!-- Central -->
@@ -597,25 +625,25 @@ async function showPublicProfile(container, player) {
                     </button>
                 </div>
                 <div class="divider"></div>
-                
+
                 <div class="comments-header">
                     <h3>Comments (<span id="comments-count">0</span>)</h3>
                     <div class="pagination-info" id="pagination-info">Page 1 of 1</div>
                 </div>
-                
+
                 <div class="comments-list" id="comments-list">
                     <!-- JS -->
                 </div>
-                
+
                 <div class="pagination-controls" id="pagination-controls">
                     <button class="pagination-btn pagination-prev" id="prev-page" disabled>
                         <i class="fa-solid fa-chevron-left"></i> Prev
                     </button>
-                    
+
                     <div class="page-indicators" id="page-indicators">
                         <!-- JS -->
                     </div>
-                    
+
                     <button class="pagination-btn pagination-next" id="next-page">
                         Next <i class="fa-solid fa-chevron-right"></i>
                     </button>
@@ -627,7 +655,7 @@ async function showPublicProfile(container, player) {
                     <!-- JS -->
                 </div>
             </div>
-            
+
         </div>
 
         <!-- Right -->
@@ -637,7 +665,7 @@ async function showPublicProfile(container, player) {
             <div class="playermodel profile-section" id="playermodel">
                 <div class="rank-display">
                     <div class="rank-icon-container">
-                        <div class="circular-progress" 
+                        <div class="circular-progress"
                             style="--progress: ${rank.progress}; --progress-color: ${rank.borderColor};">
                             <img src="${rank.image}" alt="${rank.fullName}" class="rank-icon">
                         </div>
@@ -646,17 +674,17 @@ async function showPublicProfile(container, player) {
                         ${rank.fullName}
                     </span>
                 </div>
-                
+
                 <div class="playermodel-image">
                     <div class="loading-overlay-other active" id="loading-model">
                         <p>Auto-resizing...</p> <div class="loading-spinner"></div>
                     </div>
 
-                    <img src="${pmcPfpsPath}${player.permaLink}_full.png" 
-                        alt="Player Model Preview" 
+                    <img src="${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png"
+                        alt="Player Model Preview"
                         onerror="this.onerror=null; this.src='media/default_full_pmc_avatar.png';" />
                 </div>
-                
+
                 <div class="playermodel-stats profile-section">
                     <div class="player-health">
                         <img src="media/leaderboard_icons/health_icon.png" alt="Health">
@@ -691,7 +719,7 @@ async function showPublicProfile(container, player) {
                                 <div class="stattrack-message">This player is not using <a href="https://hub.sp-tarkov.com/files/file/2501-stattrack/">Stattrack Mod</a> by AcidPhantasm</div>
                             </div>
                         ` : ``}
-                    
+
                         <div class="weapon-info ${!player?.isUsingStattrack ? 'stattrack-disabled' : ''}">
                         <img src="media/weapon_icons/${bestWeapon?.name}.webp" alt="bestWeapon?.name" class="weapon-icon-fav" onerror="this.src='media/default_weapon_icon.png';" />
                         <div class="weapon-name">${bestWeapon?.name ? bestWeapon.name : 'Unknown'}</div>
@@ -892,14 +920,14 @@ async function showPublicProfile(container, player) {
     //user-hideout.js
     loadHideoutData(player.hideout);
     //user-community.js
-    commentsManager = new CommentsManager({
+    ProfileState.commentsManager = new CommentsManager({
         commentsPerPage: 5
     });
-    commentsManager.init(player.permaLink, player.id);
+    ProfileState.commentsManager.init(player.permaLink, player.id);
 
     // Friends
-    friendManager = new FriendManager();
-    await friendManager.init(player);
+    ProfileState.friendManager = new FriendManager();
+    await ProfileState.friendManager.init(player);
 
     // Equipment displayer
     const equipmentDisplay = new PlayerEquipmentDisplay(player.id);
@@ -912,11 +940,13 @@ async function showPublicProfile(container, player) {
             console.error('Failed to load equipment display:', error);
         }
     }
-    
+
+    setupRegistrationDropdown();
+
     // I have no clue, this is bullshit but it works.
     // upd 2/22/2026: *kinda* fixed, but still, would like to make it the other way.
     // This is by any means is some voodoo possessed shit.
-    statusUpdater = startStatusUpdater(player, container);
+    ProfileState.statusUpdater = startStatusUpdater(player, container);
 }
 //#endregion
 
@@ -1026,7 +1056,7 @@ function updateBodyHitsVisualization(raidHitsHistory) {
 }
 // #endregion
 
-// #region Weapons
+// #region Weapons Render
 async function renderWeaponList(playerId, modWeaponStats) {
     const weaponsContainer = document.getElementById('weapons-container');
     weaponsContainer.innerHTML = '';
@@ -1115,6 +1145,7 @@ function getBestWeapon(modWeaponStats) {
 
     return bestWeapon;
 }
+
 // #endregion
 // #region Profile Watcher
 function startStatusUpdater(player, container) {
@@ -1218,15 +1249,6 @@ function startStatusUpdater(player, container) {
 // #endregion
 
 // #region Utils
-function getPlayerSideImageHTML(player) {
-    // Add faction badge
-    if (player.pmcSide === "Bear") {
-        return `<img src="/media/Bear.png" width="70" height="70" alt="BEAR">`;
-    } else if (player.pmcSide === "Usec") {
-        return `<img src="/media/Usec.png" width="70" height="70" alt="USEC">`;
-    }
-}
-
 function generateBadgesHTML(player) {
     let badges = "";
 
@@ -1344,6 +1366,141 @@ function generateBadgesHTML(player) {
     return badges;
 }
 
+function getPlayerSideImageHTML(player) {
+    // Add faction badge
+    if (player.pmcSide === "Bear") {
+        return `<img src="/media/Bear.png" width="70" height="70" alt="BEAR">`;
+    } else if (player.pmcSide === "Usec") {
+        return `<img src="/media/Usec.png" width="70" height="70" alt="USEC">`;
+    }
+}
+
+function formatLastGame(player) {
+    if (player.banned) return 'Banned';
+
+    const playerStatus = window.heartbeatMonitor?.getPlayerStatus(player.id);
+
+    if (window.heartbeatMonitor?.isOnline(player.id)) {
+        return 'Online';
+    }
+
+    const lastPlayed = playerStatus?.lastUpdate || player.lastPlayed;
+    if (!lastPlayed) return 'Never played';
+
+    const lastPlayedDate = new Date(lastPlayed * 1000);
+    const now = new Date();
+    const diffHours = Math.floor((now - lastPlayedDate) / (1000 * 60 * 60));
+
+    if (diffHours < 24) {
+        return `${diffHours} hours ago`;
+    } else {
+        const diffDays = Math.floor(diffHours / 24);
+        return `${diffDays} days ago`;
+    }
+}
+
+function startRegistrationInfoUpdater(player) {
+    const lastGameElement = document.getElementById('last-game');
+
+    if (!ageElement || !lastGameElement) return;
+
+    const updateInfo = () => {
+        lastGameElement.textContent = formatLastGame(player);
+    };
+
+    updateInfo();
+    return setInterval(updateInfo, 60000);
+}
+
+function getStatusClass(player) {
+    if (player.banned) return 'status-banned';
+    if (player.suspicious && !player.isCasual) return 'status-suspicious';
+    return 'status-active';
+}
+
+function getStatusIcon(player) {
+    if (player.banned) {
+        return '<i class="fa-solid fa-ban"></i>';
+    }
+    if (player.suspicious && !player.isCasual) {
+        return '<i class="fa-solid fa-triangle-exclamation"></i>';
+    }
+    return '<i class="fa-regular fa-circle-check"></i>';
+}
+
+function getStatusText(player) {
+    if (player.banned) {
+        return 'Banned';
+    }
+    if (player.suspicious && !player.isCasual) {
+        return 'Suspicious Activity';
+    }
+
+    return 'Active';
+}
+
+function renderDetailedStatus(player) {
+    if (player.banned && player.banReason) {
+        return `
+            <div class="status-details banned-details">
+                <div class="status-detail-item">
+                    <i class="fa-solid fa-bullhorn"></i>
+                    <span class="detail-label">Ban Reason:</span>
+                    <span class="detail-value">${player.banReason}</span>
+                </div>
+                ${player.tookAction ? `
+                <div class="status-detail-item">
+                    <i class="fa-solid fa-gavel"></i>
+                    <span class="detail-label">Banned By:</span>
+                    <span class="detail-value">${player.tookAction}</span>
+                </div>
+                ` : ''}
+                ${player.banTime ? `
+                <div class="status-detail-item">
+                    <i class="fa-regular fa-calendar-xmark"></i>
+                    <span class="detail-label">Ban Date:</span>
+                    <span class="detail-value">${new Date(player.banTime * 1000).toLocaleDateString()}</span>
+                </div>
+                ` : ''}
+                ${player.banExpires ? `
+                <div class="status-detail-item">
+                    <i class="fa-regular fa-clock"></i>
+                    <span class="detail-label">Expires:</span>
+                    <span class="detail-value ${player.banExpires > Date.now() / 1000 ? 'text-warning' : 'text-success'}">
+                        ${player.banExpires ? `Never` : player.banExpires > Date.now() / 1000 ? 'Temporary' : 'Expired'}
+                    </span>
+                </div>
+                ` : ''}
+            </div>
+        `;
+    }
+
+    if (player.suspicious && player.suspicious_reason && !player.isCasual) {
+        return `
+            <div class="status-details suspicious-details">
+                <div class="status-detail-item">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span class="detail-label">Reason:</span>
+                    <span class="detail-value">${player.suspicious_reasons[0]}</span>
+                </div>
+            </div>
+        `;
+    }
+
+    return ``;
+}
+
+// #endregion
+
+// #region Modal Close & Scroll
+let _closeModalOnEsc = null;
+
+/**
+ * Registers close handlers for the profile modal. Binds the close button click
+ * and the Escape key to trigger the inner closeProfile routine. Removes any
+ * previously registered Escape listener to prevent duplicates.
+ * @returns {void}
+ */
 function setupModalCloseHandlers() {
     const closeBtn = document.getElementById("closeButton");
     const modal = document.getElementById("playerProfileModal");
@@ -1354,12 +1511,24 @@ function setupModalCloseHandlers() {
         });
     }
 
-    window.addEventListener("keydown", function closeModalOnEsc(e) {
+    // Remove previous Escape listener to prevent duplicates
+    if (_closeModalOnEsc) {
+        window.removeEventListener("keydown", _closeModalOnEsc);
+    }
+
+    _closeModalOnEsc = function (e) {
         if (e.key === "Escape") {
             closeProfile();
         }
-    });
+    };
+    window.addEventListener("keydown", _closeModalOnEsc);
 
+    /**
+     * Closes the profile modal with an animation, cleans up active intervals
+     * and managers (status updater, comments, friends), re-enables the
+     * leaderboard auto-updater, and restores the scroll position.
+     * @returns {void}
+     */
     function closeProfile() {
         modal.classList.remove('active');
         modal.classList.add('closing');
@@ -1369,25 +1538,26 @@ function setupModalCloseHandlers() {
         leaderboardTable.classList.remove('hidden');
 
         // Clean up
-        if (statusUpdater) {
-            clearInterval(statusUpdater.intervalId);
-            statusUpdater.stopTimeAnimator();
-            statusUpdater = null;
+        if (ProfileState.statusUpdater) {
+            clearInterval(ProfileState.statusUpdater.intervalId);
+            ProfileState.statusUpdater.stopTimeAnimator();
+            ProfileState.statusUpdater = null;
         }
 
-        if (commentsManager) {
-            commentsManager.destroy();
-            commentsManager = null;
+        if (ProfileState.commentsManager) {
+            ProfileState.commentsManager.destroy();
+            ProfileState.commentsManager = null;
         }
 
-        if (friendManager) {
-            friendManager = null;
+        if (ProfileState.friendManager) {
+            ProfileState.friendManager.destroy();
+            ProfileState.friendManager = null;
         }
 
         setTimeout(() => {
             AutoUpdater.setEnabled(true);
             modal.classList.remove('closing');
-            isProfileOpened = false;
+            ProfileState.isProfileOpened = false;
             history.replaceState(null, null, ' ');
             document.body.style.overflow = 'auto';
 
@@ -1397,21 +1567,69 @@ function setupModalCloseHandlers() {
 }
 
 function restoreScrollPosition() {
-    if (targetPlayerElement && document.contains(targetPlayerElement)) {
-        targetPlayerElement.scrollIntoView({
+    if (ProfileState.targetPlayerElement && document.contains(ProfileState.targetPlayerElement)) {
+        ProfileState.targetPlayerElement.scrollIntoView({
             behavior: 'smooth',
             block: 'center',
             inline: 'nearest'
         });
     }
-    else if (savedScrollPosition) {
+    else if (ProfileState.savedScrollPosition) {
         window.scrollTo({
-            top: savedScrollPosition,
+            top: ProfileState.savedScrollPosition,
             behavior: 'smooth'
         });
     }
 
-    savedScrollPosition = 0;
+    ProfileState.savedScrollPosition = 0;
+}
+
+function setupRegistrationDropdown() {
+    const trigger = document.getElementById('registrationTrigger');
+    const dropdown = document.getElementById('registrationDropdown');
+    const chevron = document.getElementById('chevronIcon');
+
+    if (!trigger || !dropdown) return;
+
+    function openDropdown() {
+        dropdown.classList.add('show');
+        trigger.classList.add('active');
+        chevron.style.transform = 'rotate(180deg)';
+    }
+
+    function closeDropdown() {
+        dropdown.classList.remove('show');
+        trigger.classList.remove('active');
+        chevron.style.transform = 'rotate(0deg)';
+    }
+
+    trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+
+        if (dropdown.classList.contains('show')) {
+            closeDropdown();
+        } else {
+            openDropdown();
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!trigger.contains(e.target) && !dropdown.contains(e.target)) {
+            closeDropdown();
+        }
+    });
+
+    dropdown.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && dropdown.classList.contains('show')) {
+            closeDropdown();
+        }
+    });
+
+    return { openDropdown, closeDropdown };
 }
 
 function closeLoader() {
@@ -1422,3 +1640,4 @@ function closeLoader() {
         loader.remove();
     }, 300); // 300ms - animation lenght (CSS)
 }
+// #endregion

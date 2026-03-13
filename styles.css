@@ -1200,6 +1200,7 @@ td {
 }
 
 @keyframes blinkGlow {
+
     0%,
     100% {
         opacity: 0.4;
@@ -3221,8 +3222,6 @@ input[type="checkbox"]:checked:hover {
 
 .profile-section {
     background: linear-gradient(145deg, #ffffff08, #ffffff12);
-    backdrop-filter: blur(12px) saturate(150%);
-    -webkit-backdrop-filter: blur(12px) saturate(150%);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.1);
     border-radius: 16px;
@@ -3242,12 +3241,30 @@ input[type="checkbox"]:checked:hover {
 }
 
 .profile-section h3 {
+    z-index: 1;
+    position: relative;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-light);
     text-transform: uppercase;
     letter-spacing: 1px;
     margin: 0 0 15px 0;
+}
+
+.profile-section::before {
+    position: absolute;
+    background: #00000036;
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    content: '';
+    border-radius: 16px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .user-main-card {
@@ -3259,6 +3276,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .profile-header {
+    z-index: 1;
     grid-column: 2;
     display: flex;
     flex-direction: column;
@@ -3282,7 +3300,7 @@ input[type="checkbox"]:checked:hover {
     padding: 10px;
     background: linear-gradient(145deg, #ffffff0a, #ffffff12);
     border-radius: 12px;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow:
         0 4px 20px rgba(0, 0, 0, 0.1),
@@ -3398,7 +3416,6 @@ input[type="checkbox"]:checked:hover {
     backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
     border: 1px solid rgba(99, 102, 241, 0.2);
-    color: rgba(165, 180, 252, 0.9);
 }
 
 .friend-button.login-required:hover {
@@ -3528,7 +3545,6 @@ input[type="checkbox"]:checked:hover {
     padding: 12px;
     gap: 12px;
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-    backdrop-filter: blur(10px);
 }
 
 .showcase-mini {
@@ -3736,6 +3752,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .user-main-card .pfp {
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3805,12 +3822,308 @@ input[type="checkbox"]:checked:hover {
     border: 1px solid #ffffff1a;
 }
 
-.user-main-card .registerDate {
-    font-size: 12px;
-    color: #cdcdcd;
+/* Registration Info Container */
+.registration-info {
     position: absolute;
     top: 10px;
     right: 10px;
+    z-index: 10;
+}
+
+/* Trigger Button */
+.register-date-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(8px) saturate(180%);
+    -webkit-backdrop-filter: blur(8px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    font-size: 12px;
+    color: #cdcdcd;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+}
+
+.register-date-trigger:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.register-date-trigger.active {
+    background: rgba(247, 247, 255, 0.15);
+    border-color: rgba(246, 246, 255, 0.3);
+    color: white;
+}
+
+.register-date-trigger i {
+    font-size: 11px;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.register-date-trigger:hover i,
+.register-date-trigger.active i {
+    opacity: 1;
+    color: var(--light);
+}
+
+.register-date-trigger .info-chevron {
+    font-size: 8px;
+    transition: transform 0.3s ease;
+}
+
+.register-date-trigger.active .info-chevron {
+    transform: rotate(180deg);
+}
+
+/* Info Dropdown */
+.registration-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 350px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.registration-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+/* Dropdown Header */
+.dropdown-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dropdown-header i {
+    font-size: 18px;
+    color: var(--light);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.dropdown-header span {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Dropdown Content */
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 15px;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.info-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.info-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.info-label i {
+    width: 16px;
+    font-size: 12px;
+    color: var(--light);
+    opacity: 0.7;
+}
+
+.info-value {
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 4px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dropdown-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 18px;
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 12px;
+}
+
+.dropdown-footer i {
+    font-size: 14px;
+    color: var(--success);
+}
+
+.dropdown-footer span {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Account Status Colors */
+.dropdown-footer.banned i {
+    color: var(--danger);
+}
+
+.dropdown-footer.banned span {
+    color: var(--danger);
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.status-badge i {
+    font-size: 12px;
+}
+
+/* Status Colors */
+.status-badge.status-active {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #10b981;
+}
+
+.status-badge.status-banned {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+}
+
+.status-badge.status-suspicious {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #f59e0b;
+    animation: suspiciousPulse 2s infinite;
+}
+
+/* Status Details Section */
+.status-details {
+    margin: 8px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+}
+
+.status-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    font-size: 11px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.status-detail-item:last-child {
+    border-bottom: none;
+}
+
+.status-detail-item i {
+    width: 16px;
+    font-size: 12px;
+    color: var(--light);
+    opacity: 0.7;
+}
+
+.status-detail-item .detail-label {
+    color: rgba(255, 255, 255, 0.5);
+    min-width: 90px;
+}
+
+.status-detail-item .detail-value {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    flex: 1;
+}
+
+/* Specific status details backgrounds */
+.banned-details {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #ef4444;
+}
+
+.suspicious-details {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid #f59e0b;
+}
+
+.active-details {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid #10b981;
+}
+
+/* Animations */
+@keyframes suspiciousPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+    }
+}
+
+/* Text colors */
+.text-warning {
+    color: #f59e0b;
+}
+
+.text-success {
+    color: #10b981;
+}
+
+/* Info item adjustment for status */
+.info-item.status-section {
+    border-bottom: none;
+    margin-bottom: 4px;
 }
 
 #main-profile-loader {
@@ -3837,6 +4150,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .playermodel-stats div {
+    z-index: 1;
     display: flex;
     align-items: center;
     gap: 5px;
@@ -4532,14 +4846,11 @@ input[type="checkbox"]:checked:hover {
 .recent-stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 12px;
-    margin-top: 10px;
+    gap: 5px;
 }
 
 .recent-stats-grid .stat-card {
     padding: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .recent-stats-grid .stat-label {
@@ -4587,6 +4898,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .hits-wrapper {
+    z-index: 1;
     display: flex;
     flex-direction: column;
 }
@@ -4999,10 +5311,6 @@ input[type="checkbox"]:checked:hover {
     border: 2px solid rgba(255, 71, 86, 0.096);
 }
 
-.banned {
-    filter: blur(5px);
-}
-
 /* Profile loader container */
 .shimmer-bg {
     position: absolute;
@@ -5350,11 +5658,11 @@ input[type="checkbox"]:checked:hover {
     align-items: center;
     gap: 8px;
     padding: 6px 12px;
-    background: rgba(255, 193, 7, 0.2);
-    border: 1px solid rgba(255, 193, 7, 0.5);
+    background: rgb(162 162 162 / 20%);
+    border: 1px solid rgb(132 132 132 / 50%);
     border-radius: 20px;
     font-size: 12px;
-    color: #ffc107;
+    color: #a8a8a8;
     font-weight: 500;
 }
 
@@ -5368,7 +5676,7 @@ input[type="checkbox"]:checked:hover {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    color: #ffc107;
+    color: #ffffffa9;
     text-decoration: none;
     font-weight: 600;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -6129,6 +6437,10 @@ input[type="checkbox"]:checked:hover {
 }
 
 /* Quests Progression */
+.quests-container {
+    position: relative;
+}
+
 .quests-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -6276,11 +6588,13 @@ input[type="checkbox"]:checked:hover {
 .quests-stats {
     display: flex;
     gap: 15px;
+    position: relative;
     margin-bottom: 20px;
     padding: 15px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1;
 }
 
 .quests-controls {
@@ -6591,6 +6905,8 @@ input[type="checkbox"]:checked:hover {
     display: flex;
     gap: 1rem;
     margin-top: 0.5rem;
+    z-index: 1;
+    position: relative;
 }
 
 .achievement-icon {
@@ -6979,6 +7295,7 @@ input[type="checkbox"]:checked:hover {
 
 .trader-grid {
     display: grid;
+    position: relative;
     grid-template-columns: repeat(3, 1fr);
     gap: 5px;
     overflow-y: scroll;
@@ -6986,6 +7303,7 @@ input[type="checkbox"]:checked:hover {
     padding: 10px;
     scrollbar-width: thin;
     scrollbar-color: #555 #2a2a2a;
+    z-index: 1;
 }
 
 .trader-grid::-webkit-scrollbar {
@@ -7064,9 +7382,11 @@ input[type="checkbox"]:checked:hover {
 }
 
 .weapon-info {
+    z-index: 1;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    position: relative;
 }
 
 .weapon-name {
@@ -7670,8 +7990,11 @@ input[type="checkbox"]:checked:hover {
 }
 
 .stat-card {
-    background: rgba(255, 255, 255, 0.05);
+    background: linear-gradient(145deg, #ffffff08, #ffffff12);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     padding: 15px;
     text-align: center;
@@ -8512,6 +8835,8 @@ input[type="checkbox"]:checked:hover {
     align-items: center;
     margin-bottom: 20px;
     padding: 0 10px;
+    z-index: 1;
+    position: relative;
 }
 
 .comments-header h3 {
