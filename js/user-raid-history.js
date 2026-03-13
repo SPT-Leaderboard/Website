@@ -99,14 +99,8 @@ async function initLastRaids(playerId, permaLink) {
     `;
 
     try {
-        const playerRaidsPath = `${lastRaidsPath}${permaLink}.json?t=${Date.now()}`;
-        const response = await fetch(playerRaidsPath);
-
-        if (!response.ok) {
-            console.error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
+        const playerRaidsUrl = `${ApiPaths.lastRaidsPath}${permaLink}.json`;
+        const data = await apiFetch(playerRaidsUrl);
 
         if (!data?.raids?.length) {
             statsContainer.innerHTML = `
@@ -309,11 +303,11 @@ function createCrossProfileIndicator(raid, currentPlayerId, leaderboardData) {
                     Played on: 
                     <button data-player-id="${otherPlayer.id}" class="cross-profile-link">
                         <img src="${otherPlayer.profilePicture || 'media/default_avatar.png'}" 
-                             alt="${otherPlayer.name}" 
+                             alt="${escapeHtml(otherPlayer.name)}"
                              loading="lazy"
                              class="cross-profile-avatar"
                              onerror="this.src='media/default_avatar.png';">
-                        ${otherPlayer.name}
+                        ${escapeHtml(otherPlayer.name)}
                     </button>
                 </div>
             </div>
@@ -430,7 +424,7 @@ function createKillerInfo(raid) {
 
     return `
         <span class="meta-item">
-            <i class="fa-solid fa-skull-crossbones"></i> Killed by <span class="raid-killer">${raid.agressorName}</span>
+            <i class="fa-solid fa-skull-crossbones"></i> Killed by <span class="raid-killer">${escapeHtml(raid.agressorName)}</span>
         </span>
     `;
 }
