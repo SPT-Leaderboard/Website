@@ -17,7 +17,7 @@ class FriendManager {
         this.currentPlayer = null;
         this.isLoggedIn = isLoggedIn;
         this.friends = [];
-        this.realFriends = new Set();
+        this.realFriends = new Map();
         this._onDocumentClick = null;
     }
 
@@ -268,15 +268,62 @@ class FriendManager {
                 body: JSON.stringify({ profileId: this.currentPlayer.id })
             });
 
-            if (!response.ok) return [];
+            if (!response.ok) return new Map();
 
             const data = await response.json();
 
-            return data.friends || [];
+            const friendsMap = new Map();
+            (data.friends || []).forEach(friend => {
+                friendsMap.set(friend.id, {
+                    ...friend,
+                    isRealFriend: true,
+                    added_at: friend.added_at
+                });
+            });
+
+            return friendsMap;
         } catch (error) {
             console.error('Error fetching real friends:', error);
-            return [];
+            return new Map();
         }
+    }
+
+    /**
+     * Gets local friends (based on permaLink/teamTag) from leaderboard data
+     * @returns {Array<Object>} Array of local friend objects
+     */
+    getLocalFriends() {
+        const localFriends = [];
+        const friendLink = this.currentPlayer.permaLink;
+        const teamTag = this.currentPlayer.teamTag;
+
+        if (!friendLink && !teamTag) {
+            return localFriends;
+        }
+
+        for (const playerId in leaderboardData) {
+            const p = leaderboardData[playerId];
+
+            // Don't include yourself, dumbass
+            if (p.id === this.currentPlayer.id) continue;
+
+            // Don't include if they're already a real friend (will be filtered later)
+            if (this.realFriends.has(p.id)) continue;
+
+            if ((friendLink && p.permaLink === friendLink) ||
+                (teamTag && p.teamTag === teamTag)) {
+                localFriends.push({
+                    id: p.id,
+                    name: p.name,
+                    profilePicture: p.profilePicture,
+                    teamTag: p.teamTag,
+                    lastPlayed: p.lastPlayed,
+                    isRealFriend: false
+                });
+            }
+        }
+
+        return localFriends;
     }
 
     /**
@@ -285,41 +332,24 @@ class FriendManager {
      * @returns {Promise<Array<Object>>} Sorted array of friend objects with `isRealFriend` flag
      */
     async checkFriends() {
-        const realFriendIds = await this.fetchRealFriends();
-        this.realFriends = new Set(realFriendIds);
+        this.realFriends = await this.fetchRealFriends();
 
-        try {
-            const response = await fetch('/api/network/functions/community/get_friends.php', {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ profileId: this.currentPlayer.id })
-            });
+        const localFriends = this.getLocalFriends();
+        const realFriendsArray = Array.from(this.realFriends.values());
+        const allFriends = [...realFriendsArray, ...localFriends];
 
-            if (!response.ok) return [];
+        allFriends.sort((a, b) => {
+            if (a.isRealFriend && !b.isRealFriend) return -1;
+            if (!a.isRealFriend && b.isRealFriend) return 1;
 
-            const data = await response.json();
+            if (a.isRealFriend && b.isRealFriend) {
+                return (b.added_at || 0) - (a.added_at || 0);
+            }
 
-            const friends = (data.friends || []).map(friend => ({
-                ...friend,
-                isRealFriend: this.realFriends.has(friend.id)
-            }));
+            return (a.name || '').localeCompare(b.name || '');
+        });
 
-            friends.sort((a, b) => {
-                if (a.isRealFriend && !b.isRealFriend) return -1;
-                if (!a.isRealFriend && b.isRealFriend) return 1;
-
-                return (a.name || '').localeCompare(b.name || '');
-            });
-
-            return friends;
-        } catch (error) {
-            console.error('Error checking friends:', error);
-            return [];
-        }
+        return allFriends;
     }
 
     /**
@@ -358,7 +388,7 @@ class FriendManager {
                     : `<span class="last-online-time">${lastOnlineTime}</span>`;
 
                 const friendClass = friend.isRealFriend ? 'real-friend' : 'local-friend';
-                const friendBadge = !friend.isRealFriend ? '<i class="fa-solid fa-users-between-lines local-badge" title="Local friend"></i>' : '';
+                const friendBadge = !friend.isRealFriend ? '<i class="fa-solid fa-users-between-lines local-badge" title="Local friend (Same Team/PermaLink)"></i>' : '';
 
                 return `
                 <div class="friend-item ${friendClass}" data-player-id="${friend.id || '0'}">
@@ -384,7 +414,6 @@ class FriendManager {
             }).join('');
 
             this.attachFriendListListeners();
-
         } catch (error) {
             console.error('Error loading friends:', error);
             this.container.innerHTML = `
