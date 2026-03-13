@@ -1,6 +1,11 @@
 .streets-bg {
     background: url(media/rewards/card_background/streets1.png) center;
     background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.streets-bg.profile-section::before {
+    backdrop-filter: none;
 }
 
 .streets2-bg {
@@ -8,9 +13,17 @@
     background-size: cover;
 }
 
+.streets2-bg.profile-section::before {
+    backdrop-filter: none;
+}
+
 .streets3-bg {
     background: url(media/rewards/card_background/streets3.png) no-repeat center;
     background-size: cover;
+}
+
+.streets3-bg.profile-section::before {
+    backdrop-filter: none;
 }
 
 .purple-bg {
@@ -18,9 +31,17 @@
     background-size: cover;
 }
 
+.purple-bg.profile-section::before {
+    backdrop-filter: none;
+}
+
 .labs-bg {
     background: url(media/rewards/card_background/labs.png) no-repeat center;
     background-size: cover;
+}
+
+.labs-bg.profile-section::before {
+    backdrop-filter: none;
 }
 
 .waves-bg {
@@ -28,9 +49,17 @@
     background-size: cover;
 }
 
+.waves-bg.profile-section::before {
+    backdrop-filter: none;
+}
+
 .sunset-bg {
     background: url(media/rewards/card_background/sunset.gif) no-repeat center;
     background-size: cover;
+}
+
+.sunset-bg.profile-section::before {
+    backdrop-filter: none;
 }
 
 .grenades-bg {
@@ -38,9 +67,17 @@
     background-size: cover;
 }
 
+.grenades-bg.profile-section::before {
+    backdrop-filter: none;
+}
+
 .labs-bg {
     background: url(media/rewards/card_background/labs.png) no-repeat center;
     background-size: cover;
+}
+
+.labs-bg.profile-section::before {
+    backdrop-filter: none;
 }
 
 .usec-background {
@@ -807,8 +844,8 @@
     position: absolute;
     display: none;
     width: 150px;
-    top: 120px;
-    left: 23.5rem;
+    top: 213px;
+    left: 630px;
     z-index: 1;
 }
 
