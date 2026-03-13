@@ -50,7 +50,9 @@ const ApiPaths = {
     pmcPfpsPath: '/api/data/pmc_avatars/',
     globalCounters: '/api/data/shared/global_counters.json',
     adminsOnline: '/api/admins_online.json',
-    dripDataPath: `/api/network/functions/dripfest/drip_data.json?t=${Date.now()}`
+    dripDataPath: `/api/network/functions/dripfest/drip_data.json?t=${Date.now()}`,
+    achievementsDataPath: `achievements/js/compiledAchData.json`,
+    achievementsCustomDataPath: `achievements/js/compiledAchSEData.json`
 };
 
 // Paths for local files if debug is on
@@ -118,7 +120,6 @@ async function checkSeasonExists(seasonNumber) {
  * @throws {Error} When an unexpected network or parsing error occurs during season probing
  */
 async function initAllSeasons() {
-    // Seasons start from 4
     // Clean up before initialize
     let seasonNumber = 4;
     seasons = [];
