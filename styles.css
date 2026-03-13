@@ -1634,7 +1634,7 @@ button:hover,
 }
 
 .silver-name {
-    font-size: 1.5rem;
+    font-size: 1rem;
     color: transparent !important;
     font-weight: bold;
     background-size: 300%;
@@ -1651,13 +1651,13 @@ button:hover,
     background-size: 300%;
     background-clip: text;
     font-style: normal;
-    font-size: 1.3em;
+    font-size: 1rem;
 }
 
 .promo-name {
     color: transparent !important;
     font-weight: bold !important;
-    font-size: 1.1em !important;
+    font-size: 1.1rem !important;
     background-size: 200%;
     animation: shine 5s linear infinite;
     -webkit-background-clip: text;
@@ -1682,22 +1682,11 @@ button:hover,
 .player-name-gold {
     font-family: 'Bender Bold', sans-serif;
     font-weight: bolder;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: transparent;
-    background: linear-gradient(45deg,
-            #ffd700 0%,
-            #ffec8b 25%,
-            #fffacd 50%,
-            #ffec8b 75%,
-            #ffd700 100%);
+    background: linear-gradient(45deg, #ffd700 0%, #ffec8b 25%, #fffacd 50%, #ffec8b 75%, #ffd700 100%);
     background-clip: text;
-    -webkit-background-clip: text;
-    text-shadow:
-        1px 1px 1px rgba(120, 90, 0, 0.3),
-        0 0 1px rgba(255, 215, 0, 0.5);
-    border-radius: 6px;
-    display: inline-block;
-    letter-spacing: 1px;
+    text-shadow: 1px 1px 1px rgba(120, 90, 0, 0.3), 0 0 1px rgba(255, 215, 0, 0.5);
 }
 
 .player-name-gold.only-name {
@@ -1705,7 +1694,6 @@ button:hover,
 }
 
 .player-name-gold::before {
-    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -3263,6 +3251,7 @@ input[type="checkbox"]:checked:hover {
     left: 0;
     bottom: 0;
     right: 0;
+    z-index: -1;
     width: 100%;
     height: 100%;
 }
@@ -6319,6 +6308,8 @@ input[type="checkbox"]:checked:hover {
 }
 
 .no-stats-message {
+    z-index: 1;
+    position: relative;
     text-align: center;
     padding: 60px 40px;
     border-radius: 20px;

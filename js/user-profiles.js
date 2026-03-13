@@ -159,6 +159,9 @@ async function showPublicProfile(container, player) {
     const lbRegDate = player.registeredOnLeaderboard
         ? new Date(player.registeredOnLeaderboard * 1000).toLocaleDateString()
         : "Unknown";
+    const firstSeenDate = player.firstSeen
+        ? new Date(player.firstSeen * 1000).toLocaleDateString()
+        : "Unknown";
 
     // Generate badges
     const badgesHTML = generateBadgesHTML(player);
@@ -310,7 +313,7 @@ async function showPublicProfile(container, player) {
 
     // Winner - priority
     if (player.isWinner === true) {
-        finalNameClass = 'player-name-gold Legendary';
+        finalNameClass = 'player-name-gold';
     } else if (isPremium(player)) {
         finalNameClass = 'premium-name';
     }
@@ -326,11 +329,11 @@ async function showPublicProfile(container, player) {
         <button id="closeButton" class="close-profile-button">&times;</button>
         <div class="left-column">
 
-            <div class="user-main-card profile-section" id="main-profile-card">
+            <div class="user-main-card profile-section ${finalNameClass}" id="main-profile-card">
                 <div class="pfp"><img src="${player.customPfp ? player.customPfp : player.profilePicture}" class="player-avatar" id="profile-avatar" alt="${escapeHtml(player.name)}" onerror="this.src='media/default_avatar.png';" /></div>
                 <div class="profile-header">
                     <div class="name-wrapper">
-                        <div class="${finalNameClass} ${player.isWinner ? `` : `name`}" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''}>
+                        <div class="${finalNameClass} name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''}>
                             ${player.teamTag ? `[${escapeHtml(player.teamTag)}]` : ``}
                             ${escapeHtml(player.customName ? player.customName : player.name)}
                         </div>
@@ -348,6 +351,14 @@ async function showPublicProfile(container, player) {
                             </div>
                             
                             <div class="dropdown-content">
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fa-regular fa-calendar-check"></i>
+                                        <span>First Seen:</span>
+                                    </div>
+                                    <div class="info-value" id="reg-sptlb">${firstSeenDate} (${formatLastPlayedRaid(player.firstSeen)})</div>
+                                </div>
+
                                 <div class="info-item">
                                     <div class="info-label">
                                         <i class="fa-regular fa-calendar-check"></i>
@@ -1433,7 +1444,7 @@ function getStatusText(player) {
         return 'Banned';
     }
     if (player.suspicious && !player.isCasual) {
-        return 'Suspicious Activity';
+        return 'Suspicious';
     }
 
     return 'Active';
