@@ -50,38 +50,48 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to load a resource
     function loadResource(resource, index) {
         return new Promise((resolve, reject) => {
-
             const startTime = Date.now();
             const minLoadTime = 800 + (index * 100);
+            const isJsonFile = resource.url.endsWith('.json');
 
-            setTimeout(() => {
-                fetch(resource.url, { method: 'HEAD' })
-                    .then(response => {
-                        if (response.ok) {
-                            return fetch(resource.url);
-                        } else {
-                            throw new Error(`HTTP ${response.status}`);
-                        }
-                    })
-                    .then(response => {
-                        if (response.ok) {
+            const fetchPromise = isJsonFile
+                ? apiFetch(resource.url, {
+                    method: 'GET',
+                    cacheBust: true,
+                    showErrorToast: false,
+                    timeout: 10000
+                })
+                : fetch(resource.url, {
+                    method: 'HEAD',
+                    cache: 'no-cache'
+                }).then(response => {
+                    if (response.ok) {
+                        return true;
+                    }
+                    throw new Error(`HTTP ${response.status}`);
+                });
 
-                            loadedResources += resource.weight;
-                            updateProgress();
+            fetchPromise.then(result => {
+                if (isJsonFile && result === null) {
+                    throw new Error(`Failed to load ${resource.name}`);
+                }
 
-                            if (Math.random() > 0.9) {
-                                statusText.textContent = getRandomMessage();
-                            }
+                const elapsedTime = Date.now() - startTime;
+                const remainingTime = Math.max(0, minLoadTime - elapsedTime);
 
-                            resolve();
-                        } else {
-                            throw new Error(`HTTP ${response.status}`);
-                        }
-                    })
-                    .catch(error => {
-                        reject(new Error(`Failed to load ${resource.name}: ${error.message}`));
-                    });
-            }, minLoadTime - (Date.now() - startTime));
+                setTimeout(() => {
+                    loadedResources += resource.weight;
+                    updateProgress();
+
+                    if (Math.random() > 0.9) {
+                        statusText.textContent = getRandomMessage();
+                    }
+
+                    resolve();
+                }, remainingTime);
+            }).catch(error => {
+                reject(new Error(`Failed to load ${resource.name}: ${error.message}`));
+            });
         });
     }
 
