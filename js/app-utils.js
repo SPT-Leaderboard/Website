@@ -20,7 +20,6 @@ function escapeHtml(str) {
         .replace(/'/g, '&#039;');
 }
 
-
 function getPrettyMapName(entry) {
     const mapAliases = {
         "bigmap": "Customs",
@@ -37,8 +36,6 @@ function getPrettyMapName(entry) {
         "Sandbox_high": "Ground Zero - High",
         "labyrinth": "The Labyrinth"
     };
-
-    entry.toLowerCase();
 
     return mapAliases[entry] || entry; // returning raw if not found
 }
@@ -444,21 +441,18 @@ function capitalize(str, locale = 'en-EN') {
  * @returns {Promise<Object|null>} The profile appearance settings object, or null on failure
  */
 async function getCustomProfileSettings(profileId) {
-    try {
-        const response = await fetch(profileAppearencePath, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ profileId: profileId })
-        });
+    const data = await apiFetch(ApiPaths.profileAppearencePath, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: { profileId: profileId },
+        cacheBust: false,
+        showErrorToast: false,
+        timeout: 10000
+    });
 
-        if (!response.ok) return null;
-
-        return await response.json();
-    } catch {
-        return null;
-    }
+    return data;
 }
 
 function waitForDataReady(callback, timeout = 15000) {
@@ -557,25 +551,15 @@ class KeepAliveService {
         }
 
         try {
-            const response = await fetch(this.#heartbeatEndpoint, {
+            await apiFetch(this.#heartbeatEndpoint, {
                 method: 'POST',
+                cacheBust: false,
+                showErrorToast: false,
+                timeout: 10000,
                 headers: {
-                    'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest'
-                },
-                credentials: 'include',
-                cache: 'no-store'
+                }
             });
-
-            if (!response.ok) {
-                console.error(`HTTP error ${response.status}: ${response.statusText}`);
-            }
-
-            const data = await response.json();
-
-            if (data.status !== 'OK') {
-                console.error('Invalid server response');
-            }
 
             this.#retryCount = 0;
 

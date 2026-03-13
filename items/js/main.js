@@ -71,17 +71,27 @@ class ItemsRenderer {
 
         let itemsPath = isLocalhost ? CONFIG.LOCALE_JSON_LOCAL_URL : CONFIG.ITEMS_JSON_URL;
 
-        const [itemsResponse, localeResponse] = await Promise.all([
-            fetch(`${itemsPath}?t=${Date.now()}`),
-            fetch(CONFIG.LOCALE_JSON_URL)
+        const [itemsData, localeData] = await Promise.all([
+            apiFetch(`${itemsPath}`, {
+                method: 'GET',
+                cacheBust: true,
+                showErrorToast: true,
+                timeout: 10000
+            }),
+            apiFetch(CONFIG.LOCALE_JSON_URL, {
+                method: 'GET',
+                cacheBust: false,
+                showErrorToast: true,
+                timeout: 10000
+            })
         ]);
 
-        if (!itemsResponse.ok || !localeResponse.ok) {
-            throw new Error('Could not load item data');
+        if (!itemsData || !localeData) {
+            throw new Error('Failed to load items or locale data');
         }
 
-        this.itemsData = await itemsResponse.json();
-        this.localeData = await localeResponse.json();
+        this.itemsData = itemsData;
+        this.localeData = localeData;
 
         this.totalItems = Object.keys(this.itemsData).length;
         this.filteredItems = this.prepareItemsData();

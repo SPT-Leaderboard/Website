@@ -1,1 +1,21 @@
-{"Woods":9075,"total_damage":74961244,"total_hits":1742186,"total_playtime":58366432,"total_kills":42448071,"total_raids":130489,"RezervBase":4190,"Shoreline":3983,"bigmap":14317,"laboratory":3321,"factory4_day":13717,"Lighthouse":2087,"Sandbox":6983,"TarkovStreets":2261,"Interchange":2924,"factory4_night":1156,"Sandbox_high":1549,"KilledByBosses":2299,"Labyrinth":387}
+{
+  "Woods": 9075,
+  "total_damage": 74961244,
+  "total_hits": 1742186,
+  "total_playtime": 58366432,
+  "total_kills": 42448071,
+  "total_raids": 130489,
+  "RezervBase": 4190,
+  "Shoreline": 3983,
+  "bigmap": 14317,
+  "laboratory": 3321,
+  "factory4_day": 13717,
+  "Lighthouse": 2087,
+  "Sandbox": 6983,
+  "TarkovStreets": 2261,
+  "Interchange": 2924,
+  "factory4_night": 1156,
+  "Sandbox_high": 1549,
+  "KilledByBosses": 2299,
+  "Labyrinth": 387
+}

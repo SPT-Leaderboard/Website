@@ -5,19 +5,16 @@
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
 document.addEventListener('DOMContentLoaded', function () {
-    fetch(`${weaponStatsPath}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok >:(');
-            }
-            return response.json();
-        })
-        .then(weaponData => {
+    apiFetch(ApiPaths.weaponStatsPath, {
+        method: 'GET',
+        cacheBust: true,
+        showErrorToast: true,
+        timeout: 10000
+    }).then(weaponData => {
+        if (weaponData !== null) {
             processWeaponData(weaponData);
-        })
-        .catch(error => {
-            console.error('Error loading weapon data:', error);
-        });
+        }
+    });
 
     async function processWeaponData(weaponData) {
         const weaponMap = new Map();

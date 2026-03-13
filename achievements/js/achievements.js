@@ -138,7 +138,7 @@ async function initAchievements() {
         const [newAchievements, seAchievements, playersData] = await Promise.all([
             loadJSON('../achievements/js/compiledAchData.json'),
             loadJSON('../achievements/js/compiledAchSEData.json'),
-            loadJSON(achievementsPath)
+            loadJSON(ApiPaths.achievementsPath)
         ]);
 
         // Merge achievements - new data overwrites old data for same IDs (just to be sure if its changed recently)

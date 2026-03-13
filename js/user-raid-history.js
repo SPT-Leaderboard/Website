@@ -615,11 +615,11 @@ function renderRaidsSummary(raids, currentPlayerId, leaderboardData) {
             </div>
             <div class="stat-card">
                 <div class="stat-value ${recentStats.totalProfit >= 0 ? 'stat-positive' : 'stat-negative'}">${formatProfit(recentStats.totalProfit)} ₽</div>
-                <div class="stat-label">Total Profit Made</div>
+                <div class="stat-label">Total Profit</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value ${extraPlayerData.longestHeadshot == null ? '' : extraPlayerData.longestHeadshot >= 350 ? 'stat-positive' : 'stat-negative'}">${extraPlayerData.longestHeadshot ?? 0}</div>
-                <div class="stat-label">Longest Headshot (M)</div>
+                <div class="stat-label">Longest HS (M)</div>
             </div>
         </div>
     `;

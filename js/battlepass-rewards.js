@@ -21,9 +21,6 @@ function refreshRewards(player) {
 
     // Handle cat and badger visibility
     elements.profileCat.style.display = (player?.bp_cat && player?.battlePassLevel >= 20) ? 'block' : 'none';
-
-    // Deprecated
-    elements.badgerPenguin.style.display = 'none';
 }
 
 function resetStyles({ mainBackground, profileCard, profileAvatar, profileBackground }) {

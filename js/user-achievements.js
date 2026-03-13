@@ -13,8 +13,8 @@ let isDataLoaded = false;
 async function loadAchievementsData() {
     try {
         const [newAchievements, seAchievements, playersData] = await Promise.all([
-            apiFetch('achievements/js/compiledAchData.json'),
-            apiFetch('achievements/js/compiledAchSEData.json'),
+            apiFetch(`${ApiPaths.achievementsDataPath}`),
+            apiFetch(`${ApiPaths.achievementsCustomDataPath}`),
             apiFetch(`${ApiPaths.achievementsPath}`)
         ]);
 
