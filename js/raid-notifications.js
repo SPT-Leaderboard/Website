@@ -140,7 +140,6 @@ async function showPlayerNotification(player) {
     }
 
     // Profit
-    // Profit
     let shouldShowProfit = false;
     let hasLostProfit = false;
     let profitText = '';

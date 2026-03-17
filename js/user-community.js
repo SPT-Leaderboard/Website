@@ -1739,3 +1739,343 @@ class PlayerEquipmentDisplay {
 
 }
 // #endregion
+
+class TabManager {
+    constructor(profileId, leaderboardData) {
+        this.currentPlayerId = profileId;
+        this.currentPlayerObject = null;
+        this.activeTab = 'summary';
+        this.leaderboardDataToProccess = leaderboardData;
+        this.init();
+    }
+
+    init() {
+        const tabs = document.querySelectorAll('.raid-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', (e) => this.switchTab(e));
+        });
+    }
+
+    async switchTab(event) {
+        const tab = event.currentTarget;
+        const tabId = tab.dataset.tab;
+
+        if (this.activeTab === tabId) return;
+
+        document.querySelectorAll('.raid-tab').forEach(t => {
+            t.classList.remove('active');
+        });
+        tab.classList.add('active');
+
+        const currentPane = document.getElementById(`tab-${this.activeTab}`);
+        const newPane = document.getElementById(`tab-${tabId}`);
+        const direction = this.getDirection(tabId);
+
+        newPane.classList.add(direction);
+
+        currentPane.classList.remove('active');
+        currentPane.classList.add(this.activeTab === 'summary' ? 'next' : 'prev');
+
+        newPane.classList.add('active');
+
+        if (tabId === 'records') {
+            await this.getGlobalStatistics();
+        }
+
+        setTimeout(() => {
+            currentPane.classList.remove('prev', 'next');
+            newPane.classList.remove('prev', 'next');
+        }, 300);
+
+        this.activeTab = tabId;
+    }
+
+    getDirection(newTabId) {
+        const tabs = ['summary', 'records'];
+        const oldIndex = tabs.indexOf(this.activeTab);
+        const newIndex = tabs.indexOf(newTabId);
+
+        return newIndex > oldIndex ? 'next' : 'prev';
+    }
+
+    async getGlobalStatistics() {
+        const container = document.getElementById('tab-records');
+        container.innerHTML = `
+            <div class="loader-dots" style="grid-column: 1 / -1;">
+                <div class="shimmer-bg"></div>
+                <div class="dots-container">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+                <p class="dots-text">Loading...</p>
+            </div>
+        `;
+
+        try {
+            this.getGlobalStatsPerPlayer(this.leaderboardDataToProccess);
+
+        } catch (error) {
+            console.error('Error loading data:', error);
+        }
+    }
+
+    async getGlobalStatsPerPlayer(leaderboardData) {
+        const container = document.getElementById('tab-records');
+
+        if (!leaderboardData || leaderboardData.length === 0) {
+            container.innerHTML = `
+            <div class="error-message">No data available</div>
+        `;
+            return;
+        }
+
+        this.currentPlayerObject = window.findPlayer(leaderboardData, this.currentPlayerId);
+
+        if (!this.currentPlayerObject) {
+            container.innerHTML = `
+            <div class="error-message">Player not found in leaderboard</div>
+        `;
+            return;
+        }
+
+        // 1. Calculate averages
+        const stats = {
+            damage: { sum: 0, max: 0, maxPlayer: null },
+            longestShot: { sum: 0, max: 0, maxPlayer: null },
+            scavTotalProfit: { sum: 0, max: 0, maxPlayer: null },
+            totalProfit: { sum: 0, max: 0, maxPlayer: null },
+            scavsKilled: { sum: 0, max: 0, maxPlayer: null },
+            bossesKilled: { sum: 0, max: 0, maxPlayer: null },
+            scavRaids: { sum: 0, max: 0, maxPlayer: null },
+            scavDeaths: { sum: 0, max: 0, maxPlayer: null },
+            pmcRaids: { sum: 0, max: 0, maxPlayer: null },
+            pmcKills: { sum: 0, max: 0, maxPlayer: null },
+            pmcDeaths: { sum: 0, max: 0, maxPlayer: null },
+            killToDeathRatio: { sum: 0, max: 0, maxPlayer: null }
+        };
+
+        const playerCount = leaderboardData.length;
+
+        leaderboardData.forEach(player => {
+            if (player.isCasual || player.isBanned || player.permBanned) {
+                return;
+            }
+
+            Object.keys(stats).forEach(stat => {
+                const value = parseFloat(player[stat]) || 0;
+                stats[stat].sum += value;
+
+                if (value > stats[stat].max) {
+                    stats[stat].max = value;
+                    stats[stat].maxPlayer = player.name || 'Unknown';
+                }
+            });
+        });
+
+        // Calculate averages
+        const averages = {};
+        Object.keys(stats).forEach(stat => {
+            averages[stat] = {
+                average: stats[stat].sum / playerCount,
+                max: stats[stat].max,
+                maxPlayer: stats[stat].maxPlayer
+            };
+        });
+
+        // 3. & 4. Compare and display
+        this.renderGlobalStats(container, averages);
+    }
+
+    renderGlobalStats(container, averages) {
+        const player = this.currentPlayerObject;
+
+        // Define stat categories with display names and comparison logic
+        const statCategories = [
+            {
+                key: 'damage',
+                label: 'Damage Dealt',
+                value: player.damage || 0,
+                average: averages.damage.average,
+                max: averages.damage.max,
+                maxPlayer: averages.damage.maxPlayer,
+                higherIsBetter: true,
+                unit: ''
+            },
+            {
+                key: 'longestShot',
+                label: 'Longest Shot',
+                value: player.longestShot || 0,
+                average: averages.longestShot.average,
+                max: averages.longestShot.max,
+                maxPlayer: averages.longestShot.maxPlayer,
+                higherIsBetter: true,
+                unit: 'm'
+            },
+            {
+                key: 'scavTotalProfit',
+                label: 'SCAV Profit',
+                value: player.scavTotalProfit || 0,
+                average: averages.scavTotalProfit.average,
+                max: averages.scavTotalProfit.max,
+                maxPlayer: averages.scavTotalProfit.maxPlayer,
+                higherIsBetter: true,
+                unit: ''
+            },
+            {
+                key: 'totalProfit',
+                label: 'Total Profit',
+                value: player.totalProfit || 0,
+                average: averages.totalProfit.average,
+                max: averages.totalProfit.max,
+                maxPlayer: averages.totalProfit.maxPlayer,
+                higherIsBetter: true,
+                unit: ''
+            },
+            {
+                key: 'scavsKilled',
+                label: 'SCAV Kills',
+                value: player.scavsKilled || 0,
+                average: averages.scavsKilled.average,
+                max: averages.scavsKilled.max,
+                maxPlayer: averages.scavsKilled.maxPlayer,
+                higherIsBetter: true,
+                unit: ''
+            },
+            {
+                key: 'bossesKilled',
+                label: 'Boss Kills',
+                value: player.bossesKilled || 0,
+                average: averages.bossesKilled.average,
+                max: averages.bossesKilled.max,
+                maxPlayer: averages.bossesKilled.maxPlayer,
+                higherIsBetter: true,
+                unit: ''
+            },
+            {
+                key: 'scavRaids',
+                label: 'SCAV Raids',
+                value: player.scavRaids || 0,
+                average: averages.scavRaids.average,
+                max: averages.scavRaids.max,
+                maxPlayer: averages.scavRaids.maxPlayer,
+                higherIsBetter: true,
+                unit: ''
+            },
+            {
+                key: 'scavDeaths',
+                label: 'SCAV Deaths',
+                value: player.scavDeaths || 0,
+                average: averages.scavDeaths.average,
+                max: averages.scavDeaths.max,
+                maxPlayer: averages.scavDeaths.maxPlayer,
+                higherIsBetter: false,
+                unit: '',
+                specialMessage: value => value >= averages.scavDeaths.max ? 'Unluckiest SCAV' : null
+            },
+            {
+                key: 'pmcRaids',
+                label: 'PMC Raids',
+                value: player.pmcRaids || 0,
+                average: averages.pmcRaids.average,
+                max: averages.pmcRaids.max,
+                maxPlayer: averages.pmcRaids.maxPlayer,
+                higherIsBetter: true,
+                unit: ''
+            },
+            {
+                key: 'pmcKills',
+                label: 'PMC Kills',
+                value: player.pmcKills || 0,
+                average: averages.pmcKills.average,
+                max: averages.pmcKills.max,
+                maxPlayer: averages.pmcKills.maxPlayer,
+                higherIsBetter: true,
+                unit: ''
+            },
+            {
+                key: 'pmcDeaths',
+                label: 'PMC Deaths',
+                value: player.pmcDeaths || 0,
+                average: averages.pmcDeaths.average,
+                max: averages.pmcDeaths.max,
+                maxPlayer: averages.pmcDeaths.maxPlayer,
+                higherIsBetter: false,
+                unit: '',
+                specialMessage: value => value >= averages.pmcDeaths.max ? 'Most Deaths' : null
+            },
+            {
+                key: 'killToDeathRatio',
+                label: 'K/D Ratio',
+                value: (player.killToDeathRatio || 0).toFixed(2),
+                average: averages.killToDeathRatio.average.toFixed(2),
+                max: averages.killToDeathRatio.max.toFixed(2),
+                maxPlayer: averages.killToDeathRatio.maxPlayer,
+                higherIsBetter: true,
+                unit: ''
+            }
+        ];
+
+        let html = '<div class="global-stats-grid">';
+
+        statCategories.forEach(stat => {
+            const playerValue = parseFloat(stat.value) || 0;
+            const avgValue = parseFloat(stat.average) || 0;
+            const maxValue = parseFloat(stat.max) || 0;
+
+            let percentage = 0;
+            if (maxValue > 0) {
+                percentage = Math.min(100, (playerValue / maxValue) * 100);
+            }
+
+            const specialMessage = stat.specialMessage ? stat.specialMessage(playerValue) : null;
+            const isRecordHolder = playerValue >= maxValue && maxValue > 0;
+
+            html += `
+            <div class="stat-comparison-card ${isRecordHolder ? 'record-holder' : ''}">
+                <div class="record-stat-header">
+                    <span class="record-stat-label">${stat.label}</span>
+                    ${specialMessage ? `<span class="record-special-badge">${specialMessage}</span>` : ''}
+                    ${isRecordHolder && !specialMessage ? '<span class="record-badge">Record Holder</span>' : ''}
+                </div>
+                
+                <div class="record-stat-values">
+                    <div class="record-player-stat">
+                        <span class="record-value">${this.formatNumber(playerValue)}${stat.unit}</span>
+                        <span class="record-label">${this.currentPlayerObject.name}</span>
+                    </div>
+                    <div class="record-average-stat">
+                        <span class="record-value">${this.formatNumber(avgValue)}${stat.unit}</span>
+                        <span class="record-label">Average</span>
+                    </div>
+                    <div class="record-max-stat">
+                        <span class="record-value">${this.formatNumber(maxValue)}${stat.unit}</span>
+                        <span class="record-label">Best</span>
+                        <span class="record-max-player" title="${stat.maxPlayer}">by ${window.truncateName(stat.maxPlayer)}</span>
+                    </div>
+                </div>
+                
+                <div class="record-progress-container">
+                    <div class="record-progress-bar">
+                        <div class="record-progress-fill" style="width: ${percentage}%"></div>
+                    </div>
+                    <span class="record-progress-label">Holds the top of ${percentage.toFixed(1)}%</span>
+                </div>
+            </div>
+        `;
+        });
+
+        html += '</div>';
+
+        container.innerHTML = html;
+    }
+
+    // Because I am lazy, (yes, you heard it right) and we have a similar formatSales in app-utils, I am just going to leave this here.
+    // Not like anyone is gonna notice x)
+    formatNumber(value) {
+        if (value >= 1000000) return (value / 1000000).toFixed(1) + 'M';
+        if (value >= 1000) return (value / 1000).toFixed(1) + 'K';
+        return Math.round(value).toLocaleString();
+    }
+}

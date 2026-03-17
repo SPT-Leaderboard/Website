@@ -455,6 +455,12 @@ async function getCustomProfileSettings(profileId) {
     return data;
 }
 
+/**
+ * Callback for various operation to ensure data is not in the proccess of loading
+ * @param {function} callback - The function we callback to
+ * @param {timeout} timeout - Timeout for the callback if for some reason data doesn't load or function never calls back
+ * @returns {void}
+ */
 function waitForDataReady(callback, timeout = 15000) {
     const startTime = Date.now();
     const checkInterval = 500;
@@ -472,7 +478,9 @@ function waitForDataReady(callback, timeout = 15000) {
     }, checkInterval);
 }
 
-// Format number and add 'Bil', 'Mil, 'K' suffixes to it
+/**
+ * Format number and add 'Bil', 'Mil, 'K' suffixes to it
+ */
 function formatSalesNum(num) {
     if (num >= 1000000000) {
         return (num / 1000000000).toFixed(1) + 'Bil';
@@ -486,14 +494,18 @@ function formatSalesNum(num) {
     return num.toString();
 }
 
-// Check if user actually owns premium
+/**
+ * Check if user actually owns premium
+ */
 function isPremium(player) {
     const now = Math.floor(Date.now() / 1000);
 
     return !!(player.isPremium && player.premiumUntil && player.premiumUntil > now);
 }
 
-// Quick util for loading data from JSON
+/**
+ * Quick util for loading data from JSON
+ */
 async function loadJSON(url) {
     const response = await fetch(url);
     if (!response.ok) {
@@ -502,6 +514,157 @@ async function loadJSON(url) {
     return await response.json();
 }
 
+function findPlayer(leaderboardData, playerId) {
+    const player = leaderboardData.find((p) => p.id === playerId);
+
+    return player;
+}
+
+/**
+ * Gets classes or icons for the name in ready HTML format, depending on the custom roles, or something else.
+ * @param {Array<Object>} player - Player object
+ * @returns {string} Formatted HTML
+ */
+function renderUsernameHTML(player, shouldRenderTeamTag = null) {
+    const styleRules = [
+        {
+            condition: () => player.banned,
+            icon: null,
+            color: '#787878',
+            className: 'banned-name',
+            priority: 100
+        },
+        // Dev
+        {
+            condition: () => player.dev,
+            icon: `<i class="fa-solid fa-user-shield" alt="Staff"></i>`,
+            color: '#2486ff',
+            className: 'dev-name',
+            priority: 95
+        },
+        // Tester (trusted)
+        {
+            condition: () => player.trusted && !player.banned,
+            icon: `<img loading="lazy" src="/media/trusted.png" alt="Tester" class="account-icon">`,
+            color: '#ba8bdb',
+            className: 'tester-name',
+            priority: 80
+        },
+        // SPTLB Team
+        {
+            condition: () => player.teamTag === "SPTLB",
+            icon: null,
+            color: null,
+            className: 'promo-name',
+            priority: 75
+        },
+        // Winner
+        {
+            condition: () => player.isWinner === true,
+            icon: null,
+            color: null,
+            className: 'gold-name',
+            priority: 70
+        },
+        // Premium
+        {
+            condition: () => isPremium(player),
+            icon: null,
+            color: null,
+            className: 'premium-name',
+            priority: 65
+        },
+        // Twitch Players
+        {
+            condition: () => player.isUsingTP && !player.banned,
+            icon: null,
+            color: null,
+            className: 'gradient-tp-text',
+            priority: 60
+        },
+        // EOD Edition
+        {
+            condition: () => player.accountType === 'edge_of_darkness' && !player.banned && !player.isUsingTP,
+            icon: `<img loading="lazy" src="/media/EOD.png" alt="EOD" class="account-icon">`,
+            color: null,
+            className: 'eod-name',
+            priority: 50
+        },
+        // Unheard Edition
+        {
+            condition: () => player.accountType === 'unheard_edition' && !player.banned && !player.isUsingTP,
+            icon: `<img loading="lazy" src="/media/Unheard.png" alt="Unheard" class="account-icon">`,
+            color: '#54d0e7',
+            className: 'unheard-name',
+            priority: 50
+        },
+        // Rank-based
+        {
+            condition: () => player.rank === 1,
+            icon: null,
+            color: null,
+            className: 'gold-name',
+            priority: 99
+        },
+        {
+            condition: () => player.rank === 2,
+            icon: null,
+            color: null,
+            className: 'silver-name',
+            priority: 92
+        },
+        {
+            condition: () => player.rank === 3,
+            icon: null,
+            color: null,
+            className: 'bronze-name',
+            priority: 91
+        }
+    ];
+
+    const appliedStyles = styleRules
+        .sort((a, b) => b.priority - a.priority)
+        .filter(rule => rule.condition())
+        .reduce((acc, rule) => {
+            if (rule.icon && !acc.icon) {
+                acc.icon = rule.icon;
+            }
+            if (rule.color && !acc.color) {
+                acc.color = rule.color;
+            }
+            if (rule.className) {
+                acc.classes.push(rule.className);
+            }
+            return acc;
+        }, { icon: null, color: null, classes: [] });
+
+    const iconHTML = appliedStyles.icon ?
+        `<span class="username-icon">${appliedStyles.icon}</span>` : '';
+
+    const colorStyle = appliedStyles.color ?
+        `style="color: ${appliedStyles.color}"` : '';
+
+    const classesString = appliedStyles.classes.length > 0 ?
+        `class="${appliedStyles.classes.join(' ')}"` : '';
+
+    return `
+        <span class="player-name-wrapper-main">
+            ${iconHTML}
+            <span data-text="${player.name}" ${classesString} ${colorStyle}>
+                ${shouldRenderTeamTag && player.teamTag ? `[${escapeHtml(player.teamTag)}] ` : ''}${escapeHtml(player.name)}
+            </span>
+        </span>
+    `;
+}
+
+function truncateName(name, maxLength = 15) {
+    if (!name || name.length <= maxLength) return name || 'Unknown';
+    return name.substring(0, maxLength) + '...';
+}
+
+/**
+ * Quick util for loading data from JSON
+ */
 class KeepAliveService {
     #keepAliveInterval = null;
     #isActive = false;

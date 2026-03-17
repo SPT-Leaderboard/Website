@@ -13,7 +13,7 @@ const AppState = (() => {
         setAutoUpdate(enabled) {
             autoUpdateEnabled = enabled && !this.isSearchActive();
             if (typeof AutoUpdater !== 'undefined') {
-                AutoUpdater.setEnabled(autoUpdateEnabled);
+                AutoUpdater.setAutoUpdateEnabled(autoUpdateEnabled);
             }
         },
 
@@ -52,7 +52,6 @@ const AppState = (() => {
                 searchInput.placeholder = 'Find player by name...';
                 searchContainer.classList.remove('searching-by-id');
             }
-
         }
     };
 })();
@@ -83,7 +82,7 @@ function searchPlayers() {
     AppState.setSearchActive(searchTerm !== '');
 
     rows.forEach((row, index) => {
-        const playerNameCell = row.querySelector('.player-name');
+        const playerNameCell = row.querySelector('.player-name-wrapper');
         if (!playerNameCell) return;
 
         let shouldShow;

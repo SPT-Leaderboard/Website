@@ -6,14 +6,16 @@
 
 /**
  * @class HeartbeatMonitor
- * @description Polls the server for player heartbeat data at regular intervals (10s) and
+ * @description Polls the server for player heartbeat data at regular intervals (5s) and
  * provides online/offline status, activity state (in raid, in menu, trading, etc.),
  * and "last online" time formatting for each tracked player.
  */
 class HeartbeatMonitor {
     constructor() {
         this.heartbeatData = {};
+        this.previousHeartbeatData = {};
         this.onlineThreshold = 300;
+        this.updateCallbacks = new Set();
     }
 
     /**
@@ -24,8 +26,68 @@ class HeartbeatMonitor {
         const data = await apiFetch(`${ApiPaths.heartbeatsPath}`, { showErrorToast: false });
         if (!data) return false;
 
+        this.previousHeartbeatData = { ...this.heartbeatData };
         this.heartbeatData = data;
+
+        if (this.hasSignificantChanges()) {
+            this.notifyChanges();
+        }
+
         return true;
+    }
+
+    hasImportantChanges(oldBeat, newBeat) {
+        if (!oldBeat || !newBeat) return true;
+
+        return (
+            oldBeat.type !== newBeat.type ||
+            oldBeat.map !== newBeat.map ||
+            oldBeat.side !== newBeat.side ||
+            Math.abs(oldBeat.timestamp - newBeat.timestamp) > 60
+        );
+    }
+
+    hasSignificantChanges() {
+        const oldCount = Object.keys(this.previousHeartbeatData).length;
+        const newCount = Object.keys(this.heartbeatData).length;
+
+        if (oldCount !== newCount) {
+            return true;
+        }
+
+        for (const [playerId, newBeat] of Object.entries(this.heartbeatData)) {
+            const oldBeat = this.previousHeartbeatData[playerId];
+
+            if (this.hasImportantChanges(oldBeat, newBeat)) {
+                return true;
+            }
+        }
+
+        for (const playerId of Object.keys(this.previousHeartbeatData)) {
+            if (!this.heartbeatData[playerId]) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    subscribe(callback) {
+        this.updateCallbacks.add(callback);
+    }
+
+    unsubscribe(callback) {
+        this.updateCallbacks.delete(callback);
+    }
+
+    notifyChanges() {
+        this.updateCallbacks.forEach(callback => {
+            try {
+                callback(this.heartbeatData);
+            } catch (error) {
+                console.error('Error in heartbeat callback:', error);
+            }
+        });
     }
 
     /**
@@ -161,9 +223,16 @@ class HeartbeatMonitor {
 
 window.heartbeatMonitor = new HeartbeatMonitor();
 
+// Subscribe to the callbacks for our auto data updates (if heartbeat mode is enabled)
+heartbeatMonitor.subscribe(() => {
+    if (window.AutoUpdater && window.AutoUpdater.isHeartbeatEnabled()) {
+        window.AutoUpdater.forceUpdate();
+    }
+});
+
 setInterval(() => {
     heartbeatMonitor.fetchHeartbeats();
-}, 10000);
+}, 5000);
 
 // Load this bad boy
 heartbeatMonitor.fetchHeartbeats();

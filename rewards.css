@@ -410,11 +410,7 @@
 .premium-name {
     font-weight: 700;
     font-size: 18px;
-    background: radial-gradient(#eb10ff, #d700ff);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 5px #ebebeb9c, -1px -1px 1px #ffffff9c, 1px 0 5px #c0f, 0 -2px 1px #ea2eff00, 1px 0 5px #d325ff, 0 -2px 1px #fff, 0 1px 1px #a600f88f, -1px 3px 1px #a600f854;
+    color: #eb10ff, #d700ff;
 }
 
 .theme-premium .trader-card {

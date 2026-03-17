@@ -11,12 +11,12 @@ const ProfileState = {
     currentHighlightedPlayerId: null,
     statusUpdater: null,
     commentsManager: null,
-    friendManager: null
+    friendManager: null,
+    tabManager: null
 };
 
 /**
  * Opens a player's profile modal by looking up the player in leaderboardData.
- * Routes to the disqualified profile view if the player is banned, otherwise shows the full public profile.
  * @param {string} playerId - The unique identifier of the player to display.
  * @param {boolean} [bypass=false] - If true, allows reopening a profile even if one is already open (from friend list or raid history).
  * @returns {void}
@@ -37,7 +37,7 @@ function openProfile(playerId, bypass = false) {
         return;
     }
 
-    const player = leaderboardData.find((p) => p.id === playerId);
+    const player = findPlayer(leaderboardData, playerId);
 
     if (!player) {
         showToast(`Couldn't find player`, 'error', 8000)
@@ -46,6 +46,7 @@ function openProfile(playerId, bypass = false) {
 
     window.location.hash = `id=${encodeURIComponent(player.id)}`;
     modal.style.display = "flex";
+    modal.classList.remove('hidden');
     modal.classList.add('active');
 
     showPublicProfile(modalContent, player);
@@ -53,10 +54,7 @@ function openProfile(playerId, bypass = false) {
 
 // #region Public Profile
 /**
- * Fetches custom profile settings and renders the full public profile view.
- * Highlights the player row on the leaderboard, hides the leaderboard table,
- * applies the player's theme/prestige styling, and builds all profile sections
- * (header, stats, raid history, friends, comments, showcase, etc.).
+ * Renders the full public profile view and builds all profile sections.
  * @param {HTMLElement} container - The modal content element to render into.
  * @param {Object} player - The player data object from leaderboardData.
  * @returns {Promise<void>}
@@ -150,7 +148,7 @@ async function showPublicProfile(container, player) {
     }
 
     // Disable auto updating on the background
-    AutoUpdater.setEnabled(false);
+    AutoUpdater.setAutoUpdateEnabled(false);
 
     // Convert registration date of a player
     const regDate = player.registrationDate
@@ -248,6 +246,13 @@ async function showPublicProfile(container, player) {
     // Get latest achievement
     const latestAchievement = await processPlayerAchievements(player);
 
+    // Render name
+    const name = renderUsernameHTML(player, true);
+
+    // Get rank
+    const playerRating = player.networkRaids ?? 0;
+    const rank = getRank(playerRating, 2000, 512);
+
     let lastGame;
     if (!player.banned) {
         const lastOnlineTime = heartbeatMonitor.isOnline(player.id)
@@ -264,64 +269,6 @@ async function showPublicProfile(container, player) {
         lastGame = `<span class="last-online-time">Banned</span>`;
     }
 
-    // Account type handling
-    let accountColor = '';
-    let accountClass = '';
-    let nameClass = '';
-
-    // 1st prio - dev
-    if (player.dev) {
-        accountColor = '#2486ff';
-    }
-    // 2nd prio - Tester
-    else if (player.trusted && !player.banned) {
-        accountColor = '#ba8bdb';
-    }
-    // 3rd prio - twitch players
-    else if (!player.banned && player.isUsingTP) {
-        accountClass = 'gradient-tp-text';
-        accountColor = '';
-    }
-    // 4th prio - account type
-    else if (!player.banned && !player.isUsingTP) {
-        switch (player.accountType) {
-            case 'edge_of_darkness':
-                accountColor = '#be8301';
-                break;
-            case 'unheard_edition':
-                accountColor = '#54d0e7';
-                break;
-        }
-    }
-
-    // Banned - lowest prio
-    else {
-        accountColor = '#787878';
-    }
-
-    // PROMO
-    if (player.teamTag === "SPTLB") {
-        nameClass = 'promo-name';
-    }
-
-    let finalNameClass = '';
-    if (nameClass) {
-        finalNameClass = nameClass;
-    } else if (accountClass) {
-        finalNameClass = accountClass; // TP
-    }
-
-    // Winner - priority
-    if (player.isWinner === true) {
-        finalNameClass = 'player-name-gold';
-    } else if (isPremium(player)) {
-        finalNameClass = 'premium-name';
-    }
-
-    // Get rank
-    const playerRating = player.networkRaids ?? 0;
-    const rank = getRank(playerRating, 2000, 512);
-
     container.innerHTML = `
         <!-- left column -->
         <img src="media/rewards/other/cat.gif" class="kittyrew" id="catrew"  alt=""/>
@@ -329,14 +276,11 @@ async function showPublicProfile(container, player) {
         <button id="closeButton" class="close-profile-button">&times;</button>
         <div class="left-column">
 
-            <div class="user-main-card profile-section ${finalNameClass}" id="main-profile-card">
+            <div class="user-main-card profile-section" id="main-profile-card">
                 <div class="pfp"><img src="${player.customPfp ? player.customPfp : player.profilePicture}" class="player-avatar" id="profile-avatar" alt="${escapeHtml(player.name)}" onerror="this.src='media/default_avatar.png';" /></div>
                 <div class="profile-header">
                     <div class="name-wrapper">
-                        <div class="${finalNameClass} name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''}>
-                            ${player.teamTag ? `[${escapeHtml(player.teamTag)}]` : ``}
-                            ${escapeHtml(player.customName ? player.customName : player.name)}
-                        </div>
+                        ${name}
                     <div class="registration-info">
                         <div class="register-date-trigger" id="registrationTrigger">
                             <i class="fa-regular fa-calendar"></i>
@@ -390,12 +334,24 @@ async function showPublicProfile(container, player) {
                                     </div>
                                     <div class="info-value" id="player-id">${player.id || 'N/A'}</div>
                                 </div>
+
                                 <div class="info-item">
                                     <div class="info-label">
                                         <i class="fa-solid fa-link"></i>
                                         <span>PermaLink:</span>
                                     </div>
                                     <div class="info-value" id="perma-link">${player.permaLink}</div>
+                                </div>
+
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fa-solid fa-computer"></i>
+                                        <span>SPT Setup:</span>
+                                    </div>
+                                    <div class="info-value">
+                                        ${player.isUsingFika ? 'Project Fika' : 'Vanilla'}
+                                        ${player.isUsingTP ? ' (Twitch Players)' : ''}
+                                    </div>
                                 </div>
                             </div>
                             
@@ -591,35 +547,66 @@ async function showPublicProfile(container, player) {
             <!-- Raid History -->
             <div class="raid-block">
                 <div class="raid-summary profile-section">
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-value">${player.currentWinstreak.toLocaleString()}</div>
-                            <div class="stat-label">Current Raid Streak</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value">${player.longestShot.toLocaleString()}m</div>
-                            <div class="stat-label">Avg Engage Distance</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value">${player.pmcKills.toLocaleString()}</div>
-                            <div class="stat-label">PMC Kills</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value">${player.scavsKilled.toLocaleString()}</div>
-                            <div class="stat-label">SCAV Kills</div>
-                        </div>
-                        <div class="stat-card">
-                          <div class="stat-value">${player.bossesKilled.toLocaleString()}</div>
-                          <div class="stat-label">Boss Kills</div>
-                        </div>
-                        <div class="stat-card">
-                          <div class="stat-value">${player.damage.toLocaleString()}</div>
-                          <div class="stat-label">Dmg Dealt</div>
-                        </div>
+                    <div class="raid-tabs">
+                        <button class="raid-tab active" data-tab="summary">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Summary</span>
+                        </button>
+                        <button class="raid-tab" data-tab="records">
+                            <i class="fas fa-trophy"></i>
+                            <span>Season Records</span>
+                        </button>
                     </div>
 
-                    <div class="recent-raids-stats" id="recent-raids-stats">
-                        <!-- JavaScript -->
+                    <div class="tab-content-container">
+                        <!-- Summary -->
+                        <div class="tab-pane active" id="tab-summary">
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-value">${player.currentWinstreak.toLocaleString()}</div>
+                                    <div class="stat-label">Current Raid Streak</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">${player.longestShot.toLocaleString()}m</div>
+                                    <div class="stat-label">Avg Engage Distance</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">${player.pmcKills.toLocaleString()}</div>
+                                    <div class="stat-label">PMC Kills</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">${player.scavsKilled.toLocaleString()}</div>
+                                    <div class="stat-label">SCAV Kills</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">${player.bossesKilled.toLocaleString()}</div>
+                                    <div class="stat-label">Boss Kills</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">${player.damage.toLocaleString()}</div>
+                                    <div class="stat-label">Dmg Dealt</div>
+                                </div>
+                            </div>
+
+                            <div class="recent-raids-stats" id="recent-raids-stats">
+                                <!-- JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Season Records -->
+                        <div class="tab-pane" id="tab-records">
+                            <div class="loader-dots" style="grid-column: 1 / -1;">
+                                <div class="shimmer-bg"></div>
+                                <div class="dots-container">
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                </div>
+                                <p class="dots-text">Loading...</p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -940,6 +927,9 @@ async function showPublicProfile(container, player) {
     ProfileState.friendManager = new FriendManager();
     await ProfileState.friendManager.init(player);
 
+    // Records
+    ProfileState.tabManager = new TabManager(player.id, leaderboardData);
+
     // Equipment displayer
     const equipmentDisplay = new PlayerEquipmentDisplay(player.id);
     const viewmodelContainer = document.querySelector('.playermodel-image');
@@ -955,7 +945,7 @@ async function showPublicProfile(container, player) {
     setupRegistrationDropdown();
 
     // I have no clue, this is bullshit but it works.
-    // upd 2/22/2026: *kinda* fixed, but still, would like to make it the other way.
+    // upd 2/22/2026: *kinda* fixed but still would like to make it the other way.
     // This is by any means is some voodoo possessed shit.
     ProfileState.statusUpdater = startStatusUpdater(player, container);
 }
@@ -1110,19 +1100,48 @@ async function renderWeaponList(playerId, modWeaponStats) {
 
         weaponItem.classList.add('profile-section');
 
+        const headshotPrc = calculateHeadshotPercent(headshots, kills);
+
         weaponItem.innerHTML = `
-            <div class="weapon-info">
-                <div class="weapon-name">${cleanWeaponName}</div>
-                <div class="weapon-infos">
-                    <div class="stat"><span class="stat-label">Kills:</span> ${kills}</div>
-                    <div class="stat"><span class="stat-label">Shots:</span> ${shotsFired}</div>
-                    <div class="stat"><span class="stat-label">Accuracy:</span> ${accuracy}</div>
-                    <div class="stat"><span class="stat-label">Lost:</span> ${timesLost}</div>
-                    <div class="stat"><span class="stat-label">Headshots:</span> ${headshots}</div>
+            <div class="weapon-card">
+                <div class="weapon-card-header">
+                    <h4 class="profile-weapon-name" title="${weaponName}">${cleanWeaponName}</h4>
+                    <span class="weapon-kills-badge">${kills} <span class="badge-label">kills</span></span>
                 </div>
-            </div>
-            <div class="weapon-icon">
-                <img src="media/weapon_icons/${cleanWeaponName}.webp" alt="${weaponName}" onerror="this.src='media/default_weapon_icon.png';" />
+                
+                <div class="weapon-card-body">
+                    <div class="weapon-icon-container">
+                        <img src="media/weapon_icons/${cleanWeaponName}.webp" 
+                            alt="${weaponName}" 
+                            class="profile-weapon-icon"
+                            loading="lazy"
+                            onerror="this.src='media/default_weapon_icon.png';" />
+                    </div>
+                    
+                    <div class="weapon-stats-grid">
+                        <div class="profile-wpn-stat-item" title="Shots fired">
+                            <span class="profile-wpn-stat-value">${formatSalesNum(shotsFired)}</span>
+                            <span class="profile-wpn-stat-label">shots</span>
+                        </div>
+                        <div class="profile-wpn-stat-item" title="Accuracy">
+                            <span class="profile-wpn-stat-value">${accuracy}</span>
+                            <span class="profile-wpn-stat-label">acc</span>
+                        </div>
+                        <div class="profile-wpn-stat-item" title="Headshots">
+                            <span class="profile-wpn-stat-value">${headshots}</span>
+                            <span class="profile-wpn-stat-label">hs</span>
+                        </div>
+                        <div class="profile-wpn-stat-item" title="Times lost">
+                            <span class="profile-wpn-stat-value">${timesLost}</span>
+                            <span class="profile-wpn-stat-label">lost</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="weapon-micro-stats" data-label="HS Rate">
+                    <div class="progress-bar" style="width: ${headshotPrc}%">
+                        ${headshotPrc}%
+                    </div>
+                </div>
             </div>
         `;
 
@@ -1130,6 +1149,11 @@ async function renderWeaponList(playerId, modWeaponStats) {
     });
 
     weaponsContainer.appendChild(weaponList);
+}
+
+function calculateHeadshotPercent(headshots, kills) {
+    if (!kills) return 0;
+    return Math.min(100, Math.round((headshots / kills) * 100));
 }
 
 function getBestWeapon(modWeaponStats) {
@@ -1386,37 +1410,13 @@ function getPlayerSideImageHTML(player) {
     }
 }
 
-function formatLastGame(player) {
-    if (player.banned) return 'Banned';
-
-    const playerStatus = window.heartbeatMonitor?.getPlayerStatus(player.id);
-
-    if (window.heartbeatMonitor?.isOnline(player.id)) {
-        return 'Online';
-    }
-
-    const lastPlayed = playerStatus?.lastUpdate || player.lastPlayed;
-    if (!lastPlayed) return 'Never played';
-
-    const lastPlayedDate = new Date(lastPlayed * 1000);
-    const now = new Date();
-    const diffHours = Math.floor((now - lastPlayedDate) / (1000 * 60 * 60));
-
-    if (diffHours < 24) {
-        return `${diffHours} hours ago`;
-    } else {
-        const diffDays = Math.floor(diffHours / 24);
-        return `${diffDays} days ago`;
-    }
-}
-
 function startRegistrationInfoUpdater(player) {
     const lastGameElement = document.getElementById('last-game');
 
     if (!ageElement || !lastGameElement) return;
 
     const updateInfo = () => {
-        lastGameElement.textContent = formatLastGame(player);
+        lastGameElement.textContent = formatLastPlayedRaid(player.absoluteLastTime);
     };
 
     updateInfo();
@@ -1566,9 +1566,13 @@ function setupModalCloseHandlers() {
         }
 
         setTimeout(() => {
-            AutoUpdater.setEnabled(true);
+            AutoUpdater.setAutoUpdateEnabled(true);
             modal.classList.remove('closing');
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+
             ProfileState.isProfileOpened = false;
+            
             history.replaceState(null, null, ' ');
             document.body.style.overflow = 'auto';
 

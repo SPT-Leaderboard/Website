@@ -5,6 +5,7 @@
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
 let leaderboardData = []; // For keeping current season data
+let oldLeaderboardData = [];
 let seasons = []; // Storing available seasons
 let ranOnlyOnce = false; // Run only once (ie winners)
 
@@ -37,7 +38,7 @@ const PrevStats = {
 const ApiPaths = {
     seasonPath: '/api/data/seasons/season',
     seasonLocalPath: 'fallbacks/',
-    currentSeason: '/api/data/seasons/season9.json',
+    currentSeason: '/api/data/seasons/season10.json',
     seasonPathEnd: '.json',
     lastRaidsPath: '/api/data/player_raids/',
     profileAppearencePath: '/api/network/functions/get_player_customization.php',
@@ -58,7 +59,7 @@ const ApiPaths = {
 // Paths for local files if debug is on
 if (isLocalhost) {
     ApiPaths.pmcPfpsPath = `../fallbacks/pmc_avatars/`;
-    ApiPaths.currentSeason = `/fallbacks/season9.json`;
+    ApiPaths.currentSeason = `/fallbacks/season10.json`;
     ApiPaths.seasonPath = `../fallbacks/season`;
     ApiPaths.profileAppearencePath = `http://localhost:3000/api/network/functions/get_player_customization.php`;
     ApiPaths.weaponStatsPath = `../fallbacks/shared/weapon_counters.json?t=${Date.now()}`;
@@ -257,7 +258,10 @@ function populateSeasonDropdown() {
                 AppState.setAutoUpdate(true);
             } else {
                 AppState.setAutoUpdate(false);
-                showToast('Live Data Flow was automatically disabled', 'info', 8000);
+                
+                if (!AppState.isAutoUpdateEnabled) {
+                    showToast('Live Data Flow was automatically disabled', 'info', 8000);
+                }
             }
         });
     }
@@ -298,7 +302,7 @@ function populateSeasonDropdown() {
  * checks recent player activity, computes overall stats, and initializes the profile watch list.
  * Delegates rendering to either {@link displaySimpleLeaderboard} or {@link displayLeaderboard}
  * based on the user's toggle setting. Sets the global {@link isDataReady} flag when complete.
- * @param {number} season - The season number to load (e.g. 9)
+ * @param {number} season - The season number to load
  * @returns {Promise<void>}
  * @throws {Error} When the fetch request or data processing fails unexpectedly
  */
@@ -306,6 +310,8 @@ async function loadSeasonData(season) {
     const emptyLeaderboardNotification = document.getElementById('emptyLeaderboardNotification');
     emptyLeaderboardNotification.style.display = 'none';
     isDataReady = false;
+
+    let newLeaderboardData = null;
 
     try {
         const data = await apiFetch(`${ApiPaths.seasonPath}${season}${ApiPaths.seasonPathEnd}`);
@@ -316,46 +322,83 @@ async function loadSeasonData(season) {
             return;
         }
 
-        leaderboardData = data.leaderboard || [];
+        newLeaderboardData = data.leaderboard || [];
 
-        if (leaderboardData.length === 0 || (leaderboardData.length === 1 && Object.keys(leaderboardData[0]).length === 0)) {
+        if (newLeaderboardData.length === 0 || (newLeaderboardData.length === 1 && Object.keys(newLeaderboardData[0]).length === 0)) {
             emptyLeaderboardNotification.style.display = 'block';
             await resetStats();
             return;
         }
 
+        // Update everything
+        leaderboardData = newLeaderboardData;
         calculatePlaces(leaderboardData);
-
-        // Run through this real quick before displaying
         addColorIndicators(leaderboardData);
-        checkRecentPlayers(leaderboardData);
         calculateOverallStats(leaderboardData);
+
+        // raid-notifications.js
+        checkRecentPlayers(leaderboardData);
+
+        // ui-navigation.js
         initProfileWatchList(leaderboardData);
     } catch (error) {
         console.error('Error loading season data:', error);
         emptyLeaderboardNotification.style.display = 'block';
+
+        return;
     } finally {
-        // Data is fully ready
-        if (SettingsHelper.get('lbToggle')) {
-            await displaySimpleLeaderboard(leaderboardData);
-        } else {
-            await displayLeaderboard(leaderboardData);
+        if (!newLeaderboardData || newLeaderboardData.length === 0) {
+            return;
         }
 
-        // Mark data is ready for our callback
+        const updateMode = AutoUpdater.getUpdateMode();
+        const isAutoUpdateEnabled = AutoUpdater.getStatus();
+
+        const shouldSkipUpdate =
+            areLeaderboardsEqual(oldLeaderboardData, newLeaderboardData) &&
+            isAutoUpdateEnabled &&
+            updateMode === 'normal';
+
+        if (shouldSkipUpdate) {
+            console.log(`[loadSeasonData] Skipping update - normal mode, data unchanged`);
+        } else {
+            if (!areLeaderboardsEqual(oldLeaderboardData, newLeaderboardData)) {
+                console.log(`[loadSeasonData] Data changed, updating...`);
+            } else if (updateMode === 'force') {
+                console.log(`[loadSeasonData] Force mode enabled, updating even without changes...`);
+            } else if (updateMode === 'heartbeat') {
+                console.log(`[loadSeasonData] Called from HeartbeatManager, updating...`);
+            } else if (!isAutoUpdateEnabled) {
+                console.log(`[loadSeasonData] Auto-update disabled.`);
+            }
+
+            if (SettingsHelper.get('lbToggle')) {
+                await displaySimpleLeaderboard(leaderboardData);
+            } else {
+                await displayLeaderboard(leaderboardData);
+            }
+            oldLeaderboardData = [...leaderboardData];
+        }
+
         isDataReady = true;
     }
 }
 
+function areLeaderboardsEqual(oldData, newData) {
+    if (!oldData || !newData) return false;
+    if (oldData.length !== newData.length) return false;
+
+    const oldHash = oldData.map(p => `${p.name}_${p.absoluteLastTime}_${p.pmcKills}`).join('|');
+    const newHash = newData.map(p => `${p.name}_${p.absoluteLastTime}_${p.pmcKills}`).join('|');
+
+    return oldHash === newHash;
+}
+
 /**
- * Renders the full leaderboard table with profile pictures, rank icons, account type badges,
- * prestige icons, boost indicators, team tags, and online status for each player.
- * Banned and permanently banned players are excluded or visually distinguished.
+ * Renders the full leaderboard table.
  * Builds rows in a document fragment for performance, then swaps the table body in one operation.
  * Attaches click handlers for opening player profiles and team views.
- * @param {Array<Object>} data - Array of player objects for the current season, each containing
- *   properties such as id, name, rank, totalScore, pmcRaids, survivalRate, killToDeathRatio,
- *   averageLifeTime, sptVer, banned, isCasual, teamTag, profilePicture, and more
+ * @param {Array<Object>} data - Array of player objects for the current season (aka leaderboardData)
  * @returns {Promise<void>}
  */
 async function displayLeaderboard(data) {
@@ -377,14 +420,12 @@ async function displayLeaderboard(data) {
         const playerStatus = window.heartbeatMonitor.getPlayerStatus(player.id);
 
         if (!player.banned) {
-            const lastOnlineTime = heartbeatMonitor.isOnline(player.id)
-                ? '<span class="player-status-lb-online">Online</span>'
-                : window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || player.lastPlayed);
-
             // For lastGame
             if (window.heartbeatMonitor.isOnline(player.id)) {
                 lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">${playerStatus.statusText} <div id="blink"></div></span>`
             } else {
+                const lastOnlineTime = !heartbeatMonitor.isOnline(player.id) && window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || player.lastPlayed);
+
                 lastGame = `<span class="last-online-time">${lastOnlineTime}</span>`;
             }
         } else {
@@ -446,84 +487,13 @@ async function displayLeaderboard(data) {
         }
 
         // Account type handling
-        let accountIcon = '';
-        let accountColor = '';
-        let accountClass = '';
-
-        // 1st prio - dev
-        if (player.dev) {
-            accountIcon = `<i class="fa-solid fa-user-shield promo-name" alt="Staff" style="font-size: 18px;"></i>`;
-            accountColor = '#2486ff';
-        }
-        // 2nd prio - Tester
-        else if (player.trusted && !player.banned) {
-            accountIcon = `<img loading="lazy" src="/media/trusted.png" alt="Tester" class="account-icon">`;
-            accountColor = '#ba8bdb';
-        }
-        // 3rd prio - twitch players
-        else if (!player.banned && player.isUsingTP) {
-            accountClass = 'gradient-tp-text';
-            accountColor = '';
-        }
-        // 4th prio - account type
-        else if (!player.banned && !player.isUsingTP) {
-            switch (player.accountType) {
-                case 'edge_of_darkness':
-                    accountIcon = `<img loading="lazy" src="/media/EOD.png" alt="EOD" class="account-icon">`;
-                    accountColor = '#be8301';
-                    break;
-                case 'unheard_edition':
-                    accountIcon = `<img loading="lazy" src="/media/Unheard.png" alt="Unheard" class="account-icon">`;
-                    accountColor = '#54d0e7';
-                    break;
-            }
-        }
-        // Banned - lowest prio
-        else {
-            accountColor = '#787878';
-        }
-
-        // Determine rank classes
-        let rankClass = '';
-        let nameClass = '';
-        if (player.rank === 1) {
-            rankClass = 'gold';
-            nameClass = 'gold-name';
-        } else if (player.rank === 2) {
-            rankClass = 'silver';
-            nameClass = 'silver-name';
-        } else if (player.rank === 3) {
-            rankClass = 'bronze';
-            nameClass = 'bronze-name';
-        }
-
-        // PROMO
-        let teamTagClass = '';
-        if (player.teamTag === "SPTLB") {
-            nameClass = 'promo-name';
-            teamTagClass = 'promo-name'
-        }
-
-        let finalNameClass = '';
-        if (nameClass) {
-            finalNameClass = nameClass;
-        } else if (accountClass) {
-            finalNameClass = accountClass; // TP
-        }
-
-        // Winner or Premium - 1 priority
-        if (player.isWinner === true) {
-            finalNameClass = 'gold-name';
-        } else if (isPremium(player)) {
-            player.isPremium = true;
-            finalNameClass = 'premium-name';
-        }
+        const name = renderUsernameHTML(player);
 
         // Get Rank
         const playerRating = player.networkRaids ?? 0;
         const rank = getRank(playerRating);
         const rankHTML = `
-            <div class="badge-lb tooltip">
+            <div class="badge-lb tooltip player-rank-leaderboard">
                 <img loading="lazy" src="${rank.image}" height="20" alt="Rank Image"> 
                 <span class="tooltiptext">${rank.fullName}</span>
             </div>
@@ -538,11 +508,11 @@ async function displayLeaderboard(data) {
         const rankLabel = player.isCasual ? 'Casual' : getRankLabel(player.totalScore);
 
         row.innerHTML = `
-            <td class="rank ${rankClass}">${player.rank} ${escapeHtml(player.medal)}</td>
-            <td class="teamtag ${teamTagClass}" data-team="${escapeHtml(player.teamTag ? player.teamTag : ``)}">${player.teamTag ? `[${escapeHtml(player.teamTag)}]` : ``}</td>
-            <td class="player-name" ${accountColor && !finalNameClass ? `style="color: ${accountColor}"` : ''} data-player-id="${player.id || '0'}">
-                <div class="lb-row-wrapper">${`<img loading="lazy" class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';"  alt="Avatar"/>`}
-                ${accountIcon} <span class="${finalNameClass}">${escapeHtml(player.name)}</span> ${prestigeImg} <div class="player-mode">${rankHTML}</div></div>
+            <td class="rank">${player.rank} ${escapeHtml(player.medal)}</td>
+            <td class="teamtag" data-team="${escapeHtml(player.teamTag ? player.teamTag : ``)}">${player.teamTag ? `[${escapeHtml(player.teamTag)}]` : ``}</td>
+            <td class="player-name-wrapper" data-player-id="${player.id || '0'}">
+                    ${`<img loading="lazy" class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';"  alt="Avatar"/>`}
+                    ${name} ${prestigeImg} ${rankHTML}
             </td>
             <td>${lastGame || 'N/A'}</td>
             <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class="fa-solid fa-share-from-square"></i> </button></td>
@@ -567,8 +537,8 @@ async function displayLeaderboard(data) {
 
     // Add click handlers for player names
     mainTable.addEventListener('click', (e) => {
-        if (e.target.closest('.player-name')) {
-            openProfile(e.target.closest('.player-name').dataset.playerId);
+        if (e.target.closest('.player-name-wrapper')) {
+            openProfile(e.target.closest('.player-name-wrapper').dataset.playerId);
         }
         if (e.target.closest('.teamtag')) {
             openTeam(e.target.closest('.teamtag').dataset.team);
@@ -619,14 +589,12 @@ async function displaySimpleLeaderboard(data) {
         const playerStatus = window.heartbeatMonitor.getPlayerStatus(player.id);
 
         if (!player.banned) {
-            const lastOnlineTime = window.heartbeatMonitor.isOnline(player.id)
-                ? '<span class="player-status-lb-online">Online</span>'
-                : window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || player.lastPlayed);
-
             // For lastGame
             if (window.heartbeatMonitor.isOnline(player.id)) {
                 lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">${playerStatus.statusText} <div id="blink"></div></span>`
             } else {
+                const lastOnlineTime = !heartbeatMonitor.isOnline(player.id) && window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || player.lastPlayed);
+
                 lastGame = `<span class="last-online-time">${lastOnlineTime}</span>`;
             }
         } else {
@@ -719,8 +687,8 @@ async function displaySimpleLeaderboard(data) {
 
     // Add click handlers for player names
     mainTable.addEventListener('click', (e) => {
-        if (e.target.closest('.player-name')) {
-            openProfile(e.target.closest('.player-name').dataset.playerId);
+        if (e.target.closest('.player-name-wrapper')) {
+            openProfile(e.target.closest('.player-name-wrapper').dataset.playerId);
         }
         if (e.target.closest('.teamtag')) {
             openTeam(e.target.closest('.teamtag').dataset.team);

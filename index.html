@@ -46,7 +46,6 @@
         <script src="js/ui-toasts.js"></script>
         <script src="js/app-utils.js"></script>
         <script src="js/app-init.js"></script>
-        <script src="js/misc-event.js"></script>
         <script data-cfasync="false" src="js/app-seasons.js"></script>
         <script src="js/app-welcome-screen.js"></script>
         <title>SPT Leaderboard</title>
@@ -404,6 +403,7 @@
                     <li>2.2. <strong>Multi-Account Policy:</strong> Players may link multiple accounts under the same token/identifier. However, if any of them violate the rules, all linked accounts will be held responsible. Penalties (including restrictions, or bans) will be applied to the entire group of accounts.</li>
                     <li>2.3. <strong>Honesty:</strong> All submitted statistics must reflect genuine gameplay. Any form of falsified or edited data will result in a disqualification from leaderboard, or permanent ban.</li>
                     <li>2.4. <strong>Account Responsibility:</strong> You are solely responsible for all activities that occur under your profile and token. Do not share your token or account details. Any submission or action made with your token will be treated as an action taken by you.</li>
+                    <li>2.5. <strong>Account General Purpose:</strong> Accounts are intended for genuine player use only. The use of test accounts, development accounts, or any account created for purposes other than legitimate gameplay is strictly prohibited. Violation will result in profile ban, removal from the leaderboard including but not limited to all linked accounts temporarily banned.</li>
                 </ul>
                 <h3>3. Data Usage & Rights</h3>
                 <ul>
@@ -416,7 +416,7 @@
                 <h3>Limitation of Liability & Disclaimer</h3>
                 <ul>
                     <li>4.1. <strong>Service "As Is":</strong> The SPT Leaderboard and its related services are provided on an "as is" and "as available" basis without any warranties of any kind. We do not guarantee that the service will be uninterrupted, timely, secure, or error-free.</li>
-                    <li>4.2. <strong>No Liability:</strong> To the fullest extent permitted by law, the SPT Leaderboard Team, its developers, and moderators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of data, server interruptions, arising out of or in connection with your use of the SPT Leaderboard.</li>
+                    <li>4.2. <strong>No Liability:</strong> To the fullest extent permitted by law, the SPT Leaderboard Team, its developers and moderators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of data, server interruptions, arising out of or in connection with your use of the SPT Leaderboard.</li>
                     <li>4.3. <strong>Termination of Service:</strong> SPT Leaderboard Team reserves the right to modify, suspend, or discontinue the SPT Leaderboard, any part of it, or its services, either temporarily or permanently, at any time without notice and without liability given.</li>
                 </ul>
                 <p><em>Last updated: November 8, 2025</em></p>
@@ -486,61 +486,13 @@
                         <source src="/media/event/bg_event.mp4" type="video/mp4">
                     </video>
                 </div>
-                <div class="snow-crust"></div>
                 <!--<div class="announcement-icon">
                     <img src="media/player-achievements/67a0e5f786681d1e210705f0.png" alt="SPT Logo" class="celebration-icon">
                 </div>-->
                 <div class="announcement-content">
-                    <div class="announcement-badge">EVENT</div>
-                    <h2 class="announcement-title">Unknown Convoy Intercepted</h2>
-                    <div class="announcement-text">"PMC USEC has intercepted an unauthorized convoy outside Norvinsk in a brief engagement. Hostiles, also identified as Smugglers, abandoned vehicles under TerraGroup insignia and fled into the evacuation zone. Cargo bays contained sealed TerraGroup cases and was secured by USEC, passed to Volkov." Now moving through Tarkov Market with a first batch already in rotation with <strong style="color: #ffd966;">extremely limited stock</strong>. <br><br> Join our <a href="https://discord.gg/psV2PY8brW" target="_blank" class="announcement-link">Discord Server</a></div>
-                    <div class="announcement-text">
-                        <div class="war-progress-container">
-                            <div class="war-header">
-                                <div class="faction-event scave-faction">
-                                    <span class="faction-name">SCAVS</span>
-                                </div>
-                                <div class="war-title">FACTION CONFLICT</div>
-                                <div class="faction-event pmce-faction">
-                                    <span class="faction-name">PMCS</span>
-                                </div>
-                            </div>
-                            <div class="progress-bar-war">
-                                <div class="progress scav-progress" id="scavProgress" style="width: 50%;">
-                                    <span class="progress-count" id="scavCount">0</span>
-                                </div>
-                                <div class="progress pmc-progress" id="pmcProgress" style="width: 50%;">
-                                    <span class="progress-count" id="pmcCount">0</span>
-                                </div>
-                            </div>
-                            <div class="war-status" id="warStatus"> Approximating battle intensity... </div>
-                        </div>
-                        <div class="leaderboard-switch-container">
-                            <div class="leaderboard-mini" id="bossHuntersTable">
-                                <div class="leaderboard-header">
-                                    <span class="leaderboard-title">CURRENT BOSS HUNTERS</span>
-                                    <span class="switch-indicator">BOSS KILLS</span>
-                                </div>
-                                <div id="topHuntersList" class="leaderboard-list">
-                                    <div class="leaderboard-loading">Getting signal...</div>
-                                </div>
-                            </div>
-                            <div class="leaderboard-mini" id="pmcHuntersTable" style="display: none;">
-                                <div class="leaderboard-header">
-                                    <span class="leaderboard-title">CURRENT PMC HUNTERS</span>
-                                    <span class="switch-indicator">PMC KILLS</span>
-                                </div>
-                                <div id="topPmcHuntersList" class="leaderboard-list">
-                                    <div class="leaderboard-loading">Getting signal...</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="table-switch-indicator">
-                            <span class="switch-dot active" data-table="boss"></span>
-                            <span class="switch-label">switching every 10s</span>
-                            <span class="switch-dot" data-table="pmc"></span>
-                        </div>
-                    </div>
+                    <div class="announcement-badge">EVENT #2/2</div>
+                    <h2 class="announcement-title">The conflict has been resolved</h2>
+                    <div class="announcement-text">PMCs has outnumbered their opponents and settled down the conflict. The rewards and supplies will be arriving to Tarkov Market for everyone soon. <br><br> Join our <a href="https://discord.gg/psV2PY8brW" target="_blank" class="announcement-link">Discord Server</a></div>
                     <div class="announcement-signature">
                         <!--<span class="signature-line"></span>-->
                         <span class="signature-name">Unauthorized Source</span>
@@ -561,8 +513,19 @@
             </div>
             <div class="controls-toolset">
                 <div class="auto-update-control">
-                    <label>
-                        <input type="checkbox" id="autoUpdateToggle" checked /> Live Data Flow </label>
+                    <label> <input type="checkbox" id="autoUpdateToggle" checked /> Live Data Flow </label>
+                    <div class="update-mode-selector">
+                        <span class="mode-label">Update mode:</span>
+                        <label class="mode-option">
+                            <input type="radio" name="updateMode" id="normalRadio" value="normal" checked />
+                            <span class="radio-custom"></span> Normal </label>
+                        <label class="mode-option">
+                            <input type="radio" name="updateMode" id="forceUpdateRadio" value="force" checked />
+                            <span class="radio-custom"></span> Force Update </label>
+                        <label class="mode-option">
+                            <input type="radio" name="updateMode" id="heartbeatRadio" value="heartbeat" />
+                            <span class="radio-custom"></span> Heartbeats </label>
+                    </div>
                     <span id="timeToUpdate"></span>
                 </div>
             </div>
