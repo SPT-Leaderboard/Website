@@ -876,7 +876,7 @@ class CommentsManager {
         }
 
         try {
-            const response = await fetch(`${this.apiEndpoints.loadComments}${this.permaLink}.json`);
+            const response = await fetch(`${this.apiEndpoints.loadComments}player_${this.permaLink}.json`);
 
             if (!response.ok) {
                 if (response.status === 404) {
