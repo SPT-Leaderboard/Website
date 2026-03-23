@@ -1478,7 +1478,7 @@ function renderDetailedStatus(player) {
                     <i class="fa-regular fa-clock"></i>
                     <span class="detail-label">Expires:</span>
                     <span class="detail-value ${player.banExpires > Date.now() / 1000 ? 'text-warning' : 'text-success'}">
-                        ${player.banExpires ? `Never` : player.banExpires > Date.now() / 1000 ? 'Temporary' : 'Expired'}
+                        ${player.banExpires === 0 ? 'Never' : (player.banExpires > Date.now() / 1000 ? `Temporary (in ${howMuchUntilFutureDateWeHaveLeft(player.banExpires)})` : 'Expired')}
                     </span>
                 </div>
                 ` : ''}
@@ -1486,6 +1486,7 @@ function renderDetailedStatus(player) {
         `;
     }
 
+    // TODO: Include all reasons
     if (player.suspicious && player.suspicious_reason && !player.isCasual) {
         return `
             <div class="status-details suspicious-details">

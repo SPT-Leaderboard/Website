@@ -662,7 +662,7 @@ async function displaySimpleLeaderboard(data) {
             <td class="rank">${player.rank}</td>
             <td class="teamtag" data-team="${escapeHtml(player.teamTag ? player.teamTag : ``)}">${player.teamTag ? `[${escapeHtml(player.teamTag)}]` : ``}</td>
             <td class="player-name" style="height: 33px;" data-player-id="${player.id || '0'}">
-                <span">${escapeHtml(player.name)}</span>
+                <span>${escapeHtml(player.name)}</span>
             </td>
             <td>${lastGame || 'N/A'}</td>
             <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class="fa-solid fa-share-from-square"></i> </button></td>
