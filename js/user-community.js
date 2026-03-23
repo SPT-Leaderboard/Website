@@ -1383,14 +1383,14 @@ class PlayerEquipmentDisplay {
             };
 
         } catch (error) {
-            console.error(`PlayerEquipmentDisplay Error! ${error}`)
+            console.error(`PlayerEquipmentDisplay Error! ${error}`);
         }
     }
 
 
     async testAttachmentIcon(iconLink, iconLink2) {
         try {
-            const cdnSuccess = await testImageLoad(iconLink, 1000);
+            const cdnSuccess = await this.testImageLoad(iconLink, 1000);
 
             if (cdnSuccess) {
                 return iconLink;

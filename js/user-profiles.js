@@ -73,7 +73,7 @@ async function showPublicProfile(container, player) {
             </div>
             <p class="dots-text">Loading...</p>
         </div>
-    `
+    `;
 
     ProfileState.isProfileOpened = true;
     if (ProfileState.currentHighlightedPlayerId) {
@@ -142,7 +142,7 @@ async function showPublicProfile(container, player) {
                 "base_price": 72033,
                 "slot": 3
             }
-        }
+        };
     } else {
         player.showcase = playerDataResponse?.showcase || null;
     }
@@ -261,7 +261,7 @@ async function showPublicProfile(container, player) {
 
         // For lastGame
         if (heartbeatMonitor.isOnline(player.id)) {
-            lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">${playerStatus.statusText} <div id="blink"></div></span>`
+            lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">${playerStatus.statusText} <div id="blink"></div></span>`;
         } else {
             lastGame = `<span class="last-online-time">Last seen ${lastOnlineTime}</span>`;
         }

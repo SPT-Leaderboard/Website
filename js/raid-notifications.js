@@ -182,7 +182,7 @@ async function showPlayerNotification(player) {
     const kills = player.lastRaidKills;
     if (!isOnRaidStreak && !shouldShowProfit && player.lastRaidSurvived && player.lastRaidKills > 1 && !player.banned) {
         let killStreak;
-        let soundFile;
+        let soundFile = '';
         let notificationText;
 
         switch (true) {

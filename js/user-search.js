@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 searchPlayers();
             }
 
-            setCookie('searchType', searchType, 7);
+            setCookie('searchType', searchType);
         });
     });
 
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
     searchInput.addEventListener('input', function () {
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
-            setCookie('playerSearch', this.value, 7);
+            setCookie('playerSearch', this.value);
             searchPlayers();
         }, 200);
     });
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
         searchInput.style.transform = 'scale(0.98)';
         setTimeout(() => {
             searchInput.value = '';
-            setCookie('playerSearch', '', -1);
+            setCookie('playerSearch', '');
             searchPlayers();
             searchInput.focus();
             searchInput.style.transform = 'scale(1)';
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
         searchInput.style.transform = 'scale(0.98)';
         setTimeout(() => {
             searchInput.value = '';
-            setCookie('playerSearch', '', -1);
+            setCookie('playerSearch', '');
             searchPlayers();
             searchInput.focus();
             searchInput.style.transform = 'scale(1)';

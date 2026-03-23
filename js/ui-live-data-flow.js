@@ -161,7 +161,7 @@ const AutoUpdater = (() => {
          */
         setAutoUpdateEnabled(enabled) {
             autoUpdateEnabled = enabled;
-            setCookie('autoUpdateEnabled', enabled, 30);
+            setCookie('autoUpdateEnabled', enabled);
             if (autoUpdateToggle) autoUpdateToggle.checked = enabled;
 
             if (enabled && (updateMode === 'force' || updateMode === 'normal')) {
@@ -181,7 +181,7 @@ const AutoUpdater = (() => {
             if (mode !== 'force' && mode !== 'heartbeat' && mode !== 'normal') return;
 
             updateMode = mode;
-            setCookie('updateMode', mode, 30);
+            setCookie('updateMode', mode);
 
             if (forceUpdateRadio) forceUpdateRadio.checked = (mode === 'force');
             if (heartbeatRadio) heartbeatRadio.checked = (mode === 'heartbeat');
@@ -202,13 +202,13 @@ const AutoUpdater = (() => {
 
         setForceUpdateEnabled(enabled) {
             forceUpdateEnabled = enabled;
-            setCookie('forceUpdateEnabled', enabled, 30);
+            setCookie('forceUpdateEnabled', enabled);
             if (forceUpdateToggle) forceUpdateToggle.checked = enabled;
         },
 
         setHeartbeatEnabled(enabled) {
             autoUpdateFromHeartbeats = enabled;
-            setCookie('autoUpdateFromHeartbeats', enabled, 30);
+            setCookie('autoUpdateFromHeartbeats', enabled);
             if (forceHeartbeatToggle) forceHeartbeatToggle.checked = enabled;
 
             if (enabled) {

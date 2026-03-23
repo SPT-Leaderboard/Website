@@ -47,7 +47,7 @@ function applyRewards(player, elements) {
         goons: "6513f1feec10ff011f17c7ea",
         lighthouse: "6514321bec10ff011f17ccac",
         raider: "6513eec00dc723592b0f90cc"
-    }
+    };
 
     // Apply profile decal
     if (!["redshade", "steelshade", "premium", "gradient"].includes(player.profileTheme.toLowerCase())) {

@@ -174,7 +174,7 @@ async function displayQuestsWithControls(quests, container) {
     const questsHTML = await createQuestsHTML(filteredQuests);
 
     container.innerHTML = controlsHTML + `<div class="quests-grid">${questsHTML}</div>`;
-    updateQuestCounter(filteredQuests.length, quests.length);
+    updateQuestCounter(quests.length);
 }
 
 function calculateQuestStats(quests) {

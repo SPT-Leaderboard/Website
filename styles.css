@@ -1764,7 +1764,7 @@ button:hover,
     font-size: 0.96rem;
     min-width: 1000px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1)
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .stats-line {
@@ -4901,10 +4901,9 @@ input[type="checkbox"]:checked:hover {
 }
 
 .raid-tab.active {
-    background: linear-gradient(135deg, 
-        rgba(100, 255, 218, 0.15), 
-        rgba(100, 200, 255, 0.1)
-    );
+    background: linear-gradient(135deg,
+            rgba(100, 255, 218, 0.15),
+            rgba(100, 200, 255, 0.1));
     color: var(--accent-teal, #64ffda);
     box-shadow: 0 4px 12px rgba(100, 255, 218, 0.2);
     border: 1px solid rgba(100, 255, 218, 0.3);
@@ -4973,10 +4972,9 @@ input[type="checkbox"]:checked:hover {
 
 .stat-comparison-card.record-holder {
     border: 1px solid var(--accent-teal) !important;
-    background: linear-gradient(135deg, 
-        rgba(100, 255, 218, 0.1) 0%,
-        var(--glass-bg) 70%
-    ) !important;
+    background: linear-gradient(135deg,
+            rgba(100, 255, 218, 0.1) 0%,
+            var(--glass-bg) 70%) !important;
 }
 
 .record-stat-header {
@@ -4996,7 +4994,8 @@ input[type="checkbox"]:checked:hover {
     letter-spacing: 0.5px;
 }
 
-.record-special-badge, .record-badge {
+.record-special-badge,
+.record-badge {
     font-size: 11px;
     padding: 4px 8px;
     border-radius: 12px;
@@ -5017,7 +5016,9 @@ input[type="checkbox"]:checked:hover {
     margin-bottom: 16px;
 }
 
-.record-player-stat, .record-average-stat, .record-max-stat {
+.record-player-stat,
+.record-average-stat,
+.record-max-stat {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8544,7 +8545,6 @@ input[type="checkbox"]:checked:hover {
 /* Footer */
 .modern-footer {
     background-color: rgba(57, 89, 131, 0.205);
-    ;
     color: #f0f0f0;
     padding: 2.5rem 0;
     font-family: 'Inter', -apple-system, sans-serif;

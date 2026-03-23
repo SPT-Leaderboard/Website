@@ -116,7 +116,7 @@ async function initLastRaids(playerId, permaLink) {
 
         renderRaidHistory(sortedRaids, playerId, leaderboardData);
         renderRaidsSummary(sortedRaids, playerId, leaderboardData);
-        renderMapStats(sortedRaids)
+        renderMapStats(sortedRaids);
     } catch (error) {
         closeLoader();
         statsContainer.innerHTML = `

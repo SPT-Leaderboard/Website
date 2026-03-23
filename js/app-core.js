@@ -139,7 +139,7 @@ async function initAllSeasons() {
         // Sort from newest to oldest
         seasons.sort((a, b) => b - a);
 
-        await prepareSeasonData()
+        await prepareSeasonData();
         populateSeasonDropdown();
     }
 }
@@ -928,7 +928,7 @@ function calculateOverallStats(data) {
         if (player.totalPlayTime) {
             totalPlayTime += Math.floor(player.totalPlayTime / 60);
         }
-    })
+    });
 
     // Calculate averages
     const averageKDR = totalDeaths > 0 ? totalKills / totalDeaths : 0;
@@ -990,14 +990,6 @@ function animateNumber(elementId, targetValue, decimals = 0, startValue = null) 
     if (!element) return;
 
     const suffix = elementId === 'averageSurvival' ? '%' : '';
-
-    // Parse current displayed value
-    let currentDisplayValue = element.textContent.replace(/[^0-9.-]/g, '');
-
-    if (suffix === '%') {
-        currentDisplayValue = currentDisplayValue.replace('%', '');
-    }
-
     const formatValue = value => {
         return (decimals > 0 ? value.toFixed(decimals) : Math.round(value)) + suffix;
     };
