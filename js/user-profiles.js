@@ -498,16 +498,16 @@ async function showPublicProfile(container, player) {
                                     <p class="hit-perc">0.0% of Hits - <span id="headHits">0</span> Hits</p>
                                 </div>
                                 <div>
-                                    <p class="hit-perc">0.0% of Hits - <span id="headHits">0</span> Hits</p>
+                                    <p class="hit-perc">0.0% of Hits - <span id="chestHits">0</span> Hits</p>
                                 </div>
                                 <div>
-                                    <p class="hit-perc">0.0% of Hits - <span id="headHits">0</span> Hits</p>
+                                    <p class="hit-perc">0.0% of Hits - <span id="stomachHits">0</span> Hits</p>
                                 </div>
                                 <div>
-                                    <p class="hit-perc">0.0% of Hits - <span id="headHits">0</span> Hits</p>
+                                    <p class="hit-perc">0.0% of Hits - <span id="armsHits">0</span> Hits</p>
                                 </div>
                                 <div>
-                                    <p class="hit-perc">0.0% of Hits - <span id="headHits">0</span> Hits</p>
+                                    <p class="hit-perc">0.0% of Hits - <span id="legsHits">0</span> Hits</p>
                                 </div>
                             </div>
                         </div>
@@ -869,7 +869,7 @@ async function showPublicProfile(container, player) {
                             </div>
                             <div class="trader-name">Lightkeeper</div>
                             <div class="trader-standing">Loyalty: ${player.traderInfo ? Number(player.traderInfo.LIGHTKEEPER.standing.toFixed(2)) : 0}</div>
-                            <div class="trader-standing">Money Traded: ${player.traderInfo ? formatSalesNum(Number(player.traderInfo.PRAPOR.salesSum)) : 0}</div>
+                            <div class="trader-standing">Money Traded: ${player.traderInfo ? formatSalesNum(Number(player.traderInfo.LIGHTKEEPER.salesSum)) : 0}</div>
                         </div>
 
                         <div class="trader-card" data-unlocked="${player.traderInfo.BTR_DRIVER.unlocked}">

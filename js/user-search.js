@@ -200,17 +200,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    clearButton.addEventListener('click', function () {
-        searchInput.style.transform = 'scale(0.98)';
-        setTimeout(() => {
-            searchInput.value = '';
-            setCookie('playerSearch', '');
-            searchPlayers();
-            searchInput.focus();
-            searchInput.style.transform = 'scale(1)';
-        }, 150);
-    });
-
     // Sync with AutoUpdater
     if (typeof AutoUpdater !== 'undefined') {
         AutoUpdater.init();
