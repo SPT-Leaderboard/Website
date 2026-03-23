@@ -1413,7 +1413,7 @@ function getPlayerSideImageHTML(player) {
 function startRegistrationInfoUpdater(player) {
     const lastGameElement = document.getElementById('last-game');
 
-    if (!ageElement || !lastGameElement) return;
+    if (!lastGameElement) return;
 
     const updateInfo = () => {
         lastGameElement.textContent = formatLastPlayedRaid(player.absoluteLastTime);

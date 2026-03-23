@@ -113,7 +113,7 @@ function applyRewards(player, elements) {
 
     // Apply prestige styling
     if (player.usePrestigeStyling && player.prestige > 0) {
-        const prestigeClass = `prestige-${player.bp_prestigebg}`;
+        const prestigeClass = `prestige-${player.prestigeBackground}`;
         if (['prestige-tagilla', 'prestige-killa', 'prestige-both'].includes(prestigeClass)) {
             mainBackground.className = mainBackground.className.replace(/(usec|bear|labs|prestige-(tagilla|killa|both))-background/g, '');
             mainBackground.classList.add(prestigeClass);
