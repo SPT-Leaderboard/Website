@@ -209,7 +209,7 @@ async function fetchData() {
         initCharts();
 
         // Fetch data from all sources
-        const seasonNumbers = [2, 3, 4, 5, 6, 7, 8, 9];
+        const seasonNumbers = [2, 3, 4, 5, 6, 7, 8, 9, 10];
         const seasonPromises = seasonNumbers.map(num =>
             fetch(`../api/data/seasons/season${num}.json`)
         );
