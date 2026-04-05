@@ -119,6 +119,7 @@ async function initLastRaids(playerId, permaLink) {
         renderMapStats(sortedRaids);
     } catch (error) {
         closeLoader();
+        
         statsContainer.innerHTML = `
         <div class="no-stats-message">
                 <h3>Failed to load last raid data</h3>

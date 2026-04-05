@@ -18,13 +18,13 @@ const ProfileState = {
 /**
  * Opens a player's profile modal by looking up the player in leaderboardData.
  * @param {string} playerId - The unique identifier of the player to display.
- * @param {boolean} [bypass=false] - If true, allows reopening a profile even if one is already open (from friend list or raid history).
+ * @param {boolean} [reOpenProfile=false] - If true, allows reopening a profile even if one is already open (from friend list or raid history).
  * @returns {void}
  */
-function openProfile(playerId, bypass = false) {
+function openProfile(playerId, reOpenProfile = false) {
     // Don't open profile again for whatever reason if profile is already open
     // Only let this happen if user opens a player from friend list or raid history
-    if (ProfileState.isProfileOpened && !bypass) {
+    if (ProfileState.isProfileOpened && !reOpenProfile) {
         return;
     }
 
