@@ -63,68 +63,7 @@ async function showPlayerNotification(player) {
         return;
     }
 
-    // Account type handling
-    let accountIcon = '';
-    let accountColor = '';
-    let accountClass = '';
-
-    // 1st prio - dev
-    if (player.dev) {
-        accountIcon = `<i class="fa-solid fa-user-shield promo-name" alt="Staff" style="font-size: 18px;"></i>`;
-        accountColor = '#2486ff';
-    }
-    // 2nd prio - Tester
-    else if (player.trusted && !player.banned) {
-        accountIcon = `<img loading="lazy" src="/media/trusted.png" alt="Tester" class="account-icon">`;
-        accountColor = '#ba8bdb';
-    }
-    // 3rd prio - twitch players
-    else if (!player.banned && player.isUsingTP) {
-        accountClass = 'gradient-tp-text';
-        accountColor = '';
-    }
-    // 4th prio - account type
-    else if (!player.banned && !player.isUsingTP) {
-        switch (player.accountType) {
-            case 'edge_of_darkness':
-                accountIcon = `<img loading="lazy" src="/media/EOD.png" alt="EOD" class="account-icon">`;
-                accountColor = '#be8301';
-                break;
-            case 'unheard_edition':
-                accountIcon = `<img loading="lazy" src="/media/Unheard.png" alt="Unheard" class="account-icon">`;
-                accountColor = '#54d0e7';
-                break;
-        }
-    }
-
-    // PROMO
-    let nameClass = '';
-    if (player.teamTag === "SPTLB") {
-        nameClass = 'promo-name';
-    }
-
-    let rankClass = '';
-    switch (player.rank) {
-        case 1:
-            rankClass = "Legendary";
-            break;
-
-        case 2:
-            rankClass = "Rare";
-            break;
-    }
-
-    // Winner - priority
-    let finalNameClass = '';
-    if (player.isWinner) {
-        finalNameClass = 'player-name-gold Legendary';
-    } else if (isPremium(player)) {
-        finalNameClass = 'premium-name';
-    } else if (nameClass) {
-        finalNameClass = nameClass;
-    } else if (accountClass) {
-        finalNameClass = accountClass;
-    }
+    const name = renderUsernameHTML(player, true);
 
     // Raidstreak/Killstreaks
     let isOnRaidStreak = false;
@@ -278,12 +217,9 @@ async function showPlayerNotification(player) {
             <div class="notification-header-r">
                 <img src="${player.profilePicture}" alt="${escapeHtml(player.name)}'s avatar" onclick="openProfile(${player.id})" class="notification-avatar-r" onerror="this.src='media/default_avatar.png';">
                 <div class="notification-text-r">
-                    <span class="${finalNameClass} ${player.isWinner ? 'only-name' : 'notification-name-r'}"
-                        style="${accountColor && !finalNameClass.includes('gradient') ? `color:${accountColor};` : ''} margin-bottom: 4px; font-weight: 700;">
-                        ${accountIcon}${player.teamTag ? `[${escapeHtml(player.teamTag)}] ` : ''}${escapeHtml(player.name)}
-                    </span>
+                    ${name}
                     <span class="notification-info-r">
-                        Finished raid • ${formatLastPlayedRaid(player.absoluteLastTime)} • ${!player.isCasual ? `<span class="${rankClass}">Rank #${player.rank}</span>` : `Casual Mode`}
+                        Finished raid • ${formatLastPlayedRaid(player.absoluteLastTime)} • ${!player.isCasual ? `<span>Rank #${player.rank}</span>` : `Casual Mode`}
                     </span>
                 </div>
             </div>
@@ -381,13 +317,6 @@ function checkRecentPlayers(leaderboardData) {
             setTimeout(() => showPlayerNotification(player), shownCount * NOTIFICATION_DELAY);
         }
     }
-}
-
-function wasBanRecentlyShown(playerId) {
-    const cookieValue = document.cookie
-        .split('; ')
-        .find(row => row.startsWith(`banNotify_${playerId}=`));
-    return !!cookieValue;
 }
 
 function setBanNotificationCookie(playerId) {
@@ -525,6 +454,12 @@ async function showNewPlayerWelcome(player) {
 function wasNewPlayerRecentlyShown(playerId) {
     const cookies = document.cookie.split(';').map(cookie => cookie.trim());
     const cookieValue = cookies.find(row => row.startsWith(`newPlayer_${playerId}=`));
+    return !!cookieValue;
+}
+
+function wasBanRecentlyShown(playerId) {
+    const cookies = document.cookie.split(';').map(cookie => cookie.trim());
+    const cookieValue = cookies.find(row => row.startsWith(`banNotify_${playerId}=`));
     return !!cookieValue;
 }
 
