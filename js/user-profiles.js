@@ -1072,14 +1072,14 @@ async function renderWeaponList(playerId, modWeaponStats) {
         weaponItem.innerHTML = `
             <div class="weapon-card">
                 <div class="weapon-card-header">
-                    <h4 class="profile-weapon-name" title="${weaponName}">${cleanWeaponName}</h4>
+                    <h4 class="profile-weapon-name" title="${cleanWeaponName}">${cleanWeaponName}</h4>
                     <span class="weapon-kills-badge">${kills} <span class="badge-label">kills</span></span>
                 </div>
                 
                 <div class="weapon-card-body">
                     <div class="weapon-icon-container">
                         <img src="media/weapon_icons/${cleanWeaponName}.webp" 
-                            alt="${weaponName}" 
+                            alt="${cleanWeaponName}" 
                             class="profile-weapon-icon"
                             loading="lazy"
                             onerror="this.src='media/default_weapon_icon.png';" />
