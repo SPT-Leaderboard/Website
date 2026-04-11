@@ -526,6 +526,7 @@ function formatSalesNum(num) {
     if (num >= 1000) {
         return (num / 1000).toFixed(1) + 'K';
     }
+
     return num.toString();
 }
 
@@ -543,9 +544,11 @@ function isPremium(player) {
  */
 async function loadJSON(url) {
     const response = await fetch(url);
+
     if (!response.ok) {
         console.error(`Failed to load ${url}: ${response.status}`);
     }
+
     return await response.json();
 }
 
@@ -690,6 +693,34 @@ function renderUsernameHTML(player, shouldRenderTeamTag = null) {
             </span>
         </span>
     `;
+}
+
+function getPlayerEdition(edition) {
+    if (!edition || typeof edition !== 'string') {
+        return `<span class="status-badge status-suspicious"><i class="fa-solid fa-triangle-exclamation"></i> Unknown Edition: ${escapeHtml(edition)}</span>`;
+    }
+    
+    const normalizedEdition = edition.toLowerCase().trim();
+
+    const editionMap = {
+        'unheard_edition': 'Unheard',
+        'edge_of_darkness': 'Edge of Darkness',
+        'prepare_for_escape': 'Prepare for Escape',
+        'left_behind': 'Left Behind',
+        'standard': 'Standard'
+    };
+    
+    if (editionMap[normalizedEdition]) {
+        return `<span class="info-value"> ${editionMap[normalizedEdition]} </span>`;
+    }
+
+    for (const [key, value] of Object.entries(editionMap)) {
+        if (normalizedEdition.includes(key) || key.includes(normalizedEdition)) {
+            return `<span class="info-value"> ${value} </span>`;
+        }
+    }
+    
+    return `<span class="status-badge status-suspicious"><i class="fa-solid fa-triangle-exclamation"></i> Unknown Edition: ${escapeHtml(edition)}</span>`;
 }
 
 function truncateName(name, maxLength = 15) {

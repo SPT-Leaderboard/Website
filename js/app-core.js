@@ -419,18 +419,38 @@ async function displayLeaderboard(data) {
         // Check HeartbeatMonitor
         const playerStatus = window.heartbeatMonitor.getPlayerStatus(player.id);
 
-        if (!player.banned) {
-            // For lastGame
-            if (window.heartbeatMonitor.isOnline(player.id)) {
-                lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">${playerStatus.statusText} <div id="blink"></div></span>`
-            } else {
-                const lastOnlineTime = !heartbeatMonitor.isOnline(player.id) && window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || player.lastPlayed);
+    if (!player.banned) {
+        const lastOnlineTime = heartbeatMonitor.isOnline(player.id)
+            ? '<span class="player-status-lb-online">Online</span>'
+            : window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || player.lastPlayed);
 
-                lastGame = `<span class="last-online-time">${lastOnlineTime}</span>`;
+        // For lastGame
+        if (heartbeatMonitor.isOnline(player.id)) {
+            const isInRaid = playerStatus.status === 'in_raid' || playerStatus.status === 'in_transit';
+
+            if (isInRaid) {
+                // Raid
+                lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">
+                ${playerStatus.statusText} 
+                <span class="raid-dots">
+                    <span class="r-dot"></span>
+                    <span class="r-dot"></span>
+                    <span class="r-dot"></span>
+                </span>
+            </span>`;
+            } else {
+                // Default
+                lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">
+                ${playerStatus.statusText} 
+                <span id="blink"></span>
+            </span>`;
             }
         } else {
-            lastGame = `<span class="last-online-time">Banned</span>`;
+            lastGame = `<span class="last-online-time">${lastOnlineTime}</span>`;
         }
+    } else {
+        lastGame = `<span class="last-online-time">Banned</span>`;
+    }
 
         // Add profile standing
         let badge;
@@ -567,7 +587,6 @@ async function displaySimpleLeaderboard(data) {
     const fragment = document.createDocumentFragment();
     data.forEach(player => {
         const row = document.createElement('tr');
-        let lastGame;
 
         const nowInSeconds = Math.floor(Date.now() / 1000);
         const fifteenDaysInSeconds = 15 * 24 * 60 * 60;
@@ -588,6 +607,7 @@ async function displaySimpleLeaderboard(data) {
         // Check HeartbeatMonitor
         const playerStatus = window.heartbeatMonitor.getPlayerStatus(player.id);
 
+        let lastGame;
         if (!player.banned) {
             // For lastGame
             if (window.heartbeatMonitor.isOnline(player.id)) {

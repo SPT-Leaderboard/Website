@@ -120,16 +120,6 @@ function applyRewards(player, elements) {
         }
     }
 
-    // Apply avatar style
-    const avatarStyleMap = {
-        'box': { level: 5, class: 'box-style' },
-        'wide': { level: 10, class: 'wide-style' }
-    };
-
-    if (avatarStyleMap[player.bp_pfpstyle]?.level <= bpLevel) {
-        profileAvatar.classList.add(avatarStyleMap[player.bp_pfpstyle].class);
-    }
-
     // Apply avatar border
     const borderMap = {
         'red': 5,

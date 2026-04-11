@@ -110,25 +110,13 @@
     background-size: cover;
 }
 
-/* PFP Styles */
-.box-style {
-    border-radius: 10%;
-}
-
-.wide-style {
-    border-radius: 10%;
-    width: 90px;
-    height: 90px;
-    margin-top: 8px;
-}
-
 /* PFP Borders */
 .red-border {
-    border-color: rgb(206, 89, 89);
+    border-color: rgba(206, 89, 89, 0.800);
 }
 
 .pink-border {
-    border-color: rgb(255, 138, 206);
+    border-color: rgb(255, 138, 206, 0.800);
 }
 
 .white-border {

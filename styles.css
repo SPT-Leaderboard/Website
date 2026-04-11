@@ -1435,6 +1435,53 @@ td {
     box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
 }
 
+/* Different approach for raid dots */
+.raid-dots {
+    display: inline-flex;
+    gap: 3px;
+    margin-left: 6px;
+    align-items: center;
+}
+
+.raid-dots .r-dot {
+    width: 7px;
+    height: 7px;
+    background-color: currentColor;
+    border-radius: 50%;
+    display: inline-block;
+    animation: raidDotPulse 800ms ease-in-out infinite;
+    opacity: 0.4;
+}
+
+.raid-dots .r-dot:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.raid-dots .r-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.raid-dots .r-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes raidDotPulse {
+    0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+    30% {
+        transform: translateY(-2px);
+        opacity: 1;
+        box-shadow: 0 0 8px currentColor;
+    }
+}
+
+.player-status-lb-raid #blink,
+.player-status-lb-transit #blink {
+    display: none;
+}
+
 td:nth-child(3) {
     font-weight: 600;
     color: white;
@@ -1487,6 +1534,7 @@ button:hover,
 }
 
 .player-name-wrapper-main {
+    font-size: 1.2rem;
     font-weight: 600;
     display: inline-flex;
     align-items: center;
@@ -1593,7 +1641,6 @@ button:hover,
 }
 
 .gold-name {
-    font-size: 1.5rem;
     font-family: "Archivo Black", sans-serif;
     color: transparent !important;
     font-weight: 800;
@@ -1646,7 +1693,6 @@ button:hover,
 }
 
 .silver-name {
-    font-size: 1.3rem;
     color: transparent !important;
     font-weight: bold;
     background-size: 300%;
@@ -1659,7 +1705,6 @@ button:hover,
 }
 
 @keyframes silverShimmer {
-
     0%,
     100% {
         background-position: 0% center;
@@ -1681,7 +1726,6 @@ button:hover,
     background-size: 300%;
     background-clip: text;
     font-style: normal;
-    font-size: 1.1rem;
 }
 
 @keyframes bronzeShimmer {
@@ -3301,27 +3345,13 @@ input[type="checkbox"]:checked:hover {
     height: 100%;
 }
 
-.user-main-card {
-    display: grid;
-    grid-template-columns: 100px 1fr;
-    gap: 15px;
-    position: relative;
-    padding: 20px;
-}
-
 .profile-header {
-    z-index: 1;
-    grid-column: 2;
+    margin-top: 20px;
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.name-wrapper {
-    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
     justify-content: space-between;
-    align-items: flex-start;
-    gap: 15px;
+    width: 100%;
 }
 
 /* Main PMC/SCAV stats on the profile*/
@@ -3785,23 +3815,74 @@ input[type="checkbox"]:checked:hover {
     letter-spacing: 1px;
 }
 
-.user-main-card .pfp {
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    align-self: start;
+.user-main-card {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 20px 25px;
+    align-items: start;
+    position: relative;
+    padding: 20px;
 }
 
-.user-main-card .name {
-    font-size: 1.2em;
-    color: #dadada;
-    font-weight: bold;
-    line-height: 1.2;
+.card-left {
+    margin-top: 20px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 5px;
-    width: 220px;
+    gap: 10px;
+}
+
+.user-main-card .pfp {
+    transition: transform 0.2s ease;
+    position: relative;
+}
+
+.level-badges {
+    width: 100%;
+}
+
+.level-badge {
+    margin-top: 6px;
+    border: 1px solid #ffffff05;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(4px);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.level-badge.pmc {
+    color: #9ab8e8;
+    border-color: #5a7aae;
+    background: #1a2430;
+}
+
+.level-badge.scav {
+    color: #e8b89a;
+    border-color: #ae7a5a;
+    background: #301a10;
+}
+
+.level-badge.discord {
+    font-size: 12px;
+    font-weight: bold;
+    background: #5865f210;
+    padding: 4px 8px;
+    border-radius: 10px;
+    border-color: #5865f240;
+    color: #b9bbff;
+    align-items: center;
+    gap: 6px;
+}
+
+.card-right {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
 }
 
 .user-main-card .aboutMe {
@@ -3813,8 +3894,7 @@ input[type="checkbox"]:checked:hover {
     max-width: fit-content;
     font-weight: 600;
     color: #cdcdcd;
-    padding: 5px 10px;
-    margin: 25px 0 0;
+    padding: 8px 16px;
 }
 
 .user-main-card .badges {
@@ -3828,32 +3908,31 @@ input[type="checkbox"]:checked:hover {
     backdrop-filter: blur(5px);
     border-radius: 10px;
     padding: 8px;
+    margin-top: 10px;
 }
 
 .pmc-side-wrapper {
-    width: 150px;
-    height: 150px;
     position: absolute;
-    top: 0;
-    right: 0;
-    display: inline-grid;
+    bottom: -15px;
+    right: -15px;
+    width: 50px;
+    height: 50px;
+    background-color: #ffffff05;
+    border: 1px solid #ffffff21;
+    backdrop-filter: blur(5px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    z-index: 2;
 }
 
 .pmc-side-wrapper img {
-    width: 150px;
-    height: 150px;
-}
-
-.pmc-level {
-    position: relative;
-    bottom: 40px;
-    font-family: 'Bender Regular', sans-serif;
-    background-color: #ffffff14;
-    justify-self: center;
-    padding: 5px;
-    border-radius: 8px;
-    font-weight: 600;
-    border: 1px solid #ffffff1a;
+    width: 180%;
+    height: 180%;
+    object-fit: contain;
+    border-radius: 50%;
 }
 
 /* Registration Info Container */
@@ -4769,7 +4848,7 @@ input[type="checkbox"]:checked:hover {
     padding: 6px 12px;
     color: #f3f3f3;
     width: fit-content;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.1);
     font-family: 'Bender Bold';
     border-radius: 10px;
     backdrop-filter: blur(5px);
@@ -5420,29 +5499,12 @@ input[type="checkbox"]:checked:hover {
 
 /* Player Info for profile */
 .player-avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    border: 2px solid #ffffff31;
-    margin-bottom: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    border-radius: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    width: 120px;
+    height: 120px;
     object-fit: cover;
-}
-
-.player-discord {
-    background: rgba(255, 255, 255, 0.096);
-    border: 1px solid #ffffff3b;
-    gap: 5px;
-    border-radius: 5px;
-    width: fit-content;
-    font-size: 0.85rem;
-    padding: 3px;
-    letter-spacing: 1px;
-    display: flex;
-    align-items: center;
-}
-
-.player-discord i {
-    color: #7289da;
 }
 
 .badge {

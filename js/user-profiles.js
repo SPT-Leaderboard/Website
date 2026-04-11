@@ -113,6 +113,9 @@ async function showPublicProfile(container, player) {
         player.discordUser = playerData.discordUser ?? '';
         player.customPfp = playerData.profilePicture ?? '';
         player.customName = playerData.name ?? '';
+    } else if (isLocalhost) {
+        player.discordUser = 'mydiscord';
+        player.customPfp = 'https://i.pinimg.com/736x/24/63/ce/2463ce365a48ee9293a4b9743bd67378.jpg';
     }
 
     // Assign a showcase we got from API
@@ -209,7 +212,7 @@ async function showPublicProfile(container, player) {
     // About me
     const aboutText = player.profileAboutMe
         ? player.profileAboutMe
-        : "No description provided.";
+        : ``;
 
     // Is player online?
     const playerStatus = heartbeatMonitor.getPlayerStatus(player.id);
@@ -249,6 +252,9 @@ async function showPublicProfile(container, player) {
     // Render name
     const name = renderUsernameHTML(player, true);
 
+    // Get edition
+    const edition = getPlayerEdition(player.accountType);
+
     // Get rank
     const playerRating = player.networkRaids ?? 0;
     const rank = getRank(playerRating, 2000, 512);
@@ -261,7 +267,25 @@ async function showPublicProfile(container, player) {
 
         // For lastGame
         if (heartbeatMonitor.isOnline(player.id)) {
-            lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">${playerStatus.statusText} <div id="blink"></div></span>`;
+            const isInRaid = playerStatus.status === 'in_raid' || playerStatus.status === 'in_transit';
+
+            if (isInRaid) {
+                // Raid
+                lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">
+                ${playerStatus.statusText} 
+                <span class="raid-dots">
+                    <span class="r-dot"></span>
+                    <span class="r-dot"></span>
+                    <span class="r-dot"></span>
+                </span>
+            </span>`;
+            } else {
+                // Default
+                lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">
+                ${playerStatus.statusText} 
+                <span id="blink"></span>
+            </span>`;
+            }
         } else {
             lastGame = `<span class="last-online-time">Last seen ${lastOnlineTime}</span>`;
         }
@@ -269,117 +293,129 @@ async function showPublicProfile(container, player) {
         lastGame = `<span class="last-online-time">Banned</span>`;
     }
 
-    container.innerHTML = `
-        <!-- left column -->
-        <img src="media/rewards/other/cat.gif" class="kittyrew" id="catrew"  alt=""/>
+    const html = String.raw;
 
+    const template = html`
+        <!-- left column -->
+        <img src="media/rewards/other/cat.gif" class="kittyrew" id="catrew" alt="" />
         <button id="closeButton" class="close-profile-button">&times;</button>
         <div class="left-column">
-
             <div class="user-main-card profile-section" id="main-profile-card">
-                <div class="pfp"><img src="${player.customPfp ? player.customPfp : player.profilePicture}" class="player-avatar" id="profile-avatar" alt="${escapeHtml(player.name)}" onerror="this.src='media/default_avatar.png';" /></div>
-                <div class="profile-header">
-                    <div class="name-wrapper">
-                        ${name}
-                    <div class="registration-info">
-                        <div class="register-date-trigger" id="registrationTrigger">
-                            <i class="fa-regular fa-calendar"></i>
-                            <span>Joined: ${regDate}</span>
-                            <i class="fa-solid fa-chevron-down info-chevron" id="chevronIcon"></i>
-                        </div>
-                        
-                        <div class="registration-dropdown glass-dropdown" id="registrationDropdown">
-                            <div class="dropdown-header">
-                                <i class="fa-regular fa-id-card"></i>
-                                <span>Account Information</span>
-                            </div>
-                            
-                            <div class="dropdown-content">
-                                <div class="info-item">
-                                    <div class="info-label">
-                                        <i class="fa-regular fa-calendar-check"></i>
-                                        <span>First Seen:</span>
-                                    </div>
-                                    <div class="info-value" id="reg-sptlb">${firstSeenDate} (${formatLastPlayedRaid(player.firstSeen)})</div>
-                                </div>
-
-                                <div class="info-item">
-                                    <div class="info-label">
-                                        <i class="fa-regular fa-calendar-check"></i>
-                                        <span>Registered (SPT):</span>
-                                    </div>
-                                    <div class="info-value" id="reg-full-date">${regDate} (${formatLastPlayedRaid(player.registrationDate)})</div>
-                                </div>
-                                
-                                <div class="info-item">
-                                    <div class="info-label">
-                                        <i class="fa-regular fa-clock"></i>
-                                        <span>Registered (SPTLB):</span>
-                                    </div>
-                                    <div class="info-value" id="account-age">${lbRegDate} (${formatLastPlayedRaid(player.registeredOnLeaderboard)})</div>
-                                </div>
-                                
-                                <div class="info-item">
-                                    <div class="info-label">
-                                        <i class="fa-regular fa-hourglass-half"></i>
-                                        <span>Last Game:</span>
-                                    </div>
-                                    <div class="info-value" id="last-game">${formatLastPlayedRaid(player.lastPlayed)}</div>
-                                </div>
-                                
-                                <div class="info-item">
-                                    <div class="info-label">
-                                        <i class="fa-regular fa-id-card"></i>
-                                        <span>Profile ID:</span>
-                                    </div>
-                                    <div class="info-value" id="player-id">${player.id || 'N/A'}</div>
-                                </div>
-
-                                <div class="info-item">
-                                    <div class="info-label">
-                                        <i class="fa-solid fa-link"></i>
-                                        <span>PermaLink:</span>
-                                    </div>
-                                    <div class="info-value" id="perma-link">${player.permaLink}</div>
-                                </div>
-
-                                <div class="info-item">
-                                    <div class="info-label">
-                                        <i class="fa-solid fa-computer"></i>
-                                        <span>SPT Setup:</span>
-                                    </div>
-                                    <div class="info-value">
-                                        ${player.isUsingFika ? 'Project Fika' : 'Vanilla'}
-                                        ${player.isUsingTP ? ' (Twitch Players)' : ''}
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="info-item status-section">
-                                <div class="info-label">
-                                    <i class="fa-solid fa-user"></i>
-                                    <span>Status:</span>
-                                </div>
-                                <div class="status-badge ${getStatusClass(player)}" id="account-status-badge">
-                                    ${getStatusIcon(player)}
-                                    <span>${getStatusText(player)}</span>
-                                </div>
-                            </div>
-                            ${renderDetailedStatus(player)}
+                <!-- pfp + PMC Level -->
+                <div class="card-left">
+                    <div class="pfp">
+                        <img src="${player.customPfp ? player.customPfp : player.profilePicture}" class="player-avatar" id="profile-avatar" alt="${escapeHtml(player.name)}" onerror="this.src='media/default_avatar.png';" />
+                        ${profileSideHTML ? `<div class="pmc-side-wrapper">${profileSideHTML}</div>` : ''}
+                    </div>
+                    <div class="level-badges">
+                        ${player.pmcLevel ? `<div class="level-badge pmc">PMC Lvl. ${player.pmcLevel}</div>` : ''}
+                        ${player.scavLevel ? `<div class="level-badge scav">SCAV Lvl. ${player.scavLevel}</div>` : ''}
+                        ${player.discordUser ? `<div class="level-badge discord"><i class="fa-brands fa-discord"></i> ${escapeHtml(player.discordUser)}</div>` : ''}
+                    </div>
+                </div>
+                <div class="card-right">
+                    <!-- Name-->
+                    <div class="profile-header">
+                        <div class="name-wrapper">
+                            <span class="name">${name}</span>
                         </div>
                     </div>
-                    </div>
-                    ${player.discordUser ? `<div class="player-discord"><i class="fa-brands fa-discord"></i> ${escapeHtml(player.discordUser)}</div>` : ``}
-                    <div class="player-status">
-                        <span>${lastGame}</span>
+                    <!-- Status and info -->
+                    <div class="meta-footer">
+                        <div class="player-status-badge">
+                            ${lastGame}
+                        </div>
+                        <div class="registration-info">
+                            <div class="register-date-trigger" id="registrationTrigger">
+                                <i class="fa-regular fa-calendar"></i>
+                                <span>Joined: ${regDate}</span>
+                                <i class="fa-solid fa-chevron-down info-chevron" id="chevronIcon"></i>
+                            </div>
+                            <!-- Info -->
+                            <div class="registration-dropdown glass-dropdown" id="registrationDropdown">
+                                <div class="dropdown-header">
+                                    <i class="fa-regular fa-id-card"></i>
+                                    <span>Account Information</span>
+                                </div>
+                                <div class="dropdown-content">
+                                    <div class="info-item">
+                                        <div class="info-label">
+                                            <i class="fa-regular fa-calendar-check"></i>
+                                            <span>First Seen:</span>
+                                        </div>
+                                        <div class="info-value">${firstSeenDate} (${formatLastPlayedRaid(player.firstSeen)})</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">
+                                            <i class="fa-regular fa-calendar-check"></i>
+                                            <span>Registered (SPT):</span>
+                                        </div>
+                                        <div class="info-value">${regDate} (${formatLastPlayedRaid(player.registrationDate)})</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">
+                                            <i class="fa-regular fa-clock"></i>
+                                            <span>Registered (SPTLB):</span>
+                                        </div>
+                                        <div class="info-value">${lbRegDate} (${formatLastPlayedRaid(player.registeredOnLeaderboard)})</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">
+                                            <i class="fa-regular fa-hourglass-half"></i>
+                                            <span>Last Game:</span>
+                                        </div>
+                                        <div class="info-value">${formatLastPlayedRaid(player.lastPlayed)}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">
+                                            <i class="fa-regular fa-id-card"></i>
+                                            <span>Profile ID:</span>
+                                        </div>
+                                        <div class="info-value">${player.id || 'N/A'}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">
+                                            <i class="fa-solid fa-link"></i>
+                                            <span>PermaLink:</span>
+                                        </div>
+                                        <div class="info-value">${player.permaLink}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">
+                                            <i class="fa-solid fa-computer"></i>
+                                            <span>SPT Setup:</span>
+                                        </div>
+                                        <div class="info-value">${player.isUsingFika ? 'Project Fika' : 'Vanilla'} ${player.isUsingTP ? ' (Twitch Players)' : ''} </div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">
+                                            <i class="fa-solid fa-box-open"></i>
+                                            <span>EFT Edition:</span>
+                                        </div>
+                                        <div>${edition}</div>
+                                    </div>
+                                </div>
+                                <div class="info-item status-section">
+                                    <div class="info-label">
+                                        <i class="fa-solid fa-user"></i>
+                                        <span>Status:</span>
+                                    </div>
+                                    <div class="status-badge ${getStatusClass(player)}"> ${getStatusIcon(player)} <span>${getStatusText(player)}</span>
+                                    </div>
+                                </div>
+
+                                ${renderDetailedStatus(player)}
+                            </div>
+                        </div>
                     </div>
                     ${raidInfo}
                 </div>
 
-                <div class="aboutMe">${aboutText}</div>
+                ${aboutText ? `<div class="aboutMe">${aboutText}</div>` : ``}
 
                 <div class="friend-button-container"></div>
 
+                <!-- PMC Overview -->
                 <div class="player-overview">
                     <div class="player-overview-side player-overview-pmc">PMC</div>
                     <div class="stat-item">
@@ -399,7 +435,7 @@ async function showPublicProfile(container, player) {
                         <div class="stat-name">In-Raid Time</div>
                     </div>
                 </div>
-
+                <!-- SCAV Overview -->
                 <div class="player-overview">
                     <div class="player-overview-side player-overview-scav">SCAV</div>
                     <div class="stat-item">
@@ -420,15 +456,14 @@ async function showPublicProfile(container, player) {
                     </div>
                 </div>
 
-                ${player.showcase && Object.keys(player.showcase).length > 0 ? `
-                <div class="player-overview player-showcase">
-                    <div class="showcase-mini">
-                        <div class="showcase-mini-header">
-                            <span class="showcase-title">Item Showcase</span>
-                        </div>
-                        <div class="showcase-items-mini">
-                            ${Object.values(player.showcase || {}).filter(item => item !== null && item !== undefined && item.item_id).map(item => `
-                                <div class="showcase-item-mini" data-rarity="${item.rarity}">
+                <!-- Item Showcase -->
+                ${player.showcase && Object.keys(player.showcase).length > 0 ?
+                    `<div class="player-overview player-showcase">
+                        <div class="showcase-mini">
+                            <div class="showcase-mini-header">
+                                <span class="showcase-title">Item Showcase</span>
+                            </div>
+                            <div class="showcase-items-mini"> ${Object.values(player.showcase || {}).filter(item => item !== null && item !== undefined && item.item_id).map(item => ` <div class="showcase-item-mini" data-rarity="${item.rarity}">
                                     <div class="item-mini-icon">
                                         <img src="${item.icon_path.replace(/^\/\.\.\//, '/')}" alt="${escapeHtml(item.name)}">
                                         <div class="item-mini-glow"></div>
@@ -437,25 +472,16 @@ async function showPublicProfile(container, player) {
                                         <span class="item-mini-name">${escapeHtml(item.name)}</span>
                                         <span class="item-mini-price">${item.base_price} LC</span>
                                     </div>
-                                </div>
-                            `).join('')}
+                                </div> `).join('')}
+                            </div>
                         </div>
-                    </div>
-                </div>
-                ` : ''}
+                    </div>`
+                : ''}
 
                 <div class="badges">${badgesHTML}</div>
-                <div class="pmc-side-wrapper">
-                    ${profileSideHTML}
-                    <div class="pmc-level">${player.pmcLevel} LVL</div>
-                </div>
-
             </div>
-
             <div class="battlepass-level profile-section">
-                <h3>
-                    Leaderboard Level
-                </h3>
+                <h3> Leaderboard Level </h3>
                 <div class="bp-wrapper" id="playerRankIcon">
                     <div class="level-info">
                         <span class="level-value">0</span>
@@ -470,13 +496,9 @@ async function showPublicProfile(container, player) {
                             <span class="next-level-exp">0</span>
                         </div>
                     </div>
-                    <div class="exp-remaining">
-                        Until next level:
-                        <span class="remaining-value">0</span> EXP
-                    </div>
+                    <div class="exp-remaining"> Until next level: <span class="remaining-value">0</span> EXP </div>
                 </div>
             </div>
-
             <div class="hits-past-raids profile-section">
                 <div class="hits-wrapper">
                     <div class="hits-avg-headshots">
@@ -514,36 +536,27 @@ async function showPublicProfile(container, player) {
                     </div>
                 </div>
             </div>
-
             <!-- Map Stats -->
             <div class="weapon-stats profile-section">
                 <h3>Stats by Map</h3>
                 <div class="weapon-stats-container" id="maps-container">
                 </div>
             </div>
-
-            <div class="user-achievements profile-section">
-                ${await renderSingleAchievement(latestAchievement)}
-            </div>
-
+            <div class="user-achievements profile-section"> ${await renderSingleAchievement(latestAchievement)} </div>
             <div class="weapon-stats profile-section">
                 <h3>Achievements</h3>
                 <div class="weapon-stats-container" id="achievements-container">
                 </div>
             </div>
-
             <div class="profile-section">
                 <h3>Hideout</h3>
                 <div class="hideout-container" id="hideout-container">
                     <!-- JS -->
                 </div>
             </div>
-
         </div>
-
         <!-- Central -->
         <div class="center-column">
-
             <!-- Raid History -->
             <div class="raid-block">
                 <div class="raid-summary profile-section">
@@ -557,7 +570,6 @@ async function showPublicProfile(container, player) {
                             <span>Season Records</span>
                         </button>
                     </div>
-
                     <div class="tab-content-container">
                         <!-- Summary -->
                         <div class="tab-pane active" id="tab-summary">
@@ -587,12 +599,10 @@ async function showPublicProfile(container, player) {
                                     <div class="stat-label">Dmg Dealt</div>
                                 </div>
                             </div>
-
                             <div class="recent-raids-stats" id="recent-raids-stats">
                                 <!-- JavaScript -->
                             </div>
                         </div>
-
                         <!-- Season Records -->
                         <div class="tab-pane" id="tab-records">
                             <div class="loader-dots" style="grid-column: 1 / -1;">
@@ -606,83 +616,60 @@ async function showPublicProfile(container, player) {
                                 <p class="dots-text">Loading...</p>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
-
             <div class="last-raids" id="raids-stats-container">
             </div>
-
             <div class="profile-section">
                 <div class="comment-form">
                     <textarea class="comment-input" id="comment-text" placeholder="Say something nice..."></textarea>
                     <button class="comment-submit" id="submit-comment">
-                        <i class="fa-solid fa-paper-plane"></i>
-                        Send
-                    </button>
+                        <i class="fa-solid fa-paper-plane"></i> Send </button>
                 </div>
                 <div class="divider"></div>
-
                 <div class="comments-header">
                     <h3>Comments (<span id="comments-count">0</span>)</h3>
                     <div class="pagination-info" id="pagination-info">Page 1 of 1</div>
                 </div>
-
                 <div class="comments-list" id="comments-list">
                     <!-- JS -->
                 </div>
-
                 <div class="pagination-controls" id="pagination-controls">
                     <button class="pagination-btn pagination-prev" id="prev-page" disabled>
-                        <i class="fa-solid fa-chevron-left"></i> Prev
-                    </button>
-
+                        <i class="fa-solid fa-chevron-left"></i> Prev </button>
                     <div class="page-indicators" id="page-indicators">
                         <!-- JS -->
                     </div>
-
-                    <button class="pagination-btn pagination-next" id="next-page">
-                        Next <i class="fa-solid fa-chevron-right"></i>
+                    <button class="pagination-btn pagination-next" id="next-page"> Next <i class="fa-solid fa-chevron-right"></i>
                     </button>
                 </div>
             </div>
-
             <div class="profile-section">
                 <div class="quests-container" id="quests-container">
                     <!-- JS -->
                 </div>
             </div>
-
         </div>
-
         <!-- Right -->
         <div class="right-column">
-
             <!-- Player image -->
             <div class="playermodel profile-section" id="playermodel">
                 <div class="rank-display">
                     <div class="rank-icon-container">
-                        <div class="circular-progress"
-                            style="--progress: ${rank.progress}; --progress-color: ${rank.borderColor};">
+                        <div class="circular-progress" style="--progress: ${rank.progress}; --progress-color: ${rank.borderColor};">
                             <img src="${rank.image}" alt="${rank.fullName}" class="rank-icon">
                         </div>
                     </div>
-                    <span class="rank-name" style="background: ${rank.gradient}; border-color: ${rank.borderColor}; color: ${rank.textColor};">
-                        ${rank.fullName}
-                    </span>
+                    <span class="rank-name" style="background: ${rank.gradient}; border-color: ${rank.borderColor}; color: ${rank.textColor};"> ${rank.fullName} </span>
                 </div>
-
                 <div class="playermodel-image">
                     <div class="loading-overlay-other active" id="loading-model">
-                        <p>Auto-resizing...</p> <div class="loading-spinner"></div>
+                        <p>Auto-resizing...</p>
+                        <div class="loading-spinner"></div>
                     </div>
-
-                    <img src="${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png"
-                        alt="Player Model Preview"
-                        onerror="this.onerror=null; this.src='media/default_full_pmc_avatar.png';" />
+                    <img src="${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png" alt="Player Model Preview" onerror="this.onerror=null; this.src='media/default_full_pmc_avatar.png';" />
                 </div>
-
                 <div class="playermodel-stats profile-section">
                     <div class="player-health">
                         <img src="media/leaderboard_icons/health_icon.png" alt="Health">
@@ -700,29 +687,23 @@ async function showPublicProfile(container, player) {
                     </div>
                 </div>
             </div>
-
             <!-- Friend list (hides if no friends) -->
             <div class="friends-list profile-section" id="friend-list">
                 <h3>Friend List</h3>
                 <div class="friends-container" id="friends-container">
                 </div>
             </div>
-
             <!-- Meta gun -->
-                <div class="favorite-weapons profile-section" id="weapon-meta-section">
-                    <h3>Favorite Weapon</h3>
-                    <div class="favorite-weapons-container" id="weapon-container">
-                        ${!player?.isUsingStattrack ? `
-                            <div class="stattrack-overlay">
-                                <div class="stattrack-message">This player is not using <a href="https://hub.sp-tarkov.com/files/file/2501-stattrack/">Stattrack Mod</a> by AcidPhantasm</div>
-                            </div>
-                        ` : ``}
-
-                        <div class="weapon-info ${!player?.isUsingStattrack ? 'stattrack-disabled' : ''}">
+            <div class="favorite-weapons profile-section" id="weapon-meta-section">
+                <h3>Favorite Weapon</h3>
+                <div class="favorite-weapons-container" id="weapon-container">
+                ${!player?.isUsingStattrack ? ` <div class="stattrack-overlay">
+                        <div class="stattrack-message">This player is not using <a href="https://hub.sp-tarkov.com/files/file/2501-stattrack/">Stattrack Mod</a> by AcidPhantasm</div>
+                    </div> ` : ``}
+                    <div class="weapon-info ${!player?.isUsingStattrack ? 'stattrack-disabled' : ''}">
                         <img src="media/weapon_icons/${bestWeapon?.name}.webp" alt="bestWeapon?.name" class="weapon-icon-fav" onerror="this.src='media/default_weapon_icon.png';" />
                         <div class="weapon-name">${bestWeapon?.name ? bestWeapon.name : 'Unknown'}</div>
                         <div class="weapon-mastery">Mastery Level: <span class="level-value-wp">0</span></div>
-
                         <div class="exp-bar-container-weapon">
                             <div class="exp-bar">
                                 <div class="exp-progress-wp" style="width: 0;"></div>
@@ -733,7 +714,6 @@ async function showPublicProfile(container, player) {
                             </div>
                         </div>
                         <div class="exp-remaining">Until next level: <span class="remaining-value-wp">0</span> EXP</div>
-
                         <div class="weapon-extra-stats">
                             <div class="raid-stats-grid">
                                 <div class="raid-stat-block">
@@ -755,18 +735,14 @@ async function showPublicProfile(container, player) {
                             </div>
                         </div>
                     </div>
-                    </div>
                 </div>
-
+            </div>
             <!-- All weapons list if they exist -->
             ${player?.isUsingStattrack ? `
             <div class="weapon-stats profile-section">
                 <h3>Weapons</h3>
-                <div class="weapon-stats-container" id="weapons-container">
-                </div>
-            </div>
-            ` : ''}
-
+                <div class="weapon-stats-container" id="weapons-container"></div>
+            </div> ` : ''}
             <!-- Trader Standing -->
             <div class="standing-stats profile-section">
                 <h3>Standings</h3>
@@ -781,7 +757,6 @@ async function showPublicProfile(container, player) {
                             <div class="trader-standing">Loyalty: ${player.traderInfo ? Number(player.traderInfo.PRAPOR.standing.toFixed(2)) : 0}</div>
                             <div class="trader-standing">Money Traded: ${player.traderInfo ? formatSalesNum(Number(player.traderInfo.PRAPOR.salesSum)) : 0}</div>
                         </div>
-
                         <div class="trader-card" data-unlocked="${player.traderInfo.THERAPIST.unlocked}">
                             <div class="trader-image-container">
                                 <img src="media/traders/therapist.png" alt="Therapist" class="trader-image" />
@@ -791,7 +766,6 @@ async function showPublicProfile(container, player) {
                             <div class="trader-standing">Loyalty: ${player.traderInfo ? Number(player.traderInfo.THERAPIST.standing.toFixed(2)) : 0}</div>
                             <div class="trader-standing">Money Traded: ${player.traderInfo ? formatSalesNum(Number(player.traderInfo.THERAPIST.salesSum)) : 0}</div>
                         </div>
-
                         <div class="trader-card" data-unlocked="${player.traderInfo.FENCE.unlocked}">
                             <div class="trader-image-container">
                                 <img src="media/traders/fence.png" alt="Fence" class="trader-image" />
@@ -801,7 +775,6 @@ async function showPublicProfile(container, player) {
                             <div class="trader-standing">Loyalty: ${player.traderInfo ? Number(player.traderInfo.FENCE.standing.toFixed(2)) : 0}</div>
                             <div class="trader-standing">Money Traded: ${player.traderInfo ? formatSalesNum(Number(player.traderInfo.FENCE.salesSum)) : 0}</div>
                         </div>
-
                         <div class="trader-card" data-unlocked="${player.traderInfo.SKIER.unlocked}">
                             <div class="trader-image-container">
                                 <img src="media/traders/skier.png" alt="Skier" class="trader-image" />
@@ -811,7 +784,6 @@ async function showPublicProfile(container, player) {
                             <div class="trader-standing">Loyalty: ${player.traderInfo ? Number(player.traderInfo.SKIER.standing.toFixed(2)) : 0}</div>
                             <div class="trader-standing">Money Traded: ${player.traderInfo ? formatSalesNum(Number(player.traderInfo.SKIER.salesSum)) : 0}</div>
                         </div>
-
                         <div class="trader-card" data-unlocked="${player.traderInfo.PEACEKEEPER.unlocked}">
                             <div class="trader-image-container">
                                 <img src="media/traders/peacekeeper.png" alt="Peacekeeper" class="trader-image" />
@@ -821,7 +793,6 @@ async function showPublicProfile(container, player) {
                             <div class="trader-standing">Loyalty: ${player.traderInfo ? Number(player.traderInfo.PEACEKEEPER.standing.toFixed(2)) : 0}</div>
                             <div class="trader-standing">Money Traded: ${player.traderInfo ? formatSalesNum(Number(player.traderInfo.PEACEKEEPER.salesSum)) : 0}</div>
                         </div>
-
                         <div class="trader-card" data-unlocked="${player.traderInfo.MECHANIC.unlocked}">
                             <div class="trader-image-container">
                                 <img src="media/traders/mechanic.png" alt="Mechanic" class="trader-image" />
@@ -831,7 +802,6 @@ async function showPublicProfile(container, player) {
                             <div class="trader-standing">Loyalty: ${player.traderInfo ? Number(player.traderInfo.MECHANIC.standing.toFixed(2)) : 0}</div>
                             <div class="trader-standing">Money Traded: ${player.traderInfo ? formatSalesNum(Number(player.traderInfo.MECHANIC.salesSum)) : 0}</div>
                         </div>
-
                         <div class="trader-card" data-unlocked="${player.traderInfo.RAGMAN.unlocked}">
                             <div class="trader-image-container">
                                 <img src="media/traders/ragman.png" alt="Ragman" class="trader-image" />
@@ -841,7 +811,6 @@ async function showPublicProfile(container, player) {
                             <div class="trader-standing">Loyalty: ${player.traderInfo ? Number(player.traderInfo.RAGMAN.standing.toFixed(2)) : 0}</div>
                             <div class="trader-standing">Money Traded: ${player.traderInfo ? formatSalesNum(Number(player.traderInfo.RAGMAN.salesSum)) : 0}</div>
                         </div>
-
                         <div class="trader-card" data-unlocked="${player.traderInfo.JAEGER.unlocked}">
                             <div class="trader-image-container">
                                 <img src="media/traders/jaeger.png" alt="Jaeger" class="trader-image" />
@@ -851,7 +820,6 @@ async function showPublicProfile(container, player) {
                             <div class="trader-standing">Loyalty: ${player.traderInfo ? Number(player.traderInfo.JAEGER.standing.toFixed(2)) : 0}</div>
                             <div class="trader-standing">Money Traded: ${player.traderInfo ? formatSalesNum(Number(player.traderInfo.JAEGER.salesSum)) : 0}</div>
                         </div>
-
                         <div class="trader-card" data-unlocked="${player.traderInfo.REF.unlocked}">
                             <div class="trader-image-container">
                                 <img src="media/traders/ref.png" alt="Ref" class="trader-image" />
@@ -861,7 +829,6 @@ async function showPublicProfile(container, player) {
                             <div class="trader-standing">Loyalty: ${player.traderInfo ? Number(player.traderInfo.REF.standing.toFixed(2)) : 0}</div>
                             <div class="trader-standing">Money Traded: ${player.traderInfo ? formatSalesNum(Number(player.traderInfo.REF.salesSum)) : 0}</div>
                         </div>
-
                         <div class="trader-card" data-unlocked="${player.traderInfo.LIGHTKEEPER.unlocked}">
                             <div class="trader-image-container">
                                 <img src="media/traders/lightkeeper.png" alt="Lightkeeper" class="trader-image" />
@@ -871,7 +838,6 @@ async function showPublicProfile(container, player) {
                             <div class="trader-standing">Loyalty: ${player.traderInfo ? Number(player.traderInfo.LIGHTKEEPER.standing.toFixed(2)) : 0}</div>
                             <div class="trader-standing">Money Traded: ${player.traderInfo ? formatSalesNum(Number(player.traderInfo.LIGHTKEEPER.salesSum)) : 0}</div>
                         </div>
-
                         <div class="trader-card" data-unlocked="${player.traderInfo.BTR_DRIVER.unlocked}">
                             <div class="trader-image-container">
                                 <img src="media/traders/btr.png" alt="BTR Driver" class="trader-image" />
@@ -883,9 +849,10 @@ async function showPublicProfile(container, player) {
                     </div>
                 </div>
             </div>
-
         </div>
     `;
+
+    container.innerHTML = template;
 
     // Crop the image
     await loadAndCropPlayerImage(player);
@@ -1185,7 +1152,7 @@ function getBestWeapon(modWeaponStats) {
 // #region Profile Watcher
 function startStatusUpdater(player, container) {
     let raidTimeAnimator = null;
-    const statusElement = container.querySelector('.player-status span');
+    const statusElement = container.querySelector('.player-status-badge .player-status-lb');
 
     const updateStatus = async () => {
         try {
@@ -1196,10 +1163,22 @@ function startStatusUpdater(player, container) {
 
             if (!player.banned) {
                 if (isOnline) {
-                    if (playerStatus.raidDetails !== null) {
-                        newStatusHTML = `<span class="player-status-lb ${playerStatus.statusClass}">In raid <div id="blink"></div></span>`;
+                    const isInRaid = playerStatus.status === 'in_raid' || playerStatus.status === 'in_transit';
+
+                    if (isInRaid) {
+                        newStatusHTML = `<span class="player-status-lb ${playerStatus.statusClass}">
+                            ${playerStatus.statusText} 
+                            <span class="raid-dots">
+                                <span class="r-dot"></span>
+                                <span class="r-dot"></span>
+                                <span class="r-dot"></span>
+                            </span>
+                        </span>`;
                     } else {
-                        newStatusHTML = `<span class="player-status-lb ${playerStatus.statusClass}">${playerStatus.statusText} <div id="blink"></div></span>`;
+                        newStatusHTML = `<span class="player-status-lb ${playerStatus.statusClass}">
+                            ${playerStatus.statusText} 
+                            <span id="blink"></span>
+                        </span>`;
                     }
                 } else {
                     const lastOnlineTime = window.heartbeatMonitor.getLastOnlineTime(
@@ -1212,12 +1191,25 @@ function startStatusUpdater(player, container) {
             }
 
             // Perform magic update here if heartbeat has changed
-            if (statusElement.innerHTML !== newStatusHTML) {
-                statusElement.innerHTML = newStatusHTML;
+            if (statusElement && statusElement.outerHTML !== newStatusHTML) {
+                // fuck this shit - just get rid of the thing entirely
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = newStatusHTML;
+                const newElement = tempDiv.firstChild;
+
+                const parentContainer = statusElement.parentNode;
+
+                // if .player-status-badge, replace
+                if (parentContainer.classList.contains('player-status-badge')) {
+                    parentContainer.innerHTML = '';
+                    parentContainer.appendChild(newElement);
+                } else {
+                    statusElement.replaceWith(newElement);
+                }
+
                 await loadAndCropPlayerImage(player);
                 await loadQuestData(player.completed_quests);
                 await initLastRaids(player.id, player.permaLink);
-
                 loadHideoutData(player.hideout);
             }
 
@@ -1298,25 +1290,25 @@ function generateBadgesHTML(player) {
             condition: (seasons) => seasons >= 3 && seasons <= 4,
             icon: "fa-solid fa-medal",
             style: "color: rgb(100, 149, 237)",
-            tooltip: (seasons) => `${seasons} seasons of service.`
+            tooltip: (seasons) => `${seasons} seasons of service`
         },
         {
             condition: (seasons) => seasons >= 5 && seasons <= 6,
             icon: "fa-solid fa-star",
             style: "color: rgba(205, 50, 128, 1)",
-            tooltip: (seasons) => `${seasons} seasons of service.`
+            tooltip: (seasons) => `${seasons} seasons of service`
         },
         {
             condition: (seasons) => seasons >= 7 && seasons <= 8,
             icon: "fa-solid fa-crown",
             style: "color: #FFD700; text-shadow: 0 0 5px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFD700;",
-            tooltip: (seasons) => `${seasons} seasons of service.`
+            tooltip: (seasons) => `${seasons} seasons of service`
         },
         {
             condition: (seasons) => seasons >= 9,
             icon: "fa-solid fa-eye",
             style: "color: #B9F2FF; text-shadow: 0 0 5px #B9F2FF, 0 0 20px #B9F2FF, 0 0 40px #B9F2FF; animation: pulse 2s infinite;",
-            tooltip: (seasons) => `${seasons} seasons of service. `
+            tooltip: (seasons) => `${seasons} seasons of service `
         }
     ];
 
@@ -1363,7 +1355,7 @@ function generateBadgesHTML(player) {
     if (player.dev) {
         badges += `<div class="badge tooltip">
             <em class="fa-solid fa-user-shield promo-name" alt="Staff" style="font-size: 18px;"></em>
-            <span class="tooltiptext">SPTLB Staff Member</span>
+            <span class="tooltiptext">Staff Member</span>
         </div>`;
     }
 
@@ -1382,7 +1374,7 @@ function generateBadgesHTML(player) {
     if (player?.trusted && !player?.dev) {
         badges += `<div class="badge tooltip">
         <img src="/media/trusted.png" width="30" height="30" alt="Trusted">
-        <span class="tooltiptext">Official Tester</span>
+        <span class="tooltiptext">Verified Profile by SPTLB Team</span>
       </div>`;
     }
 
@@ -1573,7 +1565,7 @@ function setupModalCloseHandlers() {
             modal.style.display = 'none';
 
             ProfileState.isProfileOpened = false;
-            
+
             history.replaceState(null, null, ' ');
             document.body.style.overflow = 'auto';
 
