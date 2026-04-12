@@ -242,99 +242,7 @@ h1 {
     font-family: 'Inter', sans-serif;
     text-transform: uppercase;
     letter-spacing: 2px;
-    text-shadow:
-        0 0 1px rgba(100, 255, 218, 0.4),
-        0 0 3px rgba(100, 255, 218, 0.2);
-}
-
-/* Is player logged in */
-.auth-status {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 5;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.3s ease;
-}
-
-.auth-status.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.auth-indicator {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    background: var(--darker);
-    border: 1px solid var(--gray-ultradark);
-    border-radius: 8px;
-    backdrop-filter: blur(10px);
-    box-shadow: var(--shadow-lg);
-    transition: all 0.3s ease;
-}
-
-.auth-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--gray);
-    animation: pulse 2s infinite;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-}
-
-.auth-text {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-muted);
-    transition: all 0.3s ease;
-    white-space: nowrap;
-}
-
-/* Dot Statuses */
-.auth-status.authenticated .auth-dot {
-    background: var(--success);
-    animation: pulse-success 2s infinite;
-    box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
-}
-
-.auth-status.authenticated .auth-text {
-    color: var(--success);
-    font-weight: 600;
-}
-
-.auth-status.not-authenticated .auth-dot {
-    background: var(--danger);
-    animation: pulse-danger 2s infinite;
-    box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
-}
-
-.auth-status.not-authenticated .auth-text {
-    color: var(--danger);
-}
-
-.auth-status.error .auth-dot {
-    background: var(--accent);
-    animation: pulse-warning 2s infinite;
-    box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
-}
-
-.auth-status.error .auth-text {
-    color: var(--accent);
-}
-
-.auth-status.checking .auth-dot {
-    background: var(--primary);
-    animation: pulse-checking 1.5s infinite;
-    box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
-}
-
-.auth-status.checking .auth-text {
-    color: var(--primary-light);
+    text-shadow: 0 0 1px rgba(100, 255, 218, 0.4), 0 0 3px rgba(100, 255, 218, 0.2);
 }
 
 @keyframes pulse-success {
@@ -494,7 +402,7 @@ h1 {
     background-color: rgba(255, 255, 255, 0.05);
     color: var(--text-light);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 4px 8px;
+    padding: 8px 16px;
     border-radius: 8px;
     cursor: pointer;
     font-family: 'Inter', sans-serif;
@@ -533,26 +441,6 @@ h1 {
 .navbar-link--login:hover {
     background: rgba(100, 255, 219, 0.35);
     border: 1px solid rgba(100, 255, 219, 0.5);
-}
-
-/* SPTLB Network notifications */
-#networkNotifies {
-    position: absolute;
-    top: -12px;
-    right: -13px;
-    min-width: 20px;
-    height: 20px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, var(--danger), var(--danger-dark));
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 2px;
-    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.336);
-    z-index: 10;
 }
 
 /* Season Selector */
@@ -851,7 +739,6 @@ h1 {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 16px;
     border-radius: 12px;
     color: var(--text-light);
     font-weight: 600;
@@ -862,12 +749,121 @@ h1 {
     justify-content: center;
     backdrop-filter: blur(10px);
     position: relative;
+    text-decoration: none;
 }
 
 .compact-login-btn:hover {
     background: rgba(100, 255, 219, 0.35);
     border: 1px solid rgba(100, 255, 219, 0.5);
     box-shadow: 0 4px 15px rgba(100, 255, 219, 0.2);
+}
+
+.compact-login-btn.checking {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.compact-login-btn.checking .login-icon i {
+    animation: spin 1s linear infinite;
+}
+
+.compact-login-btn.error {
+    background: rgba(255, 71, 87, 0.25);
+    border: 1px solid rgba(255, 71, 87, 0.4);
+}
+
+.compact-login-btn.error:hover {
+    background: rgba(255, 71, 87, 0.35);
+    border: 1px solid rgba(255, 71, 87, 0.6);
+}
+
+.compact-login-btn.maintenance {
+    background: rgba(255, 193, 7, 0.25);
+    border: 1px solid rgba(255, 193, 7, 0.4);
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.compact-login-btn.authenticated {
+    background: rgba(100, 255, 219, 0.2);
+    border: 1px solid rgba(100, 255, 219, 0.4);
+    min-width: auto;
+}
+
+.compact-login-btn.authenticated:hover {
+    background: rgba(100, 255, 219, 0.3);
+    border: 1px solid rgba(100, 255, 219, 0.5);
+}
+
+.user-profile-pfp {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid rgba(100, 255, 219, 0.6);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    margin-left: 4px;
+    flex-shrink: 0;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+#loginButtonText {
+    font-weight: 600;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.compact-login-btn.authenticated .login-icon {
+    display: none;
+}
+
+.compact-login-btn .login-icon,
+.compact-login-btn .user-profile-pfp {
+    transition: all 0.3s ease;
+}
+
+/* SPTLB Network notifications */
+#networkNotifies {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 20px;
+    height: 20px;
+    background: #ff4757;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    color: white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#networkNotifies[data-count] {
+    display: flex !important;
+}
+
+#networkNotifies:empty {
+    display: none !important;
+}
+
+.compact-login-btn .login-icon,
+.compact-login-btn .user-profile-pfp {
+    transition: all 0.3s ease;
 }
 
 .login-icon {

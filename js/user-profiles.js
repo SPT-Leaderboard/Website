@@ -458,7 +458,7 @@ async function showPublicProfile(container, player) {
 
                 <!-- Item Showcase -->
                 ${player.showcase && Object.keys(player.showcase).length > 0 ?
-                    `<div class="player-overview player-showcase">
+            `<div class="player-overview player-showcase">
                         <div class="showcase-mini">
                             <div class="showcase-mini-header">
                                 <span class="showcase-title">Item Showcase</span>
@@ -476,7 +476,7 @@ async function showPublicProfile(container, player) {
                             </div>
                         </div>
                     </div>`
-                : ''}
+            : ''}
 
                 <div class="badges">${badgesHTML}</div>
             </div>
@@ -890,14 +890,14 @@ async function showPublicProfile(container, player) {
     });
     ProfileState.commentsManager.init(player.permaLink, player.id);
 
-    // Friends
+    // Friends user-community.js
     ProfileState.friendManager = new FriendManager();
     await ProfileState.friendManager.init(player);
 
     // Records
     ProfileState.tabManager = new TabManager(player.id, leaderboardData);
 
-    // Equipment displayer
+    // Equipment displayer user-community.js
     const equipmentDisplay = new PlayerEquipmentDisplay(player.id);
     const viewmodelContainer = document.querySelector('.playermodel-image');
     if (viewmodelContainer) {

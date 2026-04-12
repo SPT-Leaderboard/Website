@@ -133,9 +133,12 @@
                             </button>
                         </div>
                     </div>
-                    <a href="/api/network/login/index.php" class="navbar-link navbar-link--login compact-login-btn">
+                    <a href="/api/network/login/index.php" class="navbar-link navbar-link--login compact-login-btn" id="loginButton">
                         <span class="login-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></span>
-                        <span>Login</span>
+                        <span id="loginButtonText">Login</span>
+                        <div class="user-profile-pfp" id="userProfilePfp" style="display: none;">
+                            <img id="userAvatar" src="" alt="Profile" class="avatar-img">
+                        </div>
                         <div id="networkNotifies"></div>
                     </a>
                 </div>

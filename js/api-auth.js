@@ -6,7 +6,7 @@
 
 let authCheckInterval = null;
 let autoLoginAttempts = 0;
-const MAX_AUTO_LOGIN_ATTEMPTS = 3;
+const MAX_AUTO_LOGIN_ATTEMPTS = 1;
 
 async function checkAuth() {
     try {
@@ -35,13 +35,9 @@ async function checkAuth() {
         const data = await response.json();
 
         if (data.authenticated && data.username) {
-            updateAuthStatus('authenticated', data.username, data.unreadCount || 0);
+            updateAuthStatus('authenticated', data.username, data.profilePicture, data.unreadCount || 0);
             isLoggedIn = true;
             autoLoginAttempts = 0;
-
-            if (data.autoLogin) {
-                showNotification('Auto-login successful', 'Welcome back!', 'success');
-            }
 
             startPeriodicAuthCheck();
 
@@ -78,44 +74,60 @@ async function checkAuth() {
     }
 }
 
-function updateAuthStatus(status, message, notifications = 0) {
-    const authElement = document.getElementById('authStatus');
+function updateAuthStatus(status, message, profilePicture, notifications = 0) {
+    const loginButton = document.getElementById('loginButton');
+    const loginButtonText = document.getElementById('loginButtonText');
+    const userProfilePfp = document.getElementById('userProfilePfp');
+    const userAvatar = document.getElementById('userAvatar');
     const notificationElement = document.getElementById('networkNotifies');
-    const usernameDisplay = document.getElementById('usernameDisplay');
 
-    if (!authElement) return;
-
-    const authText = authElement.querySelector('.auth-text');
-    if (authText) {
-        authText.textContent = message;
-    }
-
-    authElement.className = `auth-status ${status}`;
-
-    if (usernameDisplay) {
+    if (loginButton) {
         if (status === 'authenticated') {
-            usernameDisplay.textContent = message;
-            usernameDisplay.style.display = 'inline';
+            if (loginButtonText) {
+                loginButtonText.textContent = message;
+            }
+
+            if (userProfilePfp && userAvatar) {
+                const avatarUrl = profilePicture;
+                userAvatar.src = avatarUrl;
+                userProfilePfp.style.display = 'block';
+            }
+
+            if (notificationElement) {
+                if (notifications > 0) {
+                    notificationElement.textContent = notifications > 99 ? '99+' : notifications;
+                    notificationElement.style.display = 'flex';
+                    notificationElement.setAttribute('data-count', notifications);
+                } else {
+                    notificationElement.textContent = '';
+                    notificationElement.style.display = 'none';
+                    notificationElement.removeAttribute('data-count');
+                }
+            }
+
+            loginButton.classList.add('authenticated');
+            loginButton.href = '/api/network/login/index.php';
+            loginButton.title = `Logged in as ${message}`;
         } else {
-            usernameDisplay.style.display = 'none';
+            if (loginButtonText) {
+                loginButtonText.textContent = 'Login';
+            }
+
+            if (userProfilePfp) {
+                userProfilePfp.style.display = 'none';
+            }
+
+            if (notificationElement) {
+                notificationElement.textContent = '';
+                notificationElement.style.display = 'none';
+                notificationElement.removeAttribute('data-count');
+            }
+
+            loginButton.classList.remove('authenticated');
+            loginButton.href = '/api/network/login/index.php';
+            loginButton.title = 'Login to your account';
         }
     }
-
-    if (notificationElement) {
-        if (notifications > 0) {
-            notificationElement.textContent = notifications > 99 ? '99+' : notifications;
-            notificationElement.style.display = 'flex';
-            notificationElement.setAttribute('data-count', notifications);
-        } else {
-            notificationElement.textContent = '';
-            notificationElement.style.display = 'none';
-            notificationElement.removeAttribute('data-count');
-        }
-    }
-
-    setTimeout(() => {
-        authElement.classList.add('show');
-    }, 100);
 }
 
 function startPeriodicAuthCheck() {
