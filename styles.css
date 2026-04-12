@@ -3841,7 +3841,8 @@ input[type="checkbox"]:checked:hover {
     font-size: 12px;
     font-weight: bold;
     letter-spacing: 0.5px;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
     text-align: center;
     white-space: nowrap;
 }
@@ -3849,25 +3850,19 @@ input[type="checkbox"]:checked:hover {
 .level-badge.pmc {
     color: #9ab8e8;
     border-color: #5a7aae;
-    background: #1a2430;
+    background: linear-gradient(145deg, #ffffff08, #ffffff12);
 }
 
 .level-badge.scav {
     color: #e8b89a;
     border-color: #ae7a5a;
-    background: #301a10;
+    background: linear-gradient(145deg, #ffffff08, #ffffff12);
 }
 
 .level-badge.discord {
-    font-size: 12px;
-    font-weight: bold;
-    background: #5865f210;
-    padding: 4px 8px;
-    border-radius: 10px;
-    border-color: #5865f240;
     color: #b9bbff;
-    align-items: center;
-    gap: 6px;
+    border-color: #5865f2;
+    background: linear-gradient(145deg, #ffffff08, #ffffff12);
 }
 
 .card-right {
