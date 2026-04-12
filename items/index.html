@@ -18,6 +18,7 @@
         <link rel="stylesheet" href="https://github.hubspot.com/odometer/themes/odometer-theme-default.css">
         <script src="../js/api-fetch.js"></script>
         <script src="../js/app-core.js"></script>
+        <script src="../js/api-auth.js"></script>
         <script src="../items/js/main.js"></script>
         <script src="../js/api-monitor.js"></script>
         <script src="../js/app-utils.js"></script>
@@ -62,9 +63,13 @@
                     <span class="login-icon"><i class="fa-solid fa-angles-left"></i></span>
                     <span>Go back</span>
                 </a>
-                <a href="/api/network/login/index.php" class="navbar-link navbar-link--login compact-login-btn">
+                <a href="/api/network/login/index.php" class="navbar-link navbar-link--login compact-login-btn" id="loginButton">
                     <span class="login-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></span>
-                    <span>Login</span>
+                    <span id="loginButtonText">Login</span>
+                    <div class="user-profile-pfp" id="userProfilePfp" style="display: none;">
+                        <img id="userAvatar" src="" alt="Profile" class="avatar-img">
+                    </div>
+                    <div id="networkNotifies"></div>
                 </a>
             </div>
         </nav>

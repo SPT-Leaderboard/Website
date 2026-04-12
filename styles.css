@@ -32,6 +32,7 @@
     --gray-light: #e2e8f0;
     --gray-dark: #64748b;
     --gray-ultradark: #475569;
+    --gray-default: #888888;
 
     --accent: #f59e0b;
     --accent-dark: #d97706;
@@ -1202,6 +1203,7 @@ td {
     display: inline-flex;
     justify-self: anchor-center;
     place-items: center;
+    align-items: baseline;
     padding: 4px 12px;
     border-radius: 10px;
     text-align: center;
@@ -1364,8 +1366,8 @@ td {
 /* Blink for online */
 #blink {
     display: flex;
-    width: 12px;
-    height: 12px;
+    width: 11px;
+    height: 11px;
     border-radius: 50%;
     margin-left: 5px;
     animation: blink 2s infinite;
@@ -1431,12 +1433,19 @@ td {
     box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
 }
 
+/* Last online Time */
+.player-status-badge {
+    font-size: 14px;
+    color: #f8f8f896;
+}
+
 /* Different approach for raid dots */
 .raid-dots {
     display: inline-flex;
     gap: 3px;
     margin-left: 6px;
     align-items: center;
+    margin-bottom: 1px;
 }
 
 .raid-dots .r-dot {
@@ -1462,10 +1471,14 @@ td {
 }
 
 @keyframes raidDotPulse {
-    0%, 60%, 100% {
+
+    0%,
+    60%,
+    100% {
         transform: translateY(0);
         opacity: 0.4;
     }
+
     30% {
         transform: translateY(-2px);
         opacity: 1;
@@ -1551,21 +1564,9 @@ button:hover,
 
 .player-name-wrapper.highlight-player {
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 0 10px rgba(127, 128, 238, 0.4);
     border: 1px solid var(--accent-teal);
     position: relative;
-}
-
-.player-name i {
-    display: flex;
-    position: static;
-    flex-direction: column;
-    margin-left: 5px;
-}
-
-.player-name:hover {
-    background-color: rgba(255, 255, 255, 0.15) !important;
-    color: #ffffff !important;
 }
 
 .player-rank-leaderboard {
@@ -1587,18 +1588,12 @@ button:hover,
     border-radius: 50%;
     border: 2px solid rgba(132, 210, 255, 0.8);
     object-fit: cover;
-    box-shadow:
-        0 2px 4px rgba(132, 210, 255, 0.3),
-        inset 0 1px 2px rgba(255, 255, 255, 0.3);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.player-name:hover .lb-profile-picture {
+.player-name-wrapper:hover .lb-profile-picture {
     border-color: #84d2ff;
     transform: scale(1.08);
-    box-shadow:
-        0 6px 25px rgba(132, 210, 255, 0.5),
-        inset 0 2px 4px rgba(255, 255, 255, 0.4);
 }
 
 /* Styling scorings by color */
@@ -1701,6 +1696,7 @@ button:hover,
 }
 
 @keyframes silverShimmer {
+
     0%,
     100% {
         background-position: 0% center;
