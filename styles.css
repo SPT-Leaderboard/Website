@@ -9137,10 +9137,17 @@ input[type="checkbox"]:checked:hover {
     box-shadow: none;
 }
 
+/* Comment Element */
 .comments-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 8px;
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    gap: 13px;
 }
 
 .comment {
@@ -9151,58 +9158,278 @@ input[type="checkbox"]:checked:hover {
     backdrop-filter: blur(10px);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    overflow: hidden;
-    margin-left: 0;
-    opacity: 1;
 }
 
 .comment:hover {
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.15);
-    transform: scale(1.02) !important;
-    margin-left: 0 !important;
-    opacity: 1 !important;
-    z-index: 100 !important;
     box-shadow: var(--shadow-lg);
 }
 
-.comment-header {
-    display: flex;
-    align-items: center;
+/* Avatar Wrapper */
+.avatar-wrapper {
+    position: relative;
+    cursor: default;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.avatar-wrapper.has-player-data {
+    cursor: pointer;
+}
+
+.avatar-wrapper.has-player-data:hover .user-avatar {
+    border-color: var(--primary);
+}
+
+.avatar-wrapper.has-player-data:hover .avatar-overlay {
+    opacity: 1;
 }
 
 .user-avatar {
     width: 55px;
     height: 55px;
-    border-radius: 50%;
+    border-radius: 20%;
     object-fit: cover;
-    margin-right: 15px;
-    border: 2px solid rgb(159 159 159 / 50%);
+    border: 2px solid rgba(159, 159, 159, 0.5);
+    transition: all 0.3s ease;
 }
 
+/* PMC Side Wrapper */
+.pmc-side-wrapper-comment {
+    position: absolute;
+    bottom: -8px;
+    left: -5px;
+    width: 28px;
+    height: 28px;
+    background-color: #ffffff05;
+    border: 1px solid #ffffff21;
+    backdrop-filter: blur(5px);
+    border-radius: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.pmc-side-wrapper-comment img,
+.pmc-side-wrapper-comment svg {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+}
+
+/* User Info */
 .user-info {
     flex-grow: 1;
     display: inline-flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.user-name-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.player-stats-comment {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* User Name Link */
+.user-name-link {
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.user-name-link.verified-user {
+    color: #bfebff;
+    cursor: pointer;
+}
+
+.user-name-link.verified-user:hover {
+    color: var(--primary);
+}
+
+.user-name-link.verified-user i {
+    color: var(--success);
+    font-size: 14px;
 }
 
 .user-name {
     font-weight: 600;
-    color: #bfebff;
     font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.user-name.verified-user {
+    color: #bfebff;
+}
+
+.user-name.guest-user {
+    color: #94a3b8;
+}
+
+.user-name i {
+    font-size: 14px;
+}
+
+/* Badges */
+.role-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.role-badge i {
+    font-size: 10px;
+}
+
+/* Staff Badge */
+.staff-badge {
+    background: linear-gradient(135deg, rgba(68, 191, 239, 0.2), rgba(68, 228, 239, 0.1));
+    color: #44b9ef;
+    border: 1px solid rgba(68, 94, 239, 0.4);
+}
+
+/* Trusted Badge */
+.trusted-badge {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1));
+    color: #a78bfa;
+    border: 1px solid rgba(139, 92, 246, 0.4);
+}
+
+/* Verified Badge */
+.verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* Raid Count Badge */
+.raid-count-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(99, 102, 241, 0.05));
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--primary-light);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+/* Guest Badge */
+.guest-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--gray);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Online stuff for comments */
+.online-status-indicator {
+    position: absolute;
+    bottom: 1px;
+    right: -1px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.online-status-indicator.online .status-dot {
+    background: linear-gradient(135deg, #6affa3 0%, #00e676 100%);
+    box-shadow: 0 0 12px rgba(106, 255, 163, 0.6);
+}
+
+.online-status-indicator.offline .status-dot {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+    box-shadow: 0 0 4px rgba(107, 114, 128, 0.4);
 }
 
 .comment-date {
     font-size: 0.85rem;
     color: #94a3b8;
+    white-space: nowrap;
 }
 
 .comment-content {
     color: #e0e0e0;
     line-height: 1.6;
-    margin-left: 75px;
+    padding-left: 70px;
+    word-wrap: break-word;
+    margin-top: 8px;
+}
+
+.avatar-wrapper.has-player-data {
+    position: relative;
+}
+
+.avatar-wrapper.has-player-data::before {
+    content: "View profile";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+}
+
+.avatar-wrapper.has-player-data:hover::before {
+    opacity: 1;
 }
 
 .divider {

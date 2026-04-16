@@ -37,7 +37,7 @@ function openProfile(playerId, reOpenProfile = false) {
         return;
     }
 
-    const player = findPlayer(leaderboardData, playerId);
+    const player = findPlayer(playerId);
 
     if (!player) {
         showToast(`Couldn't find player`, 'error', 8000)
@@ -877,11 +877,11 @@ async function showPublicProfile(container, player) {
 
     //user-raid-history.js
     //Use permalink to point out different profiles (but same player)
-    await initLastRaids(player.id, player.permaLink);
+    initLastRaids(player.id, player.permaLink);
     //battlepass-calculator.js
     await initHOF(player, bestWeapon);
     //user-quests.js
-    await loadQuestData(player.completed_quests);
+    loadQuestData(player.completed_quests);
     //user-hideout.js
     loadHideoutData(player.hideout);
     //user-community.js
@@ -892,7 +892,7 @@ async function showPublicProfile(container, player) {
 
     // Friends user-community.js
     ProfileState.friendManager = new FriendManager();
-    await ProfileState.friendManager.init(player);
+    ProfileState.friendManager.init(player);
 
     // Records
     ProfileState.tabManager = new TabManager(player.id, leaderboardData);

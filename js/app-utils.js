@@ -459,7 +459,7 @@ function howMuchUntilFutureDateWeHaveLeft(timestamp) {
     if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''}`;
 
     if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''}`;
-    
+
     return `${seconds} second${seconds > 1 ? 's' : ''}`;
 }
 
@@ -552,8 +552,20 @@ async function loadJSON(url) {
     return await response.json();
 }
 
-function findPlayer(leaderboardData, playerId) {
+/**
+ * Find player object by id
+ */
+window.findPlayer = function(playerId) {
     const player = leaderboardData.find((p) => p.id === playerId);
+
+    return player;
+}
+
+/**
+ * Find player object by permaLink
+ */
+window.findPlayerByPermaLink = function(permaLink) {
+    const player = leaderboardData.find((p) => p.permaLink === permaLink);
 
     return player;
 }
@@ -699,7 +711,7 @@ function getPlayerEdition(edition) {
     if (!edition || typeof edition !== 'string') {
         return `<span class="status-badge status-suspicious"><i class="fa-solid fa-triangle-exclamation"></i> Unknown Edition: ${escapeHtml(edition)}</span>`;
     }
-    
+
     const normalizedEdition = edition.toLowerCase().trim();
 
     const editionMap = {
@@ -709,7 +721,7 @@ function getPlayerEdition(edition) {
         'left_behind': 'Left Behind',
         'standard': 'Standard'
     };
-    
+
     if (editionMap[normalizedEdition]) {
         return `<span class="info-value"> ${editionMap[normalizedEdition]} </span>`;
     }
@@ -719,7 +731,7 @@ function getPlayerEdition(edition) {
             return `<span class="info-value"> ${value} </span>`;
         }
     }
-    
+
     return `<span class="status-badge status-suspicious"><i class="fa-solid fa-triangle-exclamation"></i> Unknown Edition: ${escapeHtml(edition)}</span>`;
 }
 

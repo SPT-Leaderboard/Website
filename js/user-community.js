@@ -876,7 +876,7 @@ class CommentsManager {
         }
 
         try {
-            const response = await fetch(`${this.apiEndpoints.loadComments}player_${this.permaLink}.json`);
+            const response = await fetch(`${this.apiEndpoints.loadComments}player_${this.permaLink}.json?t=${Date.now()}`);
 
             if (!response.ok) {
                 if (response.status === 404) {
@@ -907,34 +907,170 @@ class CommentsManager {
      * @param {Object} comment - The comment data object
      * @param {number} comment.timestamp - Unix timestamp (seconds) of the comment
      * @param {string} comment.text - The comment body (HTML-entity-encoded)
-     * @param {string} [comment.author] - Author name (defaults to "Anonymous")
-     * @param {string} [comment.avatar] - URL to the author's avatar image
+     * @param {string} comment.permaLink - The permalink to match with leaderboard data
+     * @param {string} [comment.author] - Author name (falls back to leaderboard data)
+     * @param {string} [comment.avatar] - URL to the author's avatar image (falls back to leaderboard data)
      * @returns {HTMLDivElement} The constructed comment DOM element
      */
     createCommentElement(comment) {
         const commentDiv = document.createElement('div');
         commentDiv.className = 'comment';
 
+        let playerData = null;
+        let profileId = null;
+        let isOnline = false;
+
+        const commentPermaLink = comment.permaLink;
+
+        if (commentPermaLink) {
+            playerData = window.findPlayerByPermaLink(commentPermaLink);
+
+            // Extract profile ID from player data
+            if (playerData) {
+                profileId = playerData.id;
+            }
+        }
+
+        let authorName = comment.author || 'Anonymous';
+        let avatarUrl = comment.avatar || 'media/default_avatar.png';
+        let hasPlayerData = false;
+        let playerRaidCount = 0;
+
+        // Role badges
+        let isStaff = false;
+        let isTrusted = false;
+
+        if (playerData) {
+            hasPlayerData = true;
+            // Use data from leaderboard
+            authorName = playerData.name || authorName;
+            avatarUrl = playerData.profilePicture || avatarUrl;
+            profileId = playerData.id || profileId;
+            playerRaidCount = playerData.networkRaids || playerData.totalRaids || 0;
+
+            // Check for roles/badges
+            isStaff = playerData.dev === true;
+            isTrusted = playerData.trusted === true;
+
+            // Check online
+            if (window.heartbeatMonitor) {
+                isOnline = window.heartbeatMonitor.isOnline(profileId);
+            }
+        }
+
         const commentDate = new Date(comment.timestamp * 1000);
         const formattedDate = this.formatDate(commentDate);
-        const decodedText = escapeHtml(this.decodeHtmlEntities(comment.text));
+        const decodedText = this.decodeHtmlEntities(comment.text);
+        const pmcSideHtml = hasPlayerData ? window.getPlayerSideImageHTML(playerData) : '';
+        const roleBadgesHtml = this.getRoleBadgesHtml({
+            isStaff, isTrusted
+        });
+        const onlineStatusHtml = hasPlayerData ? `
+            <div class="online-status-indicator ${isOnline ? 'online' : 'offline'}" 
+                title="${isOnline ? 'Currently Online' : 'Last seen recently'}">
+                <span class="status-dot"></span>
+            </div>
+        ` : '';
+
+        let userInfoHtml = '';
+
+        if (profileId) {
+            // Clickable profile
+            userInfoHtml = `
+                <div class="user-info">
+                    <div class="user-name-wrapper">
+                        <a href="javascript:void(0)" 
+                        onclick="openProfile('${this.escapeHtml(profileId)}', true)" 
+                        class="user-name-link ${hasPlayerData ? 'verified-user' : ''}">
+                            ${this.escapeHtml(authorName)}
+                        </a>
+                        ${hasPlayerData ? `
+                            <div class="player-stats-comment">
+                                <span class="verified-badge">
+                                    <i class="fa-solid fa-user-check"></i>
+                                </span>
+                                ${roleBadgesHtml}
+                                ${playerRaidCount > 0 ? `
+                                    <span class="raid-count-badge">
+                                        <i class="fa-solid fa-gamepad"></i> ${playerRaidCount.toLocaleString()} Raids
+                                    </span>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="comment-date">${formattedDate}</div>
+                </div>
+            `;
+        } else {
+            // Non-clickable
+            userInfoHtml = `
+                <div class="user-info">
+                    <div class="user-name-wrapper">
+                        <span class="user-name ${hasPlayerData ? 'verified-user' : 'guest-user'}">
+                            ${this.escapeHtml(authorName)}
+                        </span>
+                        ${!hasPlayerData ? '<span class="guest-badge">Guest</span>' : ''}
+                    </div>
+                    <div class="comment-date">${formattedDate}</div>
+                </div>
+            `;
+        }
 
         commentDiv.innerHTML = `
             <div class="comment-header">
-                <img src="${comment.avatar || 'media/default_avatar.png'}"
-                     alt="User Avatar" class="user-avatar"
-                     onerror="this.src='media/default_avatar.png'">
-                <div class="user-info">
-                    <div class="user-name">${escapeHtml(comment.author || 'Anonymous')}</div>
-                    <div class="comment-date">${formattedDate}</div>
+                <div class="avatar-wrapper ${hasPlayerData ? 'has-player-data' : ''}" 
+                    ${profileId ? `onclick="openProfile('${this.escapeHtml(profileId)}', true)"` : ''}>
+                    <img src="${this.escapeHtml(avatarUrl)}"
+                        alt="User Avatar" class="user-avatar"
+                        loading="lazy"
+                        onerror="this.src='media/default_avatar.png'">
+                    ${pmcSideHtml ? `<div class="pmc-side-wrapper-comment">${pmcSideHtml}</div>` : ''}
+                    ${onlineStatusHtml}
                 </div>
+                ${userInfoHtml}
             </div>
             <div class="comment-content">
-                ${decodedText}
+                ${this.escapeHtml(decodedText)}
             </div>
         `;
 
         return commentDiv;
+    }
+
+    /**
+     * Generate HTML for role badges based on player flags
+     * @param {Object} roles - Object with role flags
+     * @returns {string} HTML
+     */
+    getRoleBadgesHtml(roles) {
+        const badges = [];
+
+        // Staff badge
+        if (roles.isStaff) {
+            badges.push(`
+                <span class="role-badge staff-badge" title="Staff Member">
+                    <i class="fa-solid fa-user-shield promo-name"></i> Staff
+                </span>
+            `);
+        }
+
+        // Trusted
+        if (roles.isTrusted) {
+            badges.push(`
+                <span class="role-badge trusted-badge" title="Trusted Member/Tester">
+                    <i class="fa-solid fa-earth-americas"></i> Trusted
+                </span>
+            `);
+        }
+
+        return badges.join('');
+    }
+
+    escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
     // Display "no comments" message
@@ -1250,7 +1386,8 @@ class PlayerEquipmentDisplay {
                 a.name.includes('foregrip')) {
                 groups.grip.push(item);
             }
-            else if (a.name.includes('mm')) {
+            else if (a.name.includes('mm') ||
+                a.name.includes('Lapua Magnum')) {
                 groups.ammo.push(item);
             } else {
                 groups.other.push(item);
@@ -1831,7 +1968,7 @@ class TabManager {
             return;
         }
 
-        this.currentPlayerObject = window.findPlayer(leaderboardData, this.currentPlayerId);
+        this.currentPlayerObject = window.findPlayer(this.currentPlayerId);
 
         if (!this.currentPlayerObject) {
             container.innerHTML = `
