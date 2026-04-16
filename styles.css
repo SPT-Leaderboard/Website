@@ -5602,11 +5602,11 @@ input[type="checkbox"]:checked:hover {
 }
 
 .friend-item.real-friend {
-    background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), rgba(255, 255, 255, 0.1));
+    background: rgba(16, 185, 129, 0.1);
 }
 
 .friend-item.real-friend:hover {
-    background: linear-gradient(90deg, rgba(16, 185, 129, 0.15), rgba(255, 255, 255, 0.15));
+    background: rgba(16, 185, 129, 0.15);
 }
 
 .friend-item.local-friend {
@@ -5618,7 +5618,6 @@ input[type="checkbox"]:checked:hover {
 }
 
 .friend-item:hover {
-    background: rgba(255, 255, 255, 0.2);
     cursor: pointer;
 }
 
@@ -5657,10 +5656,17 @@ input[type="checkbox"]:checked:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.real-friend-badge {
+.real-badge {
+    position: absolute;
+    bottom: -5px;
+    right: -8px;
+    font-size: 10px;
+    padding: 4px;
+    border-radius: 30%;
+    background: var(--darker);
     color: var(--success);
     font-size: 14px;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .friend-info {

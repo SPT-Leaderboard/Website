@@ -10,6 +10,9 @@
  * friend request sending, friend list rendering, and real-friend vs local-friend tagging.
  */
 class FriendManager {
+
+    // what a fucking shithole
+
     constructor() {
         this.container = document.getElementById('friends-container');
         this.section = document.getElementById('friend-list');
@@ -22,8 +25,7 @@ class FriendManager {
     }
 
     /**
-     * Initializes the friend manager for a given player, sets up click-away listeners,
-     * renders the friend button, and loads the friend list.
+     * Initializes the friend manager for a given player
      * @param {Object} player - The player object whose profile is being viewed
      * @param {string} player.id - The player's unique ID
      */
@@ -110,7 +112,7 @@ class FriendManager {
     }
 
     /**
-     * Renders the appropriate friend action button based on the current friendship status.
+     * Renders the appropriate friend action button based on friendship status.
      * @param {string} status - ("isFriend", "requestPending", "canAdd", or other)
      */
     renderFriendButton(status) {
@@ -251,8 +253,8 @@ class FriendManager {
     }
 
     /**
-     * Fetches the list of "real" (non-local) friend IDs for the current player from the server.
-     * @returns {Promise<Array<string>>} Array of friend IDs, or empty array on failure
+     * Fetches the list of "real" (non-local) friends IDs for the current player from the API.
+     * @returns {Promise<Array<string>>} Array of friend IDs
      */
     async fetchRealFriends() {
         try {
@@ -272,12 +274,27 @@ class FriendManager {
 
             const data = await response.json();
 
+            if (!data.friends || data.friends.length === 0) {
+                return new Map();
+            }
+
+            const basicFriends = data.friends.map(friend => ({
+                id: friend.id,
+                name: friend.name,
+                profilePicture: friend.profilePicture || 'media/default_avatar.png',
+                teamTag: friend.teamTag || '',
+                absoluteLastTime: friend.absoluteLastTime || null,
+                added_at: friend.added_at,
+                permaLink: friend.permaLink  // for lookup
+            }));
+
+            const enrichedFriends = await this.enrichFriendsWithLeaderboardData(basicFriends);
+
             const friendsMap = new Map();
-            (data.friends || []).forEach(friend => {
+            enrichedFriends.forEach(friend => {
                 friendsMap.set(friend.id, {
                     ...friend,
-                    isRealFriend: true,
-                    added_at: friend.added_at
+                    isRealFriend: true
                 });
             });
 
@@ -317,7 +334,7 @@ class FriendManager {
                     name: p.name,
                     profilePicture: p.profilePicture,
                     teamTag: p.teamTag,
-                    lastPlayed: p.lastPlayed,
+                    absoluteLastTime: p.absoluteLastTime,
                     isRealFriend: false
                 });
             }
@@ -328,8 +345,7 @@ class FriendManager {
 
     /**
      * Fetches and merges the player's friend list, tagging each friend as real or local.
-     * Results are sorted with real friends first, then alphabetically by name.
-     * @returns {Promise<Array<Object>>} Sorted array of friend objects with `isRealFriend` flag
+     * @returns {Promise<Array<Object>>} friend objects with `isRealFriend` flag
      */
     async checkFriends() {
         this.realFriends = await this.fetchRealFriends();
@@ -338,7 +354,19 @@ class FriendManager {
         const realFriendsArray = Array.from(this.realFriends.values());
         const allFriends = [...realFriendsArray, ...localFriends];
 
-        allFriends.sort((a, b) => {
+        const uniqueFriends = new Map();
+        allFriends.forEach(friend => {
+            const key = friend.id || friend.permaLink || friend.name;
+            if (!uniqueFriends.has(key) || (friend.isRealFriend && !uniqueFriends.get(key).isRealFriend)) {
+                uniqueFriends.set(key, friend);
+            }
+        });
+
+        const uniqueFriendsArray = Array.from(uniqueFriends.values());
+
+        // Sort friends
+        uniqueFriendsArray.sort((a, b) => {
+            // Real friends first
             if (a.isRealFriend && !b.isRealFriend) return -1;
             if (!a.isRealFriend && b.isRealFriend) return 1;
 
@@ -349,12 +377,57 @@ class FriendManager {
             return (a.name || '').localeCompare(b.name || '');
         });
 
-        return allFriends;
+        return uniqueFriendsArray;
     }
 
     /**
-     * Fetches the friend list, renders friend items with online status and avatars into
-     * the friend container, and attaches click listeners for profile navigation.
+     * Enrich friends data with current leaderboard info
+     * @param {Array} friends - Friend objects from API
+     * @returns {Promise<Array>} friends array
+     */
+    async enrichFriendsWithLeaderboardData(friends) {
+        if (!friends || friends.length === 0) return [];
+
+        return friends.map(friend => {
+            let playerData = null;
+
+            if (friend.permaLink) {
+                playerData = window.findPlayerByPermaLink(friend.permaLink);
+            }
+            if (!playerData && friend.id) {
+                playerData = window.findPlayer(friend.id);
+            }
+
+            // COME OVER HERE, HIIIAAAAA
+            if (playerData) {
+                return {
+                    id: playerData.id,
+                    name: playerData.name || friend.name,
+                    profilePicture: playerData.profilePicture || friend.profilePicture || 'media/default_avatar.png',
+                    teamTag: playerData.teamTag || '',
+                    absoluteLastTime: playerData.absoluteLastTime || playerData.lastPlayed,
+                    added_at: friend.added_at,
+                    isRealFriend: true,
+                    permaLink: playerData.permaLink || friend.permaLink
+                };
+            }
+
+            //return defaults
+            return {
+                id: friend.id,
+                name: friend.name,
+                profilePicture: friend.profilePicture || 'media/default_avatar.png',
+                teamTag: friend.teamTag || '',
+                absoluteLastTime: null,
+                added_at: friend.added_at,
+                isRealFriend: true,
+                permaLink: friend.permaLink || null
+            };
+        });
+    }
+
+    /**
+     * Fetches the friend list
      */
     async renderFriendList() {
         if (!this.container || !this.section) return;
@@ -372,42 +445,62 @@ class FriendManager {
             this.section.style.display = 'block';
 
             this.container.innerHTML = friends.map(friend => {
-                const playerStatus = heartbeatMonitor?.getPlayerStatus?.(friend.id) || {};
-                const isOnline = heartbeatMonitor?.isOnline?.(friend.id) || false;
+                const playerStatus = heartbeatMonitor.getPlayerStatus(friend.id);
+                const isOnline = playerStatus?.isOnline || false;
 
-                let lastOnlineTime = '';
+                // Get last update time
+                // prioritize heartbeatMonitor
+                const lastUpdateTime = playerStatus?.lastUpdate || friend.absoluteLastTime || null;
+
+                let lastGame;
+
                 if (isOnline) {
-                    lastOnlineTime = '<span class="player-status-lb-online">Online</span>';
+                    const isInRaid = playerStatus?.status === 'in_raid' || playerStatus?.status === 'in_transit';
+
+                    if (isInRaid) {
+                        lastGame = `<span class="player-status-lb ${playerStatus.statusClass || ''}">
+                        ${playerStatus.statusText || 'In Raid'} 
+                        <span class="raid-dots">
+                            <span class="r-dot"></span>
+                            <span class="r-dot"></span>
+                            <span class="r-dot"></span>
+                        </span>
+                    </span>`;
+                    } else {
+                        lastGame = `<span class="player-status-lb ${playerStatus.statusClass || ''}">
+                        ${playerStatus.statusText || 'Online'} 
+                        <span id="blink"></span>
+                    </span>`;
+                    }
                 } else {
-                    const lastUpdate = playerStatus.lastUpdate || friend.lastPlayed || Date.now();
-                    lastOnlineTime = window.heartbeatMonitor?.getLastOnlineTime?.(lastUpdate) || 'Offline';
+                    // Offline - show last online time
+                    const lastOnlineTime = window.heartbeatMonitor?.getLastOnlineTime?.(lastUpdateTime) || window.formatLastPlayed(lastUpdateTime);
+                    lastGame = `<span class="last-online-time">${lastOnlineTime}</span>`;
                 }
 
-                const lastGame = isOnline
-                    ? `<span style="min-width: 0;" class="player-status-lb ${playerStatus.statusClass || ''}">${playerStatus.statusText || 'Online'} <div id="blink"></div></span>`
-                    : `<span class="last-online-time">${lastOnlineTime}</span>`;
-
                 const friendClass = friend.isRealFriend ? 'real-friend' : 'local-friend';
-                const friendBadge = !friend.isRealFriend ? '<i class="fa-solid fa-users-between-lines local-badge" title="Local friend (Same Team/PermaLink)"></i>' : '';
+                const friendBadge = !friend.isRealFriend
+                    ? '<i class="fa-solid fa-users-between-lines local-badge" title="Local friend"></i>'
+                    : '<i class="fa-solid fa-user-check real-badge" title="Friend"></i>';
 
                 return `
                 <div class="friend-item ${friendClass}" data-player-id="${friend.id || '0'}">
                     <div class="friend-avatar-wrapper">
-                        <img src="${friend.profilePicture || 'media/default_avatar.png'}" class="friend-avatar" onerror="this.src='media/default_avatar.png';" alt="Friend Avatar">
+                        <img src="${friend.profilePicture || 'media/default_avatar.png'}" 
+                             class="friend-avatar" 
+                             onerror="this.src='media/default_avatar.png';" 
+                             alt="Friend Avatar">
                         ${friendBadge}
+                        ${isOnline ? '<span class="online-dot"></span>' : ''}
                     </div>
                     <div class="friend-info">
                         <div class="friend-name">
-                            ${friend.teamTag ? `[${friend.teamTag}]` : ''} ${friend.name || 'Unknown'}
+                            ${friend.teamTag ? `<span class="friend-team-tag">[${this.escapeHtml(friend.teamTag)}]</span>` : ''} 
+                            ${this.escapeHtml(friend.name || 'Unknown')}
                         </div>
                         <div class="friend-status-text">
                             ${lastGame}
                         </div>
-                    </div>
-                    <div class="friend-status-indicator">
-                        ${friend.isRealFriend ?
-                        '<i class="fa-solid fa-check-circle real-friend-badge" title="Real friend"></i>' :
-                        ''}
                     </div>
                 </div>
             `;
@@ -423,6 +516,13 @@ class FriendManager {
             </div>
         `;
         }
+    }
+
+    escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
     attachFriendListListeners() {
@@ -907,7 +1007,7 @@ class CommentsManager {
      * @param {Object} comment - The comment data object
      * @param {number} comment.timestamp - Unix timestamp (seconds) of the comment
      * @param {string} comment.text - The comment body (HTML-entity-encoded)
-     * @param {string} comment.permaLink - The permalink to match with leaderboard data
+     * @param {string} comment.permaLink - The permaLink to match with leaderboard data
      * @param {string} [comment.author] - Author name (falls back to leaderboard data)
      * @param {string} [comment.avatar] - URL to the author's avatar image (falls back to leaderboard data)
      * @returns {HTMLDivElement} The constructed comment DOM element
