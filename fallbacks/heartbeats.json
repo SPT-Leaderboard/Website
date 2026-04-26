@@ -7,56 +7,43 @@
         "side": null,
         "gameTime": null
     },
-    "6987d41210615fb67478d413": {
-        "id": "6987d41210615fb67478d413",
-        "timestamp": 1776274223,
+    "69e20937de79937bf4ee520e": {
+        "id": "69e20937de79937bf4ee520e",
+        "timestamp": 1777016004,
         "type": "online"
     },
-    "69ab411d16a40e42ec90077c": {
-        "id": "69ab411d16a40e42ec90077c",
-        "timestamp": 1776274239,
+    "695a3cdf989c8d4f6cfa4e64": {
+        "id": "695a3cdf989c8d4f6cfa4e64",
+        "timestamp": 1777015976,
         "type": "online"
     },
-    "69d5f42000e6fa55d48c57cd": {
-        "id": "69d5f42000e6fa55d48c57cd",
-        "timestamp": 1776274199,
-        "type": "in_raid",
+    "68f474c726aed010087e7b11": {
+        "id": "68f474c726aed010087e7b11",
+        "timestamp": 1777016016,
+        "type": "in_flea",
         "map": "Loading...",
         "side": "Loading...",
-        "gameTime": "Loading..."
+        "state": "EMPTY",
+        "gameTime": "Loading...",
+        "gameCordX": null,
+        "gameCordY": null,
+        "gameCordZ": null
     },
-    "69a4ae95b014445a7cf99fae": {
-        "id": "69a4ae95b014445a7cf99fae",
-        "timestamp": 1776274211,
+    "69eaf24b2f55b613782f1967": {
+        "id": "69eaf24b2f55b613782f1967",
+        "timestamp": 1777016022,
         "type": "in_raid",
-        "map": "Lighthouse",
+        "map": "bigmap",
         "side": "Bear",
-        "gameTime": "05:09:09"
-    },
-    "69a5e84689c68200689ca220": {
-        "id": "69a5e84689c68200689ca220",
-        "timestamp": 1776274252,
-        "type": "in_raid",
-        "map": "Lighthouse",
-        "side": "Usec",
-        "gameTime": "05:14:15"
+        "state": "empty",
+        "gameTime": "07:55:20",
+        "gameCordX": -314.362061,
+        "gameCordY": 0.9271959,
+        "gameCordZ": -88.6890945
     },
     "6921bd7f673dad1fc424522e": {
         "id": "6921bd7f673dad1fc424522e",
-        "timestamp": 1776274239,
+        "timestamp": 1777016020,
         "type": "online"
-    },
-    "c6846e3feee28c60aba828d097b5aa261182b9a8627d03fb892a0237475927b1": {
-        "id": "c6846e3feee28c60aba828d097b5aa261182b9a8627d03fb892a0237475927b1",
-        "timestamp": 1776274226,
-        "type": "online"
-    },
-    "69dc252ae881502874fc8955": {
-        "id": "69dc252ae881502874fc8955",
-        "timestamp": 1776274253,
-        "type": "in_stash",
-        "map": "Loading...",
-        "side": "Loading...",
-        "gameTime": "Loading..."
     }
 }
