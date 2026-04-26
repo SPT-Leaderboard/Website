@@ -1056,7 +1056,6 @@ async function renderWeaponList(playerId, modWeaponStats) {
         const weaponItem = document.createElement('li');
         weaponItem.className = 'weapon-item';
 
-        // First 3 weapons have backgrounds
         if (index === 0) {
             weaponItem.classList.add('weapon-gold');
         } else if (index === 1) {

@@ -208,7 +208,8 @@ class ItemsRenderer {
             '13 mm aramid insert and ceramic plates',
             'Aluminum insert',
             `Accountant's notes`,
-            'Aramid insert'
+            'Aramid insert',
+            "DO NOT USE"
         ]);
 
         if (badItems.has(item.name)) {
@@ -468,19 +469,6 @@ class ItemsRenderer {
         const diffHours = (now - date) / 3600000;
 
         return diffHours < 5;
-    }
-
-    // Deprecated
-    // Never called due static page
-    destroy() {
-        clearTimeout(this.debounceTimer);
-        if (this.rafId) cancelAnimationFrame(this.rafId);
-
-        this.imageCache.clear();
-        this.currentItemsMap.clear();
-
-        this.elements.searchInput.value = '';
-        this.elements.sortSelect.value = 'name';
     }
 }
 

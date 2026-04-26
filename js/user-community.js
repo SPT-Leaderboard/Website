@@ -22,6 +22,8 @@ class FriendManager {
         this.friends = [];
         this.realFriends = new Map();
         this._onDocumentClick = null;
+        this._friendStatusCache = new Map();
+        this._cacheTimeout = 5 * 60 * 1000;
     }
 
     /**
@@ -52,6 +54,15 @@ class FriendManager {
             document.removeEventListener('click', this._onDocumentClick);
             this._onDocumentClick = null;
         }
+
+        // Clear cache
+        this._friendStatusCache.clear();
+
+        // Clear references
+        this.friends = [];
+        this.realFriends.clear();
+        this.currentPlayer = null;
+        this.buttonContainer = null;
     }
 
     async handleFriendButton() {
@@ -71,9 +82,17 @@ class FriendManager {
 
     /**
      * Checks the friendship status between the logged-in user and the current player.
+     * Uses caching to avoid redundant API calls.
      * @returns {Promise<string>} One of "canAdd", "isFriend", "requestPending", "cannotAdd", or "error"
      */
     async checkFriendStatus() {
+        const cacheKey = this.currentPlayer.id;
+        const cached = this._friendStatusCache.get(cacheKey);
+
+        if (cached && (Date.now() - cached.timestamp) < this._cacheTimeout) {
+            return cached.status;
+        }
+
         try {
             const data = await apiFetch('/api/network/functions/community/is_friend.php', {
                 method: 'POST',
@@ -87,11 +106,15 @@ class FriendManager {
                 body: { profileId: this.currentPlayer.id }
             });
 
-            if (data === null) {
-                return 'cannotAdd';
-            }
+            const status = data === null ? 'cannotAdd' : data.status;
 
-            return data.status; // "canAdd", "isFriend", "requestPending", "cannotAdd"
+            // Cache the result
+            this._friendStatusCache.set(cacheKey, {
+                status: status,
+                timestamp: Date.now()
+            });
+
+            return status;
         } catch (error) {
             console.error('Error checking friend status:', error);
             return 'cannotAdd';
@@ -444,68 +467,49 @@ class FriendManager {
 
             this.section.style.display = 'block';
 
-            this.container.innerHTML = friends.map(friend => {
-                const playerStatus = heartbeatMonitor.getPlayerStatus(friend.id);
-                const isOnline = playerStatus?.isOnline || false;
+            const fragment = document.createDocumentFragment();
+            const currentTime = Date.now();
 
-                // Get last update time
-                // prioritize heartbeatMonitor
-                const lastUpdateTime = playerStatus?.lastUpdate || friend.absoluteLastTime || null;
+            friends.forEach(friend => {
+                const playerStatus = heartbeatMonitor?.getPlayerStatus?.(friend.id) || {};
+                const isOnline = playerStatus.isOnline || false;
+                const lastUpdateTime = playerStatus.lastUpdate || friend.absoluteLastTime || null;
 
-                let lastGame;
-
-                if (isOnline) {
-                    const isInRaid = playerStatus?.status === 'in_raid' || playerStatus?.status === 'in_transit';
-
-                    if (isInRaid) {
-                        lastGame = `<span class="player-status-lb ${playerStatus.statusClass || ''}">
-                        ${playerStatus.statusText || 'In Raid'} 
-                        <span class="raid-dots">
-                            <span class="r-dot"></span>
-                            <span class="r-dot"></span>
-                            <span class="r-dot"></span>
-                        </span>
-                    </span>`;
-                    } else {
-                        lastGame = `<span class="player-status-lb ${playerStatus.statusClass || ''}">
-                        ${playerStatus.statusText || 'Online'} 
-                        <span id="blink"></span>
-                    </span>`;
-                    }
-                } else {
-                    // Offline - show last online time
-                    const lastOnlineTime = window.heartbeatMonitor?.getLastOnlineTime?.(lastUpdateTime) || window.formatLastPlayed(lastUpdateTime);
-                    lastGame = `<span class="last-online-time">${lastOnlineTime}</span>`;
-                }
+                let lastGame = this.getLastGameHTML(isOnline, playerStatus, lastUpdateTime);
 
                 const friendClass = friend.isRealFriend ? 'real-friend' : 'local-friend';
                 const friendBadge = !friend.isRealFriend
                     ? '<i class="fa-solid fa-users-between-lines local-badge" title="Local friend"></i>'
                     : '<i class="fa-solid fa-user-check real-badge" title="Friend"></i>';
 
-                return `
-                <div class="friend-item ${friendClass}" data-player-id="${friend.id || '0'}">
+                const friendDiv = document.createElement('div');
+                friendDiv.className = `friend-item ${friendClass}`;
+                friendDiv.setAttribute('data-player-id', friend.id || '0');
+                friendDiv.innerHTML = `
                     <div class="friend-avatar-wrapper">
-                        <img src="${friend.profilePicture || 'media/default_avatar.png'}" 
-                             class="friend-avatar" 
-                             onerror="this.src='media/default_avatar.png';" 
+                        <img src="${friend.profilePicture || 'media/default_avatar.png'}"
+                             class="friend-avatar"
+                             onerror="this.src='media/default_avatar.png';"
                              alt="Friend Avatar">
                         ${friendBadge}
                         ${isOnline ? '<span class="online-dot"></span>' : ''}
                     </div>
                     <div class="friend-info">
                         <div class="friend-name">
-                            ${friend.teamTag ? `<span class="friend-team-tag">[${this.escapeHtml(friend.teamTag)}]</span>` : ''} 
+                            ${friend.teamTag ? `<span class="friend-team-tag">[${this.escapeHtml(friend.teamTag)}]</span>` : ''}
                             ${this.escapeHtml(friend.name || 'Unknown')}
                         </div>
                         <div class="friend-status-text">
                             ${lastGame}
                         </div>
                     </div>
-                </div>
-            `;
-            }).join('');
+                `;
 
+                fragment.appendChild(friendDiv);
+            });
+
+            this.container.innerHTML = '';
+            this.container.appendChild(fragment);
             this.attachFriendListListeners();
         } catch (error) {
             console.error('Error loading friends:', error);
@@ -515,6 +519,35 @@ class FriendManager {
                 Error loading friends
             </div>
         `;
+        }
+    }
+
+    /**
+     * Generates HTML for the last game status.
+     */
+    getLastGameHTML(isOnline, playerStatus, lastUpdateTime) {
+        if (isOnline) {
+            const isInRaid = playerStatus?.status === 'in_raid' || playerStatus?.status === 'in_transit';
+
+            if (isInRaid) {
+                return `<span class="player-status-lb ${playerStatus.statusClass || ''}">
+                    ${playerStatus.statusText || 'In Raid'}
+                    <span class="raid-dots">
+                        <span class="r-dot"></span>
+                        <span class="r-dot"></span>
+                        <span class="r-dot"></span>
+                    </span>
+                </span>`;
+            } else {
+                return `<span class="player-status-lb ${playerStatus.statusClass || ''}">
+                    ${playerStatus.statusText || 'Online'}
+                    <span id="blink"></span>
+                </span>`;
+            }
+        } else {
+            // Offline - show last online time
+            const lastOnlineTime = window.heartbeatMonitor?.getLastOnlineTime?.(lastUpdateTime) || window.formatLastPlayed(lastUpdateTime);
+            return `<span class="last-online-time">${lastOnlineTime}</span>`;
         }
     }
 
@@ -544,8 +577,7 @@ class FriendManager {
 /**
  * @class CommentsManager
  * @description Handles the profile comment system including posting, loading, paginating,
- * and rendering comments on a player's profile page. Supports login-gated submissions and
- * real-time UI updates when new comments are posted.
+ * and rendering comments on a player's profile page.
  */
 class CommentsManager {
     /**
@@ -586,8 +618,8 @@ class CommentsManager {
     /**
      * Initializes the comments system for a specific player profile. Binds DOM elements,
      * disables the form if not logged in, sets up pagination, and loads existing comments.
-     * @param {string} permaLink - The player's permanent link identifier used to fetch comments
-     * @param {string} playerId - The player's unique ID (used as receiverId when posting)
+     * @param {string} permaLink - The player's permaLink
+     * @param {string} playerId - The player's unique ID
      */
     init(permaLink, playerId) {
         this.permaLink = permaLink;
@@ -710,16 +742,23 @@ class CommentsManager {
         const endIndex = startIndex + this.pagination.commentsPerPage;
         const pageComments = this.pagination.allComments.slice(startIndex, endIndex);
 
-        this.elements.commentsList.innerHTML = '';
+        // Clear existing comments efficiently
+        while (this.elements.commentsList.firstChild) {
+            this.elements.commentsList.removeChild(this.elements.commentsList.firstChild);
+        }
+
         this.elements.commentsList.classList.add('page-transition');
 
         if (pageComments.length === 0) {
             this.displayNoComments();
         } else {
-            pageComments.forEach((comment) => {
+            // batch DOM insert
+            const fragment = document.createDocumentFragment();
+            pageComments.forEach(comment => {
                 const commentElement = this.createCommentElement(comment);
-                this.elements.commentsList.appendChild(commentElement);
+                fragment.appendChild(commentElement);
             });
+            this.elements.commentsList.appendChild(fragment);
         }
 
         setTimeout(() => {
@@ -840,8 +879,7 @@ class CommentsManager {
     }
 
     /**
-     * Submits the comment text to the server, adds the returned comment to the UI
-     * on success, and shows success/error feedback on the submit button.
+     * Submits the comment to the server, adds the returned comment to the UI on success
      */
     async submitComment() {
         const originalText = this.elements.commentSubmit.innerHTML;
@@ -864,11 +902,12 @@ class CommentsManager {
                 })
             });
 
-            const data = await response.json();
-
             if (!response.ok) {
-                console.error(data.error || 'Failed to send comment');
+                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
             }
+
+            const data = await response.json();
 
             this.elements.commentInput.value = '';
 
@@ -990,6 +1029,11 @@ class CommentsManager {
             this.pagination.allComments = await response.json();
             this.pagination.allComments.sort((a, b) => b.timestamp - a.timestamp);
 
+            // Get rid of bad comments by ANY means
+            this.pagination.allComments = this.pagination.allComments.filter(comment =>
+                comment && comment.timestamp && comment.text
+            );
+
             this.pagination.totalPages = Math.ceil(this.pagination.allComments.length / this.pagination.commentsPerPage);
             this.pagination.currentPage = 1;
 
@@ -1024,49 +1068,37 @@ class CommentsManager {
 
         if (commentPermaLink) {
             playerData = window.findPlayerByPermaLink(commentPermaLink);
-
-            // Extract profile ID from player data
             if (playerData) {
                 profileId = playerData.id;
             }
         }
 
+        // Cache computed values
         let authorName = comment.author || 'Anonymous';
         let avatarUrl = comment.avatar || 'media/default_avatar.png';
         let hasPlayerData = false;
         let playerRaidCount = 0;
-
-        // Role badges
         let isStaff = false;
         let isTrusted = false;
 
         if (playerData) {
             hasPlayerData = true;
-            // Use data from leaderboard
             authorName = playerData.name || authorName;
             avatarUrl = playerData.profilePicture || avatarUrl;
             profileId = playerData.id || profileId;
             playerRaidCount = playerData.networkRaids || playerData.totalRaids || 0;
-
-            // Check for roles/badges
             isStaff = playerData.dev === true;
             isTrusted = playerData.trusted === true;
-
-            // Check online
-            if (window.heartbeatMonitor) {
-                isOnline = window.heartbeatMonitor.isOnline(profileId);
-            }
+            isOnline = window.heartbeatMonitor?.isOnline?.(profileId) || false;
         }
 
         const commentDate = new Date(comment.timestamp * 1000);
         const formattedDate = this.formatDate(commentDate);
         const decodedText = this.decodeHtmlEntities(comment.text);
         const pmcSideHtml = hasPlayerData ? window.getPlayerSideImageHTML(playerData) : '';
-        const roleBadgesHtml = this.getRoleBadgesHtml({
-            isStaff, isTrusted
-        });
+        const roleBadgesHtml = this.getRoleBadgesHtml({ isStaff, isTrusted });
         const onlineStatusHtml = hasPlayerData ? `
-            <div class="online-status-indicator ${isOnline ? 'online' : 'offline'}" 
+            <div class="online-status-indicator ${isOnline ? 'online' : 'offline'}"
                 title="${isOnline ? 'Currently Online' : 'Last seen recently'}">
                 <span class="status-dot"></span>
             </div>
@@ -1075,12 +1107,11 @@ class CommentsManager {
         let userInfoHtml = '';
 
         if (profileId) {
-            // Clickable profile
             userInfoHtml = `
                 <div class="user-info">
                     <div class="user-name-wrapper">
-                        <a href="javascript:void(0)" 
-                        onclick="openProfile('${this.escapeHtml(profileId)}', true)" 
+                        <a href="javascript:void(0)"
+                        onclick="openProfile('${this.escapeHtml(profileId)}', true)"
                         class="user-name-link ${hasPlayerData ? 'verified-user' : ''}">
                             ${this.escapeHtml(authorName)}
                         </a>
@@ -1102,7 +1133,6 @@ class CommentsManager {
                 </div>
             `;
         } else {
-            // Non-clickable
             userInfoHtml = `
                 <div class="user-info">
                     <div class="user-name-wrapper">
@@ -1195,14 +1225,18 @@ class CommentsManager {
     }
 
     // Format date for display
+    /**
+     * Formats a Date object into a localized date string.
+     * @param {Date} date - The date to format
+     * @returns {string} The formatted date string
+     */
     formatDate(date) {
-        // Implement your date formatting logic here
         return date.toLocaleDateString();
     }
 
     /**
-     * Decodes safe HTML entities (apostrophes, quotes, ampersands) back to characters.
-     * Intentionally does NOT decode &lt; and &gt; to prevent XSS.
+     * Decodes safe HTML entities (apostrophes, quotes, ampersands, less-than, greater-than) back to characters.
+     * Intentionally does NOT decode complex entities to prevent XSS.
      * @param {string} text - The HTML-entity-encoded string
      * @returns {string} The decoded string with safe entities restored
      */
@@ -1210,7 +1244,9 @@ class CommentsManager {
         const entities = {
             '&#39;': "'",
             '&quot;': '"',
-            '&amp;': '&'
+            '&amp;': '&',
+            '&lt;': '<',
+            '&gt;': '>'
         };
 
         return text.replace(/&#?\w+;/g, match => entities[match] || match);
@@ -1296,6 +1332,7 @@ class RaidTimeAnimator {
 
         // Convert
         this.currentTime = hours * 3600 + minutes * 60 + seconds;
+        this.lastDisplayTime = this.currentTime; // Track last displayed time
 
         this.animate();
     }
@@ -1307,12 +1344,16 @@ class RaidTimeAnimator {
 
         if (this.lastUpdate) {
             const deltaSeconds = (now - this.lastUpdate) / 1000;
-
             this.currentTime += deltaSeconds * this.timeMultiplier;
         }
 
         this.lastUpdate = now;
-        this.updateDisplay();
+
+        // Only update display if at least 1 second has passed since last display
+        if (Math.floor(this.currentTime) > Math.floor(this.lastDisplayTime)) {
+            this.updateDisplay();
+            this.lastDisplayTime = this.currentTime;
+        }
 
         this.animationFrame = requestAnimationFrame(() => this.animate());
     }
@@ -1508,7 +1549,6 @@ class PlayerEquipmentDisplay {
     createAttachmentHtml(item) {
         const itemId = item.template_id;
         const cleanName = this.cleanShortName(item.name);
-        const cleanShortName = this.cleanShortName(item.name);
 
         // Create a unique ID for this attachment to reference later
         const attachmentId = `attachment-${itemId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -1531,7 +1571,7 @@ class PlayerEquipmentDisplay {
                     </div>
                 </div>
                 <div class="attachment-info">
-                    <span class="attachment-name">${cleanShortName}</span>
+                    <span class="attachment-name">${cleanName}</span>
                     ${details.length > 0 ? `
                         <div class="attachment-details">
                             ${details.map(d => `<span>${d}</span>`).join(' • ')}
@@ -1548,15 +1588,25 @@ class PlayerEquipmentDisplay {
      * @param {HTMLElement} tooltipElement - The tooltip DOM element containing attachment placeholders
      */
     loadAttachmentImages(tooltipElement) {
-        const placeholders = tooltipElement.querySelectorAll('.attachment-icon-placeholder');
+        const placeholders = Array.from(tooltipElement.querySelectorAll('.attachment-icon-placeholder'));
 
-        placeholders.forEach(placeholder => {
+        if (placeholders.length === 0) return;
+
+        // Batching for image loading
+        const loadPromises = placeholders.map(placeholder => {
             const itemId = placeholder.dataset.itemId;
             const itemName = placeholder.dataset.itemName;
             const attachmentId = placeholder.dataset.attachmentId;
 
-            this.loadAttachmentImage(itemId, itemName, attachmentId, placeholder);
+            return this.loadAttachmentImage(itemId, itemName, attachmentId, placeholder);
         });
+
+        const batchSize = 3;
+        for (let i = 0; i < loadPromises.length; i += batchSize) {
+            setTimeout(() => {
+                loadPromises.slice(i, i + batchSize).forEach(promise => promise.catch(console.error));
+            }, i * 50);
+        }
     }
 
     /**
@@ -1625,18 +1675,14 @@ class PlayerEquipmentDisplay {
     }
 
 
-    async testAttachmentIcon(iconLink, iconLink2) {
-        try {
-            const cdnSuccess = await this.testImageLoad(iconLink, 1000);
-
-            if (cdnSuccess) {
-                return iconLink;
-            } else {
-                return iconLink2;
-            }
-        } catch (error) {
-            return iconLink2;
-        }
+    /**
+     * Shows a fallback icon when image loading fails.
+     * @param {HTMLElement} placeholderElement - The element to update with fallback
+     */
+    showFallbackIcon(placeholderElement) {
+        placeholderElement.innerHTML = '<i class="fa-solid fa-image" style="font-size: 20px; color: #666;"></i>';
+        placeholderElement.classList.remove('attachment-icon-placeholder');
+        placeholderElement.classList.add('attachment-icon-fallback');
     }
 
     async testImageLoad(url, timeout = 2000) {
@@ -2077,7 +2123,23 @@ class TabManager {
             return;
         }
 
-        // 1. Calculate averages
+        // do a single pass for averages
+        const stats = this.calculateStatsEfficiently(leaderboardData);
+
+        const averages = {};
+        const playerCount = leaderboardData.length;
+        Object.keys(stats).forEach(stat => {
+            averages[stat] = {
+                average: stats[stat].sum / playerCount,
+                max: stats[stat].max,
+                maxPlayer: stats[stat].maxPlayer
+            };
+        });
+
+        this.renderGlobalStats(container, averages);
+    }
+
+    calculateStatsEfficiently(leaderboardData) {
         const stats = {
             damage: { sum: 0, max: 0, maxPlayer: null },
             longestShot: { sum: 0, max: 0, maxPlayer: null },
@@ -2092,8 +2154,6 @@ class TabManager {
             pmcDeaths: { sum: 0, max: 0, maxPlayer: null },
             killToDeathRatio: { sum: 0, max: 0, maxPlayer: null }
         };
-
-        const playerCount = leaderboardData.length;
 
         leaderboardData.forEach(player => {
             if (player.isCasual || player.isBanned || player.permBanned) {
@@ -2111,24 +2171,11 @@ class TabManager {
             });
         });
 
-        // Calculate averages
-        const averages = {};
-        Object.keys(stats).forEach(stat => {
-            averages[stat] = {
-                average: stats[stat].sum / playerCount,
-                max: stats[stat].max,
-                maxPlayer: stats[stat].maxPlayer
-            };
-        });
-
-        // 3. & 4. Compare and display
-        this.renderGlobalStats(container, averages);
+        return stats;
     }
 
     renderGlobalStats(container, averages) {
         const player = this.currentPlayerObject;
-
-        // Define stat categories with display names and comparison logic
         const statCategories = [
             {
                 key: 'damage',
@@ -2308,11 +2355,10 @@ class TabManager {
         container.innerHTML = html;
     }
 
-    // Because I am lazy, (yes, you heard it right) and we have a similar formatSales in app-utils, I am just going to leave this here.
-    // Not like anyone is gonna notice x)
     formatNumber(value) {
-        if (value >= 1000000) return (value / 1000000).toFixed(1) + 'M';
-        if (value >= 1000) return (value / 1000).toFixed(1) + 'K';
-        return Math.round(value).toLocaleString();
+        const num = parseFloat(value) || 0;
+        if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+        if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+        return Math.round(num).toLocaleString();
     }
 }

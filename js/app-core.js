@@ -46,7 +46,7 @@ const ApiPaths = {
     profileComments: '/api/data/user-comments/player_',
     profileCommentsEnd: '.json',
     profileUrlPath: 'https://sptlb.katrinfoxvr.com/#id=',
-    heartbeatsPath: '/api/main/heartbeat/heartbeats.json',
+    heartbeatsPath: '../api/main/heartbeat/heartbeats.json',
     achievementsPath: '/api/data/shared/achievement_counters.json',
     pmcPfpsPath: '/api/data/pmc_avatars/',
     globalCounters: '/api/data/shared/global_counters.json',
@@ -66,7 +66,7 @@ if (isLocalhost) {
     ApiPaths.profileComments = `fallbacks/user-comments/player_`;
     ApiPaths.profileCommentsEnd = `.json?t=${Date.now()}`;
     ApiPaths.profileUrlPath = `127.0.0.1:5500/#id=`;
-    ApiPaths.heartbeatsPath = `fallbacks/heartbeats.json`;
+    ApiPaths.heartbeatsPath = `../fallbacks/heartbeats.json`;
     ApiPaths.achievementsPath = `../fallbacks/shared/achievement_counters.json`;
     ApiPaths.lastRaidsPath = `../fallbacks/player_raids/`;
     ApiPaths.globalCounters = `../fallbacks/shared/global_counters.json`;
@@ -102,7 +102,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 /**
  * Checks if a season JSON file exists on the server by making a fetch request.
- * Uses the configured season API path to construct the URL and suppresses error toasts on failure.
  * @param {number} seasonNumber - The season number to check (e.g. 4, 5, 6)
  * @returns {Promise<boolean>} Resolves to true if the season file exists and returns valid data, false otherwise
  */
@@ -113,16 +112,15 @@ async function checkSeasonExists(seasonNumber) {
 }
 
 /**
- * Discovers all available seasons by probing the server starting from season 4.
+ * Discovers all available seasons by probing the server.
  * Increments the season number and calls {@link checkSeasonExists} until a missing season is found,
- * then sorts the results from newest to oldest, prepares the latest season's data,
- * and populates the season dropdown UI.
+ * then sorts the results from newest to oldest and populates the season dropdown UI.
  * @returns {Promise<void>}
  * @throws {Error} When an unexpected network or parsing error occurs during season probing
  */
 async function initAllSeasons() {
     // Clean up before initialize
-    let seasonNumber = 4;
+    let seasonNumber = 10;
     seasons = [];
 
     try {
@@ -258,7 +256,7 @@ function populateSeasonDropdown() {
                 AppState.setAutoUpdate(true);
             } else {
                 AppState.setAutoUpdate(false);
-                
+
                 if (!AppState.isAutoUpdateEnabled) {
                     showToast('Live Data Flow was automatically disabled', 'info', 8000);
                 }
@@ -298,8 +296,7 @@ function populateSeasonDropdown() {
 
 /**
  * Fetches leaderboard data for a given season from the server, processes it, and renders it.
- * Calculates player rankings via {@link calculatePlaces}, applies color indicators,
- * checks recent player activity, computes overall stats, and initializes the profile watch list.
+ * Calculates player rankings via {@link calculatePlaces}
  * Delegates rendering to either {@link displaySimpleLeaderboard} or {@link displayLeaderboard}
  * based on the user's toggle setting. Sets the global {@link isDataReady} flag when complete.
  * @param {number} season - The season number to load
@@ -308,7 +305,8 @@ function populateSeasonDropdown() {
  */
 async function loadSeasonData(season) {
     const emptyLeaderboardNotification = document.getElementById('emptyLeaderboardNotification');
-    emptyLeaderboardNotification.style.display = 'none';
+    if (emptyLeaderboardNotification) emptyLeaderboardNotification.style.display = 'none';
+
     isDataReady = false;
 
     let newLeaderboardData = null;
@@ -317,7 +315,7 @@ async function loadSeasonData(season) {
         const data = await apiFetch(`${ApiPaths.seasonPath}${season}${ApiPaths.seasonPathEnd}`);
 
         if (!data) {
-            emptyLeaderboardNotification.style.display = 'block';
+            if (emptyLeaderboardNotification) emptyLeaderboardNotification.style.display = 'block';
             await resetStats();
             return;
         }
@@ -325,7 +323,7 @@ async function loadSeasonData(season) {
         newLeaderboardData = data.leaderboard || [];
 
         if (newLeaderboardData.length === 0 || (newLeaderboardData.length === 1 && Object.keys(newLeaderboardData[0]).length === 0)) {
-            emptyLeaderboardNotification.style.display = 'block';
+            if (emptyLeaderboardNotification) emptyLeaderboardNotification.style.display = 'block';
             await resetStats();
             return;
         }
@@ -343,7 +341,7 @@ async function loadSeasonData(season) {
         initProfileWatchList(leaderboardData);
     } catch (error) {
         console.error('Error loading season data:', error);
-        emptyLeaderboardNotification.style.display = 'block';
+        if (emptyLeaderboardNotification) emptyLeaderboardNotification.style.display = 'block';
 
         return;
     } finally {
@@ -419,18 +417,18 @@ async function displayLeaderboard(data) {
         // Check HeartbeatMonitor
         const playerStatus = window.heartbeatMonitor.getPlayerStatus(player.id);
 
-    if (!player.banned) {
-        const lastOnlineTime = heartbeatMonitor.isOnline(player.id)
-            ? '<span class="player-status-lb-online">Online</span>'
-            : window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || player.lastPlayed);
+        if (!player.banned) {
+            const lastOnlineTime = heartbeatMonitor.isOnline(player.id)
+                ? '<span class="player-status-lb-online">Online</span>'
+                : window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || player.lastPlayed);
 
-        // For lastGame
-        if (heartbeatMonitor.isOnline(player.id)) {
-            const isInRaid = playerStatus.status === 'in_raid' || playerStatus.status === 'in_transit';
+            // For lastGame
+            if (heartbeatMonitor.isOnline(player.id)) {
+                const isInRaid = playerStatus.status === 'in_raid' || playerStatus.status === 'in_transit';
 
-            if (isInRaid) {
-                // Raid
-                lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">
+                if (isInRaid) {
+                    // Raid
+                    lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">
                 ${playerStatus.statusText} 
                 <span class="raid-dots">
                     <span class="r-dot"></span>
@@ -438,19 +436,19 @@ async function displayLeaderboard(data) {
                     <span class="r-dot"></span>
                 </span>
             </span>`;
-            } else {
-                // Default
-                lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">
+                } else {
+                    // Default
+                    lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">
                 ${playerStatus.statusText} 
                 <span id="blink"></span>
             </span>`;
+                }
+            } else {
+                lastGame = `<span class="last-online-time">${lastOnlineTime}</span>`;
             }
         } else {
-            lastGame = `<span class="last-online-time">${lastOnlineTime}</span>`;
+            lastGame = `<span class="last-online-time">Banned</span>`;
         }
-    } else {
-        lastGame = `<span class="last-online-time">Banned</span>`;
-    }
 
         // Add profile standing
         let badge;
@@ -570,13 +568,8 @@ async function displayLeaderboard(data) {
 
 /**
  * Renders a simplified leaderboard table without profile pictures, account type icons,
- * prestige badges, or rank decorations. Omits players inactive for more than 15 days
- * (except the top 50) when auto-update is enabled. Builds rows in a document fragment
- * for performance, then swaps the table body in one operation. Attaches click handlers
- * for opening player profiles and team views.
- * @param {Array<Object>} data - Array of player objects for the current season, each containing
- *   properties such as id, name, rank, totalScore, pmcRaids, survivalRate, killToDeathRatio,
- *   averageLifeTime, sptVer, banned, isCasual, teamTag, absoluteLastTime, and more
+ * prestige badges, or rank decorations.
+ * @param {Array<Object>} data - Array of player objects for the current season
  * @returns {Promise<void>}
  */
 async function displaySimpleLeaderboard(data) {
@@ -824,9 +817,7 @@ function convertTimeToSeconds(time) {
 
 /**
  * Sorts leaderboard data by totalScore (descending) and assigns rank numbers and medal emojis.
- * Banned players have their stats zeroed out, are pushed to the bottom of the sort order,
- * and receive a "BANNED" rank label. Casual players receive a "Casual" rank label and are
- * excluded from numbered ranking. Mutates the input array in place.
+ * Banned players have their stats zeroed out, are pushed to the bottom of the sort order.
  * @param {Array<Object>} data - Array of player objects to rank. Each object is mutated with
  *   updated rank (number|string), medal (string), and for banned players, zeroed stat fields
  * @returns {Promise<void>}
