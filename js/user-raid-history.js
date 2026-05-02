@@ -119,7 +119,7 @@ async function initLastRaids(playerId, permaLink) {
         renderMapStats(sortedRaids);
     } catch (error) {
         closeLoader();
-        
+
         statsContainer.innerHTML = `
         <div class="no-stats-message">
                 <h3>Failed to load last raid data</h3>
@@ -423,11 +423,110 @@ function createKillerInfo(raid) {
         return '';
     }
 
+    const editionHTML = decodeAgressorEdition(raid.killedByEdition);
+    const bodyPartHTML = decodeAgressorBodyPart(raid.agressorKilledToBodyPart);
+
     return `
         <span class="meta-item">
-            <i class="fa-solid fa-skull-crossbones"></i> Killed by <span class="raid-killer">${escapeHtml(raid.agressorName)}</span>
+            <i class="fa-solid fa-skull-crossbones"></i> Killed by 
+            <span class="raid-killer" styles="color: ${editionHTML} !important">
+                ${escapeHtml(raid.agressorName)} ${bodyPartHTML}
+            </span>
         </span>
     `;
+}
+
+/**
+ * Decodes body part to readable name
+ * @param {number} killerBodyPart - EBodyPartColliderType enum value
+ * @returns {string} HTML string with body part icon and name
+ */
+function decodeAgressorBodyPart(killerBodyPart) {
+    if (!killerBodyPart || killerBodyPart === 'None' || killerBodyPart === -1) {
+        return '';
+    }
+
+    const bodyParts = {
+        // Head parts
+        'HeadCommon': '(Head, Front)',
+        'ParietalHead': '(Head, Lobe)',
+        'BackHead': '(Head, Back)',
+        'Ears': '(Head, Ears)',
+        'Eyes': '(Head, Eyes)',
+        'Jaw': '(Head, Jaw)',
+
+        // Neck parts
+        'NeckFront': '(Neck Front)',
+        'NeckBack': '(Neck Back)',
+
+        // Chest parts
+        'RibcageUp': '(Chest, Upper Ribcage)',
+        'RibcageLow': '(Chest, Lower Ribcage)',
+        'RightSideChestUp': '(Chest, Right Upper Chest)',
+        'LeftSideChestUp': '(Chest, Left Upper Chest)',
+        'RightSideChestDown': '(Chest, Right Lower Chest)',
+        'LeftSideChestDown': '(Chest, Left Lower Chest)',
+        'SpineTop': '(Chest, Upper Spine)',
+        'SpineDown': '(Chest, Lower Spine)',
+
+        // Pelvis/Stomach
+        'Pelvis': '(Pelvis)',
+        'PelvisBack': '(Lower Back)',
+
+        // Left Arm
+        'LeftUpperArm': '(Left Upper Arm)',
+        'LeftForearm': '(Left Forearm)',
+
+        // Right Arm
+        'RightUpperArm': '(Arm, Upper Arm)',
+        'RightForearm': '(Arm, Right Forearm)',
+
+        // Left Leg
+        'LeftThigh': '(Leg, Left Thigh)',
+        'LeftCalf': '(Leg, Left Calf)',
+
+        // Right Leg
+        'RightThigh': '(Leg, Right Thigh)',
+        'RightCalf': '(Leg, Right Calf)'
+    };
+
+    const part = bodyParts[killerBodyPart];
+
+    if (bodyParts[killerBodyPart]) {
+        return bodyParts[killerBodyPart];
+    }
+
+    // If unknown, format nicely
+    const formatted = killerBodyPart
+        .replace(/([A-Z])/g, ' $1')
+        .replace(/^./, str => str.toUpperCase())
+        .trim();
+
+    return `(${formatted})`;
+}
+
+/**
+ * Decodes killer edition string to readable format with icon and color
+ * @param {string} killerEdition - Edition string (e.g., "UniqueID", "Developer", "Unheard")
+ * @returns {string} HTML string with icon and colored name
+ */
+function decodeAgressorEdition(killerEdition) {
+    if (!killerEdition || killerEdition === 'Default' || killerEdition === '0') return '';
+
+    // Edition configurations
+    const editions = {
+        'Default': { name: 'Standard', color: '#94a3b8' },
+        'Developer': { name: 'Developer', color: '#3b82f6' },
+        'UniqueId': { name: 'Edge of Darkness', color: '#d18f00' },
+        'UniqueID': { name: 'Edge of Darkness', color: '#d18f00' },
+        'Sherpa': { name: 'Sherpa', color: '#86aa7c' },
+        'Emissary': { name: 'Emissary', color: '#a78bfa' },
+        'Unheard': { name: 'Unheard Edition', color: '#54d0e7' }
+    };
+
+    const edition = editions[killerEdition] || editions['Default'];
+
+    return `${edition.color}`;
 }
 
 function createStatsGrid(raid) {
@@ -715,7 +814,7 @@ function calculateMapStats(raids) {
     return sorted.map((stats, index) => ({
         ...stats,
         rank: index + 1,
-        isFavourite: index < 3 || stats.totalRaids >= 50
+        isFavourite: index < 3 && stats.totalRaids >= 40
     }));
 }
 

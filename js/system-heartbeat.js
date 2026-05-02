@@ -6,9 +6,8 @@
 
 /**
  * @class HeartbeatMonitor
- * @description Polls the server for player heartbeat data at regular intervals (5s) and
- * provides online/offline status, activity state (in raid, in menu, trading, etc.),
- * and "last online" time formatting for each tracked player.
+ * @description Polls the server for player heartbeat data at regular intervals  and
+ * provides online/offline status, activity state (in raid, in menu, trading, etc.)
  */
 class HeartbeatMonitor {
     constructor() {
@@ -16,6 +15,8 @@ class HeartbeatMonitor {
         this.previousHeartbeatData = {};
         this.onlineThreshold = 300;
         this.updateCallbacks = new Set();
+
+        this.fetchTime = 1000;
     }
 
     /**
@@ -232,7 +233,7 @@ heartbeatMonitor.subscribe(() => {
 
 setInterval(() => {
     heartbeatMonitor.fetchHeartbeats();
-}, 5000);
+}, heartbeatMonitor.fetchTime);
 
 // Load this bad boy
 heartbeatMonitor.fetchHeartbeats();

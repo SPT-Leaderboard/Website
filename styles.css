@@ -6170,19 +6170,7 @@ input[type="checkbox"]:checked:hover {
 .raid-killer {
     font-weight: 700;
     color: #ff6a6a;
-    text-shadow: 0 0 8px rgba(255, 106, 106, 0.4);
     position: relative;
-}
-
-.raid-killer::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, #ff6a6a, transparent);
-    transform: scaleX(1);
 }
 
 .stats-blocks {
@@ -6688,10 +6676,6 @@ input[type="checkbox"]:checked:hover {
     font-weight: 700;
     color: var(--text-light);
     margin: 0 0 6px 0;
-    background: linear-gradient(135deg, var(--text-light), var(--gray-dark));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 .map-raids-count {
@@ -6757,16 +6741,13 @@ input[type="checkbox"]:checked:hover {
     bottom: 12px;
     align-items: center;
     gap: 4px;
-    background: linear-gradient(45deg, #ffd700, #ff9900);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: #ffffff;
+    background-color: #fbff3b;
+    color: #000000;
     font-size: 10px;
-    font-weight: 900;
-    border-radius: 12px;
+    border-radius: 16px;
     text-transform: uppercase;
     letter-spacing: 1px;
+    padding: 0 6px 0 6px;
 }
 
 .no-stats-message {

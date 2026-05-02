@@ -7,43 +7,56 @@
         "side": null,
         "gameTime": null
     },
-    "69e20937de79937bf4ee520e": {
-        "id": "69e20937de79937bf4ee520e",
-        "timestamp": 1777016004,
-        "type": "online"
+    "695a80bf437803173ce1d613": {
+        "id": "695a80bf437803173ce1d613",
+        "timestamp": 1977710338,
+        "type": "in_raid",
+        "map": "RezervBase",
+        "side": "Bear",
+        "state": "empty",
+        "gameTime": "13:59:23",
+        "position": {
+            "x": 16.71394,
+            "y": -6.94648266,
+            "z": 42.87096
+        }
     },
-    "695a3cdf989c8d4f6cfa4e64": {
-        "id": "695a3cdf989c8d4f6cfa4e64",
-        "timestamp": 1777015976,
-        "type": "online"
-    },
-    "68f474c726aed010087e7b11": {
-        "id": "68f474c726aed010087e7b11",
-        "timestamp": 1777016016,
-        "type": "in_flea",
+    "69f4faa3256c1d567cb91c77": {
+        "id": "69f4faa3256c1d567cb91c77",
+        "timestamp": 1777710375,
+        "type": "in_stash",
         "map": "Loading...",
         "side": "Loading...",
         "state": "EMPTY",
         "gameTime": "Loading...",
-        "gameCordX": null,
-        "gameCordY": null,
-        "gameCordZ": null
+        "position": {
+            "x": null,
+            "y": null,
+            "z": null
+        }
     },
-    "69eaf24b2f55b613782f1967": {
-        "id": "69eaf24b2f55b613782f1967",
-        "timestamp": 1777016022,
+    "69f07bb58cb3fc4bac524556": {
+        "id": "69f07bb58cb3fc4bac524556",
+        "timestamp": 1777710371,
+        "type": "online"
+    },
+    "67ecbb25c4810e43b892a528": {
+        "id": "67ecbb25c4810e43b892a528",
+        "timestamp": 1977710349,
         "type": "in_raid",
         "map": "bigmap",
         "side": "Bear",
-        "state": "empty",
-        "gameTime": "07:55:20",
-        "gameCordX": -314.362061,
-        "gameCordY": 0.9271959,
-        "gameCordZ": -88.6890945
+        "state": "fired",
+        "gameTime": "14:00:26",
+        "position": {
+            "x": 268.321442,
+            "y": 8.869004,
+            "z": -10.5996466
+        }
     },
-    "6921bd7f673dad1fc424522e": {
-        "id": "6921bd7f673dad1fc424522e",
-        "timestamp": 1777016020,
+    "58b22bc05202d4329e1cbe4922e82658793554c76cf6dccde535fa413fcb6e02": {
+        "id": "58b22bc05202d4329e1cbe4922e82658793554c76cf6dccde535fa413fcb6e02",
+        "timestamp": 1777710362,
         "type": "online"
     }
 }

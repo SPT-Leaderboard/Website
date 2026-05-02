@@ -120,7 +120,7 @@ async function checkSeasonExists(seasonNumber) {
  */
 async function initAllSeasons() {
     // Clean up before initialize
-    let seasonNumber = 10;
+    let seasonNumber = 1;
     seasons = [];
 
     try {

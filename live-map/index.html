@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>SPT Leaderboard - Live Map</title>
+        <link rel="stylesheet" type="text/css" href="../styles.css">
+        <link rel="stylesheet" type="text/css" href="../live-map/maps.css">
+        <link rel="icon" href="../media/icon_transparent.png">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="SPT Leaderboard - Live Map" />
+        <meta property="og:description" content="Live Map with player deaths, and currently playing the game players" />
+        <meta property="og:image" content="https://sptlb.katrinfoxvr.com/media/icon_text.png" />
+        <meta property="og:url" content="https://sptlb.katrinfoxvr.com/" />
+        <meta property="og:type" content="website" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <link rel="stylesheet" href="https://github.hubspot.com/odometer/themes/odometer-theme-default.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Orbitron:wght@400..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <script src="../js/api-fetch.js"></script>
+        <script src="../js/app-core.js"></script>
+        <script src="../js/app-utils.js"></script>
+        <script src="../js/api-auth.js"></script>
+        <script src="../js/api-monitor.js"></script>
+        <script src="../js/system-heartbeat.js"></script>
+        <script data-cfasync="false" src="../js/app-seasons.js"></script>
+        <script src="../live-map/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="snowflake"></div>
+        <nav class="navbar" role="navigation">
+            <a href="#" aria-label="Weapon Meta">
+                <img src="../media/icon_transparent.png" alt="SPT Leaderboard Logo" class="navbar-logo">
+            </a>
+            <div class="navbar-compact-menu">
+                <!-- Stats -->
+                <div class="compact-dropdown">
+                    <button class="compact-toggle" aria-expanded="false" aria-haspopup="true">
+                        <span class="compact-icon"><i class="fa-solid fa-chart-column"></i></span>
+                        <span class="compact-text">Stats</span>
+                        <span class="dropdown-arrow"><i class="fa-solid fa-caret-down"></i></span>
+                    </button>
+                    <div class="compact-menu">
+                        <a href="/meta/" class="compact-item">
+                            <span class="item-icon"><i class="fa-solid fa-gun"></i></span>
+                            <span>Weapon Meta</span>
+                        </a>
+                        <a href="/insights/" class="compact-item">
+                            <span class="item-icon"><i class="fa-solid fa-globe"></i></span>
+                            <span>Global Insights</span>
+                        </a>
+                        <a href="/achievements/" class="compact-item">
+                            <span class="item-icon"><i class="fa-solid fa-trophy"></i></span>
+                            <span>Achievement Rate</span>
+                        </a>
+                        <a href="/items/" class="compact-item">
+                            <span class="item-icon"><i class="fa-solid fa-boxes-stacked"></i></span>
+                            <span>Items</span>
+                        </a>
+                    </div>
+                </div>
+                <a href="/../" class="navbar-link navbar-link--login compact-login-btn">
+                    <span class="login-icon"><i class="fa-solid fa-angles-left"></i></span>
+                    <span>Go back</span>
+                </a>
+                <a href="/api/network/login/index.php" class="navbar-link navbar-link--login compact-login-btn" id="loginButton">
+                    <span class="login-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></span>
+                    <span id="loginButtonText">Login</span>
+                    <div class="user-profile-pfp" id="userProfilePfp" style="display: none;">
+                        <img id="userAvatar" src="" alt="Profile" class="avatar-img">
+                    </div>
+                    <div id="networkNotifies"></div>
+                </a>
+            </div>
+        </nav>
+        <div class="top-stats-bar">
+            <div class="live-data-label" id="serverStatus">Getting API Status...</div>
+        </div>
+        <div class="control-panel">
+            <div class="panel-section">
+                <div class="section-title">
+                    <i class="fas fa-globe"></i> Map
+                </div>
+                <div class="map-selector" id="mapSelector">
+                    <!-- JS -->
+                </div>
+            </div>
+        </div>
+        <div class="bottom-nav" id="bottomNav">
+            <button class="nav-btn active" id="toggleDeathsBtn" type="button">
+                <i class="fas fa-skull-crossbones"></i> Death Markers
+            </button>
+            <button class="nav-btn active" id="toggleLabelsBtn" type="button">
+                <i class="fas fa-font"></i> Map Labels
+            </button>
+            <button class="nav-btn" id="toggleModeBtn" type="button">
+                <i class="fas fa-layer-group"></i> Display Mode
+            </button>
+            <button class="nav-btn" id="toggleFloorPanelBtn" type="button">
+                <i class="fas fa-stairs"></i> Select Floor
+            </button>
+        </div>
+        <div class="floor-panel" id="floorPanel">
+            <div class="floor-title">Select Floor</div>
+            <div class="floor-selector" id="floorSelector"></div>
+        </div>
+        <!-- DEBUG -->
+        <div class="coordinates-display" id="coordinates">
+            <div>
+                <span class="coord-label">Game:</span>
+                <span class="coord-value" id="gameCoords">-</span>
+            </div>
+            <div style="margin-top: 4px;">
+                <span class="coord-label">Pixel:</span>
+                <span class="coord-value" id="pixelCoords">-</span>
+            </div>
+        </div>
+        <!-- Zoom -->
+        <div class="zoom-info">
+            <i class="fas fa-search"></i>
+            <span id="zoomLevel">50%</span>
+        </div>
+        <!-- Status -->
+        <div class="status-bar">
+            <span>Data from </span>
+            <span class="live-indicator">SPTLB & Tarkov.dev API</span>
+            <span style="margin: 0 10px;">|</span>
+            <span id="markerCount">0 markers</span>
+        </div>
+        <!-- Viewport -->
+        <div id="viewport">
+            <div id="mapRoot">
+                <img id="mapImage" src="" alt="Base Map">
+                <img id="mapFloorImage" src="" alt="Selected Floor" class="floor-overlay">
+                <canvas id="heatmapCanvas" class="heatmap-canvas"></canvas>
+                <canvas id="zoneCanvas" class="zone-canvas"></canvas>
+                <div id="labels"></div>
+                <div id="markers"></div>
+            </div>
+        </div>
+    </body>
+
+</html>
