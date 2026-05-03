@@ -442,7 +442,7 @@ function createKillerInfo(raid) {
  * @returns {string} HTML string with body part icon and name
  */
 function decodeAgressorBodyPart(killerBodyPart) {
-    if (!killerBodyPart || killerBodyPart === 'None' || killerBodyPart === -1) {
+    if (!killerBodyPart) {
         return '';
     }
 
@@ -450,14 +450,14 @@ function decodeAgressorBodyPart(killerBodyPart) {
         // Head parts
         'HeadCommon': '(Head, Front)',
         'ParietalHead': '(Head, Lobe)',
-        'BackHead': '(Head, Back)',
+        'BackHead': '(Head, Nape)',
         'Ears': '(Head, Ears)',
         'Eyes': '(Head, Eyes)',
         'Jaw': '(Head, Jaw)',
 
         // Neck parts
-        'NeckFront': '(Neck Front)',
-        'NeckBack': '(Neck Back)',
+        'NeckFront': '(Neck, Front)',
+        'NeckBack': '(Neck, Back)',
 
         // Chest parts
         'RibcageUp': '(Chest, Upper Ribcage)',
@@ -511,7 +511,7 @@ function decodeAgressorBodyPart(killerBodyPart) {
  * @returns {string} HTML string with icon and colored name
  */
 function decodeAgressorEdition(killerEdition) {
-    if (!killerEdition || killerEdition === 'Default' || killerEdition === '0') return '';
+    if (!killerEdition) return '';
 
     // Edition configurations
     const editions = {

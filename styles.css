@@ -3785,7 +3785,7 @@ input[type="checkbox"]:checked:hover {
     color: #ffffff;
     border: 1px solid rgba(245, 158, 11, 0.6);
     box-shadow: 0 0 15px rgba(245, 158, 11, 0.7);
-    animation: badgeGlowLegendary 1.2s ease infinite;
+    animation: badgeGlowLegendary 2s ease infinite;
 }
 
 .rarity-badge.limited {
@@ -3800,18 +3800,15 @@ input[type="checkbox"]:checked:hover {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-
 @keyframes badgeGlowLegendary {
 
     0%,
     100% {
-        box-shadow: 0 0 15px rgba(245, 158, 11, 0.7);
-        background: linear-gradient(135deg, #f59e0b, #d97706);
+        box-shadow: 0 0 5px rgba(245, 158, 11, 0.7);
     }
 
     50% {
-        box-shadow: 0 0 25px rgba(245, 158, 11, 1);
-        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        box-shadow: 0 0 10px rgba(245, 158, 11, 1);
     }
 }
 
