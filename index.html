@@ -79,6 +79,10 @@
                             <span class="dropdown-arrow"><i class="fa-solid fa-caret-down"></i></span>
                         </button>
                         <div class="compact-menu">
+                            <a href="live-map/" class="compact-item">
+                                <span class="item-icon"><i class="fa-solid fa-map"></i></span>
+                                <span>Map</span>
+                            </a>
                             <a href="meta/" class="compact-item">
                                 <span class="item-icon"><i class="fa-solid fa-gun"></i></span>
                                 <span>Weapon Meta</span>
@@ -89,7 +93,7 @@
                             </a>
                             <a href="achievements/" class="compact-item">
                                 <span class="item-icon"><i class="fa-solid fa-trophy"></i></span>
-                                <span>Achievement Rate</span>
+                                <span>Achievement Rates</span>
                             </a>
                             <a href="items/" class="compact-item">
                                 <span class="item-icon"><i class="fa-solid fa-boxes-stacked"></i></span>
@@ -501,7 +505,8 @@
                     <div class="announcement-signature">
                         <span class="signature-line"></span>
                         <span class="signature-name">SPTLB Team</span>
-                        <span class="signature-title"><3</span>
+                        <span class="signature-title">
+                            <3< /span>
                     </div>
                 </div>
             </div>
@@ -561,6 +566,10 @@
             <div id="emptyLeaderboardNotification" class="animate animate__animated animate__fadeInUp" style="display: none;">Connection lost. We'll retry in a second...</div>
         </div>
         <div id="playerProfileModal" class="profile-modal">
+            <div class="loading-overlay-other active" id="loading-model">
+                <p id="loading-text"></p>
+                <div class="loading-spinner"></div>
+            </div>
             <div id="modalPlayerInfo" class="profile-modal-content">
                 <!-- JS Profile -->
             </div>

@@ -49,6 +49,9 @@ function openProfile(playerId, reOpenProfile = false) {
     modal.classList.remove('hidden');
     modal.classList.add('active');
 
+    window.profileLoader = new ProfileLoader();
+    window.profileLoader.show('Opening profile...');
+
     showPublicProfile(modalContent, player);
 }
 
@@ -62,6 +65,7 @@ function openProfile(playerId, reOpenProfile = false) {
 async function showPublicProfile(container, player) {
 
     // Show loader
+    window.profileLoader.setText('Opening profile...');
     container.innerHTML = `
         <div class="loader-dots" style="grid-column: 1 / -1;">
             <div class="shimmer-bg"></div>
@@ -71,7 +75,6 @@ async function showPublicProfile(container, player) {
                 <div class="dot"></div>
                 <div class="dot"></div>
             </div>
-            <p class="dots-text">Loading...</p>
         </div>
     `;
 
@@ -91,6 +94,8 @@ async function showPublicProfile(container, player) {
         ProfileState.currentHighlightedPlayerId = player.id;
     }
 
+    window.profileLoader = new ProfileLoader();
+    window.profileLoader.setText('Getting customization...');
     const playerDataResponse = await getCustomProfileSettings(player.id);
     const playerData = playerDataResponse?.settings || null;
 
@@ -98,7 +103,7 @@ async function showPublicProfile(container, player) {
     const leaderboardTable = document.getElementById('leaderboardTable');
     leaderboardTable.classList.add('hidden');
 
-    if (playerData) {
+    if (playerData && !player.forbidNameChange) {
         player.profileTheme = playerData.profileTheme ?? 'dark';
         player.usePrestigeStyling = playerData.usePrestigeStyling ?? false;
         player.prestigeBackground = playerData.prestigeBackground ?? 'none';
@@ -116,6 +121,10 @@ async function showPublicProfile(container, player) {
     } else if (isLocalhost) {
         player.discordUser = 'mydiscord';
         player.customPfp = 'https://i.pinimg.com/736x/24/63/ce/2463ce365a48ee9293a4b9743bd67378.jpg';
+    }
+
+    if (player.forbidNameChange) {
+        player.profilePicture = "media/default_banned.png";
     }
 
     // Assign a showcase we got from API
@@ -149,6 +158,8 @@ async function showPublicProfile(container, player) {
     } else {
         player.showcase = playerDataResponse?.showcase || null;
     }
+
+    window.profileLoader.setText('Processing...');
 
     // Disable auto updating on the background
     AutoUpdater.setAutoUpdateEnabled(false);
@@ -293,6 +304,7 @@ async function showPublicProfile(container, player) {
         lastGame = `<span class="last-online-time">Banned</span>`;
     }
 
+    window.profileLoader.setText('Rendering...');
     const html = String.raw;
 
     const template = html`
@@ -310,7 +322,7 @@ async function showPublicProfile(container, player) {
                     <div class="level-badges">
                         ${player.pmcLevel ? `<div class="level-badge pmc">PMC Lvl. ${player.pmcLevel}</div>` : ''}
                         ${player.scavLevel ? `<div class="level-badge scav">SCAV Lvl. ${player.scavLevel}</div>` : ''}
-                        ${player.discordUser ? `<div class="level-badge discord"><i class="fa-brands fa-discord"></i> ${escapeHtml(player.discordUser)}</div>` : ''}
+                        ${escapeHtml(player.discordUser) ? `<div class="level-badge discord"><i class="fa-brands fa-discord"></i> ${escapeHtml(player.discordUser)}</div>` : ''}
                     </div>
                 </div>
                 <div class="card-right">
@@ -355,7 +367,7 @@ async function showPublicProfile(container, player) {
                                     <div class="info-item">
                                         <div class="info-label">
                                             <i class="fa-regular fa-clock"></i>
-                                            <span>Registered (SPTLB):</span>
+                                            <span>Registered (Season):</span>
                                         </div>
                                         <div class="info-value">${lbRegDate} (${formatLastPlayedRaid(player.registeredOnLeaderboard)})</div>
                                     </div>
@@ -371,7 +383,7 @@ async function showPublicProfile(container, player) {
                                             <i class="fa-regular fa-id-card"></i>
                                             <span>Profile ID:</span>
                                         </div>
-                                        <div class="info-value">${player.id || 'N/A'}</div>
+                                        <div class="info-value">${escapeHtml(player.id) || 'N/A'}</div>
                                     </div>
                                     <div class="info-item">
                                         <div class="info-label">
@@ -461,18 +473,24 @@ async function showPublicProfile(container, player) {
             `<div class="player-overview player-showcase">
                         <div class="showcase-mini">
                             <div class="showcase-mini-header">
-                                <span class="showcase-title">Item Showcase</span>
+                                <span class="showcase-title">Showcase</span>
                             </div>
-                            <div class="showcase-items-mini"> ${Object.values(player.showcase || {}).filter(item => item !== null && item !== undefined && item.item_id).map(item => ` <div class="showcase-item-mini" data-rarity="${item.rarity}">
-                                    <div class="item-mini-icon">
-                                        <img src="${item.icon_path.replace(/^\/\.\.\//, '/')}" alt="${escapeHtml(item.name)}">
-                                        <div class="item-mini-glow"></div>
-                                    </div>
-                                    <div class="item-mini-tooltip">
-                                        <span class="item-mini-name">${escapeHtml(item.name)}</span>
-                                        <span class="item-mini-price">${item.base_price} LC</span>
-                                    </div>
-                                </div> `).join('')}
+                            <div class="showcase-items-mini"> 
+                                ${Object.values(player.showcase || {}).filter(item => item !== null && item !== undefined && item.item_id).map(item => ` 
+                                    <div class="showcase-item-mini" data-rarity="${item.rarity}" data-item-name="${escapeHtml(item.name)}">
+                                        <div class="rarity-badge ${item.rarity}">
+                                            <span class="rarity-text">${item.rarity.toUpperCase()}</span>
+                                        </div>
+                                        <div class="item-mini-icon">
+                                            <img src="${item.icon_path.replace(/^\/\.\.\//, '/')}" alt="${escapeHtml(item.name)}">
+                                            <div class="item-mini-glow"></div>
+                                        </div>
+                                        <div class="item-mini-tooltip">
+                                            <span class="item-mini-name">${escapeHtml(item.name)}</span>
+                                            <span class="item-mini-price">${item.base_price} LC</span>
+                                        </div>
+                                    </div> 
+                                `).join('')}
                             </div>
                         </div>
                     </div>`
@@ -575,33 +593,49 @@ async function showPublicProfile(container, player) {
                         <div class="tab-pane active" id="tab-summary">
                             <div class="stats-grid">
                                 <div class="stat-card">
-                                    <div class="stat-value">${player.currentWinstreak.toLocaleString()}</div>
+                                    <div class="stat-value-wrapper">
+                                        <div class="stat-value">${player.currentWinstreak.toLocaleString()} <div class="stat-trend" id="trend-winstreak"></div></div>
+                                    </div>
                                     <div class="stat-label">Current Raid Streak</div>
+                                    <div class="stat-comparison" id="compare-winstreak"></div>
                                 </div>
                                 <div class="stat-card">
-                                    <div class="stat-value">${player.longestShot.toLocaleString()}m</div>
-                                    <div class="stat-label">Avg Engage Distance</div>
+                                    <div class="stat-value-wrapper">
+                                        <div class="stat-value">${player.longestShot.toLocaleString()}m <div class="stat-trend" id="trend-longestShot"></div></div>
+                                    </div>
+                                    <div class="stat-label">Longest Shot</div>
+                                    <div class="stat-comparison" id="compare-longestShot"></div>
                                 </div>
                                 <div class="stat-card">
-                                    <div class="stat-value">${player.pmcKills.toLocaleString()}</div>
+                                    <div class="stat-value-wrapper">
+                                        <div class="stat-value">${player.pmcKills.toLocaleString()} <div class="stat-trend" id="trend-pmcKills"></div></div>
+                                    </div>
                                     <div class="stat-label">PMC Kills</div>
+                                    <div class="stat-comparison" id="compare-pmcKills"></div>
                                 </div>
                                 <div class="stat-card">
-                                    <div class="stat-value">${player.scavsKilled.toLocaleString()}</div>
+                                    <div class="stat-value-wrapper">
+                                        <div class="stat-value">${player.scavsKilled.toLocaleString()} <div class="stat-trend" id="trend-scavsKilled"></div></div>
+                                    </div>
                                     <div class="stat-label">SCAV Kills</div>
+                                    <div class="stat-comparison" id="compare-scavsKilled"></div>
                                 </div>
                                 <div class="stat-card">
-                                    <div class="stat-value">${player.bossesKilled.toLocaleString()}</div>
+                                    <div class="stat-value-wrapper">
+                                        <div class="stat-value">${player.bossesKilled.toLocaleString()} <div class="stat-trend" id="trend-bossesKilled"></div></div>
+                                    </div>
                                     <div class="stat-label">Boss Kills</div>
+                                    <div class="stat-comparison" id="compare-bossesKilled"></div>
                                 </div>
                                 <div class="stat-card">
-                                    <div class="stat-value">${player.damage.toLocaleString()}</div>
+                                    <div class="stat-value-wrapper">
+                                        <div class="stat-value">${player.damage.toLocaleString()} <div class="stat-trend" id="trend-damage"></div></div>
+                                    </div>
                                     <div class="stat-label">Dmg Dealt</div>
+                                    <div class="stat-comparison" id="compare-damage"></div>
                                 </div>
                             </div>
-                            <div class="recent-raids-stats" id="recent-raids-stats">
-                                <!-- JavaScript -->
-                            </div>
+                            <div class="recent-raids-stats" id="recent-raids-stats"></div>
                         </div>
                         <!-- Season Records -->
                         <div class="tab-pane" id="tab-records">
@@ -664,10 +698,6 @@ async function showPublicProfile(container, player) {
                     <span class="rank-name" style="background: ${rank.gradient}; border-color: ${rank.borderColor}; color: ${rank.textColor};"> ${rank.fullName} </span>
                 </div>
                 <div class="playermodel-image">
-                    <div class="loading-overlay-other active" id="loading-model">
-                        <p>Auto-resizing...</p>
-                        <div class="loading-spinner"></div>
-                    </div>
                     <img src="${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png" alt="Player Model Preview" onerror="this.onerror=null; this.src='media/default_full_pmc_avatar.png';" />
                 </div>
                 <div class="playermodel-stats profile-section">
@@ -855,6 +885,7 @@ async function showPublicProfile(container, player) {
     container.innerHTML = template;
 
     // Crop the image
+    window.profileLoader.setText('Getting Player Image...');
     await loadAndCropPlayerImage(player);
 
     // Setup close handlers first
@@ -862,6 +893,7 @@ async function showPublicProfile(container, player) {
 
     // Render stats and init the profile
     // Skip this if player is not using Stattrack
+    window.profileLoader.setText('Processing Profile Data...');
     if (player.isUsingStattrack) {
         await renderWeaponList(player.permaLink, player.stattrack_weapons || {});
     }
@@ -877,11 +909,12 @@ async function showPublicProfile(container, player) {
 
     //user-raid-history.js
     //Use permalink to point out different profiles (but same player)
-    initLastRaids(player.id, player.permaLink);
+    window.profileLoader.setText('Loading Raids...');
+    await initLastRaids(player.id, player.permaLink);
     //battlepass-calculator.js
     await initHOF(player, bestWeapon);
     //user-quests.js
-    loadQuestData(player.completed_quests);
+    await loadQuestData(player.completed_quests);
     //user-hideout.js
     loadHideoutData(player.hideout);
     //user-community.js
@@ -891,8 +924,9 @@ async function showPublicProfile(container, player) {
     ProfileState.commentsManager.init(player.permaLink, player.id);
 
     // Friends user-community.js
+    window.profileLoader.setText('Loading Friends...');
     ProfileState.friendManager = new FriendManager();
-    ProfileState.friendManager.init(player);
+    await ProfileState.friendManager.init(player);
 
     // Records
     ProfileState.tabManager = new TabManager(player.id, leaderboardData);
@@ -910,6 +944,9 @@ async function showPublicProfile(container, player) {
     }
 
     setupRegistrationDropdown();
+
+    window.profileLoader.setText('Done!');
+    window.profileLoader.hide();
 
     // I have no clue, this is bullshit but it works.
     // upd 2/22/2026: *kinda* fixed but still would like to make it the other way.
@@ -1493,6 +1530,85 @@ function renderDetailedStatus(player) {
     return ``;
 }
 
+function updateSummaryTrends(comparisons) {
+    const statMappings = {
+        winstreak: { value: comparisons.winstreak, element: 'trend-winstreak', compare: 'compare-winstreak' },
+        longestShot: { value: comparisons.longestShot, element: 'trend-longestShot', compare: 'compare-longestShot' },
+        pmcKills: { value: comparisons.pmcKills, element: 'trend-pmcKills', compare: 'compare-pmcKills' },
+        scavsKilled: { value: comparisons.scavsKilled, element: 'trend-scavsKilled', compare: 'compare-scavsKilled' },
+        bossesKilled: { value: comparisons.bossesKilled, element: 'trend-bossesKilled', compare: 'compare-bossesKilled' },
+        damage: { value: comparisons.damage, element: 'trend-damage', compare: 'compare-damage' }
+    };
+
+    for (const [key, mapping] of Object.entries(statMappings)) {
+        const comparison = mapping.value;
+        const trendElement = document.getElementById(mapping.element);
+        const compareElement = document.getElementById(mapping.compare);
+
+        if (!trendElement || !comparison) continue;
+
+        // Update trend icon and color
+        if (comparison.isHigher) {
+            trendElement.innerHTML = '<i class="fas fa-arrow-up trend-up"></i>';
+            trendElement.className = 'stat-trend trend-positive';
+            if (compareElement) {
+                compareElement.innerHTML = `<span class="comparison-text positive">+${comparison.percentage.toFixed(1)}% above average</span>`;
+                compareElement.style.display = 'block';
+            }
+        } else if (comparison.isLower) {
+            trendElement.innerHTML = '<i class="fas fa-arrow-down trend-down"></i>';
+            trendElement.className = 'stat-trend trend-negative';
+            if (compareElement) {
+                compareElement.innerHTML = `<span class="comparison-text negative">${comparison.percentage.toFixed(1)}% below average</span>`;
+                compareElement.style.display = 'block';
+            }
+        } else {
+            trendElement.innerHTML = '<i class="fas fa-minus trend-equal"></i>';
+            trendElement.className = 'stat-trend trend-neutral';
+            if (compareElement) {
+                compareElement.innerHTML = `<span class="comparison-text neutral">Equal to average</span>`;
+                compareElement.style.display = 'block';
+            }
+        }
+
+        if (compareElement) {
+            compareElement.title = `Global average: ${comparison.globalAverage.toLocaleString()}`;
+        }
+    }
+}
+
+window.addEventListener('globalAveragesReady', (event) => {
+    const { averages, player } = event.detail;
+
+    if (!averages || !player) return;
+
+    // Calculate comparisons for summary stats
+    const comparisons = {
+        winstreak: calculateComparison(averages.currentWinstreak?.average || 0, player.currentWinstreak || 0),
+        longestShot: calculateComparison(averages.longestShot?.average || 0, player.longestShot || 0),
+        pmcKills: calculateComparison(averages.pmcKills?.average || 0, player.pmcKills || 0),
+        scavsKilled: calculateComparison(averages.scavsKilled?.average || 0, player.scavsKilled || 0),
+        bossesKilled: calculateComparison(averages.bossesKilled?.average || 0, player.bossesKilled || 0),
+        damage: calculateComparison(averages.damage?.average || 0, player.damage || 0)
+    };
+
+    updateSummaryTrends(comparisons);
+});
+
+function calculateComparison(globalAverage, playerValue) {
+    const difference = playerValue - globalAverage;
+    const percentage = globalAverage > 0 ? (difference / globalAverage) * 100 : 0;
+
+    return {
+        difference: difference,
+        percentage: Math.abs(percentage),
+        isHigher: difference > 0,
+        isLower: difference < 0,
+        isEqual: difference === 0,
+        globalAverage: globalAverage
+    };
+}
+
 // #endregion
 
 // #region Modal Close & Scroll
@@ -1648,3 +1764,51 @@ function closeLoader() {
     }, 300); // 300ms - animation lenght (CSS)
 }
 // #endregion
+class ProfileLoader {
+    constructor() {
+        this.loaderElement = document.getElementById('loading-model');
+        this.loaderText = document.getElementById('loading-text');
+        this.contentElement = document.getElementById('modalPlayerInfo');
+    }
+
+    /**
+     * Show loader with custom text
+     * @param {string} text - Text to display (default: 'Showing profile...')
+     */
+    show(text = 'Showing profile...') {
+        if (this.loaderElement) {
+            setTimeout(() => {
+                this.loaderElement.classList.add('active');
+            }, 300);
+
+            this.updateText(text);
+        }
+    }
+
+    /**
+     * Hide loader and show content
+     */
+    hide() {
+        setTimeout(() => {
+            this.loaderElement.classList.remove('active');
+        }, 1000);
+    }
+
+    /**
+     * Update loader text
+     * @param {string} text - New text to display
+     */
+    updateText(text) {
+        if (this.loaderText) {
+            this.loaderText.textContent = text;
+        }
+    }
+
+    /**
+     * Update text without showing/hiding
+     * @param {string} text - Text to display
+     */
+    setText(text) {
+        this.updateText(text);
+    }
+}

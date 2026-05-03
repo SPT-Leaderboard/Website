@@ -1123,7 +1123,7 @@ h1 {
     cursor: pointer;
     border-color: var(--accent-teal);
     color: var(--accent-teal);
-    box-shadow: 0 6px 20px rgba(100, 255, 218, 0.2);
+    box-shadow: none !important;
 }
 
 /* Leader board */
@@ -2793,185 +2793,136 @@ input[type="checkbox"]:checked:hover {
 }
 
 /* Previous winners */
-.winners-container {
+.winners-wrapper-center {
+    margin: 5px;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.winners-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.winners-header h2 {
+    font-size: 1.2rem;
+    margin: 0;
+    color: var(--text-light);
+}
+
+.winners-horizontal-container {
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    gap: 15px;
-    min-width: 900px;
-    perspective: 1000px;
-}
-
-.winner-card {
-    width: 310px;
-    background: linear-gradient(145deg, rgba(23, 42, 69, 0.7), rgba(23, 42, 69, 0.4));
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 16px;
+    background: transparent;
     border-radius: 16px;
-    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.winner-horizontal-card {
     text-align: center;
-    box-sizing: border-box;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(100, 255, 218, 0.3);
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.2),
-        inset 0 1px 1px rgba(255, 255, 255, 0.1);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    margin: 0;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    min-width: 100px;
+}
+
+.winner-horizontal-card:hover {
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.winner-horizontal-card.first-place {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.05));
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.winner-avatar-container {
     position: relative;
-    overflow: hidden;
-    animation: cardAppear 0.4s ease forwards;
-    animation-delay: calc(0.1 * 0.15s);
-    transform-style: preserve-3d;
+    display: inline-block;
+    margin-bottom: 8px;
 }
 
-@keyframes cardAppear {
-    0% {
-        opacity: 0;
-        transform: translateY(30px) rotateX(-10deg) scale(0.9);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(0) rotateX(0) scale(1);
-    }
+.winner-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    transition: all 0.3s ease;
 }
 
-.winner-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.3),
-        inset 0 1px 1px rgba(255, 255, 255, 0.15);
-    border-color: rgba(100, 255, 218, 0.5);
+.winner-horizontal-card.first-place .winner-avatar {
+    width: 70px;
+    height: 70px;
+    border: 3px solid #ffd700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.winner-medal {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    background: var(--darker);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* first place */
-.winner-card:nth-child(2)::before {
-    background: linear-gradient(90deg,
-            transparent,
-            rgba(255, 215, 0, 0.2),
-            transparent);
+.winner-medal.medal-gold {
+    background: linear-gradient(135deg, #ffd700, #ffb347);
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
 }
 
-.winner-card:first-child,
-.winner-card:last-child {
-    background: linear-gradient(145deg,
-            rgba(36, 62, 83, 0.7),
-            rgba(36, 62, 83, 0.4));
-    transform: scale(0.95) translateY(-10px);
-    opacity: 0.95;
-    padding: 22px;
-    border: 1px solid rgba(100, 255, 218, 0.2);
-    z-index: 5;
+.winner-medal.medal-silver {
+    background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
 }
 
-.winner-card:first-child::after {
-    background: linear-gradient(90deg,
-            rgba(192, 192, 192, 0.3),
-            rgba(192, 192, 192, 0.6),
-            rgba(192, 192, 192, 0.3));
+.winner-medal.medal-bronze {
+    background: linear-gradient(135deg, #cd7f32, #b87333);
 }
 
-.winner-card:last-child::after {
-    background: linear-gradient(90deg,
-            rgba(205, 127, 50, 0.3),
-            rgba(205, 127, 50, 0.6),
-            rgba(205, 127, 50, 0.3));
-}
-
-.winner-card:first-child:hover,
-.winner-card:last-child:hover {
-    transform: scale(0.98) translateY(-15px);
-    opacity: 1;
+.winner-info {
+    text-align: center;
 }
 
 .winner-name {
-    font-weight: 800;
-    margin-bottom: 8px;
-    font-size: 1.2em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: var(--text-light);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    position: relative;
-}
-
-.winner-card:nth-child(2) .winner-name {
-    color: gold;
-    text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-}
-
-.winner-rank {
-    color: var(--accent-teal);
-    margin: 5px 0;
-    font-weight: 800;
-    font-size: 1.4em;
-    letter-spacing: 1px;
-    position: relative;
-}
-
-.winner-card:nth-child(2) .winner-rank {
-    color: gold;
-    font-size: 1.6em;
-    text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
-}
-
-.winner-skill,
-.winner-stats {
-    margin: 12px 0;
-    font-size: 0.95em;
     font-weight: 600;
-    color: var(--accent-teal);
-    letter-spacing: 1px;
-    display: flex;
-    justify-content: space-between;
-    place-self: center;
-    padding: 10px 15px;
-    background: linear-gradient(145deg,
-            rgba(10, 25, 47, 0.4),
-            rgba(10, 25, 47, 0.2));
-    border-radius: 10px;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* 1st place card styling */
-.winner-card:nth-child(2) .winner-skill,
-.winner-card:nth-child(2) .winner-stats {
-    background: linear-gradient(145deg,
-            rgba(30, 58, 107, 0.5),
-            rgba(30, 58, 107, 0.3));
+    font-size: 0.9rem;
     color: var(--text-light);
-    border: 1px solid gold;
+    margin-bottom: 4px;
 }
 
-.winner-stats span:last-child,
-.winner-skill span:last-child {
-    color: var(--accent-blue);
-    font-weight: 700;
-    text-shadow: 0 0 6px rgba(30, 144, 255, 0.4);
-    font-size: 1.1em;
+.winner-rank-badge {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 4px;
+    white-space: nowrap;
 }
 
-#winners h2 {
-    text-align: center;
-    font-size: 1.6em;
-    margin-bottom: 30px;
-    color: var(--text-light);
-    text-shadow: 0 2px 10px rgba(100, 255, 218, 0.3);
-    position: relative;
-    padding-bottom: 15px;
+.winner-score {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent);
 }
 
 /* Welcome screen styles */
@@ -3641,6 +3592,7 @@ input[type="checkbox"]:checked:hover {
     transition: all 0.3s ease;
     cursor: help;
     animation: itemFloat 3s ease-in-out infinite;
+    margin-top: 8px;
 }
 
 .showcase-item-mini:nth-child(1) {
@@ -3737,7 +3689,7 @@ input[type="checkbox"]:checked:hover {
 
 .item-mini-tooltip {
     position: absolute;
-    bottom: calc(100% + 10px);
+    bottom: calc(100% + 20px);
     left: 50%;
     transform: translateX(-50%) translateY(10px);
     background: rgb(31 31 31);
@@ -3787,6 +3739,114 @@ input[type="checkbox"]:checked:hover {
     font-weight: bold;
 }
 
+/* Rarity Badge */
+.rarity-badge {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    z-index: 10;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    animation: badgeSlideDown 0.3s ease;
+}
+
+.rarity-badge.common {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+    color: #e5e7eb;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 8px rgba(107, 114, 128, 0.4);
+}
+
+.rarity-badge.rare {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #ffffff;
+    border: 1px solid rgba(59, 130, 246, 0.5);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+.rarity-badge.epic {
+    background: linear-gradient(135deg, #a855f7, #7c3aed);
+    color: #ffffff;
+    border: 1px solid rgba(168, 85, 247, 0.5);
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
+}
+
+.rarity-badge.legendary {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #ffffff;
+    border: 1px solid rgba(245, 158, 11, 0.6);
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.7);
+    animation: badgeGlowLegendary 1.2s ease infinite;
+}
+
+.rarity-badge.limited {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #ffffff;
+    border: 1px solid rgba(239, 68, 68, 0.6);
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.7);
+}
+
+.rarity-text {
+    font-weight: 800;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+
+@keyframes badgeGlowLegendary {
+
+    0%,
+    100% {
+        box-shadow: 0 0 15px rgba(245, 158, 11, 0.7);
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    50% {
+        box-shadow: 0 0 25px rgba(245, 158, 11, 1);
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    }
+}
+
+.showcase-item-mini:hover .rarity-badge {
+    transform: translateX(-50%) scale(1.05);
+    transition: transform 0.2s ease;
+}
+
+/* rarity glows */
+.showcase-item-mini[data-rarity="common"] .item-mini-glow {
+    background: radial-gradient(circle, rgba(160, 160, 160, 0.3), rgba(100, 100, 100, 0.1));
+    box-shadow: inset 0 0 20px rgba(160, 160, 160, 0.6);
+}
+
+.showcase-item-mini[data-rarity="rare"] .item-mini-glow {
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.4), rgba(37, 99, 235, 0.1));
+    box-shadow: inset 0 0 25px rgba(59, 130, 246, 0.8);
+}
+
+.showcase-item-mini[data-rarity="epic"] .item-mini-glow {
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.45), rgba(124, 58, 237, 0.1));
+    box-shadow: inset 0 0 30px rgba(168, 85, 247, 0.9);
+}
+
+.showcase-item-mini[data-rarity="legendary"] .item-mini-glow {
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.5), rgba(217, 119, 6, 0.15));
+    box-shadow: inset 0 0 35px rgba(245, 158, 11, 1);
+}
+
+.showcase-item-mini[data-rarity="limited"] .item-mini-glow {
+    background: radial-gradient(circle, rgba(239, 68, 68, 0.5), rgba(220, 38, 38, 0.15));
+    box-shadow: inset 0 0 35px rgba(239, 68, 68, 1);
+}
+
+/* Stat value */
 .stat-value {
     font-size: 1.4rem;
     font-weight: 800;
@@ -8443,6 +8503,54 @@ input[type="checkbox"]:checked:hover {
     font-weight: 600;
 }
 
+.stat-trend {
+    display: inline;
+    font-size: 16px;
+}
+
+.trend-up {
+    color: #10b981;
+    animation: slideUp 0.5s ease;
+}
+
+.trend-down {
+    color: #ef4444;
+    animation: slideDown 0.5s ease;
+}
+
+.trend-equal {
+    color: #6b7280;
+}
+
+.stat-comparison {
+    margin-top: 8px;
+    font-size: 11px;
+    display: none;
+}
+
+.comparison-text {
+    padding: 4px 8px;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.1);
+    display: inline-block;
+}
+
+.comparison-text.positive {
+    color: #10b981;
+    border: 1px solid #10b981;
+}
+
+.comparison-text.negative {
+    color: #ef4444;
+    border: 1px solid #ef4444;
+}
+
+.comparison-text.neutral {
+    color: #6b7280;
+    border: 1px solid #6b7280;
+}
+
+
 .player-card {
     background: linear-gradient(135deg,
             rgba(255, 255, 255, 0.06) 0%,
@@ -8869,13 +8977,10 @@ input[type="checkbox"]:checked:hover {
 /* Universal use */
 .loading-overlay-other {
     position: absolute;
-    width: 150px;
     height: 50px;
-    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    border-radius: 14px;
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     gap: 5px;
@@ -8908,7 +9013,7 @@ input[type="checkbox"]:checked:hover {
     border: 3px solid rgba(255, 255, 255, 0.1);
     border-top-color: #a78bfa;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spin 0.3s linear infinite;
 }
 
 .error-message {

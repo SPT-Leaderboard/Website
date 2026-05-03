@@ -236,7 +236,7 @@ function getRank(rating, maxRating = 2000, res = 32) {
  */
 function getRankText(rank) {
     switch (rank) {
-        case 1: return '👑 First place 👑';
+        case 1: return 'First place';
         case 2: return 'Second place';
         case 3: return 'Third place';
         default: return '';

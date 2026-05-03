@@ -1298,7 +1298,6 @@ class CommentsManager {
 }
 // #endregion
 
-
 // #region Profile Heartbeat Animator
 /**
  * @class RaidTimeAnimator
@@ -2029,11 +2028,14 @@ class TabManager {
         this.currentPlayerObject = null;
         this.activeTab = 'summary';
         this.leaderboardDataToProccess = leaderboardData;
+        this.globalAverages = null;
         this.init();
     }
 
-    init() {
+    async init() {
         const tabs = document.querySelectorAll('.raid-tab');
+        await this.getGlobalStatistics();
+
         tabs.forEach(tab => {
             tab.addEventListener('click', (e) => this.switchTab(e));
         });
@@ -2060,10 +2062,6 @@ class TabManager {
         currentPane.classList.add(this.activeTab === 'summary' ? 'next' : 'prev');
 
         newPane.classList.add('active');
-
-        if (tabId === 'records') {
-            await this.getGlobalStatistics();
-        }
 
         setTimeout(() => {
             currentPane.classList.remove('prev', 'next');
@@ -2097,8 +2095,9 @@ class TabManager {
         `;
 
         try {
-            this.getGlobalStatsPerPlayer(this.leaderboardDataToProccess);
+            this.globalAverages = await this.getGlobalStatsPerPlayer(this.leaderboardDataToProccess);
 
+            this.emitAveragesReady();
         } catch (error) {
             console.error('Error loading data:', error);
         }
@@ -2108,19 +2107,15 @@ class TabManager {
         const container = document.getElementById('tab-records');
 
         if (!leaderboardData || leaderboardData.length === 0) {
-            container.innerHTML = `
-            <div class="error-message">No data available</div>
-        `;
-            return;
+            container.innerHTML = `<div class="error-message">No data available</div>`;
+            return null;
         }
 
         this.currentPlayerObject = window.findPlayer(this.currentPlayerId);
 
         if (!this.currentPlayerObject) {
-            container.innerHTML = `
-            <div class="error-message">Player not found in leaderboard</div>
-        `;
-            return;
+            container.innerHTML = `<div class="error-message">Player not found in leaderboard</div>`;
+            return null;
         }
 
         // do a single pass for averages
@@ -2137,11 +2132,44 @@ class TabManager {
         });
 
         this.renderGlobalStats(container, averages);
+
+        return averages;
+    }
+
+    emitAveragesReady() {
+        const event = new CustomEvent('globalAveragesReady', {
+            detail: {
+                averages: this.globalAverages,
+                player: this.currentPlayerObject
+            }
+        });
+
+        window.dispatchEvent(event);
+    }
+
+    getComparisonForStat(statKey, playerValue) {
+        if (!this.globalAverages || !this.globalAverages[statKey]) {
+            return null;
+        }
+
+        const globalAverage = this.globalAverages[statKey].average;
+        const difference = playerValue - globalAverage;
+        const percentage = globalAverage > 0 ? (difference / globalAverage) * 100 : 0;
+
+        return {
+            difference: difference,
+            percentage: percentage,
+            isHigher: difference > 0,
+            isLower: difference < 0,
+            isEqual: difference === 0,
+            globalAverage: globalAverage
+        };
     }
 
     calculateStatsEfficiently(leaderboardData) {
         const stats = {
             damage: { sum: 0, max: 0, maxPlayer: null },
+            currentWinstreak: { sum: 0, max: 0, maxPlayer: null },
             longestShot: { sum: 0, max: 0, maxPlayer: null },
             scavTotalProfit: { sum: 0, max: 0, maxPlayer: null },
             totalProfit: { sum: 0, max: 0, maxPlayer: null },

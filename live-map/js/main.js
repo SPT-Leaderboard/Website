@@ -518,10 +518,8 @@ class MapEngine {
             marker.appendChild(stateBadge);
         }
 
-        // Remove old state classes
-        stateBadge.classList.remove('state-fired', 'state-moving', 'state-idle', 'state-extracting');
+        stateBadge.classList.remove('state-fired', 'state-looting', 'state-default');
 
-        // Add state-specific class
         let stateClass = '';
         let displayState = '';
         let icon = '';
@@ -542,35 +540,28 @@ class MapEngine {
 
         stateBadge.className = `player-state-badge ${stateClass}`;
         stateBadge.innerHTML = `
-        <div class="wrapper-state">
-            <span class="player-state-text">${displayState}</span>
-            <span class="raid-dots">
-                <span class="r-dot"></span>
-                <span class="r-dot"></span>
-                <span class="r-dot"></span>
-            </span>
-        </div>
-    `;
-    }
-
-    // TODO
-    getDisplayState(state) {
-        const states = {
-            'fired': 'In Combat'
-        };
-
-        return states[state] || 'Traveling';
+            <div class="wrapper-state">
+                <span class="player-state-text">${displayState}</span>
+                <span class="raid-dots">
+                    <span class="r-dot"></span>
+                    <span class="r-dot"></span>
+                    <span class="r-dot"></span>
+                </span>
+            </div>
+        `;
     }
 
     removeLivePlayerMarker(playerId) {
         if (this.livePlayerMarkers.has(playerId)) {
             const playerData = this.livePlayerMarkers.get(playerId);
+
             if (playerData.marker) {
                 playerData.marker.remove();
 
                 const index = this.markers.findIndex(m => m.el === playerData.marker);
                 if (index !== -1) this.markers.splice(index, 1);
             }
+
             this.livePlayerMarkers.delete(playerId);
             console.log(`[LivePlayer] Removed marker for ${playerId}`);
         }

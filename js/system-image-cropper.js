@@ -127,7 +127,7 @@ async function loadAndCropPlayerImage(player) {
 
     const fallbackUrl = 'media/default_full_pmc_avatar.png';
     const imgElement = document.querySelector('.playermodel-image img');
-    const loadingModel = document.getElementById('loading-model');
+    //const loadingModel = document.getElementById('loading-model');
 
     try {
         const tempImg = new Image();
@@ -137,34 +137,34 @@ async function loadAndCropPlayerImage(player) {
             try {
                 const croppedImage = await autoCropTransparent(tempImg);
                 imgElement.src = croppedImage.src;
-                setTimeout(() => {
-                    loadingModel.classList.remove('active');
-                }, 300);
+                // setTimeout(() => {
+                //     loadingModel.classList.remove('active');
+                // }, 300);
             } catch (error) {
                 console.warn('Auto-crop failed, using original image:', error);
                 imgElement.src = imageUrl;
-                setTimeout(() => {
-                    loadingModel.classList.remove('active');
-                }, 300);
+                // setTimeout(() => {
+                //     loadingModel.classList.remove('active');
+                // }, 300);
             }
         };
 
         tempImg.onerror = () => {
             console.warn('Failed to load player image, using fallback');
             imgElement.src = fallbackUrl;
-            setTimeout(() => {
-                loadingModel.classList.remove('active');
-            }, 300);
+            // setTimeout(() => {
+            //     loadingModel.classList.remove('active');
+            // }, 300);
         };
 
         // Show *loading* state
-        loadingModel.classList.add('active');
+        //loadingModel.classList.add('active');
         tempImg.src = imageUrl;
     } catch (error) {
         console.error('Error in loadAndCropPlayerImage:', error);
         imgElement.src = fallbackUrl;
-        setTimeout(() => {
-            loadingModel.classList.remove('active');
-        }, 300);
+        // setTimeout(() => {
+        //     loadingModel.classList.remove('active');
+        // }, 300);
     }
 }

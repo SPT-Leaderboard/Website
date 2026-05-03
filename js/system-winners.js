@@ -8,16 +8,19 @@
  * Displays top 3 winners in the UI
  * @param {Array<Object>} data - Leaderboard entries of previous season from loadPreviousSeasonWinners()
  */
+/**
+ * Displays top 3 winners in a compact horizontal row
+ * @param {Array<Object>} data - Leaderboard entries of previous season from loadPreviousSeasonWinners()
+ */
 function displayWinners(data) {
     const winnersTab = document.getElementById('winners');
 
-    winnersTab.innerHTML = `
-        <h2>Our previous season Champions!</h2>
-    `;
+    if (!data || data.length === 0) {
+        winnersTab.innerHTML = '<div class="winners-placeholder">No winners data available</div>';
+        return;
+    }
 
     const top3Players = data.filter(player => player.rank <= 3);
-    const winnersContainer = document.createElement('div');
-    winnersContainer.className = 'winners-container';
 
     const orderedPlayers = [
         top3Players.find(p => p.rank === 2),
@@ -25,16 +28,40 @@ function displayWinners(data) {
         top3Players.find(p => p.rank === 3)
     ].filter(Boolean);
 
-    orderedPlayers.forEach(player => {
-        winnersContainer.innerHTML += `
-            <div class="winner-card ">
-                <p class="winner-name">${escapeHtml(player.medal)} ${escapeHtml(player.name)}</p>
-                <p class="winner-rank">${getRankText(player.rank)}</p>
-                <p class="winner-skill">Skill score: ${player.totalScore.toFixed(2)}</p>
-                <p class="winner-stats">Raids: ${player.pmcRaids} | KDR: ${player.killToDeathRatio}</p>
-            </div>
-        `;
-    });
+    winnersTab.innerHTML = `
+    <div class="winners-wrapper-center">
+        <div class="winners-horizontal-container">
+            ${orderedPlayers.map(player => `
+                <div class="winner-horizontal-card ${player.rank === 1 ? 'first-place' : ''}">
+                    <div class="winner-avatar-container">
+                        <img src="${player.profilePicture || 'media/default_avatar.png'}" 
+                             class="winner-avatar" 
+                             loading="lazy"
+                             onerror="this.src='media/default_avatar.png'"
+                             alt="${escapeHtml(player.name)}">
+                        <div class="winner-medal ${getMedalClass(player.rank)}">
+                            ${player.medal}
+                        </div>
+                    </div>
+                    <div class="winner-info">
+                        <div class="winner-name" title="${escapeHtml(player.name)}">
+                            ${escapeHtml(player.name.length > 15 ? player.name.substring(0, 12) + '...' : player.name)}
+                        </div>
+                        <div class="winner-rank-badge">${getRankText(player.rank)}</div>
+                        <div class="winner-score">${player.totalScore.toFixed(0)} SS</div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    </div>
+    `;
+}
 
-    winnersTab.appendChild(winnersContainer);
+function getMedalClass(rank) {
+    switch (rank) {
+        case 1: return 'medal-gold';
+        case 2: return 'medal-silver';
+        case 3: return 'medal-bronze';
+        default: return '';
+    }
 }

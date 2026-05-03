@@ -839,6 +839,10 @@ async function calculatePlaces(data) {
             return;
         }
 
+        if(player.forbidNameChange) {
+            player.profilePicture = "media/default_banned.png";
+        }
+
         if (player.isCasual) {
             player.rank = "Casual";
             player.medal = '';
