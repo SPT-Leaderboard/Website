@@ -2796,7 +2796,6 @@ input[type="checkbox"]:checked:hover {
 .winners-wrapper-center {
     margin: 5px;
     display: flex;
-    width: 100%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
