@@ -585,6 +585,7 @@ h1 {
     align-items: center;
     gap: 8px;
     padding: 8px 16px;
+    color: inherit;
     background: linear-gradient(145deg,
             rgba(57, 89, 131, 0.25),
             rgba(57, 89, 131, 0.15));
@@ -1521,7 +1522,6 @@ td:nth-child(4) {
     width: 170px;
 }
 
-button,
 .main-button {
     background-color: rgba(255, 255, 255, 0.05);
     color: var(--text-light);
@@ -1536,10 +1536,10 @@ button,
     overflow: hidden;
 }
 
-button:hover,
 .main-button:hover {
+    cursor: pointer;
     background-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.15);
 }
 
 .player-name-wrapper-main {
@@ -3305,7 +3305,7 @@ input[type="checkbox"]:checked:hover {
     text-align: center;
     padding: 10px;
     background: linear-gradient(145deg, #ffffff0a, #ffffff12);
-    border-radius: 12px;
+    border-radius: 16px;
     backdrop-filter: blur(10px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow:
@@ -3349,7 +3349,7 @@ input[type="checkbox"]:checked:hover {
     right: 0;
     background: rgb(31 31 31);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    border-radius: 16px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1);
     opacity: 0;
     visibility: hidden;
@@ -3420,7 +3420,6 @@ input[type="checkbox"]:checked:hover {
 .friend-button.login-required {
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
     border: 1px solid rgba(99, 102, 241, 0.2);
 }
 
@@ -3448,7 +3447,7 @@ input[type="checkbox"]:checked:hover {
     gap: 8px;
     padding: 12px 20px;
     border: none;
-    border-radius: 12px;
+    border-radius: 16px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -3466,24 +3465,6 @@ input[type="checkbox"]:checked:hover {
 
 .friend-button i {
     font-size: 14px;
-}
-
-.friend-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg,
-            transparent,
-            rgba(255, 255, 255, 0.04),
-            transparent);
-    transition: left 0.5s ease;
-}
-
-.friend-button:hover::before {
-    left: 100%;
 }
 
 /* Add Friend Button */
@@ -9781,7 +9762,6 @@ input[type="checkbox"]:checked:hover {
     transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     animation: progressGradient 2s ease infinite;
     position: relative;
-    z-index: 2;
 }
 
 @keyframes progressGradient {
@@ -9829,7 +9809,7 @@ input[type="checkbox"]:checked:hover {
     background: linear-gradient(145deg, rgba(255, 107, 107, 0.1), rgba(255, 107, 107, 0.05));
     border: 1px solid rgba(255, 107, 107, 0.2);
     border-radius: 16px;
-    margin-top: 2.5rem;
+    bottom: 1.5rem;
     backdrop-filter: blur(20px);
     animation: errorPulse 2s ease-in-out infinite;
 }
@@ -9848,7 +9828,7 @@ input[type="checkbox"]:checked:hover {
 
 .error-container-pre.visible {
     display: block;
-    animation: fadeInUp 0.6s ease-out;
+    animation: commentSlideIn 0.3s ease-in-out;
 }
 
 .error-title-pre {

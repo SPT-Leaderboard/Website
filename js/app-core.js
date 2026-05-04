@@ -533,14 +533,14 @@ async function displayLeaderboard(data) {
                     ${name} ${prestigeImg} ${rankHTML}
             </td>
             <td>${lastGame || 'N/A'}</td>
-            <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class="fa-solid fa-share-from-square"></i> </button></td>
+            <td><button class="main-button" onclick="copyProfile('${player.id}')"> Share <i class="fa-solid fa-share-from-square"></i> </button></td>
             <td>${badge}</td>
             <td>${player.pmcRaids} / ${player.scavRaids ?? 0} (${player.pmcRaids + player.scavRaids ?? 0})</td>
             <td class="${player.survivedToDiedRatioClass}">${player.survivalRate}%</td>
             <td class="${player.killToDeathRatioClass}">${player.killToDeathRatio}</td>
             <td class="${player.averageLifeTimeClass}">${formatSeconds(player.averageLifeTime)}</td>
             <td>${!player.totalScore || player.totalScore <= 0 ? 'Calibrating...' : player.totalScore.toFixed(3)} ${!player.totalScore || player.totalScore <= 0 ? '' : `(${rankLabel})`}</td>
-            <td class="${player.versionStatus}">${player.sptVer}</td>
+            <td class="${player.versionStatus}">${escapeHtml(player.sptVer)}</td>
         `
 
         fragment.appendChild(row)
@@ -678,14 +678,14 @@ async function displaySimpleLeaderboard(data) {
                 <span>${escapeHtml(player.name)}</span>
             </td>
             <td>${lastGame || 'N/A'}</td>
-            <td><button style="share-button" onclick="copyProfile('${player.id}')"> Share <i class="fa-solid fa-share-from-square"></i> </button></td>
+            <td><button class="main-button" onclick="copyProfile('${player.id}')"> Share <i class="fa-solid fa-share-from-square"></i> </button></td>
             <td>${badge}</td>
             <td>${player.pmcRaids} / ${player.scavRaids ?? 0} (${player.pmcRaids + player.scavRaids ?? 0})</td>
             <td>${player.survivalRate}%</td>
             <td>${player.killToDeathRatio}</td>
             <td>${formatSeconds(player.averageLifeTime)}</td>
             <td>${!player.totalScore || player.totalScore <= 0 ? 'Calibrating...' : player.totalScore.toFixed(3)} ${!player.totalScore || player.totalScore <= 0 ? '' : `(${rankLabel})`}</td>
-            <td>${player.sptVer}</td>
+            <td>${escapeHtml(player.sptVer)}</td>
         `
 
         fragment.appendChild(row)

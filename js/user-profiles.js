@@ -310,7 +310,7 @@ async function showPublicProfile(container, player) {
     const template = html`
         <!-- left column -->
         <img src="media/rewards/other/cat.gif" class="kittyrew" id="catrew" alt="" />
-        <button id="closeButton" class="close-profile-button">&times;</button>
+        <button id="closeButton" class="main-button close-profile-button">&times;</button>
         <div class="left-column">
             <div class="user-main-card profile-section" id="main-profile-card">
                 <!-- pfp + PMC Level -->
