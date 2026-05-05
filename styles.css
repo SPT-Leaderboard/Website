@@ -4522,14 +4522,6 @@ input[type="checkbox"]:checked:hover {
     flex-shrink: 0;
 }
 
-.weapon-type {
-    font-size: 12px;
-    color: #888;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2px 8px;
-    border-radius: 4px;
-}
-
 .weapon-hover-attachments {
     display: flex;
     flex-direction: column;
@@ -4758,9 +4750,8 @@ input[type="checkbox"]:checked:hover {
 .viewmodel-attachment-count {
     font-size: 10px;
     background: #ffffff17;
-    color: #000;
     padding: 2px 5px;
-    border-radius: 10px;
+    border-radius: 5px;
     font-weight: bold;
     margin-left: 5px;
 }

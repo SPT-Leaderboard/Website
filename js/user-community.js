@@ -1932,7 +1932,6 @@ class PlayerEquipmentDisplay {
         let html = `
             <div class="weapon-hover-header">
                 <span class="weapon-name">${this.cleanShortName(weapon.shortName)}</span>
-                <span class="weapon-type">Weapon</span>
                 <button class="tooltip-close">x</button>
             </div>
             <div class="weapon-hover-attachments">
