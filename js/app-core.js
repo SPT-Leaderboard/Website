@@ -120,7 +120,7 @@ async function checkSeasonExists(seasonNumber) {
  */
 async function initAllSeasons() {
     // Clean up before initialize
-    let seasonNumber = 1;
+    let seasonNumber = 10;
     seasons = [];
 
     try {
@@ -152,9 +152,8 @@ async function initAllSeasons() {
 async function prepareSeasonData() {
     // Load data if we found any seasons
     if (seasons.length > 0) {
-        await Promise.all([loadSeasonData(seasons[0])]);
+        await loadSeasonData(seasons[0]);
 
-        // TODO: Enable this back next season
         // Load previous winners and run it only once
         if (!ranOnlyOnce) {
             ranOnlyOnce = true;
