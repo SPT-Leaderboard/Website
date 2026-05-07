@@ -236,7 +236,6 @@ class MapEngine {
     }
 
     updateLivePlayersFromHeartbeats(heartbeats) {
-        const currentTime = Date.now();
         const inRaidPlayers = new Set();
 
         console.log(`[HEARTBEAT] Processing ${Object.keys(heartbeats).length} players`, { currentFloor: this.currentFloor });
@@ -522,7 +521,6 @@ class MapEngine {
 
         let stateClass = '';
         let displayState = '';
-        let icon = '';
 
         switch (state) {
             case 'fired':
@@ -535,7 +533,7 @@ class MapEngine {
                 break;
             default:
                 stateClass = 'state-default';
-                displayState = state || 'Unknown';
+                displayState = 'Unknown';
         }
 
         stateBadge.className = `player-state-badge ${stateClass}`;
@@ -777,7 +775,6 @@ class MapEngine {
             return relativePath;
         }
 
-        const folder = this.currentMap?.folder || '';
         return `/live-map/maps/${relativePath}`;
     }
 
@@ -1316,7 +1313,7 @@ class MapEngine {
         const byPermaLink = this.leaderboard.filter(p => p.permaLink && String(p.permaLink).toLowerCase() === q);
         if (byPermaLink.length > 0) return byPermaLink[0];
 
-        return found || null;
+        return null;
     }
 
     toggleDisplayMode() {

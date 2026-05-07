@@ -468,7 +468,6 @@ class FriendManager {
             this.section.style.display = 'block';
 
             const fragment = document.createDocumentFragment();
-            const currentTime = Date.now();
 
             friends.forEach(friend => {
                 const playerStatus = heartbeatMonitor?.getPlayerStatus?.(friend.id) || {};

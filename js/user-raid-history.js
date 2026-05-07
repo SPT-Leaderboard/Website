@@ -49,12 +49,6 @@ async function initLastRaids(playerId, permaLink) {
     const recentStatsContainer = document.getElementById('recent-raids-stats');
 
     if (!statsContainer) {
-        statsContainer.innerHTML = `
-            <div class="no-stats-message">
-                <h3>Failed to load last raid data</h3>
-                <p>This player doesn't have any raids recorded, or there was an error. Container element not found</p>
-            </div>`;
-
         return;
     }
 
@@ -429,7 +423,7 @@ function createKillerInfo(raid) {
     return `
         <span class="meta-item">
             <i class="fa-solid fa-skull-crossbones"></i> Killed by 
-            <span class="raid-killer" styles="color: ${editionHTML} !important">
+            <span class="raid-killer" style="color: ${editionHTML} !important">
                 ${escapeHtml(raid.agressorName)} ${bodyPartHTML}
             </span>
         </span>
@@ -489,8 +483,6 @@ function decodeAgressorBodyPart(killerBodyPart) {
         'RightThigh': '(Leg, Right Thigh)',
         'RightCalf': '(Leg, Right Calf)'
     };
-
-    const part = bodyParts[killerBodyPart];
 
     if (bodyParts[killerBodyPart]) {
         return bodyParts[killerBodyPart];
@@ -665,7 +657,7 @@ function renderMapStats(raids) {
                 </div>
             `;
     } else {
-        mapStatsContainer.innerHTML = `
+        mapStatsHtml = `
             <div class="no-stats-message">
                 <h3>No Map Statistics Available</h3>
                 <p>This player hasn't played any map yet, or it wasn't recorded.</p>
