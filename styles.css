@@ -9686,7 +9686,7 @@ input[type="checkbox"]:checked:hover {
     background: linear-gradient(145deg, rgba(80, 112, 255, 0.15), rgba(80, 112, 255, 0.05));
     border-radius: 50%;
     position: relative;
-    animation: skLinRotate 1.2s ease-in-out infinite alternate;
+    animation: skLinRotate 1s ease-in-out infinite alternate;
 }
 
 .loader-pre:after {
@@ -9702,7 +9702,7 @@ input[type="checkbox"]:checked:hover {
 
     95%,
     100% {
-        transform: rotate(840deg)
+        transform: rotate(1260deg)
     }
 }
 
