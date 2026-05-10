@@ -8,6 +8,8 @@ let leaderboardData = []; // For keeping current season data
 let oldLeaderboardData = [];
 let seasons = []; // Storing available seasons
 let ranOnlyOnce = false; // Run only once (ie winners)
+let leaderboardConfig = []; // Storing main config off API
+let seasonNumber = 10;
 
 // DYNAMIC: Tells whenever the live update was finished and data is ready
 // Better to use in pair with waitForDataReady(() => myFunction()); - automatic callback upon data load
@@ -96,7 +98,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     // app-utils.js
     initNavbar();
 
-    await initAllSeasons();
+    await initSeasonList();
+
     await loadAchievementsData();
 });
 
@@ -113,14 +116,11 @@ async function checkSeasonExists(seasonNumber) {
 
 /**
  * Discovers all available seasons by probing the server.
- * Increments the season number and calls {@link checkSeasonExists} until a missing season is found,
- * then sorts the results from newest to oldest and populates the season dropdown UI.
+ * Increments the season number and calls {@link checkSeasonExists} until a missing season is found.
  * @returns {Promise<void>}
  * @throws {Error} When an unexpected network or parsing error occurs during season probing
  */
 async function initAllSeasons() {
-    // Clean up before initialize
-    let seasonNumber = 10;
     seasons = [];
 
     try {
@@ -131,8 +131,8 @@ async function initAllSeasons() {
             seasons.push(seasonNumber);
             seasonNumber++;
         }
-    } catch {
-        console.error('Error checking number of seasons:', Error);
+    } catch (error) {
+        console.error('Error checking number of seasons:', error);
     } finally {
         // Sort from newest to oldest
         seasons.sort((a, b) => b - a);
@@ -140,6 +140,56 @@ async function initAllSeasons() {
         await prepareSeasonData();
         populateSeasonDropdown();
     }
+}
+
+function parseSeasonConfig(config) {
+    if (!config || typeof config !== 'object') {
+        return [];
+    }
+
+    const seasonSet = new Set();
+
+    if (Array.isArray(config.seasons_range) && config.seasons_range.length > 0) {
+        config.seasons_range.forEach((entry) => {
+            const season = Number(entry);
+            if (!Number.isNaN(season) && season > 0) {
+                seasonSet.add(season);
+            }
+        });
+    }
+
+    const minSeason = Number(config.min_season ?? config.minSeason ?? 1);
+    const maxSeason = Number(config.max_season ?? config.maxSeason ?? config.current_season ?? config.currentSeason ?? config.total_seasons ?? config.totalSeasons);
+
+    if (!Number.isNaN(minSeason) && !Number.isNaN(maxSeason) && maxSeason >= minSeason) {
+        for (let season = minSeason; season <= maxSeason; season++) {
+            seasonSet.add(season);
+        }
+    }
+
+    if (seasonSet.size === 0 && !Number.isNaN(maxSeason) && maxSeason > 0) {
+        for (let season = 1; season <= maxSeason; season++) {
+            seasonSet.add(season);
+        }
+    }
+
+    return Array.from(seasonSet).sort((a, b) => b - a);
+}
+
+async function initSeasonList() {
+    leaderboardConfig = await apiFetch('api/network/functions/get_lb_config.php', { method: 'GET', showErrorToast: true, cacheBust: false });
+
+    if (leaderboardConfig) {
+        seasons = parseSeasonConfig(leaderboardConfig);
+    }
+
+    if (!Array.isArray(seasons) || seasons.length === 0) {
+        await initAllSeasons();
+        return;
+    }
+
+    await prepareSeasonData();
+    populateSeasonDropdown();
 }
 
 /**
@@ -237,7 +287,7 @@ function populateSeasonDropdown() {
         // Update selected state
         document.querySelectorAll('.season-dropdown-item').forEach(item => {
             item.classList.remove('selected');
-            if (item.getAttribute('data-value') === season) {
+            if (parseInt(item.getAttribute('data-value'), 10) === season) {
                 item.classList.add('selected');
             }
         });
@@ -302,7 +352,12 @@ function populateSeasonDropdown() {
  * @returns {Promise<void>}
  * @throws {Error} When the fetch request or data processing fails unexpectedly
  */
-async function loadSeasonData(season) {
+async function loadSeasonData(season = seasons[0]) {
+    if (!season) {
+        console.warn('loadSeasonData called without a valid season');
+        return;
+    }
+
     const emptyLeaderboardNotification = document.getElementById('emptyLeaderboardNotification');
     if (emptyLeaderboardNotification) emptyLeaderboardNotification.style.display = 'none';
 
@@ -393,7 +448,6 @@ function areLeaderboardsEqual(oldData, newData) {
 
 /**
  * Renders the full leaderboard table.
- * Builds rows in a document fragment for performance, then swaps the table body in one operation.
  * Attaches click handlers for opening player profiles and team views.
  * @param {Array<Object>} data - Array of player objects for the current season (aka leaderboardData)
  * @returns {Promise<void>}
@@ -469,7 +523,7 @@ async function displayLeaderboard(data) {
                 boostValue > 3 ? 'rgba(100, 200, 255, 1)' :
                     boostValue < 0 ? 'rgba(255, 110, 100, 1)' : 'rgba(255, 255, 255, 1)';
 
-            const boostIcon = boostValue > 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+            const boostIcon = boostValue > 0 ? 'fa-arrow-up' : boostValue < 0 ? 'fa-arrow-down' : 'fa-arrows-to-dot';
 
             badge = `
             ${isPremium(player) ? `
@@ -633,8 +687,7 @@ async function displaySimpleLeaderboard(data) {
                 boostValue > 3 ? 'rgba(100, 200, 255, 1)' :
                     boostValue < 0 ? 'rgba(255, 110, 100, 1)' : 'rgba(255, 255, 255, 1)';
 
-            const boostIcon = boostValue > 0 ? 'fa-arrow-up' :
-                boostValue < 0 ? 'fa-arrow-down' : 'fa-arrows-to-dot';
+            const boostIcon = boostValue > 0 ? 'fa-arrow-up' : boostValue < 0 ? 'fa-arrow-down' : 'fa-arrows-to-dot';
 
             badge = `
             ${isPremium(player) ? `
@@ -838,7 +891,7 @@ async function calculatePlaces(data) {
             return;
         }
 
-        if(player.forbidNameChange) {
+        if (player.forbidNameChange) {
             player.profilePicture = "media/default_banned.png";
         }
 

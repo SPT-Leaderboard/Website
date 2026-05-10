@@ -442,46 +442,46 @@ function decodeAgressorBodyPart(killerBodyPart) {
 
     const bodyParts = {
         // Head parts
-        'HeadCommon': '(Head, Front)',
-        'ParietalHead': '(Head, Lobe)',
-        'BackHead': '(Head, Nape)',
-        'Ears': '(Head, Ears)',
-        'Eyes': '(Head, Eyes)',
-        'Jaw': '(Head, Jaw)',
+        'HeadCommon': '(head, front)',
+        'ParietalHead': '(head, lobe)',
+        'BackHead': '(head, nape)',
+        'Ears': '(head, ears)',
+        'Eyes': '(head, eyes)',
+        'Jaw': '(head, jaw)',
 
         // Neck parts
-        'NeckFront': '(Neck, Front)',
-        'NeckBack': '(Neck, Back)',
+        'NeckFront': '(neck, front)',
+        'NeckBack': '(neck, back)',
 
         // Chest parts
-        'RibcageUp': '(Chest, Upper Ribcage)',
-        'RibcageLow': '(Chest, Lower Ribcage)',
-        'RightSideChestUp': '(Chest, Right Upper Chest)',
-        'LeftSideChestUp': '(Chest, Left Upper Chest)',
-        'RightSideChestDown': '(Chest, Right Lower Chest)',
-        'LeftSideChestDown': '(Chest, Left Lower Chest)',
-        'SpineTop': '(Chest, Upper Spine)',
-        'SpineDown': '(Chest, Lower Spine)',
+        'RibcageUp': '(thorax)',
+        'RibcageLow': '(thorax, lower ribcage)',
+        'RightSideChestUp': '(thorax, right upper chest)',
+        'LeftSideChestUp': '(thorax, left upper chest)',
+        'RightSideChestDown': '(thorax, right lower chest)',
+        'LeftSideChestDown': '(thorax, left lower chest)',
+        'SpineTop': '(thorax, upper spine)',
+        'SpineDown': '(thorax, lower spine)',
 
         // Pelvis/Stomach
-        'Pelvis': '(Pelvis)',
-        'PelvisBack': '(Lower Back)',
+        'Pelvis': '(pelvis)',
+        'PelvisBack': '(lower back)',
 
         // Left Arm
-        'LeftUpperArm': '(Left Upper Arm)',
-        'LeftForearm': '(Left Forearm)',
+        'LeftUpperArm': '(left arm, shoulder)',
+        'LeftForearm': '(left forearm)',
 
         // Right Arm
-        'RightUpperArm': '(Arm, Upper Arm)',
-        'RightForearm': '(Arm, Right Forearm)',
+        'RightUpperArm': '(right arm, shoulder)',
+        'RightForearm': '(arm, right forearm)',
 
         // Left Leg
-        'LeftThigh': '(Leg, Left Thigh)',
-        'LeftCalf': '(Leg, Left Calf)',
+        'LeftThigh': '(leg, left Thigh)',
+        'LeftCalf': '(leg, left Calf)',
 
         // Right Leg
-        'RightThigh': '(Leg, Right Thigh)',
-        'RightCalf': '(Leg, Right Calf)'
+        'RightThigh': '(leg, right thigh)',
+        'RightCalf': '(leg, right calf)'
     };
 
     if (bodyParts[killerBodyPart]) {

@@ -1549,15 +1549,15 @@ function updateSummaryTrends(comparisons) {
 
         // Update trend icon and color
         if (comparison.isHigher) {
-            trendElement.innerHTML = '<i class="fas fa-arrow-up trend-up"></i>';
-            trendElement.className = 'stat-trend trend-positive';
+            trendElement.innerHTML = '<i class="fa-solid fa-play fa-rotate-270"></i>';
+            trendElement.className = 'stat-trend trend-up';
             if (compareElement) {
                 compareElement.innerHTML = `<span class="comparison-text positive">+${comparison.percentage.toFixed(1)}% above average</span>`;
                 compareElement.style.display = 'block';
             }
         } else if (comparison.isLower) {
-            trendElement.innerHTML = '<i class="fas fa-arrow-down trend-down"></i>';
-            trendElement.className = 'stat-trend trend-negative';
+            trendElement.innerHTML = '<i class="fa-solid fa-play fa-rotate-90"></i>';
+            trendElement.className = 'stat-trend trend-down';
             if (compareElement) {
                 compareElement.innerHTML = `<span class="comparison-text negative">${comparison.percentage.toFixed(1)}% below average</span>`;
                 compareElement.style.display = 'block';

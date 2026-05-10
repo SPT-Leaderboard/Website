@@ -563,8 +563,15 @@
         </table>
         <div id="seasonTimer"> Season ends in: <span id="timerDisplay"></span>
         </div>
-        <div class="notification-container">
-            <div id="emptyLeaderboardNotification" class="animate animate__animated animate__fadeInUp" style="display: none;">Connection lost. We'll retry in a second...</div>
+        <div class="el-notification-container">
+            <div class="empty-leaderboard-wrapper">
+                <div id="emptyLeaderboardNotification" class="animate animate__animated animate__fadeInUp" style="display: none;">
+                    <div class="el-notification-content">
+                        <div class="loading-spinner"></div>
+                        <span class="el-notification-text">Offline. Trying to get you back...</span>
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="playerProfileModal" class="profile-modal">
             <div class="loading-overlay-other active" id="loading-model">
