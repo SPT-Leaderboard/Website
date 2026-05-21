@@ -11,6 +11,74 @@ const NOTIFICATION_DELAY = 1600;
 const MAX_NOTIFICATIONS = 5;
 let lastNotificationTime = 0;
 
+// Sound throttling
+const banSoundQueue = {
+    isPlaying: false,
+    queue: [],
+
+    async playBanSounds() {
+        if (this.isPlaying) {
+            return new Promise((resolve) => {
+                this.queue.push(resolve);
+            });
+        }
+
+        this.isPlaying = true;
+
+        try {
+            const introMusic = new Audio('media/sounds/ban/ban_reveal.mp3');
+            introMusic.volume = 0.10;
+
+            await new Promise((resolve, reject) => {
+                introMusic.onended = resolve;
+                introMusic.onerror = reject;
+                introMusic.play().catch(reject);
+            });
+
+            const mainBanSound = new Audio('media/sounds/ban/ban.mp3');
+            mainBanSound.volume = 0.15;
+
+            await new Promise((resolve, reject) => {
+                mainBanSound.onended = resolve;
+                mainBanSound.onerror = reject;
+                mainBanSound.play().catch(reject);
+            });
+        } catch (e) {
+            console.error('Ban sound playback error:', e);
+        }
+
+        this.isPlaying = false;
+
+        // Next in queue
+        if (this.queue.length > 0) {
+            const nextResolve = this.queue.shift();
+
+            nextResolve();
+            this.playBanSounds();
+        }
+    },
+};
+
+const recentBanPlays = new Map();
+
+function shouldPlayBanSound(playerId) {
+    const now = Date.now();
+    const lastPlay = recentBanPlays.get(playerId);
+
+    if (lastPlay && (now - lastPlay) < 30000) {
+        // console.debug(`[BAN SOUND] Throttling ban sound for player ${playerId} - played ${Math.floor((now - lastPlay) / 1000)}s ago`);
+        return false;
+    }
+
+    recentBanPlays.set(playerId, now);
+
+    setTimeout(() => {
+        recentBanPlays.delete(playerId);
+    }, 60000);
+
+    return true;
+}
+
 async function showPlayerNotification(player) {
     if (!player.absoluteLastTime) {
         console.debug(`[NOTIFY] Skipping player ${player.name} – no absoluteLastTime data.`);
@@ -197,18 +265,14 @@ async function showPlayerNotification(player) {
     }
 
     if (player.banned) {
-        const introMusic = new Audio('media/sounds/ban/ban_reveal.mp3');
-        introMusic.volume = 0.10;
-        introMusic.play();
+        if (shouldPlayBanSound(player.id)) {
+            banSoundQueue.playBanSounds().catch(e => console.error('sound queue error:', e));
+        } else {
+            console.debug(`[SOUND] sound throttled for ${player.name} (${player.id})`);
+        }
 
-        introMusic.addEventListener('ended', () => {
-            const mainBanSound = new Audio('media/sounds/ban/ban.mp3');
-            mainBanSound.volume = 0.15;
-            mainBanSound.play();
-
-            createBanNotification(player);
-            setBanNotificationCookie(player.id);
-        });
+        createBanNotification(player);
+        setBanNotificationCookie(player.id);
 
         return;
     } else {

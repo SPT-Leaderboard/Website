@@ -918,13 +918,13 @@ async function showPublicProfile(container, player) {
     //user-hideout.js
     loadHideoutData(player.hideout);
     //user-community.js
+    window.profileLoader.setText('Almost Done...');
     ProfileState.commentsManager = new CommentsManager({
         commentsPerPage: 5
     });
     ProfileState.commentsManager.init(player.permaLink, player.id);
 
     // Friends user-community.js
-    window.profileLoader.setText('Loading Friends...');
     ProfileState.friendManager = new FriendManager();
     await ProfileState.friendManager.init(player);
 
@@ -1754,61 +1754,4 @@ function setupRegistrationDropdown() {
 
     return { openDropdown, closeDropdown };
 }
-
-function closeLoader() {
-    const loader = document.getElementById('main-profile-loader');
-    loader.classList.add('fade-out');
-
-    setTimeout(() => {
-        loader.remove();
-    }, 300); // 300ms - animation lenght (CSS)
-}
 // #endregion
-class ProfileLoader {
-    constructor() {
-        this.loaderElement = document.getElementById('loading-model');
-        this.loaderText = document.getElementById('loading-text');
-        this.contentElement = document.getElementById('modalPlayerInfo');
-    }
-
-    /**
-     * Show loader with custom text
-     * @param {string} text - Text to display (default: 'Showing profile...')
-     */
-    show(text = 'Showing profile...') {
-        if (this.loaderElement) {
-            setTimeout(() => {
-                this.loaderElement.classList.add('active');
-            }, 300);
-
-            this.updateText(text);
-        }
-    }
-
-    /**
-     * Hide loader and show content
-     */
-    hide() {
-        setTimeout(() => {
-            this.loaderElement.classList.remove('active');
-        }, 1000);
-    }
-
-    /**
-     * Update loader text
-     * @param {string} text - New text to display
-     */
-    updateText(text) {
-        if (this.loaderText) {
-            this.loaderText.textContent = text;
-        }
-    }
-
-    /**
-     * Update text without showing/hiding
-     * @param {string} text - Text to display
-     */
-    setText(text) {
-        this.updateText(text);
-    }
-}

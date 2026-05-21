@@ -2388,3 +2388,53 @@ class TabManager {
         return Math.round(num).toLocaleString();
     }
 }
+
+// #region Profile Loader
+class ProfileLoader {
+    constructor() {
+        this.loaderElement = document.getElementById('loading-model');
+        this.loaderText = document.getElementById('loading-text');
+        this.contentElement = document.getElementById('modalPlayerInfo');
+    }
+
+    /**
+     * Show loader with custom text
+     * @param {string} text - Text to display (default: 'Showing profile...')
+     */
+    show(text = 'Showing profile...') {
+        if (this.loaderElement) {
+            setTimeout(() => {
+                this.loaderElement.classList.add('active');
+            }, 300);
+
+            this.updateText(text);
+        }
+    }
+
+    /**
+     * Hide loader and show content
+     */
+    hide() {
+        setTimeout(() => {
+            this.loaderElement.classList.remove('active');
+        }, 1000);
+    }
+
+    /**
+     * Update loader text
+     * @param {string} text - New text to display
+     */
+    updateText(text) {
+        if (this.loaderText) {
+            this.loaderText.textContent = text;
+        }
+    }
+
+    /**
+     * Update text without showing/hiding
+     * @param {string} text - Text to display
+     */
+    setText(text) {
+        this.updateText(text);
+    }
+}
