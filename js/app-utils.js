@@ -140,37 +140,39 @@ function initNavbar() {
  */
 function getRank(rating, maxRating = 2000, res = 32) {
     const totalRanks = 50;
-    const rankIndex = Math.min(totalRanks - 1, Math.floor((rating / maxRating) * totalRanks));
+    let rankIndex = Math.floor((rating / maxRating) * totalRanks);
+    rankIndex = Math.min(totalRanks - 1, Math.max(0, rankIndex));
     const level = rankIndex + 1;
     const levelGroup = Math.floor((level - 1) / 10);
-    const groupProgress = ((level - 1) % 10) / 9;
+    const groupPosition = (level - 1) % 10;
+    const groupProgress = groupPosition / 9;
+    const rankInGroup = groupPosition + 1;
+    const isElite = level >= 41;
+    const isLegendary = level === 50;
 
-    // Level inside rank group level (yes)
-    const rankInGroup = ((level - 1) % 6) + 1;
+    // Map images
+    let imageIndex;
+    if (rankInGroup <= 2) imageIndex = 1;
+    else if (rankInGroup <= 4) imageIndex = 2;
+    else if (rankInGroup <= 6) imageIndex = 3;
+    else if (rankInGroup <= 8) imageIndex = 4;
+    else imageIndex = 5;
 
-    // Map the images (6 images per 10 ranks show smoothly)
-    let imageIndex = Math.min(6, Math.floor((rankInGroup + 1) / 2));
-    if (rankInGroup === 9) imageIndex = 5;
-    if (rankInGroup === 10) imageIndex = 6;
+    if (isLegendary) imageIndex = 6;
 
     const rankNames = [
-        // Level 1
         ['Recruit', 'Private', 'Private Second Class', 'Private First Class', 'Lance Corporal',
             'Specialist', 'Trooper', 'Rifleman', 'Grenadier', 'Combatant'],
-        // Level 2
         ['Corporal', 'Sergeant', 'Staff Sergeant', 'Sergeant First Class', 'Master Sergeant',
             'First Sergeant', 'Sergeant Major', 'Command Sergeant Major', 'Senior Enlisted Advisor', 'Chief Petty Officer'],
-        // Level 3
         ['Second Lieutenant', 'First Lieutenant', 'Captain', 'Major', 'Lieutenant Colonel',
             'Colonel', 'Brigadier General', 'Major General', 'Lieutenant General', 'General'],
-        // Level 4
         ['General of the Army', 'Field Marshal', 'Marshal of the Air Force', 'Fleet Admiral',
             'Admiral of the Fleet', 'Supreme Commander', 'Chief of Defense', 'Generalissimo',
             'Grand Marshal', 'Arch-General'],
-        // Level 5
         ['BEAR Commander', 'USEC Commander', 'TerraGroup Agent', 'High Commander',
             'Warlord', 'Marshal General', 'Ghost of Tarkov', 'Operator Supreme',
-            'TerraGroup Operator', 'Tarkov Legend']
+            'TerraGroup Operator', 'Legend']
     ];
 
     const getGroupColor = (groupIndex, progress) => {
@@ -179,7 +181,7 @@ function getRank(rating, maxRating = 2000, res = 32) {
             [50, 205, 50],    // Green
             [255, 165, 0],    // Orange
             [220, 20, 60],    // Crimson
-            [138, 43, 226],   // Blue (second blue)
+            [138, 43, 226],   // Purple
             [255, 215, 0]     // Gold
         ];
 
@@ -187,7 +189,6 @@ function getRank(rating, maxRating = 2000, res = 32) {
             return groupColors[5];
         }
 
-        // Same cubic easing from CSS, but in JS, behold :kek:
         const easeInOutCubic = (t) => {
             return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
         };
@@ -203,17 +204,37 @@ function getRank(rating, maxRating = 2000, res = 32) {
         ];
     };
 
-    const [r, g, b] = getGroupColor(levelGroup, groupProgress);
+    let [r, g, b] = getGroupColor(levelGroup, groupProgress);
 
-    // Dynamic coloring (wow)
+    if (isElite) {
+        const intensity = 1 + (level - 40) / 10; // 1.1 to 2.0
+        r = Math.min(255, Math.floor(r * intensity));
+        g = Math.min(255, Math.floor(g * intensity));
+        b = Math.min(255, Math.floor(b * intensity));
+    }
+
     const borderColor = `rgba(${Math.max(r - 30, 0)}, ${Math.max(g - 30, 0)}, ${Math.max(b - 30, 0)}, 0.6)`;
     const textColor = `hsl(${Math.round((r + g + b) / 3)}, 100%, 95%)`;
 
-    const gradient = `linear-gradient(135deg, 
-        rgba(${r}, ${g}, ${b}, 0.4), 
-        rgba(${Math.max(r - 50, 0)}, ${Math.max(g - 50, 0)}, ${Math.max(b - 50, 0)}, 0.6))`;
+    let gradient;
+    if (isLegendary) {
+        gradient = `linear-gradient(135deg, 
+            rgba(255, 215, 0, 0.6), 
+            rgba(255, 165, 0, 0.8),
+            rgba(255, 215, 0, 0.6))`;
+    } else if (isElite) {
+        const glowIntensity = 0.4 + (level - 40) / 25;
+        gradient = `linear-gradient(135deg, 
+            rgba(${r}, ${g}, ${b}, ${glowIntensity}), 
+            rgba(${Math.max(r - 30, 0)}, ${Math.max(g - 30, 0)}, ${Math.max(b - 30, 0)}, 0.8),
+            rgba(${r}, ${g}, ${b}, ${glowIntensity}))`;
+    } else {
+        gradient = `linear-gradient(135deg, 
+            rgba(${r}, ${g}, ${b}, 0.4), 
+            rgba(${Math.max(r - 50, 0)}, ${Math.max(g - 50, 0)}, ${Math.max(b - 50, 0)}, 0.6))`;
+    }
 
-    const rankName = rankNames[levelGroup][rankInGroup - 1];
+    const rankName = rankNames[levelGroup][groupPosition];
 
     return {
         image: `media/player_ranks/Rank${levelGroup + 1}/${imageIndex}@${res}px.png`,
@@ -222,10 +243,14 @@ function getRank(rating, maxRating = 2000, res = 32) {
         level: level,
         rankInGroup: rankInGroup,
         levelGroup: levelGroup + 1,
-        progress: Math.round((rating / maxRating) * 100),
+        progress: Math.min(100, Math.round((rating / maxRating) * 100)),
         gradient: gradient,
         borderColor: borderColor,
-        textColor: textColor
+        textColor: textColor,
+        isElite: isElite,
+        isLegendary: isLegendary,
+        // Animation properties
+        glowIntensity: isElite ? 0.5 + (level - 40) / 20 : 0
     };
 }
 
@@ -555,7 +580,7 @@ async function loadJSON(url) {
 /**
  * Find player object by id
  */
-window.findPlayer = function(playerId) {
+window.findPlayer = function (playerId) {
     const player = leaderboardData.find((p) => p.id === playerId);
 
     return player;
@@ -564,7 +589,7 @@ window.findPlayer = function(playerId) {
 /**
  * Find player object by permaLink
  */
-window.findPlayerByPermaLink = function(permaLink) {
+window.findPlayerByPermaLink = function (permaLink) {
     const player = leaderboardData.find((p) => p.permaLink === permaLink);
 
     return player;
