@@ -311,7 +311,7 @@ async function checkImageExists(imageUrl) {
 async function getQuestImageUrl(questId, imageFileName, attempts = 0) {
     const basePath = 'media/player_quests/';
     const baseName = imageFileName.split('.')[0];
-    const extensions = ['.png', '.jpg', '.jpeg'];
+    const extensions = ['.png', '.jpg'];
 
     if (attempts >= extensions.length) {
         return basePath + 'default.jpg';
