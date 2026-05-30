@@ -2903,34 +2903,6 @@ input[type="checkbox"]:checked:hover {
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
 
-.winner-medal {
-    position: absolute;
-    bottom: -5px;
-    right: -5px;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    background: var(--darker);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.winner-medal.medal-gold {
-    background: linear-gradient(135deg, #ffd700, #ffb347);
-    box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
-}
-
-.winner-medal.medal-silver {
-    background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
-}
-
-.winner-medal.medal-bronze {
-    background: linear-gradient(135deg, #cd7f32, #b87333);
-}
-
 .winner-info {
     text-align: center;
 }
@@ -2946,7 +2918,7 @@ input[type="checkbox"]:checked:hover {
     font-size: 0.7rem;
     padding: 2px 8px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
+    border-radius: 4px;
     display: inline-block;
     margin-bottom: 4px;
     white-space: nowrap;
@@ -8867,6 +8839,7 @@ input[type="checkbox"]:checked:hover {
         transform: translateX(-30px);
         opacity: 0;
     }
+
     to {
         transform: translateX(0);
         opacity: 1;
@@ -8878,6 +8851,7 @@ input[type="checkbox"]:checked:hover {
         transform: translateX(0);
         opacity: 1;
     }
+
     to {
         transform: translateX(-30px);
         opacity: 0;
@@ -9667,6 +9641,35 @@ input[type="checkbox"]:checked:hover {
 }
 
 /* Pre loader */
+.preloader-black-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #020819f5;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease-in-out;
+    opacity: 1;
+    animation: preload-bg-disappear 1s ease-in-out forwards;
+    overflow: hidden;
+}
+
+@keyframes preload-bg-disappear {
+
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
 .loader-container-pre {
     position: fixed;
     top: 0;
@@ -9683,35 +9686,10 @@ input[type="checkbox"]:checked:hover {
     overflow: hidden;
 }
 
-.loader-container-pre::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background:
-        radial-gradient(circle at 20% 20%, rgba(100, 255, 218, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(30, 144, 255, 0.1) 0%, transparent 50%);
-    animation: gradientPulse 8s ease-in-out infinite;
-}
-
 .loader-container-pre.hidden {
     opacity: 0;
     pointer-events: none;
     transform: translateY(-20px) scale(0.98);
-}
-
-@keyframes gradientPulse {
-
-    0%,
-    100% {
-        opacity: 0.3;
-    }
-
-    50% {
-        opacity: 0.6;
-    }
 }
 
 .logo-pre {
@@ -9724,8 +9702,10 @@ input[type="checkbox"]:checked:hover {
     -webkit-background-clip: text;
     background-clip: text;
     letter-spacing: 3px;
+    opacity: 0;
     text-shadow: 0 4px 20px rgba(100, 255, 218, 0.3);
-    animation: logoGradient 3s ease infinite, logoFloat 4s ease-in-out infinite;
+    animation: fadeIn 1.2s ease-in-out forwards, logoGradient 3s ease infinite,
+               logoFloat 4s ease-in-out infinite;
 }
 
 @keyframes logoGradient {
@@ -9752,92 +9732,85 @@ input[type="checkbox"]:checked:hover {
     }
 }
 
-.loader-pre {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(145deg, rgba(80, 112, 255, 0.15), rgba(80, 112, 255, 0.05));
-    border-radius: 50%;
-    position: relative;
-    animation: skLinRotate 1s ease-in-out infinite alternate;
-}
-
-.loader-pre:after {
-    content: "";
-    position: absolute;
-    inset: 6px;
-    border-radius: 50%;
-    border: 4px solid transparent;
-    border-top-color: var(--accent-teal);
-}
-
-@keyframes skLinRotate {
-
-    95%,
-    100% {
-        transform: rotate(1260deg)
-    }
-}
-
-.progress-container-pre {
-    width: 380px;
+.progress-dot-container {
+    width: 200px;
     height: 6px;
     background: rgba(255, 255, 255, 0.08);
     border-radius: 10px;
-    margin-top: 2.5rem;
+    position: relative;
     overflow: hidden;
-    position: relative;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: fadeIn 1.2s ease-in-out forwards;
 }
 
-.progress-container-pre::after {
-    content: '';
+.progress-dot {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg,
-            transparent 0%,
-            rgba(255, 255, 255, 0.2) 50%,
-            transparent 100%);
-    animation: load-shimmer 1s infinite;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 6px;
+    background: var(--accent-teal);
+    box-shadow: 0 0 10px rgba(100, 255, 218, 0.5),
+                0 0 20px rgba(100, 255, 218, 0.3),
+                0 0 30px rgba(100, 255, 218, 0.1);
+    animation: dotBounce 1s ease-in-out infinite;
 }
 
-@keyframes load-shimmer {
+@keyframes dotBounce {
     0% {
-        transform: translateX(-100%);
+        left: 0%;
+        background: var(--accent-teal);
+        box-shadow: 0 0 10px rgba(100, 255, 218, 0.5),
+                    0 0 20px rgba(100, 255, 218, 0.3),
+                    0 0 30px rgba(100, 255, 218, 0.1);
     }
-
-    100% {
-        transform: translateX(100%);
+    25% {
+        background: var(--accent-blue);
+        box-shadow: 0 0 10px rgba(66, 153, 225, 0.5),
+                    0 0 20px rgba(66, 153, 225, 0.3),
+                    0 0 30px rgba(66, 153, 225, 0.1);
     }
-}
-
-.progress-bar-pre {
-    height: 100%;
-    width: 0;
-    background: linear-gradient(90deg,
-            var(--accent-teal) 0%,
-            var(--accent-blue) 50%,
-            var(--accent-teal) 100%);
-    background-size: 200% 100%;
-    border-radius: 8px;
-    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-    animation: progressGradient 2s ease infinite;
-    position: relative;
-}
-
-@keyframes progressGradient {
-    0% {
-        background-position: 0 50%;
-    }
-
     50% {
-        background-position: 100% 50%;
+        left: 100%;
+        background: #5232c7;
+        box-shadow: 0 0 10px rgba(82, 50, 199, 0.5),
+                    0 0 20px rgba(82, 50, 199, 0.3),
+                    0 0 30px rgba(82, 50, 199, 0.1);
     }
-
+    75% {
+        background: var(--accent-blue);
+        box-shadow: 0 0 10px rgba(66, 153, 225, 0.5),
+                    0 0 20px rgba(66, 153, 225, 0.3),
+                    0 0 30px rgba(66, 153, 225, 0.1);
+    }
     100% {
-        background-position: 0 50%;
+        left: 0%;
+        background: var(--accent-teal);
+        box-shadow: 0 0 10px rgba(100, 255, 218, 0.5),
+                    0 0 20px rgba(100, 255, 218, 0.3),
+                    0 0 30px rgba(100, 255, 218, 0.1);
+    }
+}
+
+.loader-container-pre img {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 1.5rem;
+    object-fit: contain;
+    animation: logoReveal 1.2s ease-in-out forwards;
+    opacity: 0;
+    transform: rotate(-10deg);
+    filter: drop-shadow(0 0 10px rgba(100, 255, 218, 0.4));
+}
+
+@keyframes logoReveal {
+    0% {
+        opacity: 0;
+        transform: rotate(-10deg);
+    }
+    100% {
+        opacity: 1;
+        transform: rotate(0deg);
     }
 }
 
@@ -9848,18 +9821,28 @@ input[type="checkbox"]:checked:hover {
     font-weight: 500;
     text-align: center;
     max-width: 400px;
-    animation: textFade 2s ease-in-out infinite;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 }
 
-@keyframes textFade {
+.status-text-pre.fade-out {
+    opacity: 0;
+    transform: translateY(-10px);
+}
 
-    0%,
-    100% {
-        opacity: 0.8;
+.status-text-pre.fade-in {
+    animation: textSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes textSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
     }
-
-    50% {
+    100% {
         opacity: 1;
+        transform: translateY(0);
     }
 }
 

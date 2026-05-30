@@ -6,7 +6,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const loader = document.getElementById('loader');
-    const progressBar = document.getElementById('progress-bar');
+    const progressBar = document.getElementById('progress-dot');
     const statusText = document.getElementById('status-text');
     const errorContainer = document.getElementById('error-container');
     const errorMessage = document.getElementById('error-message');
@@ -96,32 +96,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateProgress() {
         const progress = Math.round((loadedResources / totalWeight) * 100);
-        progressBar.style.width = progress + '%';
 
         if (progress < 25) {
-            statusText.textContent = "Loading system core...";
-        } else if (progress < 50) {
-            statusText.textContent = "Loading essentials...";
+            animateStatusText("Loading system core...");
+        } else if (progress < 60) {
+            animateStatusText("Loading essentials...");
         } else if (progress < 75) {
-            statusText.textContent = "Initializing...";
+            animateStatusText("Initializing...");
         } else if (progress < 90) {
-            statusText.textContent = "Finalizing...";
+            animateStatusText("Finalizing...");
         } else if (progress < 100) {
-            statusText.textContent = "Almost ready...";
+            animateStatusText("Almost ready...");
         } else {
-            statusText.textContent = "Awaiting data from API...";
+            animateStatusText("Awaiting data from API...");
             waitForDataReady(() => completeLoading());
         }
     }
 
     function showError(error) {
-        statusText.textContent = "Connection interrupted. Retrying...";
+        animateStatusText("Connection interrupted. Retrying...");
         errorMessage.textContent = error.message || "Network connection failed";
         errorContainer.classList.add('visible');
     }
 
     function completeLoading() {
-        statusText.textContent = "Welcome to SPTLB!";
+        animateStatusText("Welcome to SPTLB!");
 
         loader.classList.add('complete');
 
@@ -137,9 +136,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1300);
     }
 
+    function animateStatusText(newText) {
+        // Don't animate if the text is the same
+        if (statusText.textContent === newText) return;
+
+        statusText.classList.add('fade-out');
+
+        setTimeout(() => {
+            statusText.textContent = newText;
+            statusText.classList.remove('fade-out');
+            statusText.classList.add('fade-in');
+
+            setTimeout(() => {
+                statusText.classList.remove('fade-in');
+            }, 400);
+        }, 200);
+    }
+
     async function init() {
         try {
-            statusText.textContent = "Starting up...";
+            animateStatusText("Starting up...");
 
             const MAX_CONCURRENT = 20;
             for (let i = 0; i < filteredResources.length; i += MAX_CONCURRENT) {
@@ -158,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     retryButton.addEventListener('click', () => {
         errorContainer.classList.remove('visible');
-        progressBar.style.width = '0%';
         loadedResources = 0;
         init();
     });

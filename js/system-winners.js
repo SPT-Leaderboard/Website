@@ -8,15 +8,10 @@
  * Displays top 3 winners in the UI
  * @param {Array<Object>} data - Leaderboard entries of previous season from loadPreviousSeasonWinners()
  */
-/**
- * Displays top 3 winners in a compact horizontal row
- * @param {Array<Object>} data - Leaderboard entries of previous season from loadPreviousSeasonWinners()
- */
 function displayWinners(data) {
     const winnersTab = document.getElementById('winners');
 
     if (!data || data.length === 0) {
-        winnersTab.innerHTML = '<div class="winners-placeholder">No winners data available</div>';
         return;
     }
 
@@ -39,9 +34,6 @@ function displayWinners(data) {
                              loading="lazy"
                              onerror="this.src='media/default_avatar.png'"
                              alt="${escapeHtml(player.name)}">
-                        <div class="winner-medal ${getMedalClass(player.rank)}">
-                            ${player.medal}
-                        </div>
                     </div>
                     <div class="winner-info">
                         <div class="winner-name" title="${escapeHtml(player.name)}">

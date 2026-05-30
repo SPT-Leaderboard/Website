@@ -579,7 +579,7 @@ async function displayLeaderboard(data) {
         const rankLabel = player.isCasual ? 'Casual' : getRankLabel(player.totalScore);
 
         row.innerHTML = `
-            <td class="rank">${player.rank} ${escapeHtml(player.medal)}</td>
+            <td class="rank">${player.rank}</td>
             <td class="teamtag" data-team="${escapeHtml(player.teamTag ? player.teamTag : ``)}">${player.teamTag ? `[${escapeHtml(player.teamTag)}]` : ``}</td>
             <td class="player-name-wrapper" data-player-id="${player.id || '0'}">
                     ${`<img loading="lazy" class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';"  alt="Avatar"/>`}
@@ -885,7 +885,6 @@ async function calculatePlaces(data) {
             player.scavRaids = 0;
             player.survivalRate = 0;
             player.rank = "BANNED";
-            player.medal = "";
             player.profilePicture = "media/default_banned.png";
             player.survivedToDiedRatio = 0;
             return;
@@ -897,7 +896,6 @@ async function calculatePlaces(data) {
 
         if (player.isCasual) {
             player.rank = "Casual";
-            player.medal = '';
         }
     });
 
@@ -917,7 +915,7 @@ async function calculatePlaces(data) {
         }
 
         player.rank = rankCounter;
-        player.medal = ['🥇', '🥈', '🥉'][rankCounter - 1] || '';
+
         rankCounter++;
     });
 }
