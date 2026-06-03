@@ -107,6 +107,7 @@ document.addEventListener("DOMContentLoaded", async () => {
  * Checks if a season JSON file exists on the server by making a fetch request.
  * @param {number} seasonNumber - The season number to check (e.g. 4, 5, 6)
  * @returns {Promise<boolean>} Resolves to true if the season file exists and returns valid data, false otherwise
+ * @deprecated See initSeasonList()
  */
 async function checkSeasonExists(seasonNumber) {
     const serverUrl = `${ApiPaths.seasonPath}${seasonNumber}${ApiPaths.seasonPathEnd}`;
@@ -119,6 +120,7 @@ async function checkSeasonExists(seasonNumber) {
  * Increments the season number and calls {@link checkSeasonExists} until a missing season is found.
  * @returns {Promise<void>}
  * @throws {Error} When an unexpected network or parsing error occurs during season probing
+ * @deprecated See initSeasonList()
  */
 async function initAllSeasons() {
     seasons = [];
@@ -183,6 +185,7 @@ async function initSeasonList() {
         seasons = parseSeasonConfig(leaderboardConfig);
     }
 
+    // fallback to legacy discovery
     if (!Array.isArray(seasons) || seasons.length === 0) {
         await initAllSeasons();
         return;
@@ -194,9 +197,7 @@ async function initSeasonList() {
 
 /**
  * Loads the latest season's leaderboard data and performs one-time initialization tasks.
- * Called after {@link initAllSeasons} has populated the seasons array. Loads the newest
- * season via {@link loadSeasonData}, triggers previous-season winner display on the first
- * invocation, and persists current stats to localStorage.
+ * Called after {@link initSeasonList} has populated the seasons array.
  * @returns {Promise<void>}
  */
 async function prepareSeasonData() {
