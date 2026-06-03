@@ -6173,18 +6173,21 @@ input[type="checkbox"]:checked:hover {
 }
 
 .cross-profile-link {
-    display: inline-flex;
+display: inline-flex;
     align-items: center;
     gap: 6px;
     color: #ffffffa9;
     text-decoration: none;
     font-weight: 600;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #ffffff2b;
+    border-radius: 8px;
+    border: #ffffff1f solid 1px;
 }
 
 .cross-profile-link:hover {
     color: #ffd54f;
-    text-decoration: underline;
+    cursor: pointer;
 }
 
 .cross-profile-avatar {
