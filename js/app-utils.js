@@ -117,7 +117,7 @@ function initNavbar() {
  * image path, and dynamically interpolated color values for UI rendering.
  * Ranks are divided into 5 groups of 10 levels (50 total), with 6 rank images per group.
  * @param {number} rating - The player's current rating score
- * @param {number} [maxRating=2000] - The maximum possible rating (used to normalize rank calculation)
+ * @param {number} [maxRating=2000] - The maximum possible rating (to normalize rank calculation)
  * @param {number} [res=32] - The image resolution suffix in pixels (e.g. 32 for @32px.png)
  * @returns {{
  *   image: string,
@@ -132,7 +132,7 @@ function initNavbar() {
  *   textColor: string
  * }} Rank data object with display properties
  * @example
- * const rank = getRank(500);
+ * const rank = getRank(500, 2000, 32);
  * // rank.name => "Corporal"
  * // rank.level => 13
  * // rank.image => "media/player_ranks/Rank2/1@32px.png"
