@@ -448,176 +448,213 @@ function areLeaderboardsEqual(oldData, newData) {
 }
 
 /**
- * Renders the full leaderboard table.
- * Attaches click handlers for opening player profiles and team views.
+ * Renders the full leaderboard table with batched processing
  * @param {Array<Object>} data - Array of player objects for the current season (aka leaderboardData)
  * @returns {Promise<void>}
  */
 async function displayLeaderboard(data) {
+    // Pre-filter
+    const validPlayers = data.filter(player => {
+        if (player.isCasual && SettingsHelper.get('casualToggle')) return false;
+        if (player.permBanned) return false;
+        return true;
+    });
+
+    const BATCH_SIZE = 50;
+    let currentIndex = 0;
+
     const tempTableBody = document.createElement('tbody');
     tempTableBody.style.display = 'none';
 
-    const fragment = document.createDocumentFragment();
-    data.forEach(player => {
-        const row = document.createElement('tr');
-        let lastGame;
+    // Batching
+    const processBatches = () => {
+        return new Promise((resolve) => {
+            const processNextBatch = () => {
+                const startTime = performance.now();
+                const endIndex = Math.min(currentIndex + BATCH_SIZE, validPlayers.length);
 
-        if (player.isCasual && SettingsHelper.get('casualToggle')) {
-            return;
-        }
-
-        if (player.permBanned) return;
-
-        // Check HeartbeatMonitor
-        const playerStatus = window.heartbeatMonitor.getPlayerStatus(player.id);
-
-        if (!player.banned) {
-            const lastOnlineTime = heartbeatMonitor.isOnline(player.id)
-                ? '<span class="player-status-lb-online">Online</span>'
-                : window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || player.lastPlayed);
-
-            // For lastGame
-            if (heartbeatMonitor.isOnline(player.id)) {
-                const isInRaid = playerStatus.status === 'in_raid' || playerStatus.status === 'in_transit';
-
-                if (isInRaid) {
-                    // Raid
-                    lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">
-                ${playerStatus.statusText} 
-                <span class="raid-dots">
-                    <span class="r-dot"></span>
-                    <span class="r-dot"></span>
-                    <span class="r-dot"></span>
-                </span>
-            </span>`;
-                } else {
-                    // Default
-                    lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">
-                ${playerStatus.statusText} 
-                <span id="blink"></span>
-            </span>`;
+                for (let i = currentIndex; i < endIndex; i++) {
+                    const player = validPlayers[i];
+                    const row = createPlayerRow(player);
+                    tempTableBody.appendChild(row);
                 }
-            } else {
-                lastGame = `<span class="last-online-time">${lastOnlineTime}</span>`;
-            }
-        } else {
-            lastGame = `<span class="last-online-time">Banned</span>`;
-        }
 
-        // Add profile standing
-        let badge;
-        if (player.banned) {
-            badge = `
-            <div class="badge-lb tooltip">
-                <em class="fa-solid fa-triangle-exclamation" style="color:rgba(255, 110, 100, 1);"></em>
-                <span class="tooltiptext">Profile is banned</span>
-            </div>`;
-        } else if (player?.suspicious && !player.isCasual) {
-            badge = `
-            <div class="badge-lb tooltip">
-                <em class="fa-solid fa-triangle-exclamation" style="color:rgb(255, 214, 100);"></em>
-                <span class="tooltiptext">Marked as suspicious by SkillIssueDetector™ (Beta)</span>
-            </div>`;
-        } else {
-            const boostValue = player.boostPerc || 0;
-            const boostColor = boostValue >= 1 && boostValue <= 3 ? 'rgba(142, 255, 189, 1)' :
-                boostValue > 3 ? 'rgba(100, 200, 255, 1)' :
-                    boostValue < 0 ? 'rgba(255, 110, 100, 1)' : 'rgba(255, 255, 255, 1)';
+                currentIndex = endIndex;
 
-            const boostIcon = boostValue > 0 ? 'fa-arrow-up' : boostValue < 0 ? 'fa-arrow-down' : 'fa-arrows-to-dot';
+                // Check if we should yield to event loop
+                const elapsed = performance.now() - startTime;
 
-            badge = `
-            ${isPremium(player) ? `
-            <div class="badge-lb tooltip" style="display: inline !important;">
-                <em class='fa-solid fa-shield' style="color:rgb(100, 255, 165);"></em>
-                <span class="tooltiptext" style="bottom: 170%;">Profile in good standing</span>
-            </div>
-            <div class="badge-lb tooltip badge-premium" style="display: inline !important;">
-                <em class="fa-solid fa-bolt"></em>
-                <span class="tooltiptext" style="bottom: 170%;">Premium BattlePass Owner</span>
-            </div>
-            <div class="boost-container tooltip">
-                <span class="boost-value">${boostValue.toFixed(1)}%</span>
-                <em class='fa-solid ${boostIcon}' style="color:${boostColor}; font-size:0.8em"></em>
-                <span class="tooltiptext">
-                    ${getBoostDescription(boostValue)}
-                </span>
-            </div>
-            ` : `
-            <div class="badge-lb tooltip">
-                <em class='fa-solid fa-shield' style="color:rgb(100, 255, 165);"></em>
-                <span class="tooltiptext">Profile in good standing</span>
-            </div>
-            <div class="boost-container tooltip">
-                <span class="boost-value">${boostValue.toFixed(1)}%</span>
-                <em class='fa-solid ${boostIcon}' style="color:${boostColor}; font-size:0.8em"></em>
-                <span class="tooltiptext">
-                    ${getBoostDescription(boostValue)}
-                </span>
-            </div> `}
-            `
-        }
+                if (currentIndex < validPlayers.length) {
+                    if (elapsed > 16) { // Took longer than 1 frame, yield
+                        setTimeout(processNextBatch, 0);
+                    } else {
+                        processNextBatch();
+                    }
+                } else {
+                    resolve();
+                }
+            };
 
-        // Account type handling
-        const name = renderUsernameHTML(player);
+            processNextBatch();
+        });
+    };
 
-        // Get Rank
-        const playerRating = player.networkRaids ?? 0;
-        const rank = getRank(playerRating);
-        const rankHTML = `
-            <div class="badge-lb tooltip player-rank-leaderboard">
-                <img loading="lazy" src="${rank.image}" height="20" alt="Rank Image"> 
-                <span class="tooltiptext">${rank.fullName}</span>
-            </div>
-        `
+    // Wait for all batches to complete
+    await processBatches();
 
-        // Prestige icon
-        const prestigeImg = [1, 2, 3, 4, 5, 6].includes(player.prestige)
-            ? `<img loading="lazy" src="media/leaderboard_icons/Prestige_Icon${player.prestige}.png" style="width: 25px; height: 25px" class="prestige-icon" alt="Prestige ${player.prestige}">`
-            : '';
-
-        // Skill rank label
-        const rankLabel = player.isCasual ? 'Casual' : getRankLabel(player.totalScore);
-
-        row.innerHTML = `
-            <td class="rank">${player.rank}</td>
-            <td class="teamtag" data-team="${escapeHtml(player.teamTag ? player.teamTag : ``)}">${player.teamTag ? `[${escapeHtml(player.teamTag)}]` : ``}</td>
-            <td class="player-name-wrapper" data-player-id="${player.id || '0'}">
-                    ${`<img loading="lazy" class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';"  alt="Avatar"/>`}
-                    ${name} ${prestigeImg} ${rankHTML}
-            </td>
-            <td>${lastGame || 'N/A'}</td>
-            <td><button class="main-button" onclick="copyProfile('${player.id}')"> Share <i class="fa-solid fa-share-from-square"></i> </button></td>
-            <td>${badge}</td>
-            <td>${player.pmcRaids} / ${player.scavRaids ?? 0} (${player.pmcRaids + player.scavRaids ?? 0})</td>
-            <td class="${player.survivedToDiedRatioClass}">${player.survivalRate}%</td>
-            <td class="${player.killToDeathRatioClass}">${player.killToDeathRatio}</td>
-            <td class="${player.averageLifeTimeClass}">${formatSeconds(player.averageLifeTime)}</td>
-            <td>${!player.totalScore || player.totalScore <= 0 ? 'Calibrating...' : player.totalScore.toFixed(3)} ${!player.totalScore || player.totalScore <= 0 ? '' : `(${rankLabel})`}</td>
-            <td class="${player.versionStatus}">${escapeHtml(player.sptVer)}</td>
-        `
-
-        fragment.appendChild(row)
-    });
-
-    tempTableBody.appendChild(fragment);
-
+    // render
     const mainTable = document.querySelector('#leaderboardTable');
     const currentTableBody = mainTable.querySelector('tbody');
     mainTable.replaceChild(tempTableBody, currentTableBody);
     tempTableBody.style.display = '';
 
-    // Add click handlers for player names
-    mainTable.addEventListener('click', (e) => {
+    const tableClickHandler = (e) => {
         if (e.target.closest('.player-name-wrapper')) {
             openProfile(e.target.closest('.player-name-wrapper').dataset.playerId);
         }
         if (e.target.closest('.teamtag')) {
             openTeam(e.target.closest('.teamtag').dataset.team);
         }
-    });
+    };
+
+    mainTable.removeEventListener('click', tableClickHandler);
+    mainTable.addEventListener('click', tableClickHandler);
 
     isDataReady = true;
+}
+
+// Extracted row rendering
+function createPlayerRow(player) {
+    const row = document.createElement('tr');
+    let lastGame;
+
+    // Check HeartbeatMonitor
+    const playerStatus = window.heartbeatMonitor.getPlayerStatus(player.id);
+
+    if (!player.banned) {
+        const lastOnlineTime = heartbeatMonitor.isOnline(player.id)
+            ? '<span class="player-status-lb-online">Online</span>'
+            : window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || player.lastPlayed);
+
+        if (heartbeatMonitor.isOnline(player.id)) {
+            const isInRaid = playerStatus.status === 'in_raid' || playerStatus.status === 'in_transit';
+
+            if (isInRaid) {
+                lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">
+            ${playerStatus.statusText} 
+            <span class="raid-dots">
+                <span class="r-dot"></span>
+                <span class="r-dot"></span>
+                <span class="r-dot"></span>
+            </span>
+        </span>`;
+            } else {
+                lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">
+            ${playerStatus.statusText} 
+            <span id="blink"></span>
+        </span>`;
+            }
+        } else {
+            lastGame = `<span class="last-online-time">${lastOnlineTime}</span>`;
+        }
+    } else {
+        lastGame = `<span class="last-online-time">Banned</span>`;
+    }
+
+    // Add profile standing
+    let badge;
+    if (player.banned) {
+        badge = `
+        <div class="badge-lb tooltip">
+            <em class="fa-solid fa-triangle-exclamation" style="color:rgba(255, 110, 100, 1);"></em>
+            <span class="tooltiptext">Profile is banned</span>
+        </div>`;
+    } else if (player?.suspicious && !player.isCasual) {
+        badge = `
+        <div class="badge-lb tooltip">
+            <em class="fa-solid fa-triangle-exclamation" style="color:rgb(255, 214, 100);"></em>
+            <span class="tooltiptext">Marked as suspicious by SkillIssueDetector™ (Beta)</span>
+        </div>`;
+    } else {
+        const boostValue = player.boostPerc || 0;
+        const boostColor = boostValue >= 1 && boostValue <= 3 ? 'rgba(142, 255, 189, 1)' :
+            boostValue > 3 ? 'rgba(100, 200, 255, 1)' :
+                boostValue < 0 ? 'rgba(255, 110, 100, 1)' : 'rgba(255, 255, 255, 1)';
+
+        const boostIcon = boostValue > 0 ? 'fa-arrow-up' : boostValue < 0 ? 'fa-arrow-down' : 'fa-arrows-to-dot';
+
+        badge = `
+        ${isPremium(player) ? `
+        <div class="badge-lb tooltip" style="display: inline !important;">
+            <em class='fa-solid fa-shield' style="color:rgb(100, 255, 165);"></em>
+            <span class="tooltiptext" style="bottom: 170%;">Profile in good standing</span>
+        </div>
+        <div class="badge-lb tooltip badge-premium" style="display: inline !important;">
+            <em class="fa-solid fa-bolt"></em>
+            <span class="tooltiptext" style="bottom: 170%;">Premium BattlePass Owner</span>
+        </div>
+        <div class="boost-container tooltip">
+            <span class="boost-value">${boostValue.toFixed(1)}%</span>
+            <em class='fa-solid ${boostIcon}' style="color:${boostColor}; font-size:0.8em"></em>
+            <span class="tooltiptext">
+                ${getBoostDescription(boostValue)}
+            </span>
+        </div>
+        ` : `
+        <div class="badge-lb tooltip">
+            <em class='fa-solid fa-shield' style="color:rgb(100, 255, 165);"></em>
+            <span class="tooltiptext">Profile in good standing</span>
+        </div>
+        <div class="boost-container tooltip">
+            <span class="boost-value">${boostValue.toFixed(1)}%</span>
+            <em class='fa-solid ${boostIcon}' style="color:${boostColor}; font-size:0.8em"></em>
+            <span class="tooltiptext">
+                ${getBoostDescription(boostValue)}
+            </span>
+        </div> `}
+        `
+    }
+
+    // Account type handling
+    const name = renderUsernameHTML(player);
+
+    // Get Rank
+    const playerRating = player.networkRaids ?? 0;
+    const rank = getRank(playerRating);
+    const rankHTML = `
+        <div class="badge-lb tooltip player-rank-leaderboard">
+            <img loading="lazy" src="${rank.image}" height="20" alt="Rank Image"> 
+            <span class="tooltiptext">${rank.fullName}</span>
+        </div>
+    `
+
+    // Prestige icon
+    const prestigeImg = [1, 2, 3, 4, 5, 6].includes(player.prestige)
+        ? `<img loading="lazy" src="media/leaderboard_icons/Prestige_Icon${player.prestige}.png" style="width: 25px; height: 25px" class="prestige-icon" alt="Prestige ${player.prestige}">`
+        : '';
+
+    // Skill rank label
+    const rankLabel = player.isCasual ? 'Casual' : getRankLabel(player.totalScore);
+
+    row.innerHTML = `
+        <td class="rank">${player.rank}</td>
+        <td class="teamtag" data-team="${escapeHtml(player.teamTag ? player.teamTag : ``)}">${player.teamTag ? `[${escapeHtml(player.teamTag)}]` : ``}</td>
+        <td class="player-name-wrapper" data-player-id="${player.id || '0'}">
+                ${`<img loading="lazy" class="lb-profile-picture" src="${player.profilePicture || `/api/data/pmc_avatars/${player.permaLink}` || 'media/default_avatar.png'}" onerror="this.src='media/default_avatar.png';"  alt="Avatar"/>`}
+                ${name} ${prestigeImg} ${rankHTML}
+        </td>
+        <td>${lastGame || 'N/A'}</td>
+        <td><button class="main-button" onclick="copyProfile('${player.id}')"> Share <i class="fa-solid fa-share-from-square"></i> </button></td>
+        <td>${badge}</td>
+        <td>${player.pmcRaids} / ${player.scavRaids ?? 0} (${player.pmcRaids + player.scavRaids ?? 0})</td>
+        <td class="${player.survivedToDiedRatioClass}">${player.survivalRate}%</td>
+        <td class="${player.killToDeathRatioClass}">${player.killToDeathRatio}</td>
+        <td class="${player.averageLifeTimeClass}">${formatSeconds(player.averageLifeTime)}</td>
+        <td>${!player.totalScore || player.totalScore <= 0 ? 'Calibrating...' : player.totalScore.toFixed(3)} ${!player.totalScore || player.totalScore <= 0 ? '' : `(${rankLabel})`}</td>
+        <td class="${player.versionStatus}">${escapeHtml(player.sptVer)}</td>
+    `;
+
+    return row;
 }
 
 /**
