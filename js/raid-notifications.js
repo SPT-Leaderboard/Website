@@ -33,15 +33,27 @@ async function showPlayerNotification(player) {
     // Throttle notifications
     if (notificationStack.length >= MAX_NOTIFICATIONS) {
         const oldestNotification = notificationStack.shift();
-        oldestNotification.remove();
+        oldestNotification.style.animation = 'notificationSlideOut 0.2s ease-in forwards';
+
+        console.debug(`[NOTIFY] Throttling ${player.name}.`);
+
+        setTimeout(() => {
+            oldestNotification.remove();
+            updateNotificationPositions();
+        }, 200);
+
+        return;
     }
 
     const now = Date.now();
     const timeSinceLast = now - lastNotificationTime;
 
     if (timeSinceLast < NOTIFICATION_DELAY) {
+        console.debug(`[NOTIFY] Throttling ${player.name}.`);
         await new Promise(resolve => setTimeout(resolve, NOTIFICATION_DELAY - timeSinceLast));
     }
+
+    lastNotificationTime = Date.now();
 
     const lastRaidTime = player.absoluteLastTime;
     const currentData = playerNotificationData.get(player.id);
@@ -60,307 +72,224 @@ async function showPlayerNotification(player) {
 
     // New player
     if (player.isNew && !player.banned) {
+        console.debug(`[NOTIFY] Showing new player ${player.name}.`);
         await showNewPlayerWelcome(player);
         return;
     }
 
+    // Ban notification
+    if (player.banned && !isBanSoundPlaying) {
+        console.debug(`[NOTIFY] Showing banned player ${player.name}.`);
+
+        await showBanNotification(player);
+        return;
+    }
+
+    // Regular raid notification
     const name = renderUsernameHTML(player, true);
+    const streakContent = generateKillstreakContent({
+        player,
+        kills: player.lastRaidKills,
+        plRank: getRank(player.networkRaids, 2000, 32),
+        isOnRaidStreak: false,
+        shouldShowProfit: false,
+        useUpgraded: player?.special_props?.includes("upgradedKillstreak") && getRank(player.networkRaids, 2000, 32).level >= 1
+    });
 
-    // Raidstreak/Killstreaks
-    let isOnRaidStreak = false;
-    let streakNotificationKillText = '';
-
+    // Handle raid streak
+    let raidStreakContent = null;
     if (player.currentWinstreak > 5 && !player.banned) {
-        isOnRaidStreak = true;
         const pmcRaid = new Audio('media/sounds/raidstreak/5raidstreak.wav');
         pmcRaid.volume = 0.05;
         pmcRaid.play();
-
-        streakNotificationKillText = `ON A ${player.currentWinstreak} RAID WIN STREAK!`;
+        raidStreakContent = {
+            type: 'raid-streak',
+            text: `ON A ${player.currentWinstreak} RAID WIN STREAK!`
+        };
     }
 
-    // Profit
-    let shouldShowProfit = false;
-    let hasLostProfit = false;
-    let profitText = '';
-
-    if (player?.lastProfitGain !== undefined && player?.lastProfitGain !== null && !player.isCasual) {
+    // Handle profit
+    let profitContent = null;
+    if (player?.lastProfitGain && !player.isCasual) {
         const profit = Number(player.lastProfitGain);
-
-        // +2.5MIL
         if (profit >= 2500000) {
-            try {
-                const profitRaid = new Audio('media/sounds/earnings/profit.mp3');
-                profitRaid.volume = 0.20;
-                profitRaid.play();
-            } catch (e) {
-                console.log('Could not play profit sound:', e);
-            }
-
-            profitText = `${player.name} just got out with ${profit.toLocaleString()} ₽!`;
-            shouldShowProfit = true;
-            console.log(`Showing profit for ${player.name}: +${profit} ₽`);
-        }
-        // -2MIL
-        else if (!player.lastRaidSurvived && profit <= -2000000) {
-            try {
-                const profitRaid = new Audio('media/sounds/earnings/profit_lost.mp3');
-                profitRaid.volume = 0.05;
-                profitRaid.play();
-            } catch (e) {
-                console.log('Could not play sound:', e);
-            }
-
-            profitText = `${player.name} just lost ${Math.abs(profit).toLocaleString()} ₽!`;
-            hasLostProfit = true;
-            shouldShowProfit = true;
-            console.log(`Showing loss for ${player.name}: ${profit} ₽`);
+            playSound('media/sounds/earnings/profit.mp3', 0.2);
+            profitContent = {
+                type: 'profit',
+                text: `${player.name} just got out with ${profit.toLocaleString()} ₽!`
+            };
+        } else if (!player.lastRaidSurvived && profit <= -1500000) {
+            playSound('media/sounds/earnings/profit_lost.mp3', 0.05);
+            profitContent = {
+                type: 'loss',
+                text: `${player.name} just lost ${Math.abs(profit).toLocaleString()} ₽!`
+            };
         }
     }
 
-    // Killstreak
-    const kills = player.lastRaidKills;
-    if (!isOnRaidStreak && !shouldShowProfit && player.lastRaidSurvived && player.lastRaidKills > 1 && !player.banned) {
-        let killStreak;
-        let soundFile = '';
-        let notificationText;
+    // Play raid sounds
+    playRaidSound(player);
 
-        switch (true) {
-            case kills === 2:
-                notificationText = `${player.name} just made double kill!`;
-                soundFile = '2.wav';
-                break;
-            case kills === 3:
-                notificationText = `${player.name} is on triple kill!`;
-                soundFile = '3.wav';
-                break;
-            case kills >= 6 && kills < 8:
-                notificationText = `${player.name} IS WICKED WITH ${kills} KILLS!`;
-                soundFile = '6.wav';
-                break;
-            case kills >= 8 && kills < 10:
-                notificationText = `${player.name} IS UNSTOPPABLE!<br>${kills} KILLS!`;
-                soundFile = '8.wav';
-                break;
-            case kills >= 10 && kills < 12:
-                notificationText = `${player.name} IS A TARKOV DEMON!<br>${kills} KILLS!`;
-                soundFile = '10.wav';
-                break;
-            case kills >= 12 && kills < 15:
-                notificationText = `${player.name} IS GODLIKE!<br>${kills} KILLS!`;
-                soundFile = '12.wav';
-                break;
-            case kills >= 15:
-                notificationText = `SOMEONE STOP THIS MACHINE!<br>${kills} KILLS IN ONE RAID!`;
-                soundFile = '15.wav';
-                break;
-            default:
-                return;
-        }
-
-        streakNotificationKillText = notificationText;
-        if (soundFile) {
-            killStreak = new Audio(`media/sounds/killstreak/${soundFile}`);
-            killStreak.volume = 0.04;
-            killStreak.play().then().catch(e => console.error('Audio play failed:', e));
-        }
-    }
-
-    // Sounds
-    if (!player.banned) {
-        if (player.lastRaidAs === "PMC" && player.lastRaidSurvived) {
-            const pmcRaid = new Audio('media/sounds/pmc-raid-run.ogg');
-            pmcRaid.volume = 0.05;
-            pmcRaid.play();
-        } else if (player.lastRaidAs === "PMC" && !player.lastRaidSurvived) {
-            const pmcRaidDied = new Audio('media/sounds/pmc-raid-died.wav');
-            pmcRaidDied.volume = 0.05;
-            pmcRaidDied.play();
-        } else if (player.lastRaidAs === "SCAV" && player.lastRaidSurvived) {
-            const pmcRaid = new Audio('media/sounds/scav-raid-run.mp3');
-            pmcRaid.volume = 0.20;
-            pmcRaid.play();
-        } else if (player.lastRaidAs === "SCAV" && !player.lastRaidSurvived) {
-            const pmcRaidDied = new Audio('media/sounds/scav-raid-died.wav');
-            pmcRaidDied.volume = 0.15;
-            pmcRaidDied.play();
-        }
-    }
-
-    // Create notification element
-    const notification = document.createElement('div');
-
-    // Set backgrounds based on the game/ban
-    if (player.banned) {
-        notification.className = `player-notification-r died-bg border-died`;
-    } else {
-        notification.className = `player-notification-r ${player.discFromRaid ? 'disconnected-bg border-died' : player.isTransition ? 'transit-bg border-transit' : player.lastRaidSurvived ? 'survived-bg border-survived' : 'died-bg border-died'}`;
-    }
-
-    if (player.banned && !isBanSoundPlaying) {
-        isBanSoundPlaying = true;
-        const introMusic = new Audio('media/sounds/ban/ban_reveal.mp3');
-        introMusic.volume = 0.10;
-        introMusic.play();
-
-        introMusic.addEventListener('ended', () => {
-            const mainBanSound = new Audio('media/sounds/ban/ban.mp3');
-            mainBanSound.volume = 0.15;
-            mainBanSound.play();
-
-            isBanSoundPlaying = false;
-        });
-
-        createBanNotification(player);
-        setBanNotificationCookie(player.id);
-
-        return;
-    } else {
-        notification.innerHTML = `
-        <div class="notification-content-r">
-            <div class="notification-header-r">
-                <img src="${player.profilePicture}" alt="${escapeHtml(player.name)}'s avatar" onclick="openProfile(${player.id})" class="notification-avatar-r" onerror="this.src='media/default_avatar.png';">
-                <div class="notification-text-r">
-                    ${name}
-                    <span class="notification-info-r">
-                        Finished raid • ${formatLastPlayedRaid(player.absoluteLastTime)} • ${!player.isCasual ? `<span>Rank #${player.rank}</span>` : `Casual Mode`}
-                    </span>
-                </div>
-            </div>
-            <div class="raid-overview-notify">
-                <span class="raid-result-r ${player.lastRaidRanThrough ? 'run-through' : player.discFromRaid ? 'disconnected' : player.isTransition ? 'transit' : player.lastRaidSurvived ? 'survived' : 'died'}">
-                    ${player.lastRaidRanThrough ? `<i class="fa-solid fa-person-walking"></i> Runner` : player.discFromRaid ? `<i class="fa-solid fa-arrow-right-from-bracket"></i> Left` : player.isTransition ? `<i class="fa-solid fa-arrows-rotate fa-spin"></i>  Transit (${player.lastRaidMap}
-                    <i class='fa-solid fa-person-walking-arrow-right'></i>  ${escapeHtml(player.lastRaidTransitionTo || 'Unknown')})` : player.lastRaidSurvived ? `<i class="fa-solid fa-person-walking"></i> Survived` : `
-                    <i class="fa-solid fa-skull-crossbones"></i> Killed in Action`}
-                </span>
-                <span class="raid-meta-notify">
-                    ${player.lastRaidMap || 'Unknown'} • ${player.lastRaidAs || 'N/A'} ${player.lastRaidSurvived ? `` : `• Killed by ${escapeHtml(player.agressorName)}`} • ${player.lastRaidEXP} EXP
-                </span>
-                ${(kills > 5 && !shouldShowProfit) ? `
-                    <span class="notification-last-raid-streak">
-                        ${streakNotificationKillText}
-                    </span>
-                    ` : `
-                    <span class="notification-last-raid-streak-common">
-                        ${streakNotificationKillText}
-                    </span>
-                    `}
-                ${shouldShowProfit ? `
-                    <span class="notification-last-raid-profit ${hasLostProfit ? `last-raid-lost-profit` : ``}">
-                        ${profitText}
-                    </span>
-                    ` : ``}
-            </div>
-        </div>
-    `;
-    }
+    // Create notification
+    const notification = createNotificationElement(player, name, {
+        streakContent,
+        raidStreakContent,
+        profitContent
+    });
 
     const container = document.getElementById('notifications-container-r') || createNotificationsContainer();
     container.appendChild(notification);
-
     notificationStack.push(notification);
     updateNotificationPositions();
 
-    setTimeout(() => {
-        notification.style.animation = 'fadeOut 0.3s forwards';
-        console.debug(`[NOTIFY] Notification fade started for ${player.name}`);
-    }, 12000);
-
-    setTimeout(() => {
-        notification.remove();
-        const index = notificationStack.indexOf(notification);
-        if (index > -1) {
-            notificationStack.splice(index, 1);
-        }
-        updateNotificationPositions();
-        console.debug(`[NOTIFY] Notification removed for ${player.name}`);
-    }, 15000);
+    scheduleNotificationRemoval(notification, player.name);
 }
 
-function updateNotificationPositions() {
-    const offset = 10;
-    let topPosition = 100;
-
-    notificationStack.forEach((notif, index) => {
-        notif.style.top = `${topPosition}px`;
-        notif.style.right = '10px';
-        notif.style.zIndex = 1000 + index;
-        topPosition += notif.offsetHeight + offset;
-    });
-}
-
-function createNotificationsContainer() {
-    const container = document.createElement('div');
-    container.id = 'notifications-container-r';
-    document.body.appendChild(container);
-    console.debug(`[NOTIFY] Notification container created.`);
-    return container;
-}
-
-function checkRecentPlayers(leaderboardData) {
-    const currentTime = Math.floor(Date.now() / 1000);
-    const fiveMinutesAgo = currentTime - 300;
-    const twoHoursAgo = currentTime - 7200;
-
-    // Sort notifications by the newest ones first
-    const sortedPlayers = [...leaderboardData].sort((a, b) =>
-        (b.absoluteLastTime || 0) - (a.absoluteLastTime || 0));
-
-    let shownCount = 0;
-    const MAX_INITIAL_NOTIFICATIONS = 3;
-
-    for (const player of sortedPlayers) {
-        if (shownCount >= MAX_INITIAL_NOTIFICATIONS) break;
-
-        if (!player.absoluteLastTime) continue;
-
-        if ((player.absoluteLastTime > fiveMinutesAgo) ||
-            (player.banned && player.banTime > twoHoursAgo)) {
-
-            shownCount++;
-            setTimeout(() => showPlayerNotification(player), shownCount * NOTIFICATION_DELAY);
-        }
-    }
-}
-
-function setBanNotificationCookie(playerId) {
-    const now = new Date();
-    now.setTime(now.getTime() + (61 * 60 * 1000)); // 61 mins
-    document.cookie = `banNotify_${playerId}=1; expires=${now.toUTCString()}; path=/`;
-}
-
-function createBanNotification(player) {
+function createNotificationElement(player, name, contents) {
+    const raidStatus = getRaidStatusNotify(player);
     const notification = document.createElement('div');
-    notification.className = `player-notification-r died-bg border-died`;
 
-    const banDate = new Date(player.banTime * 1000);
-    let bannedUntil = new Date(player.banExpires * 1000);
+    notification.className = `notification-r notification--${raidStatus.type}`;
 
-    const formattedBanDate = formatDate(banDate);
-    const formattedBanExpires = player.permBanned ? 'Permanent' : formatDate(bannedUntil);
+    const killedBy = !player.lastRaidSurvived && !player.discFromRaid && player.agressorName
+        ? `
+        <span class="notification__dot">•</span>
+        <span class="notification__killed-by">Killed by ${escapeHtml(player.agressorName)}</span>`
+        : '';
+
+    if (player.lastRaidMap) {
+        notification.style.setProperty(
+            '--map-bg',
+            `url('media/leaderboard_icons/maps/${player.lastRaidMap}.png')`
+        );
+    }
+
+    const highlights = [contents.streakContent, contents.raidStreakContent, contents.profitContent]
+        .filter(Boolean)
+        .map(content => `
+            <div class="notification__highlight notification__highlight--${content.type}">
+                ${content.text}
+            </div>
+        `).join('');
 
     notification.innerHTML = `
-        <div class="notification-content-r">
-            <div class="notification-header-r">
-                <img src="media/default_avatar.png" alt="${escapeHtml(player.name)}'s avatar" class="notification-avatar-r">
-                <div class="notification-text">
-                    <span class="notification-name-r">
-                        ${player.teamTag ? `[${escapeHtml(player.teamTag)}]` : ``} ${escapeHtml(player.name)}
-                    </span>
+        <div class="notification__content">
+            <div class="notification__header">
+                <div class="notification__avatar-wrapper">
+                    <img src="${player.profilePicture}" 
+                         alt="${escapeHtml(player.name)}" 
+                         class="notification__avatar"
+                         onerror="this.src='media/default_avatar.png';"
+                         onclick="openProfile('${player.id}')">
+                </div>
+                <div class="notification__info">
+                    <div class="notification__name">${name}</div>
+                    <div class="notification__meta">
+                        ${player.isCasual ? 'Casual Mode' : `Rank #${player.rank}`}
+                        <span class="notification__dot">•</span>
+                        ${formatLastPlayedRaid(player.absoluteLastTime)}
+                    </div>
                 </div>
             </div>
-            <div class="raid-overview-notify">
-                <span class="notification-ban">
-                    Was ${player.permBanned ? `permanently` : ``} banned from Leaderboard.
-                </span>
-                <span class="ban-text">
-                    Reason: ${escapeHtml(player.banReason)}<br>
-                    Banned at: ${formattedBanDate}<br>
-                    Banned until: ${formattedBanExpires}
-                </span>
-                <span class="ban-issued">
-                    Banned by ${escapeHtml(player.tookAction)}
-                </span>
+
+            <div class="notification__raid-info">
+                <div class="notification__status notification__status--${raidStatus.type}">
+                    ${createIcon(raidStatus.icon, raidStatus.isSpin)}
+                    <span>${raidStatus.text}</span>
+                    ${raidStatus.type === 'transit' ? `
+                        <span class="notification__transit-details">
+                            (${player.lastRaidMap} <i class="fa-solid fa-arrow-right-from-bracket"></i> ${escapeHtml(player.lastRaidTransitionTo || 'Unknown')})
+                        </span>
+                    ` : ''}
+                </div>
+
+                <div class="notification__details">
+                    <span class="notification__map">${player.lastRaidMap || 'Unknown'}</span>
+                    <span class="notification__dot">•</span>
+                    <span>${player.lastRaidAs || 'N/A'}</span>
+                    ${killedBy}
+                    <span class="notification__dot">•</span>
+                    <span class="notification__exp">${player.lastRaidEXP} EXP</span>
+                </div>
+
+                ${highlights}
+            </div>
+        </div>
+    `;
+
+    return notification;
+}
+
+async function showBanNotification(player) {
+    isBanSoundPlaying = true;
+
+    const introMusic = new Audio('media/sounds/ban/ban_reveal.mp3');
+    introMusic.volume = 0.10;
+    await new Promise((resolve) => {
+        introMusic.addEventListener('ended', resolve, { once: true });
+        introMusic.play();
+    });
+
+    const mainBanSound = new Audio('media/sounds/ban/ban.mp3');
+    mainBanSound.volume = 0.15;
+    mainBanSound.play();
+    mainBanSound.addEventListener('ended', () => {
+        isBanSoundPlaying = false;
+    });
+
+    setBanNotificationCookie(player.id);
+
+    const notification = document.createElement('div');
+    notification.className = 'notification-r notification--banned';
+
+    const banDate = new Date(player.banTime * 1000);
+    const formattedBanDate = formatDate(banDate);
+    const formattedBanExpires = player.permBanned ? 'Permanent' : formatDate(new Date(player.banExpires * 1000));
+
+    notification.innerHTML = `
+        <div class="notification__content">
+            <div class="notification__header">
+                <div class="notification__avatar-wrapper">
+                    <img src="media/default_avatar.png" 
+                         alt="${escapeHtml(player.name)}" 
+                         class="notification__avatar notification__avatar--banned">
+                </div>
+                <div class="notification__info">
+                    <div class="notification__name notification__name--banned">
+                        ${player.teamTag ? `[${escapeHtml(player.teamTag)}] ` : ''}${escapeHtml(player.name)}
+                    </div>
+                    <div class="notification__meta notification__meta--banned">
+                        Banned from Leaderboard
+                    </div>
+                </div>
+            </div>
+
+            <div class="notification__raid-info">
+                <div class="notification__status notification__status--banned">
+                    ${createIcon('fa-gavel')}
+                    <span>${player.permBanned ? 'PERMANENTLY BANNED' : 'BANNED'}</span>
+                </div>
+
+                <div class="notification__ban-details">
+                    <div class="notification__ban-reason">
+                        <span class="notification__ban-label">Reason:</span>
+                        ${escapeHtml(player.banReason)}
+                    </div>
+                    <div class="notification__ban-meta">
+                        <div>
+                            <span class="notification__ban-label">Banned at:</span>
+                            ${formattedBanDate}
+                        </div>
+                        <div>
+                            <span class="notification__ban-label">Until:</span>
+                            ${formattedBanExpires}
+                        </div>
+                        <div>
+                            <span class="notification__ban-label">By:</span>
+                            ${escapeHtml(player.tookAction)}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     `;
@@ -371,17 +300,15 @@ function createBanNotification(player) {
     updateNotificationPositions();
 
     setTimeout(() => {
-        notification.style.animation = 'fadeOut 0.3s forwards';
+        notification.classList.add('notification--removing');
     }, 27000);
 
     setTimeout(() => {
         notification.remove();
         const index = notificationStack.indexOf(notification);
-        if (index > -1) {
-            notificationStack.splice(index, 1);
-        }
+        if (index > -1) notificationStack.splice(index, 1);
         updateNotificationPositions();
-    }, 30000);
+    }, 27300);
 }
 
 async function showNewPlayerWelcome(player) {
@@ -407,30 +334,38 @@ async function showNewPlayerWelcome(player) {
     });
 
     const notification = document.createElement('div');
-    notification.className = `player-notification-r`;
+    notification.className = 'notification-r notification--new-player';
 
     notification.innerHTML = `
-        <div class="notification-content-r">
-            <div class="notification-header-r">
-                <div class="new-player-avatar-wrapper">
-                    <img src="${player.profilePicture}" alt="${escapeHtml(player.name)}'s avatar" class="notification-avatar-r new-player-avatar" onerror="this.src='media/default_avatar.png';" />
-                    <div class="new-player-badge">NEW</div>
+        <div class="notification__content">
+            <div class="notification__header">
+                <div class="notification__avatar-wrapper">
+                    <img src="${player.profilePicture}" 
+                         alt="${escapeHtml(player.name)}" 
+                         class="notification__avatar notification__avatar--new"
+                         onerror="this.src='media/default_avatar.png';">
+                    <div class="notification__new-badge">NEW</div>
                 </div>
-                <div class="notification-text">
-                    <span class="notification-name-r new-player-name">
+                <div class="notification__info">
+                    <div class="notification__name notification__name--new">
                         Welcome to SPT Leaderboard!
-                    </span>
-                    <span class="notification-info-r new-player-subtitle">
+                    </div>
+                    <div class="notification__meta notification__meta--new">
                         ${escapeHtml(player.name)} just joined SPTLB
-                    </span>
+                    </div>
                 </div>
             </div>
-            <div class="raid-overview-notify">
-                <div class="new-player-stats">
-                    <span class="new-player-stat">
-                        <i class="fa-solid fa-arrow-trend-up"></i>
-                        Joined us at #${player.rank} rank
-                    </span>
+
+            <div class="notification__raid-info">
+                <div class="notification__new-stats">
+                    <div class="notification__new-stat">
+                        ${createIcon('fa-arrow-trend-up')}
+                        <span>Joined at <strong>Rank #${player.rank}</strong></span>
+                    </div>
+                    <div class="notification__new-stat">
+                        ${createIcon('fa-clock')}
+                        <span>${player.networkRaids < 2 ? `First raid recorded` : `${player.networkRaids}th raid on record`}</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -442,17 +377,81 @@ async function showNewPlayerWelcome(player) {
     updateNotificationPositions();
 
     setTimeout(() => {
-        notification.style.animation = 'fadeOut 0.3s forwards';
+        notification.classList.add('notification--removing');
     }, 27000);
 
     setTimeout(() => {
         notification.remove();
         const index = notificationStack.indexOf(notification);
-        if (index > -1) {
-            notificationStack.splice(index, 1);
-        }
+        if (index > -1) notificationStack.splice(index, 1);
         updateNotificationPositions();
-    }, 30000);
+    }, 27300);
+}
+
+function scheduleNotificationRemoval(notification, playerName) {
+    setTimeout(() => {
+        notification.classList.add('notification--removing');
+        console.debug(`[NOTIFY] Notification fade started for ${playerName}`);
+    }, 12000);
+
+    setTimeout(() => {
+        notification.remove();
+        const index = notificationStack.indexOf(notification);
+        if (index > -1) notificationStack.splice(index, 1);
+        updateNotificationPositions();
+        console.debug(`[NOTIFY] Notification removed for ${playerName}`);
+    }, 12300);
+}
+
+function updateNotificationPositions() {
+    const gap = 12;
+    let topOffset = 0;
+
+    notificationStack.forEach((notif, index) => {
+        notif.style.top = `${topOffset}px`;
+        notif.style.right = '0';
+        notif.style.zIndex = 1000 - index;
+        topOffset += notif.offsetHeight + gap;
+    });
+}
+
+function createNotificationsContainer() {
+    const container = document.createElement('div');
+    container.id = 'notifications-container-r';
+    document.body.appendChild(container);
+    console.debug(`[NOTIFY] Notification container created.`);
+    return container;
+}
+
+function checkRecentPlayers(leaderboardData) {
+    const currentTime = Math.floor(Date.now() / 1000);
+    const fiveMinutesAgo = currentTime - 300;
+    const twoHoursAgo = currentTime - 7200;
+
+    const sortedPlayers = [...leaderboardData].sort((a, b) =>
+        (b.absoluteLastTime || 0) - (a.absoluteLastTime || 0));
+
+    let shownCount = 0;
+    const MAX_INITIAL_NOTIFICATIONS = 3;
+
+    for (const player of sortedPlayers) {
+        if (shownCount >= MAX_INITIAL_NOTIFICATIONS) break;
+
+        if (!player.absoluteLastTime) continue;
+
+        if ((player.absoluteLastTime > fiveMinutesAgo) ||
+            (player.banned && player.banTime > twoHoursAgo)) {
+
+            shownCount++;
+            setTimeout(() => showPlayerNotification(player), shownCount * NOTIFICATION_DELAY);
+        }
+    }
+}
+
+function setBanNotificationCookie(playerId) {
+    const now = new Date();
+    now.setTime(now.getTime() + (61 * 60 * 1000));
+    document.cookie = `banNotify_${playerId}=1; expires=${now.toUTCString()}; path=/`;
 }
 
 function wasNewPlayerRecentlyShown(playerId) {
@@ -471,4 +470,142 @@ function setNewPlayerCookie(playerId) {
     const now = new Date();
     now.setTime(now.getTime() + (24 * 60 * 60 * 1000));
     document.cookie = `newPlayer_${playerId}=1; expires=${now.toUTCString()}; path=/; SameSite=Lax; ${location.protocol === 'https:' ? 'Secure;' : ''}`;
+}
+
+function playSound(src, volume = 0.1) {
+    try {
+        const audio = new Audio(src);
+        audio.volume = volume;
+        audio.play().catch(e => console.log('Audio play failed:', e));
+    } catch (e) {
+        console.log('Could not play sound:', e);
+    }
+}
+
+function playRaidSound(player) {
+    if (player.banned) return;
+
+    const soundMap = {
+        'PMC_true': { src: 'media/sounds/pmc-raid-run.ogg', volume: 0.05 },
+        'PMC_false': { src: 'media/sounds/pmc-raid-died.wav', volume: 0.05 },
+        'SCAV_true': { src: 'media/sounds/scav-raid-run.mp3', volume: 0.2 },
+        'SCAV_false': { src: 'media/sounds/scav-raid-died.wav', volume: 0.15 }
+    };
+
+    const key = `${player.lastRaidAs}_${player.lastRaidSurvived}`;
+    const sound = soundMap[key];
+    if (sound) playSound(sound.src, sound.volume);
+}
+
+function getRaidStatusNotify(player) {
+    console.debug(`[NOTIFY] Getting raid status for ${player.name}:`, {
+        banned: player.banned,
+        lastRaidRanThrough: player.lastRaidRanThrough,
+        discFromRaid: player.discFromRaid,
+        isTransition: player.isTransition,
+        lastRaidSurvived: player.lastRaidSurvived
+    });
+
+    if (player.banned) return { type: 'banned', icon: 'fa-gavel', text: 'BANNED' };
+    if (player.lastRaidRanThrough) return { type: 'runner', icon: 'fa-person-walking', text: 'Run Through' };
+    if (player.discFromRaid) return { type: 'disconnected', icon: 'fa-arrow-right-from-bracket', text: 'Disconnected' };
+    if (player.isTransition) return { type: 'transit', icon: 'fa-arrows-rotate', text: 'IN Transit', isSpin: true };
+    if (player.lastRaidSurvived) return { type: 'survived', icon: 'fa-shield-halved', text: 'Survived' };
+
+    return { type: 'died', icon: 'fa-skull-crossbones', text: 'Killed in Action' };
+}
+
+function createIcon(iconClass, isSpin = false) {
+    return `<i class="fa-solid ${iconClass} ${isSpin ? 'fa-spin' : ''}"></i>`;
+}
+
+function generateKillstreakContent(options) {
+    const { player, kills, plRank, isOnRaidStreak, shouldShowProfit, useUpgraded } = options;
+
+    const result = {
+        text: '',
+        type: 'kill-streak',
+        soundFile: ''
+    };
+
+    if (isOnRaidStreak || shouldShowProfit) return null;
+    if (player.banned || !player.lastRaidSurvived || kills <= 1) return null;
+
+    if (useUpgraded) {
+        const upgradedKillstreakHandler = new UpgradedKillstreakHandler();
+        result.text = upgradedKillstreakHandler.generateKillstreakText(player, kills);
+        result.soundFile = upgradedKillstreakHandler.getKillstreakSoundFile(kills);
+    } else {
+        const standardHandler = new StandardKillstreakHandler();
+        result.text = standardHandler.generateKillstreakText(player, kills);
+        result.soundFile = standardHandler.getKillstreakSoundFile(kills);
+    }
+
+    if (result.soundFile) {
+        const killStreak = new Audio(`media/sounds/killstreak/${result.soundFile}`);
+        killStreak.volume = 0.06;
+        killStreak.play().catch(e => console.error('Audio play failed:', e));
+    }
+
+    return result;
+}
+
+class StandardKillstreakHandler {
+    generateKillstreakText(player, kills) {
+        switch (true) {
+            case kills === 2: return `${player.name} just made double kill`;
+            case kills > 2 && kills <= 4: return `${player.name} is on killing spree`;
+            case kills >= 5 && kills < 8: return `${player.name} IS WICKED WITH ${kills} KILLS!`;
+            case kills >= 8 && kills < 10: return `${player.name} IS UNSTOPPABLE! — ${kills} KILLS!`;
+            case kills >= 10 && kills < 12: return `${player.name} IS A TARKOV DEMON! — ${kills} KILLS!`;
+            case kills >= 13 && kills < 14: return `${player.name} IS GODLIKE! — ${kills} KILLS!`;
+            case kills > 15: return `SOMEONE STOP THIS MACHINE! — ${kills} KILLS IN ONE RAID!`;
+            default: return '';
+        }
+    }
+
+    getKillstreakSoundFile(kills) {
+        switch (true) {
+            case kills === 2: return '2.wav';
+            case kills > 2 && kills <= 4: return '3.wav';
+            case kills >= 5 && kills < 8: return '6.wav';
+            case kills >= 8 && kills < 10: return '8.wav';
+            case kills >= 10 && kills < 12: return '10.wav';
+            case kills >= 13 && kills < 14: return '12.wav';
+            case kills >= 15: return '15.wav';
+            default: return '';
+        }
+    }
+}
+
+class UpgradedKillstreakHandler {
+    generateKillstreakText(player, kills) {
+        switch (true) {
+            case kills === 2: return `${player.name} just made double kill`;
+            case kills === 3 || kills < 6: return `${player.name} is on a <font color='#00FF40'><b>killing spree</b></font>`;
+            case kills === 6: return `${player.name} is <font color='#808000'><b>WICKED SICK</b></font>`;
+            case kills === 7: return `${player.name} is <font color='#00e1ff'><b>UNSTOPPABLE</b></font>`;
+            case kills === 8: return `${player.name} IS GODLIKE! — ${kills} KILLS!`;
+            case kills >= 9 && kills <= 10: return `SOMEONE STOP ${player.name} with ${kills} kills!`;
+            case kills >= 11 && kills <= 12: return `${player.name} is a Legend with ${kills} kills!`;
+            case kills === 13: return `${player.name} is BEYOND <font color='#ff9900'><b>GODLIKE</b> with ${kills} kills!!`;
+            case kills > 13: return `${player.name} is on a <span class="rampage-text">RAMPAGE</span> with ${kills} kills!!!`;
+            default: return '';
+        }
+    }
+
+    getKillstreakSoundFile(kills) {
+        switch (true) {
+            case kills === 2: return '2.wav';
+            case kills === 3 || kills < 6: return '3.wav';
+            case kills === 6: return '6.wav';
+            case kills === 7: return '8.wav';
+            case kills === 8: return '10.wav';
+            case kills >= 9 && kills <= 10: return '10.wav';
+            case kills >= 11 && kills <= 12: return '12.wav';
+            case kills === 13: return '15.wav';
+            case kills > 13: return 'rampage.mp3';
+            default: return '';
+        }
+    }
 }
