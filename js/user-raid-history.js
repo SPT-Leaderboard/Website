@@ -42,6 +42,15 @@ const RAID_STAT_KEYS = [
     { key: 'lastRaidEXP', label: 'Loot EXP', format: 'number' }
 ];
 
+const DISPLAY_BATCH_SIZE = 50; // Show 50 at a time
+let currentDisplayOffset = 0;
+let allRaids = [];
+let isLoadingMore = false;
+let hasMoreToDisplay = true;
+let currentPlayerIdGlobal = null;
+let leaderboardDataGlobal = null;
+let isFullyLoaded = false;
+
 // #region Init
 async function initLastRaids(playerId, permaLink) {
     const statsContainer = document.getElementById('raids-stats-container');
@@ -52,23 +61,33 @@ async function initLastRaids(playerId, permaLink) {
         return;
     }
 
+    currentPlayerIdGlobal = playerId;
+    leaderboardDataGlobal = leaderboardData;
+
+    // Reset state
+    currentDisplayOffset = 0;
+    allRaids = [];
+    hasMoreToDisplay = true;
+    isLoadingMore = false;
+    isFullyLoaded = false;
+
     // Show loader
     statsContainer.innerHTML = `
-            <div class="loader-dots" id="main-profile-loader">
+        <div class="loader-dots" id="main-profile-loader">
             <div class="shimmer-bg"></div>
-                <div class="dots-container">
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                </div>
-                <p class="dots-text">Fetching Raids...</p>
+            <div class="dots-container">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
             </div>
-        `;
+            <p class="dots-text">Fetching Raids...</p>
+        </div>
+    `;
 
     recentStatsContainer.innerHTML = `
         <div class="loader-dots">
-        <div class="shimmer-bg"></div>
+            <div class="shimmer-bg"></div>
             <div class="dots-container">
                 <div class="dot"></div>
                 <div class="dot"></div>
@@ -81,7 +100,7 @@ async function initLastRaids(playerId, permaLink) {
 
     mapStatsContainer.innerHTML = `
         <div class="loader-dots">
-        <div class="shimmer-bg"></div>
+            <div class="shimmer-bg"></div>
             <div class="dots-container">
                 <div class="dot"></div>
                 <div class="dot"></div>
@@ -93,44 +112,292 @@ async function initLastRaids(playerId, permaLink) {
     `;
 
     try {
-        const playerRaidsUrl = `${ApiPaths.lastRaidsPath}${permaLink}.json`;
-        const data = await apiFetch(playerRaidsUrl);
+        // Load ALL raids first (but in background, without blocking UI)
+        await loadAllRaids(permaLink);
 
-        if (!data?.raids?.length) {
+        if (!allRaids.length) {
             statsContainer.innerHTML = `
-            <div class="no-stats-message">
-                <h3>Failed to load last raid data</h3>
-                <p>This player doesn't have any raids recorded, or there was an error.</p>
-            </div>`;
-
+                <div class="no-stats-message">
+                    <h3>No raids recorded</h3>
+                    <p>This player doesn't have any raids recorded yet.</p>
+                </div>`;
             return;
         }
 
-        const sortedRaids = sortRaidsByDate(data.raids);
+        // Render summary
+        renderRaidsSummary(allRaids, playerId, leaderboardData);
+        renderMapStats(allRaids);
 
-        renderRaidHistory(sortedRaids, playerId, leaderboardData);
-        renderRaidsSummary(sortedRaids, playerId, leaderboardData);
-        renderMapStats(sortedRaids);
+        // Display first batch
+        renderDisplayBatch();
+        setupInfiniteScroll();
+
     } catch (error) {
-        closeLoader();
-
         statsContainer.innerHTML = `
-        <div class="no-stats-message">
-                <h3>Failed to load last raid data</h3>
-                <p>This player doesn't have any raids recorded, or there was an error. Code - ${error.message}</p>
-        </div>`;
+            <div class="no-stats-message">
+                <h3>Failed to load raid data</h3>
+                <p>Error: ${error.message}</p>
+            </div>`;
+    }
+}
+
+// #region Load all raids
+async function loadAllRaids(permaLink) {
+    try {
+        // load index first
+        const indexUrl = `${ApiPaths.lastRaidsPath}${permaLink}_index.json`;
+        let indexData = null;
+
+        try {
+            indexData = await apiFetch(indexUrl);
+        } catch (e) {
+            // Fallback
+        }
+
+        if (indexData && indexData.total_raids > 0) {
+            const allBlobs = [...(indexData.blobs || [])];
+
+            // Add current blob if not already in blobs array
+            if (indexData.current_blob !== undefined && !allBlobs.some(b => b.blob_index === indexData.current_blob)) {
+                allBlobs.push({
+                    blob_index: indexData.current_blob,
+                    raid_count: 1000
+                });
+            }
+
+            allBlobs.sort((a, b) => a.blob_index - b.blob_index);
+
+            const statsContainer = document.getElementById('raids-stats-container');
+            let loadedBlobs = 0;
+
+            // Load each blob file
+            for (const blobInfo of allBlobs) {
+                const blobUrl = `${ApiPaths.lastRaidsPath}${permaLink}_blob_${blobInfo.blob_index}.json`;
+                try {
+                    const blobData = await apiFetch(blobUrl);
+                    if (blobData?.raids) {
+                        allRaids = [...allRaids, ...blobData.raids];
+                    }
+
+                    loadedBlobs++;
+
+                    if (statsContainer.querySelector('#main-profile-loader')) {
+                        const progressPercent = Math.round((loadedBlobs / allBlobs.length) * 100);
+                        statsContainer.querySelector('#main-profile-loader .dots-text').textContent =
+                            `Loading raids... ${progressPercent}%`;
+                    }
+                } catch (e) {
+                    console.error(`Failed to load blob ${blobInfo.blob_index}:`, e);
+                }
+            }
+
+            // Sort all raids by date (newest first)
+            allRaids = sortRaidsByDate(allRaids);
+            isFullyLoaded = true;
+
+        } else {
+            // Fallback to old file
+            const playerRaidsUrl = `${ApiPaths.lastRaidsPath}${permaLink}.json`;
+            const data = await apiFetch(playerRaidsUrl);
+
+            if (data?.raids?.length) {
+                allRaids = sortRaidsByDate(data.raids);
+                isFullyLoaded = true;
+            }
+        }
+
+    } catch (error) {
+        console.error('Error loading all raids:', error);
+        throw error;
+    }
+}
+
+// Display current batch of raids
+function renderDisplayBatch() {
+    const statsContainer = document.getElementById('raids-stats-container');
+
+    const startIdx = currentDisplayOffset;
+    const endIdx = Math.min(currentDisplayOffset + DISPLAY_BATCH_SIZE, allRaids.length);
+    const batchToDisplay = allRaids.slice(startIdx, endIdx);
+
+    if (currentDisplayOffset === 0) {
+        // First batch
+        statsContainer.innerHTML = batchToDisplay.map(raid =>
+            createRaidCard(raid, currentPlayerIdGlobal, leaderboardData)
+        ).join('');
+    } else {
+        // Subsequent batches
+        const newRaidsHtml = batchToDisplay.map(raid =>
+            createRaidCard(raid, currentPlayerIdGlobal, leaderboardData)
+        ).join('');
+
+        statsContainer.insertAdjacentHTML('beforeend', newRaidsHtml);
+    }
+
+    currentDisplayOffset = endIdx;
+    hasMoreToDisplay = currentDisplayOffset < allRaids.length;
+
+    attachEventListeners();
+
+    const loader = document.getElementById('raids-loading-more');
+    if (loader) loader.remove();
+
+    if (!hasMoreToDisplay) {
+        const showMoreContainer = document.getElementById('show-more-btn-container');
+        if (showMoreContainer) showMoreContainer.remove();
+
+        // All raids loaded
+        if (allRaids.length > DISPLAY_BATCH_SIZE) {
+            statsContainer.insertAdjacentHTML('afterend', `
+                <div class="all-raids-loaded">
+                    <i class="fa-solid fa-check-circle"></i>
+                    All ${allRaids.length} raids loaded
+                </div>
+            `);
+        }
     }
 }
 
 // #region Render raid history
-function renderRaidHistory(raids, currentPlayerId, leaderboardData) {
+function renderCurrentBatch(currentPlayerId) {
     const statsContainer = document.getElementById('raids-stats-container');
 
-    statsContainer.innerHTML = raids.map(raid =>
-        createRaidCard(raid, currentPlayerId, leaderboardData)
-    ).join('');
+    if (currentRaidOffset === 0) {
+        // First batch - replace content
+        statsContainer.innerHTML = allRaids.map(raid =>
+            createRaidCard(raid, currentPlayerIdGlobal, leaderboardData)
+        ).join('');
+    } else {
+        // Subsequent batches - append
+        const newRaidsHtml = allRaids.slice(currentRaidOffset).map(raid =>
+            createRaidCard(raid, currentPlayerIdGlobal, leaderboardData)
+        ).join('');
 
+        statsContainer.insertAdjacentHTML('beforeend', newRaidsHtml);
+    }
+
+    currentRaidOffset = allRaids.length;
     attachEventListeners();
+
+    // Remove loader if present
+    const loader = document.getElementById('raids-loading-more');
+    if (loader) loader.remove();
+}
+
+function setupInfiniteScroll(permaLink) {
+    const statsContainer = document.getElementById('raids-stats-container');
+
+    const handleScroll = () => {
+        if (!hasMoreToDisplay || isLoadingMore) return;
+
+        const scrollPosition = window.innerHeight + window.scrollY;
+        const bottomThreshold = document.body.offsetHeight - 500;
+
+        if (scrollPosition >= bottomThreshold) {
+
+            if (!document.getElementById('raids-loading-more')) {
+                statsContainer.insertAdjacentHTML('beforeend', loaderHtml);
+            }
+
+            loadRaidBatch(permaLink, allRaids.length, RAID_BATCH_SIZE);
+        }
+    };
+
+    window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll);
+}
+
+async function loadRaidBatch(permaLink, offset, limit) {
+    if (isLoadingMore) return;
+
+    isLoadingMore = true;
+
+    try {
+        const indexUrl = `${ApiPaths.lastRaidsPath}${permaLink}_index.json`;
+        const indexData = await apiFetch(indexUrl);
+
+        if (!indexData) {
+            hasMoreToDisplay = false;
+            return;
+        }
+
+        // Determine which blob files to load based on offset
+        const blobFilesToLoad = getBlobFilesForRange(indexData, offset, limit);
+
+        // Load raids from required blob files
+        let newRaids = [];
+
+        for (const blobInfo of blobFilesToLoad) {
+            const blobUrl = `${ApiPaths.lastRaidsPath}${permaLink}_blob_${blobInfo.blob_index}.json`;
+            try {
+                const blobData = await apiFetch(blobUrl);
+                if (blobData?.raids) {
+                    // Get the slice we need from this blob
+                    const startIdx = blobInfo.start_offset;
+                    const endIdx = blobInfo.end_offset;
+                    const raidsSlice = blobData.raids.slice(startIdx, endIdx);
+                    newRaids = [...newRaids, ...raidsSlice];
+                }
+            } catch (e) {
+                console.error(`Failed to load blob ${blobInfo.blob_index}:`, e);
+            }
+        }
+
+        if (newRaids.length > 0) {
+            allRaids = [...allRaids, ...newRaids];
+            renderCurrentBatch();
+        }
+
+        // Check if we have more raids to load
+        hasMoreToDisplay = allRaids.length < indexData.total_raids;
+
+    } catch (error) {
+        console.error('Error loading raid batch:', error);
+        hasMoreToDisplay = false;
+    } finally {
+        isLoadingMore = false;
+    }
+}
+
+// #region Blob Range Finder
+function getBlobFilesForRange(indexData, offset, limit) {
+    const blobsToLoad = [];
+    let remainingToLoad = limit;
+    let currentOffset = offset;
+
+    // Sort blobs by start_raid
+    const sortedBlobs = [...(indexData.blobs || [])].sort((a, b) => a.start_raid - b.start_raid);
+
+    // Add current blob if needed
+    if (indexData.current_blob !== undefined) {
+        const currentBlobFile = `${ApiPaths.lastRaidsPath}${indexData.player_id}_blob_${indexData.current_blob}.json`;
+    }
+
+    for (const blob of sortedBlobs) {
+        const blobRaidCount = blob.raid_count;
+
+        if (currentOffset >= blobRaidCount) {
+            currentOffset -= blobRaidCount;
+            continue;
+        }
+
+        const startInBlob = currentOffset;
+        const raidsToTake = Math.min(remainingToLoad, blobRaidCount - startInBlob);
+
+        blobsToLoad.push({
+            blob_index: blob.blob_index,
+            start_offset: startInBlob,
+            end_offset: startInBlob + raidsToTake,
+            raid_count: raidsToTake
+        });
+
+        remainingToLoad -= raidsToTake;
+        currentOffset = 0;
+
+        if (remainingToLoad <= 0) break;
+    }
+
+    return blobsToLoad;
 }
 
 function createRaidCard(raid, currentPlayerId, leaderboardData) {
@@ -544,20 +811,28 @@ function createStatsGrid(raid) {
 }
 
 function attachEventListeners() {
+    if (window.raidEventController) {
+        window.raidEventController.abort();
+    }
+    window.raidEventController = new AbortController();
+    const { signal } = window.raidEventController;
+
     document.querySelectorAll('.cross-profile-link').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            openProfile(link.dataset.playerId, true);
-        });
+            const playerId = link.dataset.playerId;
+            if (playerId) {
+                openProfile(playerId, true);
+            }
+        }, { signal });
     });
 
-    // Add click to expand/collapse stats
     document.querySelectorAll('.last-raid-feed').forEach(card => {
         card.addEventListener('click', (e) => {
             if (!e.target.closest('.cross-profile-link')) {
                 card.classList.toggle('expanded');
             }
-        });
+        }, { signal });
     });
 }
 
