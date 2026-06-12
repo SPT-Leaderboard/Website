@@ -80,7 +80,7 @@ function updateAuthStatus(status, message, profilePicture, notifications = 0) {
     const userProfilePfp = document.getElementById('userProfilePfp');
     const userAvatar = document.getElementById('userAvatar');
     const notificationElement = document.getElementById('networkNotifies');
-    
+
     if (loginButton) {
         if (status === 'authenticated') {
             if (loginButtonText) {
