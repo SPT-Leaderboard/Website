@@ -884,12 +884,39 @@ async function showPublicProfile(container, player) {
 
     container.innerHTML = template;
 
-    // Crop the image
-    window.profileLoader.setText('Getting Player Image...');
-    await loadAndCropPlayerImage(player);
+    //battlepass-calculator.js
+    initHOF(player, bestWeapon);
+
+    //user-raid-history.js
+    //Use permalink to point out different profiles (but same player)
+    window.profileLoader.setText('Loading Raids...');
+    initLastRaids(player.id, player.permaLink);
 
     // Setup close handlers first
     setupModalCloseHandlers();
+
+    // Update body hits SVG
+    if (player.raidHitsHistory) {
+        updateBodyHitsVisualization(player.raidHitsHistory);
+    }
+
+    //user-community.js
+    window.profileLoader.setText('Almost Done...');
+    ProfileState.commentsManager = new CommentsManager({
+        commentsPerPage: 5
+    });
+    ProfileState.commentsManager.init(player.permaLink, player.id);
+
+    setupRegistrationDropdown();
+
+    //user-hideout.js
+    loadHideoutData(player.hideout);
+    // Records
+    ProfileState.tabManager = new TabManager(player.id, leaderboardData);
+
+    // Crop the image
+    window.profileLoader.setText('Getting Player Image...');
+    await loadAndCropPlayerImage(player);
 
     // Render stats and init the profile
     // Skip this if player is not using Stattrack
@@ -898,38 +925,17 @@ async function showPublicProfile(container, player) {
         await renderWeaponList(player.permaLink, player.stattrack_weapons || {});
     }
 
-    if (player.raidHitsHistory) {
-        updateBodyHitsVisualization(player.raidHitsHistory);
-    }
-
     await processPlayerAchievements(player, {
         renderAll: true,
         container: document.getElementById('achievements-container')
     });
 
-    //user-raid-history.js
-    //Use permalink to point out different profiles (but same player)
-    window.profileLoader.setText('Loading Raids...');
-    await initLastRaids(player.id, player.permaLink);
-    //battlepass-calculator.js
-    await initHOF(player, bestWeapon);
     //user-quests.js
     await loadQuestData(player.completed_quests);
-    //user-hideout.js
-    loadHideoutData(player.hideout);
-    //user-community.js
-    window.profileLoader.setText('Almost Done...');
-    ProfileState.commentsManager = new CommentsManager({
-        commentsPerPage: 5
-    });
-    ProfileState.commentsManager.init(player.permaLink, player.id);
 
     // Friends user-community.js
     ProfileState.friendManager = new FriendManager();
     await ProfileState.friendManager.init(player);
-
-    // Records
-    ProfileState.tabManager = new TabManager(player.id, leaderboardData);
 
     // Equipment displayer user-community.js
     const equipmentDisplay = new PlayerEquipmentDisplay(player.id);
@@ -942,8 +948,6 @@ async function showPublicProfile(container, player) {
             console.error('Failed to load equipment display:', error);
         }
     }
-
-    setupRegistrationDropdown();
 
     window.profileLoader.setText('Done!');
     window.profileLoader.hide();
