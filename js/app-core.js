@@ -534,7 +534,7 @@ function createPlayerRow(player) {
     if (!player.banned) {
         const lastOnlineTime = heartbeatMonitor.isOnline(player.id)
             ? '<span class="player-status-lb-online">Online</span>'
-            : window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || player.lastPlayed);
+            : window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || player.absoluteLastTime);
 
         if (heartbeatMonitor.isOnline(player.id)) {
             const isInRaid = playerStatus.status === 'in_raid' || playerStatus.status === 'in_transit';
@@ -697,7 +697,7 @@ async function displaySimpleLeaderboard(data) {
             if (window.heartbeatMonitor.isOnline(player.id)) {
                 lastGame = `<span class="player-status-lb ${playerStatus.statusClass}">${playerStatus.statusText} <div id="blink"></div></span>`
             } else {
-                const lastOnlineTime = !heartbeatMonitor.isOnline(player.id) && window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || player.lastPlayed);
+                const lastOnlineTime = !heartbeatMonitor.isOnline(player.id) && window.heartbeatMonitor.getLastOnlineTime(playerStatus.lastUpdate || player.absoluteLastTime);
 
                 lastGame = `<span class="last-online-time">${lastOnlineTime}</span>`;
             }
