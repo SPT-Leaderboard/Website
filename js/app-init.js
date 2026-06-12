@@ -32,20 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filteredResources = isLocalhost ? resources.slice(2) : resources;
     let loadedResources = 0;
     let totalWeight = filteredResources.reduce((sum, resource) => sum + resource.weight, 0);
-    let loadingMessages = [
-        "Duping free Leaderboard Coins...",
-        "Syncing with SPTLB network...",
-        "Placing good players on top...",
-        "Preparing the competition...",
-        "Setting up real-time rankings...",
-        "Preparing your BattlePass rewards...",
-        "Polishing our UI..."
-    ];
-
-    function getRandomMessage() {
-        return loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
-    }
-
+    
     // Function to load a resource
     function loadResource(resource, index) {
         return new Promise((resolve, reject) => {
@@ -81,10 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     loadedResources += resource.weight;
                     updateProgress();
-
-                    if (Math.random() > 0.9) {
-                        statusText.textContent = getRandomMessage();
-                    }
 
                     resolve();
                 }, remainingTime);
@@ -156,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function init() {
         try {
             animateStatusText("Starting up...");
+            renderVersionLabel();
 
             const MAX_CONCURRENT = 20;
             for (let i = 0; i < filteredResources.length; i += MAX_CONCURRENT) {
@@ -180,3 +164,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     init();
 });
+
+function renderVersionLabel() {
+    if (document.querySelector('.version-label')) {
+        const buildSpan = document.getElementById('buildNumber');
+        if (buildSpan) {
+            buildSpan.textContent = BUILD;
+        }
+        return;
+    }
+}
