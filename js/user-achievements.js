@@ -31,7 +31,7 @@ async function loadAchievementsData() {
 
         playerAchievements = playersData || {};
         totalPlayers = Object.keys(playerAchievements.achievements || {}).length;
-        achievementStats = calculateAchievementStats();
+        achievementStats = await calculateAchievementStats();
 
         isDataLoaded = true;
 
@@ -52,12 +52,12 @@ async function loadAchievementsData() {
     }
 }
 
-function calculateAchievementStats() {
+async function calculateAchievementStats() {
     const stats = {};
 
     if (!achievementsData?.achievementCompiled || !playerAchievements?.achievements) {
         console.warn('Data not loaded yet');
-        return stats;
+        await ensureDataLoaded();
     }
 
     try {
@@ -327,7 +327,7 @@ async function renderAllAchievements(achievements) {
 
         const imageUrls = await Promise.allSettled(imagePromises);
 
-        let html;
+        let html = '';
 
         for (let i = 0; i < achievements.length; i++) {
             const ach = achievements[i];
@@ -369,11 +369,11 @@ async function renderAllAchievements(achievements) {
 
         if (!html) {
             return `
-            <div class="no-stats-message">
-                <h3>No Achievements Available</h3>
-                <p>This player doesn't have any achievements, or they haven't been recorded yet.</p>
-            </div>
-        `;
+                <div class="no-stats-message">
+                    <h3>No Achievements Available</h3>
+                    <p>This player doesn't have any achievements, or they haven't been recorded yet.</p>
+                </div>
+            `;
         }
 
         return html;
