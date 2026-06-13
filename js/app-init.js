@@ -139,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
     async function init() {
         try {
             animateStatusText("Starting up...");
-            renderVersionLabel();
 
             const MAX_CONCURRENT = 20;
             for (let i = 0; i < filteredResources.length; i += MAX_CONCURRENT) {
@@ -164,13 +163,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     init();
 });
-
-function renderVersionLabel() {
-    if (document.querySelector('.version-label')) {
-        const buildSpan = document.getElementById('buildNumber');
-        if (buildSpan) {
-            buildSpan.textContent = BUILD;
-        }
-        return;
-    }
-}

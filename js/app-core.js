@@ -4,8 +4,6 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ /
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
-const BUILD = '4.7.1433';
-
 let leaderboardData = []; // For keeping current season data
 let oldLeaderboardData = [];
 let seasons = []; // Storing available seasons
