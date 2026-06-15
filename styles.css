@@ -383,7 +383,7 @@ h1 {
     position: fixed;
     top: calc(var(--top-stats-height, 70px));
     left: 50%;
-    transform: translateX(-50%);
+    transform: perspective(1px) translateX(-50%);
     min-width: 300px;
     max-width: 1200px;
     background-color: rgba(57, 89, 131, 0.205);
