@@ -3852,7 +3852,7 @@ input[type="checkbox"]:checked:hover {
 
 .user-main-card {
     display: grid;
-    grid-template-columns: 120px 1fr;
+    grid-template-columns: 135px 1fr;
     gap: 20px 25px;
     align-items: start;
     position: relative;
@@ -8186,7 +8186,7 @@ input[type="checkbox"]:checked:hover {
     flex-wrap: wrap;
     gap: 5px;
     font-size: 10px;
-    color: #9090a8;
+    color: #bebed1;
 }
 
 .notification__dot {
@@ -10290,55 +10290,6 @@ input[type="checkbox"]:checked:hover {
 }
 
 /* Killstreak NEW */
-#killstreaks {
-    position: fixed;
-    top: 20%;
-    left: 50%;
-    z-index: 10000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    pointer-events: none;
-}
-
-.upgraded-killstreak-notification {
-    position: relative;
-    width: 100%;
-    min-width: 400px;
-    text-align: center;
-    pointer-events: none;
-    will-change: transform, opacity;
-    backdrop-filter: blur(15px);
-    background-color: rgba(255, 255, 255, 0.055);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.upgraded-killstreak-content {
-    padding: 15px 30px;
-}
-
-.upgraded-killstreak-title {
-    font-size: 16px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    margin-bottom: 5px;
-    font-family: 'Arial', sans-serif;
-    color: #ffffff;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.upgraded-killstreak-subtitle {
-    font-size: 24px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-family: 'Arial Black', sans-serif;
-    text-shadow: 0 0 10px currentColor;
-    display: inline-block;
-}
-
 .rampage-text {
     display: inline-block;
     font-size: 15px;
