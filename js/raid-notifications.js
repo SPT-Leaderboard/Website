@@ -93,7 +93,7 @@ async function showPlayerNotification(player) {
         plRank: getRank(player.networkRaids, 2000, 32),
         isOnRaidStreak: false,
         shouldShowProfit: false,
-        useUpgraded: player?.special_props?.includes("upgradedKillstreak") && getRank(player.networkRaids, 2000, 32).level >= 1
+        useUpgraded: player?.special_props?.includes("sptlb_killstreak_upgrade")
     });
 
     // Handle raid streak
@@ -210,6 +210,8 @@ function createNotificationElement(player, name, contents) {
                     ${killedBy}
                     <span class="notification__dot">•</span>
                     <span class="notification__exp">${player.lastRaidEXP} EXP</span>
+                    <span class="notification__dot">•</span>
+                    <span class="notification__lc">+${player.lcPointsEarned} LC</span>
                 </div>
 
                 ${highlights}
@@ -425,7 +427,7 @@ function createNotificationsContainer() {
 
 function checkRecentPlayers(leaderboardData) {
     const currentTime = Math.floor(Date.now() / 1000);
-    const fiveMinutesAgo = currentTime - 300;
+    const tenMinutesAgo = currentTime - 600;
     const twoHoursAgo = currentTime - 7200;
 
     const sortedPlayers = [...leaderboardData].sort((a, b) =>
@@ -439,7 +441,7 @@ function checkRecentPlayers(leaderboardData) {
 
         if (!player.absoluteLastTime) continue;
 
-        if ((player.absoluteLastTime > fiveMinutesAgo) ||
+        if ((player.absoluteLastTime > tenMinutesAgo) ||
             (player.banned && player.banTime > twoHoursAgo)) {
 
             shownCount++;
@@ -498,19 +500,11 @@ function playRaidSound(player) {
 }
 
 function getRaidStatusNotify(player) {
-    console.debug(`[NOTIFY] Getting raid status for ${player.name}:`, {
-        banned: player.banned,
-        lastRaidRanThrough: player.lastRaidRanThrough,
-        discFromRaid: player.discFromRaid,
-        isTransition: player.isTransition,
-        lastRaidSurvived: player.lastRaidSurvived
-    });
-
     if (player.banned) return { type: 'banned', icon: 'fa-gavel', text: 'BANNED' };
     if (player.lastRaidRanThrough) return { type: 'runner', icon: 'fa-person-walking', text: 'Run Through' };
     if (player.discFromRaid) return { type: 'disconnected', icon: 'fa-arrow-right-from-bracket', text: 'Disconnected' };
     if (player.isTransition) return { type: 'transit', icon: 'fa-arrows-rotate', text: 'IN Transit', isSpin: true };
-    if (player.lastRaidSurvived) return { type: 'survived', icon: 'fa-shield-halved', text: 'Survived' };
+    if (player.lastRaidSurvived) return { type: 'survived', icon: 'fa-person-walking', text: 'Survived' };
 
     return { type: 'died', icon: 'fa-skull-crossbones', text: 'Killed in Action' };
 }
