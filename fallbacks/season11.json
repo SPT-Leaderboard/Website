@@ -47467,11 +47467,12 @@
       "totalRaids": 19,
       "registeredOnLeaderboard": 1778081634,
       "registrationDate": 1777807745,
-      "absoluteLastTime": 1979554838,
+      "absoluteLastTime": 1999554838,
       "trusted": false,
       "health": 418,
       "special_props": [
-        "upgradedKillstreak"
+        "sptlb_killstreak_upgrade",
+        "legendary_presence"
       ],
       "banned": false,
       "lastProfitGain": 1240110,
