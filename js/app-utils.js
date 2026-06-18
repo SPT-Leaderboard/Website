@@ -247,6 +247,7 @@ function getRank(rating, maxRating = 2000, res = 32) {
         gradient: gradient,
         borderColor: borderColor,
         textColor: textColor,
+        RGB: `${r}, ${g}, ${b}`,
         isElite: isElite,
         isLegendary: isLegendary,
         // Animation properties
@@ -398,17 +399,12 @@ function formatDate(date) {
  * @returns {string} Formatted string (e.g. "3h 25m"), or "0m" if seconds is falsy
  */
 function formatOnlineTime(seconds) {
-    if (!seconds)
-        return '0m';
+    if (!seconds || seconds < 0) return '0h 0m';
 
-    let result = [];
+    const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    const hours = Math.floor((seconds % (3600 * 24)) / 3600);
 
-    result.push(`${hours}h`);
-    result.push(`${minutes}m`)
-
-    return result.join(' ') || '0m';
+    return `${hours}h ${minutes}m`;
 }
 
 /**
@@ -455,7 +451,7 @@ function formatTime(seconds) {
 
 /**
  * Formats a duration in seconds into a compact multi-unit string that to the date in the future
- * Minutes are omitted when months are present to keep the output concise.
+ * Minutes are omitted when months are present.
  * @param {number} seconds - Total number of seconds
  * @returns {string} Formatted duration string
  */
@@ -543,10 +539,10 @@ function waitForDataReady(callback, timeout = 15000) {
  */
 function formatSalesNum(num) {
     if (num >= 1000000000) {
-        return (num / 1000000000).toFixed(1) + 'Bil';
+        return (num / 1000000000).toFixed(1) + 'B';
     }
     if (num >= 1000000) {
-        return (num / 1000000).toFixed(1) + 'Mil';
+        return (num / 1000000).toFixed(1) + 'M';
     }
     if (num >= 1000) {
         return (num / 1000).toFixed(1) + 'K';
@@ -554,6 +550,7 @@ function formatSalesNum(num) {
 
     return num.toString();
 }
+
 
 /**
  * Check if user actually owns premium
@@ -763,6 +760,52 @@ function getPlayerEdition(edition) {
 function truncateName(name, maxLength = 15) {
     if (!name || name.length <= maxLength) return name || 'Unknown';
     return name.substring(0, maxLength) + '...';
+}
+
+async function imageExists(url) {
+    try {
+        const response = await fetch(url, { method: 'HEAD' });
+        return response.ok;
+    } catch {
+        return false;
+    }
+}
+
+async function loadAndCropPlayerImageUtil(player, imgElement) {
+    if (!player || !imgElement) return;
+
+    let imageUrl = `${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png`;
+
+    if (SettingsHelper.get('cacheBypassToggle')) {
+        imageUrl += `?t=${Date.now()}`;
+    }
+
+    const fallbackUrl = 'media/default_full_pmc_avatar.png';
+
+    try {
+        const tempImg = new Image();
+        tempImg.crossOrigin = "anonymous";
+
+        tempImg.onload = async () => {
+            try {
+                const croppedImage = await autoCropTransparent(tempImg);
+                imgElement.src = croppedImage.src;
+            } catch {
+                imgElement.src = imageUrl;
+            }
+            imgElement.classList.add('loaded');
+        };
+
+        tempImg.onerror = () => {
+            imgElement.src = fallbackUrl;
+            imgElement.classList.add('loaded');
+        };
+
+        tempImg.src = imageUrl;
+    } catch {
+        imgElement.src = fallbackUrl;
+        imgElement.classList.add('loaded');
+    }
 }
 
 /**
