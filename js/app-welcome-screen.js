@@ -153,18 +153,15 @@ function createWelcomeOverlay(showcasePlayers, stats) {
     return overlay;
 }
 
-
 async function getPlayersWithImages(players, count = 3) {
     const validPlayers = players.filter(p => !p.banned && !p.isCasual && !p.dev);
-    
+
     if (validPlayers.length < 3) {
         return validPlayers.sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0)).slice(0, count);
     }
 
     const getPlayerWithImage = async (playerPool) => {
-        const shuffled = [...playerPool].sort(() => Math.random() - 0.5);
-        
-        for (const player of shuffled) {
+        for (const player of playerPool) {
             if (!player.permaLink) continue;
             const imageUrl = `${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png`;
             const exists = await imageExists(imageUrl);
@@ -175,33 +172,45 @@ async function getPlayersWithImages(players, count = 3) {
         return null;
     };
 
+    const top10ByScore = [...validPlayers]
+        .sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0))
+        .slice(0, 10);
+
+    // seasonsPlayed = 1, >totalPlayTime
     const newbieCandidates = validPlayers
         .filter(p => (p.seasonsPlayed || 0) === 1)
         .sort((a, b) => (a.totalPlayTime || 0) - (b.totalPlayTime || 0));
-    
+
     let newbie = await getPlayerWithImage(newbieCandidates);
     if (!newbie) {
+        // seasonsPlayed = 1
+        newbie = newbieCandidates[0];
+    }
+    if (!newbie) {
+        // >totalPlayTime
         const fallbackNewbie = validPlayers
-            .sort((a, b) => (a.totalPlayTime || 0) - (b.totalPlayTime || 0))
-            .slice(0, 10);
+            .sort((a, b) => (a.totalPlayTime || 0) - (b.totalPlayTime || 0));
         newbie = await getPlayerWithImage(fallbackNewbie);
     }
     if (!newbie) {
         newbie = validPlayers.sort((a, b) => (a.totalPlayTime || 0) - (b.totalPlayTime || 0))[0];
     }
 
-    
+    // seasonsPlayed >= 3, <totalPlayTime
     const veteranCandidates = validPlayers
-        .filter(p => p.id !== newbie?.id)
-        .sort((a, b) => (b.seasonsPlayed || 0) - (a.seasonsPlayed || 0));
-    
+        .filter(p => p.id !== newbie?.id && (p.seasonsPlayed || 0) >= 3)
+        .sort((a, b) => (b.totalPlayTime || 0) - (a.totalPlayTime || 0));
+
     let veteran = await getPlayerWithImage(veteranCandidates);
     if (!veteran) {
-        // Just grab by totalPlayTime if no veterans found
+        // seasonsPlayed >= 3
+        veteran = veteranCandidates[0];
+    }
+    if (!veteran) {
+        // totalPlayTime
         const fallbackVeteran = validPlayers
             .filter(p => p.id !== newbie?.id)
-            .sort((a, b) => (b.totalPlayTime || 0) - (a.totalPlayTime || 0))
-            .slice(0, 10);
+            .sort((a, b) => (b.totalPlayTime || 0) - (a.totalPlayTime || 0));
         veteran = await getPlayerWithImage(fallbackVeteran);
     }
     if (!veteran) {
@@ -210,20 +219,31 @@ async function getPlayersWithImages(players, count = 3) {
             .sort((a, b) => (b.totalPlayTime || 0) - (a.totalPlayTime || 0))[0];
     }
 
-    // Highest totalscore
-    const championCandidates = validPlayers
-        .filter(p => p.id !== newbie?.id && p.id !== veteran?.id)
-        .sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0));
-    
+    const championCandidates = top10ByScore
+        .filter(p => p.id !== newbie?.id && p.id !== veteran?.id);
+
     let champion = await getPlayerWithImage(championCandidates);
     if (!champion) {
         champion = championCandidates[0];
+    }
+    if (!champion) {
+        const fallbackChampion = validPlayers
+            .filter(p => p.id !== newbie?.id && p.id !== veteran?.id)
+            .sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0));
+        champion = await getPlayerWithImage(fallbackChampion);
+    }
+    if (!champion) {
+        champion = validPlayers
+            .filter(p => p.id !== newbie?.id && p.id !== veteran?.id)
+            .sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0))[0];
     }
 
     const result = [newbie, veteran, champion].filter(Boolean);
 
     if (result.length < 3) {
-        const remaining = validPlayers.filter(p => !result.some(r => r.id === p.id));
+        const remaining = top10ByScore
+            .filter(p => !result.some(r => r.id === p.id));
+
         for (const player of remaining) {
             if (result.length >= 3) break;
             if (!player.permaLink) continue;
@@ -236,9 +256,8 @@ async function getPlayersWithImages(players, count = 3) {
     }
 
     while (result.length < 3) {
-        const extra = validPlayers
-            .filter(p => !result.some(r => r.id === p.id))
-            .sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0))[0];
+        const extra = top10ByScore
+            .filter(p => !result.some(r => r.id === p.id))[0];
         if (extra) result.push(extra);
         else break;
     }
