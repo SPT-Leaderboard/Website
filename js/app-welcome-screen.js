@@ -4,6 +4,8 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ /
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
+let lastShownPlayers = [];
+
 async function initWelcomeScreen() {
     try {
         if (localStorage.getItem('WelcomeScreenC') !== 'true') {
@@ -82,24 +84,24 @@ function createWelcomeOverlay(showcasePlayers, stats) {
                 <div class="season-pmc-column">
                     <div class="pmc-heroes-container">
                         ${showcasePlayers.map((player, index) => {
-                            const rank = getRank(player.networkRaids || 0, 2000, 32);
-                            const colorMatch = rank.textColor.match(/hsl\((\d+)/);
-                            const hue = colorMatch ? parseInt(colorMatch[1]) : 200;
-                            const glowColor = `hsla(${hue}, 100%, 70%, 0.3)`;
-                            const glowColorHover = `hsla(${hue}, 100%, 80%, 0.5)`;
-                            const glowColorStrong = `hsla(${hue}, 100%, 60%, 0.4)`;
+        const rank = getRank(player.networkRaids || 0, 2000, 32);
+        const colorMatch = rank.textColor.match(/hsl\((\d+)/);
+        const hue = colorMatch ? parseInt(colorMatch[1]) : 200;
+        const glowColor = `hsla(${hue}, 100%, 70%, 0.3)`;
+        const glowColorHover = `hsla(${hue}, 100%, 80%, 0.5)`;
+        const glowColorStrong = `hsla(${hue}, 100%, 60%, 0.4)`;
 
-                            let playerType = '';
-                            let playerTypeIcon = '';
-                            if (index === 0) {
-                                playerType = 'Newcomer';
-                            } else if (index === 1) {
-                                playerType = 'Veteran';
-                            } else {
-                                playerType = 'Champion';
-                            }
+        let playerType = '';
+        let playerTypeIcon = '';
+        if (index === 0) {
+            playerType = 'Newcomer';
+        } else if (index === 1) {
+            playerType = 'Veteran';
+        } else {
+            playerType = 'Champion';
+        }
 
-                            return `
+        return `
                                 <div class="pmc-hero"
                                     data-index="${index}"
                                     data-rank-hue="${hue}">
@@ -160,11 +162,33 @@ async function getPlayersWithImages(players, count = 3) {
         return validPlayers.sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0)).slice(0, count);
     }
 
-    const getPlayerWithImage = async (playerPool) => {
-        for (const player of playerPool) {
+    const imageCache = new Map();
+
+    const checkImageExists = async (url) => {
+        if (imageCache.has(url)) return imageCache.get(url);
+        try {
+            const response = await fetch(url, { method: 'HEAD' });
+            const exists = response.ok;
+            imageCache.set(url, exists);
+            return exists;
+        } catch {
+            imageCache.set(url, false);
+            return false;
+        }
+    };
+
+    const getPlayerWithImage = async (playerPool, excludeIds = []) => {
+        if (!playerPool || playerPool.length === 0) return null;
+
+        const freshPool = playerPool.filter(p => !lastShownPlayers.includes(p.id) && !excludeIds.includes(p.id));
+        const poolToCheck = freshPool.length > 0 ? freshPool : playerPool.filter(p => !excludeIds.includes(p.id));
+
+        const shuffled = [...poolToCheck].sort(() => Math.random() - 0.5);
+
+        for (const player of shuffled) {
             if (!player.permaLink) continue;
             const imageUrl = `${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png`;
-            const exists = await imageExists(imageUrl);
+            const exists = await checkImageExists(imageUrl);
             if (exists) {
                 return player;
             }
@@ -172,9 +196,9 @@ async function getPlayersWithImages(players, count = 3) {
         return null;
     };
 
-    const top10ByScore = [...validPlayers]
+    const top20ByScore = [...validPlayers]
         .sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0))
-        .slice(0, 10);
+        .slice(0, 20);
 
     // seasonsPlayed = 1, >totalPlayTime
     const newbieCandidates = validPlayers
@@ -219,7 +243,7 @@ async function getPlayersWithImages(players, count = 3) {
             .sort((a, b) => (b.totalPlayTime || 0) - (a.totalPlayTime || 0))[0];
     }
 
-    const championCandidates = top10ByScore
+    const championCandidates = top20ByScore
         .filter(p => p.id !== newbie?.id && p.id !== veteran?.id);
 
     let champion = await getPlayerWithImage(championCandidates);
@@ -240,8 +264,10 @@ async function getPlayersWithImages(players, count = 3) {
 
     const result = [newbie, veteran, champion].filter(Boolean);
 
+    lastShownPlayers = result.map(p => p.id);
+    
     if (result.length < 3) {
-        const remaining = top10ByScore
+        const remaining = top20ByScore
             .filter(p => !result.some(r => r.id === p.id));
 
         for (const player of remaining) {
@@ -253,13 +279,6 @@ async function getPlayersWithImages(players, count = 3) {
                 result.push(player);
             }
         }
-    }
-
-    while (result.length < 3) {
-        const extra = top10ByScore
-            .filter(p => !result.some(r => r.id === p.id))[0];
-        if (extra) result.push(extra);
-        else break;
     }
 
     return result.slice(0, 3);
