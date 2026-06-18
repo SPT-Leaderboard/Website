@@ -498,25 +498,31 @@ async function showPublicProfile(container, player) {
 
                 <div class="badges">${badgesHTML}</div>
             </div>
+            
             <div class="battlepass-level profile-section">
-                <h3> Leaderboard Level </h3>
-                <div class="bp-wrapper" id="playerRankIcon">
-                    <div class="level-info">
-                        <span class="level-value">0</span>
-                    </div>
-                    <div class="exp-bar-container">
-                        <div class="exp-bar">
-                            <div class="exp-progress" style="width: 0;"></div>
+                <h3>Leaderboard Rank</h3>
+                <div class="rank-display-wrapper" id="playerRankDisplay">
+                    <!-- Rank Display -->
+                    <div class="rank-display-new">
+                        <div class="rank-icon-container-new">
+                            <div class="circular-progress-new" style="--progress: ${rank.progress}; --progress-color: ${rank.borderColor};">
+                                <img src="${rank.image}" alt="${rank.fullName}" class="rank-icon-new">
+                                <div class="rank-level-badge">${rank.level}</div>
+                            </div>
                         </div>
-                        <div class="exp-numbers">
-                            <span class="current-exp">0</span>
-                            <span class="exp-separator"></span>
-                            <span class="next-level-exp">0</span>
+                        <div class="rank-info-new">
+                            <div class="rank-name-new" style="background: ${rank.gradient}; border-color: ${rank.borderColor}; color: ${rank.textColor};">
+                                ${rank.name}
+                            </div>
+                            <div class="rank-progress-text">
+                                <span class="rank-progress-label">Progress to next rank</span>
+                                <span class="rank-progress-value">${rank.progress}%</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="exp-remaining"> Until next level: <span class="remaining-value">0</span> EXP </div>
                 </div>
             </div>
+
             <div class="hits-past-raids profile-section">
                 <div class="hits-wrapper">
                     <div class="hits-avg-headshots">
@@ -689,14 +695,6 @@ async function showPublicProfile(container, player) {
         <div class="right-column">
             <!-- Player image -->
             <div class="playermodel profile-section" id="playermodel">
-                <div class="rank-display">
-                    <div class="rank-icon-container">
-                        <div class="circular-progress" style="--progress: ${rank.progress}; --progress-color: ${rank.borderColor};">
-                            <img src="${rank.image}" alt="${rank.fullName}" class="rank-icon">
-                        </div>
-                    </div>
-                    <span class="rank-name" style="background: ${rank.gradient}; border-color: ${rank.borderColor}; color: ${rank.textColor};"> ${rank.fullName} </span>
-                </div>
                 <div class="playermodel-image">
                     <img src="${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png" alt="Player Model Preview" onerror="this.onerror=null; this.src='media/default_full_pmc_avatar.png';" />
                 </div>
@@ -931,7 +929,7 @@ async function showPublicProfile(container, player) {
     });
 
     //user-quests.js
-    await loadQuestData(player.completed_quests);
+    loadQuestData(player.completed_quests);
 
     // Friends user-community.js
     ProfileState.friendManager = new FriendManager();

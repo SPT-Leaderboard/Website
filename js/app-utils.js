@@ -407,6 +407,25 @@ function formatOnlineTime(seconds) {
     return `${hours}h ${minutes}m`;
 }
 
+function formatPlayTime(seconds) {
+    if (!seconds || seconds === 0) return '0h 0m';
+
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+
+    if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+    }
+    return `${minutes}m`;
+}
+
+function formatPlayTimeShort(seconds) {
+    if (!seconds) return '0h';
+    const hours = Math.floor(seconds / 3600);
+    return `${hours}h`;
+}
+
+
 /**
  * Format UNIX timestamp to return "Xm ago || Xd ago"
  * @deprecated Use formatLastPlayedRaid() instead

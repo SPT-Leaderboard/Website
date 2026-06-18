@@ -4,485 +4,396 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ / 
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
-// Update timer and preload audio for season end
-let audioElements = {};
-let lastPlayed = null;
+// #region Main
+async function endSeason() {
+    try {
+        const players = leaderboardData;
+        const top3 = getTopPlayers(players, 3);
+        const stats = calculateSeasonStats(players);
 
-// Season end screen
-function playAppropriateTrack(diff) {
-    let trackToPlay = null;
+        const overlay = createSeasonOverlay(top3, stats);
+        document.body.appendChild(overlay);
 
-    if (diff <= 30000) { // 0:30
-        trackToPlay = 'season/season_end3';
-    } else if (diff <= 85000) { // 1:25
-        trackToPlay = 'season/season_end2';
-    } else if (diff <= 145000) { // 2:25
-        trackToPlay = 'season/season_end1';
-    }
+        setTimeout(() => {
+            animateStats();
+            animateFacts();
+        }, 300);
 
-    // If track changed
-    if (trackToPlay && lastPlayed !== trackToPlay) {
-        // Stop all tracks
-        Object.values(audioElements).forEach(audio => {
-            audio.pause();
-            audio.currentTime = 0;
-        });
+        await playSeasonMusic();
 
-        lastPlayed = trackToPlay;
-        audioElements[trackToPlay].play().catch(e => {
-            console.warn(`Couldn't play ${trackToPlay}:`, e);
-        });
-
+    } catch (error) {
+        console.error('Season end error:', error);
     }
 }
 
-async function endSeason() {
-    await preloadAudio();
-
-    const stats = calculateGlobalStats(leaderboardData);
-    const endMusic = new Audio(`media/sounds/season/season_end_final.mp3`);
-    await endMusic.play();
-
-    // When season end sound is over, play music and show video additional overlay + start showing names
-    endMusic.addEventListener('ended', () => {
-        const contMusic = new Audio('media/sounds/season/end_music.mp3');
-        const videoBackground = document.querySelector('.video-background');
-
-        contMusic.volume = 0.3;
-        contMusic.loop = true;
-        contMusic.play();
-
-        videoBackground.style.opacity = '0.5';
-
-        showAllPlayerNames(leaderboardData);
-    });
-
-    const roundedBillions = Math.round(stats.totalSalesSum / 1_000_000_000);
-    const roundedDamage = Math.round(stats.totalDamage / 1_000_000);
-
+function createSeasonOverlay(top3, stats) {
     const overlay = document.createElement('div');
     overlay.id = 'seasonOverlay';
+
     overlay.innerHTML = `
-        <div class="season-end-container animate__animated animate__fadeIn">
+        <div class="season-end-container">
             <div class="video-background">
                 <video autoplay muted loop playsinline>
                     <source src="media/season_end/test.mp4" type="video/mp4">
                 </video>
+                <div class="video-overlay-gradient"></div>
             </div>
 
-            <div class="video-background-overlay">
-                <video autoplay muted loop playsinline>
-                    <source src="media/season_end/season_end_overlay.mp4" type="video/mp4">
-                </video>
-            </div>
+            <div class="season-end-layout">
+                <div class="season-stats-column">
+                    <div class="season-header">
+                        <h1>SEASON ${getCurrentSeason()} FINALE</h1>
+                        <p class="season-end-subtitle">The battle is over... for now.</p>
+                    </div>
 
-            <div class="season-header">
-                <h1>SEASON ${seasons[0]} FINALE</h1>
-                <p class="subtitle">The battle is over... for now.</p>
-            </div>
-            <div class="season-stats-grid">
-                <!-- Left Block -->
-                <div class="stats-block general-stats animate__animated animate__fadeInLeft">
-                    <h2>Season ${seasons[0]} Statistics</h2>
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-value">${leaderboardData.length}</div>
-                            <div class="stat-label">WARRIORS</div>
+                    <div class="season-end-stats-grid">
+                        <div class="season-end-stats-stat-card">
+                            <div class="season-end-stat-value" data-target="${stats.totalKills}">0</div>
+                            <div class="season-end-stat-label">PMCs Killed</div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-value">${stats.totalRaids.toLocaleString('en-EN')}</div>
-                            <div class="stat-label">RAIDS</div>
+                        <div class="season-end-stats-stat-card">
+                            <div class="season-end-stat-value" data-target="${stats.totalDeaths}">0</div>
+                            <div class="season-end-stat-label">Total Deaths</div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-value">${stats.totalKills.toLocaleString('en-EN')}</div>
-                            <div class="stat-label">KILLS</div>
+                        <div class="season-end-stats-stat-card">
+                            <div class="season-end-stat-value" data-target="${stats.totalDamage}">0</div>
+                            <div class="season-end-stat-label">Damage Dealt</div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-value">${roundedDamage} MILLION</div>
-                            <div class="stat-label">DAMAGE</div>
+                        <div class="season-end-stats-stat-card">
+                            <div class="season-end-stat-value" data-target="${stats.totalRaids}">0</div>
+                            <div class="season-end-stat-label">Raids Completed</div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-value">${formatTime(stats.totalPlayTime)}</div>
-                            <div class="stat-label">SPENT IN RAID</div>
+                        <div class="season-end-stats-stat-card">
+                            <div class="season-end-stat-value" data-target="${stats.totalPlayTime}" data-type="time">0h 0m</div>
+                            <div class="season-end-stat-label">Hours Played</div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-value">${stats.averageSurvivalRate}%</div>
-                            <div class="stat-label">AVG SURVIVAL</div>
+                        <div class="season-end-stats-stat-card">
+                            <div class="season-end-stat-value"  data-target="${stats.averageSurvivalRate}" data-type="percent">0%</div>
+                            <div class="season-end-stat-label">Avg Survival Rate</div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-value">${stats.mostPopularMap}</div>
-                            <div class="stat-label">HOTTEST MAP</div>
+                    </div>
+
+                    <div class="season-facts">
+                        <div class="fact-item">
+                            <span class="fact-text">Most kills: <strong>${stats.topKillsPlayer || 'N/A'}</strong> (${stats.topKills || 0})</span>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-value">${roundedBillions} BILLION</div>
-                            <div class="stat-label">RUBLES TRADED ACROSS</div>
+                        <div class="fact-item">
+                            <span class="fact-text">Deadliest weapon: <strong>${stats.topKillsWeapon || 'N/A'}</strong> (${stats.topKillsWeaponCount || 0} kills)</span>
                         </div>
+                        <div class="fact-item">
+                            <span class="fact-text">Most played map: <strong>${stats.mostPopularMap || 'N/A'}</strong></span>
+                        </div>
+                        <div class="fact-item">
+                            <span class="fact-text">Total sales: <strong>${formatSalesNum(stats.totalSalesSum || 0)} ₽</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="season-countdown">
+                        <p>Our team is launching next season<span class="loading-dots"></span></p>
                     </div>
                 </div>
-                
-                <!-- Right Block -->
-                <div class="stats-block top-players animate__animated animate__fadeInRight">
-                    <h2>Season MVPs</h2>
-                    
-                    <div class="player-card top-kd">
-                        <div class="player-title">BEST K/D RATIO</div>
-                        <div class="player-se-name">${stats.topKD.name}</div>
-                        <div class="player-stats-se">
-                            <span>KDR ${stats.topKD.killToDeathRatio.toFixed(0)}</span>
-                        </div>
-                        <div class="player-additional">
-                            ${stats.topKD.teamTag ? `[${stats.topKD.teamTag}]` : ''}
-                            Level ${stats.topKD.pmcLevel}
-                        </div>
-                    </div>
-                    
-                    <div class="player-card top-kills">
-                        <div class="player-title">MOST KILLS</div>
-                        <div class="player-se-name">${stats.topKills.name}</div>
-                        <div class="player-stats-se">
-                            <span>${stats.topKills.pmcKills.toLocaleString('en-EN')} PMC kills</span>
-                        </div>
-                        <div class="player-additional">
-                            ${stats.topKills.weaponMastery ? `Favorite weapon: ${stats.topKills.weaponMastery}` : ''}
-                        </div>
-                    </div>
-                    
-                    <div class="player-card top-survivor">
-                        <div class="player-title">MOST TIME PLAYED</div>
-                        <div class="player-se-name">${stats.topPlayTime.name}</div>
-                        <div class="player-stats-se">
-                            <span>${formatTime(stats.topPlayTime.totalPlayTime)}</span>
-                            <span>${stats.topPlayTime.survivalRate}% SR</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Extra -->
-            <div class="additional-stats animate__animated animate__fadeInUp animate__delay-5s">
-                <h3>Interesting Facts</h3>
-                <div class="facts-grid">
-                    <div class="fact-card">
-                        <div class="fact-icon"><img src="media/season_end/Mastering.png" width="20px" height="25px" alt=""></div>
-                        <div class="fact-text">${stats.topKillsWeapon} was the deadliest weapon with ${stats.topKillsWeaponCount} kills</div>
-                    </div>
-                    <div class="fact-card">
-                        <div class="fact-icon"><img src="media/season_end/icon_unique_id.png" width="25px" height="25px" alt=""></div>
-                        <div class="fact-text">${stats.kappaOwners} players achieved Kappa container</div>
-                    </div>
-                    <div class="fact-card">
-                        <div class="fact-icon"><img src="media/season_end/icon_statscategory_combat_0.png" width="25px" height="25px" alt=""></div>
-                        <div class="fact-text">Longest hit: ${stats.longestShot}m by ${stats.longestShotPlayer}</div>
-                    </div>
-                    <div class="fact-card">
-                        <div class="fact-icon"><img src="media/season_end/standing_icon.png" width="25px" height="25px" alt=""></div>
-                        <div class="fact-text">${stats.richestTrader} was the most profitable trader</div>
+
+                <!-- PMC -->
+                <div class="season-pmc-column">
+                    <div class="pmc-heroes-container">
+                        ${top3.map((player, index) => {
+                            const rank = getRank(player.networkRaids, 2000, 32);
+
+                            const colorMatch = rank.textColor.match(/hsl\((\d+)/);
+                            const hue = colorMatch ? parseInt(colorMatch[1]) : 200;
+                            const glowColor = `hsla(${hue}, 100%, 70%, 0.3)`;
+                            const glowColorHover = `hsla(${hue}, 100%, 80%, 0.5)`;
+                            const glowColorStrong = `hsla(${hue}, 100%, 60%, 0.4)`;
+
+                            return `
+                                <div class="pmc-hero" 
+                                    data-index="${index}"
+                                    data-rank-hue="${hue}">
+                                    <div class="pmc-rank-badge" style="background: ${rank.gradient}; border-color: ${rank.borderColor};">
+                                        <span class="rank-number" style="color: ${rank.textColor};">
+                                            #${index + 1}
+                                        </span>
+                                        <span class="rank-name" style="color: ${rank.textColor};">
+                                            ${rank.name}
+                                        </span>
+                                        <span class="rank-level" style="color: ${rank.textColor}; opacity: 0.7;">
+                                            LVL ${rank.level}
+                                        </span>
+                                    </div>
+                                    <div class="pmc-image-wrapper">
+                                        <img src="${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png" 
+                                            alt="${escapeHtml(player.name)}"
+                                            class="pmc-image"
+                                            loading="lazy"
+                                            style="filter: drop-shadow(0 0 3px rgba(${rank.RGB}, 0.5));"
+                                            data-glow="${glowColor}"
+                                            data-glow-hover="${glowColorHover}">
+                                    </div>
+                                    <div class="pmc-info">
+                                        <div class="pmc-name">${renderUsernameHTML(player)}</div>
+                                        <div class="pmc-stats">
+                                            <span class="pmc-stat"><i class="fa-solid fa-skull-crossbones"></i> ${player.pmcKills || 0} KILLS</span>
+                                            <span class="pmc-stat"><i class="fas fa-trophy"></i> ${(player.killToDeathRatio || 0).toFixed(1)} K/D</span>
+                                            <span class="pmc-stat"><i class="fa-solid fa-user-clock"></i> ${formatPlayTimeShort(player.totalPlayTime || 0)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
                     </div>
                 </div>
-            </div>
-            
-            <div class="season-countdown animate__animated animate__fadeInUp animate__delay-5s">
-                <p>Preparing for update... <img src="media/loading_bar.gif" width="20px" height="20px" style="position: relative; top: 5px;" alt=""></p>
             </div>
         </div>
     `;
 
-    document.body.appendChild(overlay);
+        setTimeout(() => {
+        top3.forEach((player, index) => {
+            const imgElement = overlay.querySelector(`.pmc-hero[data-index="${index}"] .pmc-image`);
+            if (imgElement) {
+                loadAndCropPlayerImageUtil(player, imgElement);
+            }
+        });
+    }, 100);
 
-    const videoBackgroundOverlay = document.querySelector('.video-background-overlay');
-    videoBackgroundOverlay.style.opacity = '0.09';
+    return overlay;
 }
 
-function calculateGlobalStats(players) {
-    let totalKills = 0;
-    let totalDeaths = 0;
-    let totalPlayTime = 0;
-    let totalDamage = 0;
-    let totalRaids = 0;
-    let totalSurvived = 0;
-    let kappaOwners = 0;
-    let totalSurvivalRate = 0;
-    let validPlayersCount = 0;
+// #region Calculations
+function calculateSeasonStats(players) {
+    const stats = {
+        totalKills: 0,
+        totalDeaths: 0,
+        totalPlayTime: 0,
+        totalRaids: 0,
+        totalDamage: 0,
+        totalSurvived: 0,
+        totalSalesSum: 0,
+        totalScore: 0,
+        topKills: 0,
+        topKillsPlayer: null,
+        topKillsWeapon: null,
+        topKillsWeaponCount: 0,
+        mostPopularMap: null,
+        mostPopularMapCount: 0,
+        averageSurvivalRate: 0,
+        topScore: 0,
+        topScorePlayer: null
+    };
 
-    const weaponStats = {};
     const mapStats = {};
-    const traderStats = {};
-
-    let topKD = null;
-    let topKills = null;
-    let topPlayTime = null;
-    let longestShot = 0;
-    let longestShotPlayer = null;
-    let totalSalesSum = 0;
-    let topKillsWeapon = "Unknown";
-    let topKillsWeaponCount = 0;
+    const weaponStats = {};
 
     players.forEach(player => {
-        if (!player.banned && !player.isCasual) {
-            const kd = player.killToDeathRatio || 0;
-            const kills = player.pmcKills || 0;
-            const deaths = player.pmcDeaths || 0;
-            const playTime = player.totalPlayTime || 0;
-            const raids = player.totalRaids || 0;
-            const survived = player.pmcSurvived || 0;
-            const damage = player.damage || 0;
+        if (player.banned || player.isCasual) return;
 
-            totalKills += kills;
-            totalDeaths += deaths;
-            totalPlayTime += playTime;
-            totalRaids += raids;
-            totalSurvived += survived;
-            totalDamage += damage;
+        stats.totalKills += player.pmcKills || 0;
+        stats.totalDeaths += player.pmcDeaths || 0;
+        stats.totalPlayTime += player.totalPlayTime || 0;
+        stats.totalRaids += player.totalRaids || 0;
+        stats.totalDamage += player.damage || 0;
+        stats.totalSurvived += player.survived || 0;
+        stats.totalSalesSum += player.totalSales || 0;
+        stats.totalScore += player.totalScore || 0;
 
-            if (player.traderInfo) {
-                for (const trader in player.traderInfo) {
-                    const data = player.traderInfo[trader];
-                    if (data.salesSum && data.salesSum > 0) {
-                        totalSalesSum += data.salesSum;
-                    }
-                }
-            }
-
-            if (player.weapons) {
-                for (const profileId in player.weapons) {
-                    const profileData = player.weapons[profileId];
-
-                    if (!profileData.weapons) continue;
-
-                    const weapons = profileData.weapons;
-
-                    for (const weaponName in weapons) {
-                        const weapon = weapons[weaponName];
-                        const weaponKills = weapon.stats?.kills || 0;
-
-                        if (weaponKills > 0) {
-                            const weaponKey = weapon.originalId || weaponName;
-                            weaponStats[weaponKey] = (weaponStats[weaponKey] || 0) + weaponKills;
-
-                            if (weaponStats[weaponKey] > topKillsWeaponCount) {
-                                topKillsWeaponCount = weaponStats[weaponKey];
-                                topKillsWeapon = weaponName;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (player.lastRaidMap) {
-                mapStats[player.lastRaidMap] = (mapStats[player.lastRaidMap] || 0) + 1;
-            }
-
-            if (player.traderInfo) {
-                Object.entries(player.traderInfo).forEach(([trader, data]) => {
-                    if (data.salesSum > 0) {
-                        traderStats[trader] = (traderStats[trader] || 0) + data.salesSum;
-                    }
-                });
-            }
-
-            if (player.survivalRate !== undefined && player.survivalRate !== null) {
-                totalSurvivalRate += player.survivalRate;
-                validPlayersCount++;
-            }
-
-            if (player.hasKappa) kappaOwners++;
-
-            if (player.longestShot > longestShot) {
-                longestShot = player.longestShot;
-                longestShotPlayer = player.name;
-            }
-
-            if (!topKD || kd > topKD.killToDeathRatio) topKD = player;
-            if (!topKills || kills > topKills.pmcKills) topKills = player;
-            if (!topPlayTime || playTime > topPlayTime.totalPlayTime) topPlayTime = player;
+        if ((player.pmcKills || 0) > stats.topKills) {
+            stats.topKills = player.pmcKills;
+            stats.topKillsPlayer = player.name;
         }
-    });
 
-    let mostPopularMap = "Unknown";
-    if (Object.keys(mapStats).length > 0) {
-        mostPopularMap = Object.entries(mapStats).sort((a, b) => b[1] - a[1])[0][0];
-    }
+        if ((player.totalScore || 0) > stats.topScore) {
+            stats.topScore = player.totalScore;
+            stats.topScorePlayer = player.name;
+        }
 
-    let richestTrader = "Unknown";
-    if (Object.keys(traderStats).length > 0) {
-        richestTrader = Object.entries(traderStats).sort((a, b) => b[1] - a[1])[0][0];
-    }
-
-    const averageSurvivalRate = validPlayersCount > 0 ? totalSurvivalRate / validPlayersCount : 0;
-
-    return {
-        totalKills,
-        totalDeaths,
-        totalPlayTime,
-        totalRaids,
-        totalDamage,
-        averageSurvivalRate: averageSurvivalRate.toFixed(1),
-        kappaOwners,
-        topKD,
-        topKills,
-        topPlayTime,
-        topKillsWeapon,
-        topKillsWeaponCount,
-        totalWeapons: Object.keys(weaponStats).length,
-        mostPopularMap,
-        richestTrader,
-        longestShot,
-        longestShotPlayer,
-        totalSalesSum
-    };
-}
-
-async function preloadAudio() {
-    const files = [
-        { name: 'season/season_end1', time: 145000 }, // 2:25
-        { name: 'season/season_end2', time: 85000 },  // 1:25
-        { name: 'season/season_end3', time: 30000 },  // 0:30
-        { name: 'season/season_end_final', time: 0 }  // 0:00
-    ];
-
-    files.forEach(({ name, time }) => {
-        const audio = new Audio(`media/sounds/${name}.mp3`);
-        audio.timeThreshold = time;
-        audio.volume = 0.4;
-        audioElements[name] = audio;
-    });
-}
-
-function showAllPlayerNames(players) {
-    const overlay = document.getElementById('seasonOverlay');
-
-    // Fade out
-    const darkOverlay = document.createElement('div');
-    darkOverlay.id = 'memoryOverlay';
-    darkOverlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.85);
-        z-index: 999;
-        opacity: 0;
-        transition: opacity 2s ease-in-out;
-    `;
-
-    // "In Memory of..."
-    // Lazy to move it to CSS.. So here you go, enjoy.
-    // TODO: Move it to CSS.
-    const memoryTitle = document.createElement('div');
-    memoryTitle.id = 'memoryTitle';
-    memoryTitle.textContent = 'In memory of our Fallen and Risen. Your sacrifice will not be forgotten.';
-    memoryTitle.style.cssText = `
-        position: fixed;
-        top: 5%;
-        left: 50%;
-        transform: translateX(-50%);
-        font-family: Rajdhani, sans-serif;
-        font-size: 18px;
-        font-weight: 700;
-        color: rgb(177 176 176);
-        z-index: 1001;
-        opacity: 1;
-        transition: opacity 2s ease-in-out;
-        text-align: center;
-    `;
-
-    const namesContainer = document.createElement('div');
-    namesContainer.id = 'playerNamesOverlay';
-    namesContainer.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 1000;
-        opacity: 0;
-    `;
-
-    overlay.appendChild(darkOverlay);
-    overlay.appendChild(memoryTitle);
-    overlay.appendChild(namesContainer);
-
-    setTimeout(() => {
-        darkOverlay.style.opacity = '1';
-        memoryTitle.style.opacity = '1';
-        namesContainer.style.opacity = '1';
-    }, 100);
-
-    const validPlayers = players.filter(player => !player.banned && player.name);
-
-    // Start showign names
-    validPlayers.forEach((player, index) => {
-        setTimeout(() => {
-            createFloatingName(player.name, namesContainer, 5000);
-        }, index * 300);
-    });
-
-    // After showing start fading out names
-    const totalDisplayTime = validPlayers.length * 500 + 4000; // 6 seconds after last name
-    setTimeout(() => {
-        fadeOutAllElements(darkOverlay, memoryTitle, namesContainer);
-    }, totalDisplayTime);
-}
-
-function createFloatingName(playerName, container, delay) {
-    const nameElement = document.createElement('div');
-    nameElement.className = 'floating-player-name';
-    nameElement.textContent = playerName;
-
-    const posX = Math.random() * 80 + 10; // 15% - 85%
-    const posY = Math.random() * 80 + 10; // 10% - 70%
-    const fontSize = Math.random() * 20 + 18; // 18px - 38px
-    const opacity = Math.random() * 0.2 + 0.4; // 40% - 100%
-
-    nameElement.style.cssText = `
-        position: absolute;
-        left: ${posX}%;
-        top: ${posY}%;
-        font-family: 'Rajdhani', sans-serif;
-        font-size: ${fontSize}px;
-        font-weight: 600;
-        color: rgba(255, 255, 255, ${opacity});
-        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
-        white-space: nowrap;
-        transform: translate(-50%, -50%);
-        opacity: 0;
-        transition: opacity 1.5s ease-in-out, transform 2s ease-in-out;
-        pointer-events: none;
-        z-index: 1001;
-    `;
-
-    container.appendChild(nameElement);
-
-    setTimeout(() => {
-        nameElement.style.opacity = '1';
-    }, 100);
-
-    // Automatic remove name after 3-5 seconds
-    const displayTime = 3000 + Math.random() * 2000;
-    setTimeout(() => {
-        nameElement.style.opacity = '0';
-        setTimeout(() => {
-            if (nameElement.parentNode) {
-                nameElement.parentNode.removeChild(nameElement);
+        if (player.stattrack_weapons) {
+            for (const [weaponHash, weaponData] of Object.entries(player.stattrack_weapons)) {
+                for (const [weaponName, weaponInfo] of Object.entries(weaponData)) {
+                    if (weaponInfo.stats && weaponInfo.stats.kills) {
+                        const kills = weaponInfo.stats.kills || 0;
+                        weaponStats[weaponName] = (weaponStats[weaponName] || 0) + kills;
+                    }
+                }
             }
-        }, 1500);
-    }, delay + displayTime);
+        }
+
+        // mapFatigue collection
+        if (player.mapFatigue && player.mapFatigue.mapCounts) {
+            const mapCounts = player.mapFatigue.mapCounts;
+            for (const [mapKey, count] of Object.entries(mapCounts)) {
+                mapStats[mapKey] = (mapStats[mapKey] || 0) + count;
+            }
+        }
+
+        if (player.traderInfo) {
+            for (const trader in player.traderInfo) {
+                const data = player.traderInfo[trader];
+                if (data.salesSum && data.salesSum > 0) {
+                    stats.totalSalesSum += data.salesSum;
+                }
+            }
+        }
+
+    });
+
+    let maxWeaponKills = 0;
+    for (const [weapon, kills] of Object.entries(weaponStats)) {
+        if (kills > maxWeaponKills) {
+            maxWeaponKills = kills;
+            stats.topKillsWeapon = weapon;
+            stats.topKillsWeaponCount = kills;
+        }
+    }
+
+    // Most popular map
+    let maxMapCount = 0;
+    let mostPopularMapKey = null;
+    for (const [mapKey, count] of Object.entries(mapStats)) {
+        if (count > maxMapCount) {
+            maxMapCount = count;
+            mostPopularMapKey = mapKey;
+        }
+    }
+
+    if (mostPopularMapKey) {
+        stats.mostPopularMap = getPrettyMapName(mostPopularMapKey);
+        stats.mostPopularMapCount = maxMapCount;
+    } else {
+        stats.mostPopularMap = 'N/A';
+        stats.mostPopularMapCount = 0;
+    }
+
+    stats.averageSurvivalRate = stats.totalRaids > 0
+        ? ((stats.totalSurvived / stats.totalRaids) * 100).toFixed(1) + '%'
+        : 0;
+
+    return stats;
 }
 
-function fadeOutAllElements(darkOverlay, memoryTitle, namesContainer) {
-    memoryTitle.style.opacity = '0';
+function getCurrentSeason() {
+    return seasons?.[0] || '1';
+}
 
-    // Remove all elements with fadeout
-    setTimeout(() => {
-        namesContainer.style.opacity = '0';
-        darkOverlay.style.opacity = '0';
+function getTopPlayers(players, count = 3) {
+    return players
+        .filter(p => !p.banned && !p.isCasual && p.totalScore > 0)
+        .sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0))
+        .slice(0, count);
+}
+
+// #region Anims
+function animateStats() {
+    document.querySelectorAll('.season-end-stat-value').forEach(el => {
+        const target = el.dataset.target;
+        if (!target) return;
+
+        const isPercent = el.dataset.type === 'percent';
+        const isTime = el.dataset.type === 'time';
+        const isLargeNumber = el.dataset.type === 'large';
+
+        let cleanTarget = parseFloat(target);
+        if (isNaN(cleanTarget)) return;
+
+        const duration = 2000;
+        const startTime = performance.now();
+
+        function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(1, elapsed / duration);
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            const current = Math.floor(cleanTarget * easeOutQuart);
+
+            if (isPercent) {
+                el.textContent = current + '%';
+            } else if (isTime) {
+                el.textContent = formatOnlineTime(current);
+            } else if (isLargeNumber) {
+                el.textContent = formatNumber(current);
+            } else {
+                el.textContent = current.toLocaleString();
+            }
+
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            } else {
+                if (isPercent) {
+                    el.textContent = cleanTarget + '%';
+                } else if (isTime) {
+                    el.textContent = formatOnlineTime(cleanTarget);
+                } else if (isLargeNumber) {
+                    el.textContent = formatNumber(cleanTarget);
+                } else {
+                    el.textContent = cleanTarget.toLocaleString();
+                }
+                el.classList.add('stat-complete');
+            }
+        }
 
         setTimeout(() => {
-            if (darkOverlay.parentNode) darkOverlay.parentNode.removeChild(darkOverlay);
-            if (memoryTitle.parentNode) memoryTitle.parentNode.removeChild(memoryTitle);
-            if (namesContainer.parentNode) namesContainer.parentNode.removeChild(namesContainer);
-        }, 2000);
-    }, 1000);
+            requestAnimationFrame(update);
+        }, Math.random() * 300);
+    });
+}
+
+function animateFacts() {
+    document.querySelectorAll('.fact-item').forEach((item, index) => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(-20px)';
+
+        setTimeout(() => {
+            item.style.transition = 'all 0.5s ease-out';
+            item.style.opacity = '1';
+            item.style.transform = 'translateX(0)';
+        }, 700 + index * 100);
+    });
+}
+
+// #region Music
+async function playSeasonMusic() {
+    try {
+        const finalMusic = new Audio('media/sounds/season/season_end_final.mp3');
+        finalMusic.volume = 0.5;
+        finalMusic.play();
+
+        finalMusic.addEventListener('ended', () => {
+            const contMusic = new Audio('media/sounds/season/end_music.mp3');
+            contMusic.volume = 0.3;
+            contMusic.loop = true;
+
+
+            window.seasonMusic = finalMusic;
+            contMusic.play();
+        });
+
+    } catch (error) {
+        console.warn('Music play failed:', error);
+    }
+}
+
+function stopSeasonMusic() {
+    if (window.seasonMusic) {
+        window.seasonMusic.pause();
+        window.seasonMusic.currentTime = 0;
+        window.seasonMusic = null;
+    }
+}
+
+function stopSeasonEffects() {
+    if (seasonAnimationFrame) {
+        clearInterval(seasonAnimationFrame);
+        seasonAnimationFrame = null;
+    }
+}
+
+// #region Utils
+function cleanupSeasonEnd() {
+    stopSeasonMusic();
+    stopSeasonEffects();
+
+    const overlay = document.getElementById('seasonOverlay');
+    if (overlay) {
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+            overlay.remove();
+        }, 500);
+    }
 }
