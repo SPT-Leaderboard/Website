@@ -84,24 +84,24 @@ function createWelcomeOverlay(showcasePlayers, stats) {
                 <div class="season-pmc-column">
                     <div class="pmc-heroes-container">
                         ${showcasePlayers.map((player, index) => {
-        const rank = getRank(player.networkRaids || 0, 2000, 32);
-        const colorMatch = rank.textColor.match(/hsl\((\d+)/);
-        const hue = colorMatch ? parseInt(colorMatch[1]) : 200;
-        const glowColor = `hsla(${hue}, 100%, 70%, 0.3)`;
-        const glowColorHover = `hsla(${hue}, 100%, 80%, 0.5)`;
-        const glowColorStrong = `hsla(${hue}, 100%, 60%, 0.4)`;
+                        const rank = getRank(player.networkRaids || 0, 2000, 32);
+                        const colorMatch = rank.textColor.match(/hsl\((\d+)/);
+                        const hue = colorMatch ? parseInt(colorMatch[1]) : 200;
+                        const glowColor = `hsla(${hue}, 100%, 70%, 0.3)`;
+                        const glowColorHover = `hsla(${hue}, 100%, 80%, 0.5)`;
+                        const glowColorStrong = `hsla(${hue}, 100%, 60%, 0.4)`;
 
-        let playerType = '';
-        let playerTypeIcon = '';
-        if (index === 0) {
-            playerType = 'Newcomer';
-        } else if (index === 1) {
-            playerType = 'Veteran';
-        } else {
-            playerType = 'Champion';
-        }
+                        let playerType = '';
+                        let playerTypeIcon = '';
+                        if (index === 0) {
+                            playerType = 'Newcomer';
+                        } else if (index === 1) {
+                            playerType = 'Veteran';
+                        } else {
+                            playerType = 'Champion';
+                        }
 
-        return `
+                        return `
                                 <div class="pmc-hero"
                                     data-index="${index}"
                                     data-rank-hue="${hue}">
@@ -135,7 +135,7 @@ function createWelcomeOverlay(showcasePlayers, stats) {
                                     </div>
                                 </div>
                             `;
-    }).join('')}
+                        }).join('')}
                     </div>
                 </div>
             </div>
