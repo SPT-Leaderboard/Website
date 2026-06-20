@@ -8,6 +8,8 @@ let lastShownPlayers = [];
 const phrases = [
     'love from developers.',
     'competitive SPT community.',
+    'connection with players worldwide.',
+    'welcome for everyone.',
     'tracking of your progress.',
     'glory of yours.'
 ]
@@ -37,7 +39,7 @@ async function initWelcomeScreen() {
 
                 const next = () => {
                     fx.setText(phrases[counter]).then(() => {
-                        setTimeout(next, 3000)
+                        setTimeout(next, 2000)
                     })
                     counter = (counter + 1) % phrases.length
                 }
@@ -78,7 +80,7 @@ function createWelcomeOverlay(showcasePlayers, stats) {
                 <div class="season-stats-column">
                     <div class="season-header">
                         <h1>Welcome to SPTLB</h1>
-                        <p class="season-end-subtitle">With everlasting <span id="journey-text"> </span></p>
+                        <p class="season-end-subtitle">With everlasting <span class="animated-text-glitch" id="journey-text"> </span></p>
                         <div class="welcome-description">
                             <p>Join, Explore, Trade, Team Up, Engage and Compete. For you. For free.</p>
                         </div>

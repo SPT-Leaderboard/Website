@@ -8606,6 +8606,10 @@ input[type="checkbox"]:checked:hover {
     }
 }
 
+.animated-text-glitch {
+    color: var(--accent-teal);
+}
+
 /* Rank Badge */
 .pmc-rank-badge {
     position: absolute;
