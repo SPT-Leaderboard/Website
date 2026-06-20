@@ -48,7 +48,6 @@ let allRaids = [];
 let isLoadingMore = false;
 let hasMoreToDisplay = true;
 let currentPlayerIdGlobal = null;
-let leaderboardDataGlobal = null;
 let isFullyLoaded = false;
 
 // #region Init
@@ -62,7 +61,6 @@ async function initLastRaids(playerId, permaLink) {
     }
 
     currentPlayerIdGlobal = playerId;
-    leaderboardDataGlobal = leaderboardData;
 
     // Reset state
     currentDisplayOffset = 0;
@@ -130,8 +128,10 @@ async function initLastRaids(playerId, permaLink) {
 
         // Display first batch
         renderDisplayBatch();
-        setupInfiniteScroll();
 
+        // Render player hits
+        initBodyHitsSelector();
+        updateBodyHitsFromRaidHistory(allRaids, 10);
     } catch (error) {
         statsContainer.innerHTML = `
             <div class="no-stats-message">
@@ -239,23 +239,72 @@ function renderDisplayBatch() {
 
     attachEventListeners();
 
+    // Remove loading
     const loader = document.getElementById('raids-loading-more');
     if (loader) loader.remove();
 
-    if (!hasMoreToDisplay) {
+    // Add "Show More" button
+    if (hasMoreToDisplay) {
+        addShowMoreButton();
+    } else {
+        // All raids loaded
         const showMoreContainer = document.getElementById('show-more-btn-container');
         if (showMoreContainer) showMoreContainer.remove();
 
-        // All raids loaded
         if (allRaids.length > DISPLAY_BATCH_SIZE) {
-            statsContainer.insertAdjacentHTML('afterend', `
-                <div class="all-raids-loaded">
-                    <i class="fa-solid fa-check-circle"></i>
-                    All ${allRaids.length} raids loaded
+            // Remove "all loaded"
+            const existingAllLoaded = document.querySelector('.all-raids-loaded');
+            if (existingAllLoaded) existingAllLoaded.remove();
+
+            statsContainer.insertAdjacentHTML('beforeend', `
+                <div class="all-raids-loaded" style="animation: notificationSlideOutToTop 300ms ease-in-out forwards; animation-delay: 5s;">
+                    Displaying all ${allRaids.length} raids!
                 </div>
             `);
         }
     }
+}
+
+function addShowMoreButton() {
+    // Remove existing button if any
+    const existingContainer = document.getElementById('show-more-btn-container');
+    if (existingContainer) existingContainer.remove();
+
+    // Remove any existing "all loaded" message
+    const existingAllLoaded = document.querySelector('.all-raids-loaded');
+    if (existingAllLoaded) existingAllLoaded.remove();
+
+    const statsContainer = document.getElementById('raids-stats-container');
+    const remainingRaids = allRaids.length - currentDisplayOffset;
+
+    const buttonHtml = `
+        <div id="show-more-btn-container" class="show-more-container">
+            <button id="show-more-raids" class="show-more-btn">
+                <i class="fa-solid fa-arrow-down"></i>
+                Show More Raids (${remainingRaids} remaining)
+            </button>
+        </div>
+    `;
+
+    statsContainer.insertAdjacentHTML('beforeend', buttonHtml);
+
+    const showMoreBtn = document.getElementById('show-more-raids');
+    if (showMoreBtn) {
+        showMoreBtn.removeEventListener('click', handleShowMore);
+        showMoreBtn.addEventListener('click', handleShowMore);
+    }
+}
+
+function handleShowMore() {
+    const button = document.getElementById('show-more-raids');
+    if (button) {
+        button.disabled = true;
+        button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
+    }
+
+    setTimeout(() => {
+        renderDisplayBatch();
+    }, 100);
 }
 
 // #region Render raid history
@@ -282,122 +331,6 @@ function renderCurrentBatch(currentPlayerId) {
     // Remove loader if present
     const loader = document.getElementById('raids-loading-more');
     if (loader) loader.remove();
-}
-
-function setupInfiniteScroll(permaLink) {
-    const statsContainer = document.getElementById('raids-stats-container');
-
-    const handleScroll = () => {
-        if (!hasMoreToDisplay || isLoadingMore) return;
-
-        const scrollPosition = window.innerHeight + window.scrollY;
-        const bottomThreshold = document.body.offsetHeight - 500;
-
-        if (scrollPosition >= bottomThreshold) {
-
-            if (!document.getElementById('raids-loading-more')) {
-                statsContainer.insertAdjacentHTML('beforeend', loaderHtml);
-            }
-
-            loadRaidBatch(permaLink, allRaids.length, RAID_BATCH_SIZE);
-        }
-    };
-
-    window.removeEventListener('scroll', handleScroll);
-    window.addEventListener('scroll', handleScroll);
-}
-
-async function loadRaidBatch(permaLink, offset, limit) {
-    if (isLoadingMore) return;
-
-    isLoadingMore = true;
-
-    try {
-        const indexUrl = `${ApiPaths.lastRaidsPath}${permaLink}_index.json`;
-        const indexData = await apiFetch(indexUrl);
-
-        if (!indexData) {
-            hasMoreToDisplay = false;
-            return;
-        }
-
-        // Determine which blob files to load based on offset
-        const blobFilesToLoad = getBlobFilesForRange(indexData, offset, limit);
-
-        // Load raids from required blob files
-        let newRaids = [];
-
-        for (const blobInfo of blobFilesToLoad) {
-            const blobUrl = `${ApiPaths.lastRaidsPath}${permaLink}_blob_${blobInfo.blob_index}.json`;
-            try {
-                const blobData = await apiFetch(blobUrl);
-                if (blobData?.raids) {
-                    // Get the slice we need from this blob
-                    const startIdx = blobInfo.start_offset;
-                    const endIdx = blobInfo.end_offset;
-                    const raidsSlice = blobData.raids.slice(startIdx, endIdx);
-                    newRaids = [...newRaids, ...raidsSlice];
-                }
-            } catch (e) {
-                console.error(`Failed to load blob ${blobInfo.blob_index}:`, e);
-            }
-        }
-
-        if (newRaids.length > 0) {
-            allRaids = [...allRaids, ...newRaids];
-            renderCurrentBatch();
-        }
-
-        // Check if we have more raids to load
-        hasMoreToDisplay = allRaids.length < indexData.total_raids;
-
-    } catch (error) {
-        console.error('Error loading raid batch:', error);
-        hasMoreToDisplay = false;
-    } finally {
-        isLoadingMore = false;
-    }
-}
-
-// #region Blob Range Finder
-function getBlobFilesForRange(indexData, offset, limit) {
-    const blobsToLoad = [];
-    let remainingToLoad = limit;
-    let currentOffset = offset;
-
-    // Sort blobs by start_raid
-    const sortedBlobs = [...(indexData.blobs || [])].sort((a, b) => a.start_raid - b.start_raid);
-
-    // Add current blob if needed
-    if (indexData.current_blob !== undefined) {
-        const currentBlobFile = `${ApiPaths.lastRaidsPath}${indexData.player_id}_blob_${indexData.current_blob}.json`;
-    }
-
-    for (const blob of sortedBlobs) {
-        const blobRaidCount = blob.raid_count;
-
-        if (currentOffset >= blobRaidCount) {
-            currentOffset -= blobRaidCount;
-            continue;
-        }
-
-        const startInBlob = currentOffset;
-        const raidsToTake = Math.min(remainingToLoad, blobRaidCount - startInBlob);
-
-        blobsToLoad.push({
-            blob_index: blob.blob_index,
-            start_offset: startInBlob,
-            end_offset: startInBlob + raidsToTake,
-            raid_count: raidsToTake
-        });
-
-        remainingToLoad -= raidsToTake;
-        currentOffset = 0;
-
-        if (remainingToLoad <= 0) break;
-    }
-
-    return blobsToLoad;
 }
 
 function createRaidCard(raid, currentPlayerId, leaderboardData) {
@@ -651,7 +584,7 @@ function createProfitSection(raid) {
         <div class="raid-profit ${profitClass}">
             <i class="fa-solid fa-money-bill-trend-up"></i>
             <i class="${profitIcon}"></i>
-            <span>${formatProfit(raid.lastRaidProfit)} ₽</span>
+            <span>${formatSalesNum(raid.lastRaidProfit)} ₽</span>
         </div>
     `;
 }
@@ -923,7 +856,7 @@ function renderMapStats(raids) {
                             <div class="map-stat-item">
                                 <div class="map-stat-label">Total Profit</div>
                                 <div class="map-stat-value ${map.totalProfit >= 0 ? 'stat-positive' : 'stat-negative'}">
-                                    ${map.totalProfit >= 0 ? '+' : ''}${formatProfit(map.totalProfit)} ₽
+                                    ${map.totalProfit >= 0 ? '+' : ''}${formatSalesNum(map.totalProfit)} ₽
                                 </div>
                             </div>
                         </div>
@@ -981,7 +914,7 @@ function renderRaidsSummary(raids, currentPlayerId, leaderboardData) {
                 <div class="stat-label">Total LC Earned</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value ${recentStats.totalProfit >= 0 ? 'stat-positive' : 'stat-negative'}">${formatProfit(recentStats.totalProfit)} ₽</div>
+                <div class="stat-value ${recentStats.totalProfit >= 0 ? 'stat-positive' : 'stat-negative'}">${formatSalesNum(recentStats.totalProfit)} ₽</div>
                 <div class="stat-label">Total Profit</div>
             </div>
             <div class="stat-card">
@@ -1072,7 +1005,7 @@ function calculateMapStats(raids) {
             survivalRate,
             avgEXP,
             formattedTime: formatSeconds(avgTime),
-            formattedProfit: formatProfit(avgProfit)
+            formattedProfit: formatSalesNum(avgProfit)
         };
     });
 
@@ -1083,22 +1016,6 @@ function calculateMapStats(raids) {
         rank: index + 1,
         isFavourite: index < 3 && stats.totalRaids >= 40
     }));
-}
-
-function formatProfit(profit) {
-    if (!profit)
-        return 0;
-
-    const absoluteProfit = Math.abs(profit);
-
-    if (absoluteProfit >= 1000000000) {
-        return (profit / 1000000000).toFixed(1) + 'B';
-    } else if (absoluteProfit >= 1000000) {
-        return (profit / 1000000).toFixed(1) + 'M';
-    } else if (absoluteProfit >= 1000) {
-        return (profit / 1000).toFixed(0) + 'K';
-    }
-    return profit.toLocaleString();
 }
 
 function getTimeProgress(currentTime, minTime = 1, maxTime = 4300) {
