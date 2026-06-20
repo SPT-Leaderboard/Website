@@ -41,12 +41,12 @@ async function loadQuestData(quests) {
     }
 
     try {
-        const response = await fetch("achievements/js/compiledQuests.json");
-        if (!response.ok) {
+        const response = await apiFetch("achievements/js/compiledQuests.json");
+        if (!response) {
             console.error(`HTTP error! status: ${response.status}`);
         }
 
-        const compiledQuests = await response.json();
+        const compiledQuests = response;
         currentQuests = processQuestsData(quests, compiledQuests.questsCompiled);
         await displayQuestsWithControls(currentQuests, questsContainer);
 

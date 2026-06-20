@@ -4,7 +4,6 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ /
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
-let authCheckInterval = null;
 let autoLoginAttempts = 0;
 const MAX_AUTO_LOGIN_ATTEMPTS = 1;
 
@@ -15,9 +14,10 @@ async function checkAuth() {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-        const response = await fetch('/api/network/login/check_auth.php', {
+        const response = await apiFetch('/api/network/login/check_auth.php', {
             method: 'GET',
             credentials: 'include',
+            cacheBust: false,
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Cache-Control': 'no-cache',
@@ -28,18 +28,16 @@ async function checkAuth() {
 
         clearTimeout(timeoutId);
 
-        if (!response.ok) {
+        if (!response) {
             console.error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json();
+        const data = response;
 
         if (data.authenticated && data.username) {
             updateAuthStatus('authenticated', data.username, data.profilePicture, data.unreadCount || 0);
             isLoggedIn = true;
             autoLoginAttempts = 0;
-
-            startPeriodicAuthCheck();
 
         } else if (data.maintenance) {
             updateAuthStatus('maintenance', 'Maintenance', 0);
@@ -68,6 +66,7 @@ async function checkAuth() {
         }
 
         isLoggedIn = false;
+        autoLoginAttempts++;
 
         // retry
         setTimeout(() => checkAuth(), 5000);
@@ -130,61 +129,43 @@ function updateAuthStatus(status, message, profilePicture, notifications = 0) {
     }
 }
 
-function startPeriodicAuthCheck() {
-    if (authCheckInterval) {
-        clearInterval(authCheckInterval);
-    }
-
-    authCheckInterval = setInterval(() => {
-        silentAuthCheck();
-    }, 300000);
-
-    document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) {
-            silentAuthCheck();
-        }
-    });
-}
-
 async function silentAuthCheck() {
     try {
-        const response = await fetch('/api/network/login/check_auth.php', {
+        const response = await apiFetch('/api/network/login/check_auth.php', {
             method: 'GET',
             credentials: 'include',
+            cacheBust: false,
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Cache-Control': 'no-cache'
             }
         });
 
-        if (!response.ok) return;
+        if (!response) return;
 
-        const data = await response.json();
-
-        if (data.authenticated && data.username) {
+        if (response.authenticated && response.username) {
             const notificationElement = document.getElementById('networkNotifies');
             if (notificationElement) {
-                if (data.unreadCount > 0) {
-                    notificationElement.textContent = data.unreadCount > 99 ? '99+' : data.unreadCount;
+                if (response.unreadCount > 0) {
+                    notificationElement.textContent = response.unreadCount > 99 ? '99+' : response.unreadCount;
                     notificationElement.style.display = 'flex';
                 } else {
                     notificationElement.style.display = 'none';
                 }
             }
-        } else if (isLoggedIn) {
-            checkAuth();
+        } else {
+            const authResponse = await apiFetch('/api/network/login/check_auth.php', {
+                method: 'GET',
+                cacheBust: false,
+                credentials: 'include'
+            });
         }
     } catch (error) {
         console.error('Silent auth check failed:', error);
+        autoLoginAttempts++;
     }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
     checkAuth();
-
-    window.addEventListener('beforeunload', function () {
-        if (authCheckInterval) {
-            clearInterval(authCheckInterval);
-        }
-    });
 });

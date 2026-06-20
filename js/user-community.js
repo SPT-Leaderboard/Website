@@ -281,9 +281,10 @@ class FriendManager {
      */
     async fetchRealFriends() {
         try {
-            const response = await fetch('/api/network/functions/community/get_friends.php', {
+            const response = await apiFetch('/api/network/functions/community/get_friends.php', {
                 method: 'POST',
                 credentials: 'include',
+                cacheBust: false,
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Cache-Control': 'no-cache',
@@ -293,9 +294,9 @@ class FriendManager {
                 body: JSON.stringify({ profileId: this.currentPlayer.id })
             });
 
-            if (!response.ok) return new Map();
+            if (!response) return new Map();
 
-            const data = await response.json();
+            const data = response;
 
             if (!data.friends || data.friends.length === 0) {
                 return new Map();
@@ -888,8 +889,9 @@ class CommentsManager {
             this.elements.commentSubmit.classList.add('loading');
             this.elements.commentSubmit.disabled = true;
 
-            const response = await fetch(this.apiEndpoints.sendComment, {
+            const response = await apifetch(this.apiEndpoints.sendComment, {
                 method: 'POST',
+                cacheBust: false,
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
@@ -901,12 +903,12 @@ class CommentsManager {
                 })
             });
 
-            if (!response.ok) {
+            if (!response) {
                 const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
                 throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
             }
 
-            const data = await response.json();
+            const data = response;
 
             this.elements.commentInput.value = '';
 
@@ -1014,18 +1016,17 @@ class CommentsManager {
         }
 
         try {
-            const response = await fetch(`${this.apiEndpoints.loadComments}player_${this.permaLink}.json?t=${Date.now()}`);
+            const response = await apiFetch(`${this.apiEndpoints.loadComments}player_${this.permaLink}.json?t=${Date.now()}`);
 
-            if (!response.ok) {
-                if (response.status === 404) {
-                    this.displayNoComments();
-                    return;
-                }
-
+            if (!response) {
                 console.error('Failed to load comments');
+
+                this.displayNoComments();
+                
+                return;
             }
 
-            this.pagination.allComments = await response.json();
+            this.pagination.allComments = response;
             this.pagination.allComments.sort((a, b) => b.timestamp - a.timestamp);
 
             // Get rid of bad comments by ANY means
@@ -1412,15 +1413,17 @@ class PlayerEquipmentDisplay {
         this.isLoading = true;
         this.loadPromise = (async () => {
             try {
-                const response = await fetch(`/api/data/pmc_equipment/${this.playerId}.json`);
-                if (!response.ok) console.error('Failed to load equipment data');
+                const response = await apiFetch(`/api/data/pmc_equipment/${this.playerId}.json`);
+                if (!response) console.error('Failed to load equipment data');
 
-                const playerData = await response.json();
+                const playerData = response;
                 this.equipment = playerData || {};
+
                 return this.equipment;
             } catch (error) {
                 console.error(`Error loading equipment for player ${this.playerId}:`, error);
                 this.equipment = {};
+
                 return {};
             } finally {
                 this.isLoading = false;

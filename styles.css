@@ -5143,6 +5143,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .hit-perc {
+    transition: all 0.3s;
     color: #c0c0c0;
     font-size: smaller;
     font-family: sans-serif;
@@ -5155,6 +5156,81 @@ input[type="checkbox"]:checked:hover {
     margin-top: 10px;
     place-self: center;
     rotate: 9deg;
+}
+
+/* Body Hits Container */
+.body-hits-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.hits-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.selector-label {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    margin-right: 4px;
+}
+
+.hits-raid-count-selector {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.count-btn {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.5);
+    padding: 4px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 400;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.3px;
+}
+
+.count-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.count-btn.active {
+    background: rgba(100, 255, 218, 0.12);
+    border-color: rgba(100, 255, 218, 0.25);
+    color: #64ffda;
+    box-shadow: 0 2px 10px rgba(100, 255, 218, 0.05);
+}
+
+.body-svg-container {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.body-svg-container svg {
+    max-width: 150px;
+    height: auto;
+    filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.3));
+}
+
+.body-svg-container svg path,
+.body-svg-container svg ellipse,
+.body-svg-container svg rect {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
 }
 
 /* Weapons List & Achievements & Maps Stats */
@@ -5811,6 +5887,104 @@ input[type="checkbox"]:checked:hover {
 }
 
 /* Last Raids History */
+.show-more-container {
+    position: absolute;
+    text-align: center;
+    margin: 10px 0;
+    padding: 10px;
+    place-self: center;
+}
+
+.show-more-btn {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #e0e0e0;
+    padding: 14px 36px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    letter-spacing: 0.3px;
+    position: relative;
+    overflow: hidden;
+}
+
+.show-more-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.show-more-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.show-more-btn i {
+    margin-right: 10px;
+    font-size: 14px;
+    opacity: 0.8;
+    transition: transform 0.3s ease;
+}
+
+.show-more-btn:disabled i {
+    animation: spin 1s linear infinite;
+    transform: none !important;
+}
+
+.all-raids-loaded {
+    position: absolute;
+    margin: 10px 0;
+    padding: 10px;
+    place-self: center;
+    text-align: center;
+    background: rgba(46, 204, 113, 0.06);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(46, 204, 113, 0.15);
+    border-radius: 10px;
+    color: #2ecc71;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    box-shadow: 0 4px 20px rgba(46, 204, 113, 0.05);
+}
+
+.all-rails-loaded i {
+    margin-right: 10px;
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.loading-more {
+    text-align: center;
+    margin: 25px 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+}
+
+.loading-more p {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+    margin-top: 10px;
+    letter-spacing: 0.5px;
+}
+
+/* Last raids history main */
 .last-raid-feed {
     position: relative;
     border-radius: 16px;
@@ -8345,6 +8519,13 @@ input[type="checkbox"]:checked:hover {
     to {
         opacity: 0;
         transform: translateX(40px) scale(0.94);
+    }
+}
+
+@keyframes notificationSlideOutToTop {
+    to {
+        opacity: 0;
+        transform: translateY(-30px);
     }
 }
 

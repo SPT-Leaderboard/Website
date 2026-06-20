@@ -112,6 +112,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function checkSeasonExists(seasonNumber) {
     const serverUrl = `${ApiPaths.seasonPath}${seasonNumber}${ApiPaths.seasonPathEnd}`;
     const data = await apiFetch(serverUrl, { showErrorToast: false, cacheBust: false });
+    
     return data !== null;
 }
 

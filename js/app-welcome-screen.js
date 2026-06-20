@@ -191,7 +191,7 @@ async function getPlayersWithImages(players, count = 3) {
     const checkImageExists = async (url) => {
         if (imageCache.has(url)) return imageCache.get(url);
         try {
-            const response = await fetch(url, { method: 'HEAD' });
+            const response = await apiFetch(url, { method: 'HEAD' });
             const exists = response.ok;
             imageCache.set(url, exists);
             return exists;

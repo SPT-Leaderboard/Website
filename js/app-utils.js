@@ -584,7 +584,7 @@ function isPremium(player) {
  * Quick util for loading data from JSON
  */
 async function loadJSON(url) {
-    const response = await fetch(url);
+    const response = await apiFetch(url);
 
     if (!response.ok) {
         console.error(`Failed to load ${url}: ${response.status}`);
@@ -783,7 +783,7 @@ function truncateName(name, maxLength = 15) {
 
 async function imageExists(url) {
     try {
-        const response = await fetch(url, { method: 'HEAD' });
+        const response = await apiFetch(url, { method: 'HEAD' });
         return response.ok;
     } catch {
         return false;

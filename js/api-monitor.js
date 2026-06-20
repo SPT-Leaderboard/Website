@@ -6,7 +6,10 @@
 
 async function getServerStatus() {
     try {
-        const response = await fetch(`/api/main/online.json?t=${Date.now()}`);
+        const response = await apiFetch(`/api/main/online.json?t=${Date.now()}`, {
+            cacheBust: true
+        });
+
         if (!response.ok) console.error('API is not responding');
 
         return await response.json();
