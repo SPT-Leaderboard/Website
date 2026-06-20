@@ -4,7 +4,7 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ /
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
-const ProfileState = {
+let ProfileState = {
     isProfileOpened: false,
     savedScrollPosition: 0,
     targetPlayerElement: null,
@@ -12,7 +12,8 @@ const ProfileState = {
     statusUpdater: null,
     commentsManager: null,
     friendManager: null,
-    tabManager: null
+    tabManager: null,
+    playerHitDefaultRender: 10
 };
 
 /**
@@ -558,6 +559,19 @@ async function showPublicProfile(container, player) {
                             </div>
                         </div>
                     </div>
+                    <div class="body-hits-header">
+                        <div class="hits-header-right">
+                            <div class="hits-raid-count-selector">
+                                <span class="selector-label">Show:</span>
+                                <button class="count-btn active" data-count="10">10</button>
+                                <button class="count-btn" data-count="25">25</button>
+                                <button class="count-btn" data-count="50">50</button>
+                                <button class="count-btn" data-count="100">100</button>
+                                <button class="count-btn" data-count="500">500</button>
+                                <button class="count-btn" data-count="all">All</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- Map Stats -->
@@ -893,11 +907,6 @@ async function showPublicProfile(container, player) {
     // Setup close handlers first
     setupModalCloseHandlers();
 
-    // Update body hits SVG
-    if (player.raidHitsHistory) {
-        updateBodyHitsVisualization(player.raidHitsHistory);
-    }
-
     //user-community.js
     window.profileLoader.setText('Almost Done...');
     ProfileState.commentsManager = new CommentsManager({
@@ -958,61 +967,74 @@ async function showPublicProfile(container, player) {
 //#endregion
 
 // #region Body Hits
-function updateBodyHitsVisualization(raidHitsHistory) {
-    // Sum up all player hits
-    const totalHits = {
-        head: 0,
-        chest: 0,
-        stomach: 0,
-        leftArm: 0,
-        rightArm: 0,
-        leftLeg: 0,
-        rightLeg: 0
-    };
-
-    raidHitsHistory.forEach(game => {
-        for (const part in game) {
-            totalHits[part] += game[part];
-        }
-    });
+function updateBodyHitsVisualization(totalHits, raidCount = 10) {
+    if (!totalHits || typeof totalHits !== 'object') {
+        console.error('Invalid totalHits data:', totalHits);
+        return;
+    }
 
     const groupedHits = {
-        head: totalHits.head,
-        chest: totalHits.chest,
-        stomach: totalHits.stomach,
-        arms: totalHits.leftArm + totalHits.rightArm,
-        legs: totalHits.leftLeg + totalHits.rightLeg
+        head: totalHits.head || 0,
+        chest: totalHits.chest || 0,
+        stomach: totalHits.stomach || 0,
+        arms: (totalHits.leftArm || 0) + (totalHits.rightArm || 0),
+        legs: (totalHits.leftLeg || 0) + (totalHits.rightLeg || 0)
     };
 
-    // Get total hits
     const totalAllHits = Object.values(groupedHits).reduce((sum, hits) => sum + hits, 0);
     const maxHits = Math.max(...Object.values(groupedHits));
 
-    const getColorStyle = (hits, max) => {
-        // If body part has no hits, return this
-        if (hits === 0) return { color: '#cdcdcd', opacity: '0.5' };
+    // No hits?
+    if (totalAllHits === 0) {
+        document.querySelectorAll('.hit-perc').forEach((element, index) => {
+            const hitParts = ['head', 'chest', 'arms', 'stomach', 'legs'];
+            element.innerHTML = `${capitalize(hitParts[index])}: 0% of Hits - <span>0 Hits</span> (${raidCount} raids)`;
+            Object.assign(element.style, {
+                color: '#666',
+                opacity: '0.5',
+                fontSize: '0.9rem',
+                fontWeight: '400'
+            });
+        });
 
+        const bodyElements = ['head', 'chest', 'arms', 'stomach', 'legs'];
+        bodyElements.forEach(part => {
+            const selector = `.body-${part}`;
+            const element = document.querySelector(selector);
+            if (element) {
+                Object.assign(element.style, {
+                    fill: '#808080ff',
+                    opacity: '0.15'
+                });
+            }
+        });
+
+        const avgElement = document.querySelector('.avg-headshots span');
+        if (avgElement) {
+            avgElement.textContent = `Avg. Headshot % Last ${raidCount} Games: 0%`;
+        }
+        return;
+    }
+
+    const getColorStyle = (hits, max) => {
+        if (hits === 0) return { color: '#cdcdcd', opacity: '0.5' };
         const intensity = hits / max;
         const mixFactor = Math.pow(intensity, 0.7);
-
-        // #cdcdcd5e to #64ffda
         return {
-            color: `rgb(${Math.floor(205 + (100 - 205) * mixFactor)
-                }, ${Math.floor(205 + (255 - 205) * mixFactor)
-                }, ${Math.floor(205 + (218 - 205) * mixFactor)
-                })`,
+            color: `rgb(${Math.floor(205 + (100 - 205) * mixFactor)}, ${Math.floor(205 + (255 - 205) * mixFactor)}, ${Math.floor(205 + (218 - 205) * mixFactor)})`,
             opacity: 0.37 + (0.95 - 0.37) * mixFactor
         };
     };
 
-    // Update CSS for body parts
+    // Text update
     const hitParts = ['head', 'chest', 'arms', 'stomach', 'legs'];
     document.querySelectorAll('.hit-perc').forEach((element, index) => {
         const part = hitParts[index];
         const hits = groupedHits[part] || 0;
         const percentage = totalAllHits > 0 ? (hits / totalAllHits * 100).toFixed(1) : '0.0';
 
-        element.innerHTML = `${capitalize(hitParts[index])}: ${percentage}% of Hits - <span>${hits} Hits</span>`;
+        element.innerHTML = `${capitalize(part)}: ${percentage}% of Hits - <span>${hits} Hits</span>`;
+
         const intensity = maxHits > 0 ? hits / maxHits : 0;
         const styles = getColorStyle(hits, maxHits);
 
@@ -1032,7 +1054,6 @@ function updateBodyHitsVisualization(raidHitsHistory) {
         'legs': '.body-legs'
     };
 
-    // Now fill SVG bodies to appropriate colors (same as text ones)
     Object.entries(bodyElements).forEach(([part, selector]) => {
         const element = document.querySelector(selector);
         if (!element) return;
@@ -1053,14 +1074,125 @@ function updateBodyHitsVisualization(raidHitsHistory) {
         }
     });
 
-    // Headshot % header
     const headshotPercentage = totalAllHits > 0
         ? (groupedHits.head / totalAllHits * 100).toFixed(1)
         : '0.0';
 
     const avgElement = document.querySelector('.avg-headshots span');
-    avgElement.textContent = `Avg. Headshot % Last 10 Games: ${headshotPercentage}%`;
+    if (avgElement) {
+        avgElement.textContent = `Avg. Headshot % Last ${raidCount} Games: ${headshotPercentage}%`;
+    }
 }
+
+function collectHitsFromRaidHistory(raids, limit = 10) {
+    const totalHits = {
+        head: 0,
+        chest: 0,
+        stomach: 0,
+        leftArm: 0,
+        rightArm: 0,
+        leftLeg: 0,
+        rightLeg: 0
+    };
+
+    // Go through the raids, first earliest
+    // Prevent from an infinite looping over loading the hits with maxAttempts
+    let collectedCount = 0;
+    let skippedCount = 0;
+    const maxAttempts = raids.length * 2;
+
+    for (let i = raids.length - 1; i >= 0 && collectedCount < limit && i >= -maxAttempts; i--) {
+        const raid = raids[i];
+
+        // Has any hits in raid?
+        if (raid.lastRaidBodyPartHits && typeof raid.lastRaidBodyPartHits === 'object') {
+            const hits = raid.lastRaidBodyPartHits;
+
+            // At least one?
+            const hasHits = Object.values(hits).some(value => value > 0);
+
+            if (hasHits) {
+                totalHits.head += hits.head || 0;
+                totalHits.chest += hits.chest || 0;
+                totalHits.stomach += hits.stomach || 0;
+                totalHits.leftArm += hits.leftArm || 0;
+                totalHits.rightArm += hits.rightArm || 0;
+                totalHits.leftLeg += hits.leftLeg || 0;
+                totalHits.rightLeg += hits.rightLeg || 0;
+                collectedCount++;
+            } else {
+                skippedCount++;
+            }
+        } else {
+            skippedCount++;
+        }
+    }
+
+    return totalHits;
+}
+
+function updateBodyHitsFromRaidHistory(raids, limit = 10) {
+    if (!raids || raids.length === 0) {
+        console.warn('No raid history available');
+        updateBodyHitsVisualization(null, 0);
+        return;
+    }
+
+    const totalHits = collectHitsFromRaidHistory(raids, limit);
+
+    const totalHitsSum = Object.values(totalHits).reduce((sum, hits) => sum + hits, 0);
+    let actualRaidCount = 0;
+
+    if (totalHitsSum > 0) {
+        let foundCount = 0;
+        for (let i = raids.length - 1; i >= 0 && foundCount < limit; i--) {
+            const raid = raids[i];
+            if (raid.lastRaidBodyPartHits && typeof raid.lastRaidBodyPartHits === 'object') {
+                const hasHits = Object.values(raid.lastRaidBodyPartHits).some(value => value > 0);
+                if (hasHits) {
+                    foundCount++;
+                }
+            }
+        }
+        actualRaidCount = foundCount || limit;
+    } else {
+        actualRaidCount = 0;
+    }
+
+    // If we found less than required, show what we got
+    const displayRaidCount = actualRaidCount > 0 ? actualRaidCount : Math.min(raids.length, limit);
+
+    updateBodyHitsVisualization(totalHits, displayRaidCount);
+}
+
+function initBodyHitsSelector() {
+    const buttons = document.querySelectorAll('.count-btn');
+
+    buttons.forEach(button => {
+        button.removeEventListener('click', handleCountSelect);
+        button.addEventListener('click', handleCountSelect);
+    });
+}
+
+function handleCountSelect(event) {
+    const button = event.currentTarget;
+    const count = button.dataset.count;
+
+    document.querySelectorAll('.count-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    button.classList.add('active');
+
+    if (count === 'all') {
+        ProfileState.playerHitDefaultRender = allRaids.length;
+    } else {
+        ProfileState.playerHitDefaultRender = parseInt(count, 10);
+    }
+
+    updateBodyHitsFromRaidHistory(allRaids, ProfileState.playerHitDefaultRender);
+}
+
 // #endregion
 
 // #region Weapons Render
