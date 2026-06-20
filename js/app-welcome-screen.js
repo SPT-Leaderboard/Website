@@ -5,10 +5,16 @@
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
 let lastShownPlayers = [];
+const phrases = [
+    'love from developers.',
+    'competitive SPT community.',
+    'tracking of your progress.',
+    'glory of yours.'
+]
 
 async function initWelcomeScreen() {
     try {
-        if (localStorage.getItem('WelcomeScreenC') !== 'true') {
+        if (localStorage.getItem('WelcomeSplashScreen') !== 'true') {
             const players = leaderboardData;
             const showcasePlayers = await getPlayersWithImages(players, 3);
             const stats = calculateSeasonStats(players);
@@ -24,11 +30,27 @@ async function initWelcomeScreen() {
             const continueBtn = document.getElementById('continueBtn');
             const welcomePopup = document.getElementById('welcomePopup');
 
+            const el = document.getElementById('journey-text')
+            if (el) {
+                const fx = new Fun(el)
+                let counter = 0
+
+                const next = () => {
+                    fx.setText(phrases[counter]).then(() => {
+                        setTimeout(next, 3000)
+                    })
+                    counter = (counter + 1) % phrases.length
+                }
+
+                setTimeout(next, 1000)
+            }
+
+
             continueBtn.addEventListener('click', function () {
                 welcomePopup.style.opacity = '0';
                 welcomePopup.style.transform = 'translateY(-20px)';
                 welcomePopup.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                localStorage.setItem('WelcomeScreenC', 'true');
+                localStorage.setItem('WelcomeSplashScreen', 'true');
                 setTimeout(() => {
                     welcomePopup.remove();
                 }, 400);
@@ -56,9 +78,9 @@ function createWelcomeOverlay(showcasePlayers, stats) {
                 <div class="season-stats-column">
                     <div class="season-header">
                         <h1>Welcome to SPTLB</h1>
-                        <p class="season-end-subtitle">Your journey starts here.</p>
+                        <p class="season-end-subtitle">With everlasting <span id="journey-text"> </span></p>
                         <div class="welcome-description">
-                            <p>Join, Explore, Trade, Engage and Compete. Everything is open, just for you, player.</p>
+                            <p>Join, Explore, Trade, Team Up, Engage and Compete. For you. For free.</p>
                         </div>
                     </div>
 
@@ -135,7 +157,7 @@ function createWelcomeOverlay(showcasePlayers, stats) {
                                     </div>
                                 </div>
                             `;
-                        }).join('')}
+    }).join('')}
                     </div>
                 </div>
             </div>
@@ -265,7 +287,7 @@ async function getPlayersWithImages(players, count = 3) {
     const result = [newbie, veteran, champion].filter(Boolean);
 
     lastShownPlayers = result.map(p => p.id);
-    
+
     if (result.length < 3) {
         const remaining = top20ByScore
             .filter(p => !result.some(r => r.id === p.id));
@@ -282,4 +304,59 @@ async function getPlayersWithImages(players, count = 3) {
     }
 
     return result.slice(0, 3);
+}
+
+// Make text animated (from NVV)
+class Fun {
+    constructor(el) {
+        this.el = el
+        this.chars = '!<>-_\\/[]{}—=+*^?#________'
+        this.update = this.update.bind(this)
+    }
+    setText(newText) {
+        const oldText = this.el.innerText
+        const length = Math.max(oldText.length, newText.length)
+        const promise = new Promise((resolve) => this.resolve = resolve)
+        this.queue = []
+        for (let i = 0; i < length; i++) {
+            const from = oldText[i] || ''
+            const to = newText[i] || ''
+            const start = Math.floor(Math.random() * 40)
+            const end = start + Math.floor(Math.random() * 40)
+            this.queue.push({ from, to, start, end })
+        }
+        cancelAnimationFrame(this.frameRequest)
+        this.frame = 0
+        this.update()
+        return promise
+    }
+    update() {
+        let output = ''
+        let complete = 0
+        for (let i = 0, n = this.queue.length; i < n; i++) {
+            let { from, to, start, end, char } = this.queue[i]
+            if (this.frame >= end) {
+                complete++
+                output += to
+            } else if (this.frame >= start) {
+                if (!char || Math.random() < 0.28) {
+                    char = this.randomChar()
+                    this.queue[i].char = char
+                }
+                output += `<span class="dud">${char}</span>`
+            } else {
+                output += from
+            }
+        }
+        this.el.innerHTML = output
+        if (complete === this.queue.length) {
+            this.resolve()
+        } else {
+            this.frameRequest = requestAnimationFrame(this.update)
+            this.frame++
+        }
+    }
+    randomChar() {
+        return this.chars[Math.floor(Math.random() * this.chars.length)]
+    }
 }
