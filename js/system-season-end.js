@@ -397,3 +397,35 @@ function cleanupSeasonEnd() {
         }, 500);
     }
 }
+
+// Update timer and preload audio for season end
+let audioElements = {};
+let lastPlayed = null;
+
+// Season end screen
+function playAppropriateTrack(diff) {
+    let trackToPlay = null;
+
+    if (diff <= 30000) { // 0:30
+        trackToPlay = 'season/season_end3';
+    } else if (diff <= 85000) { // 1:25
+        trackToPlay = 'season/season_end2';
+    } else if (diff <= 145000) { // 2:25
+        trackToPlay = 'season/season_end1';
+    }
+
+    // If track changed
+    if (trackToPlay && lastPlayed !== trackToPlay) {
+        // Stop all tracks
+        Object.values(audioElements).forEach(audio => {
+            audio.pause();
+            audio.currentTime = 0;
+        });
+
+        lastPlayed = trackToPlay;
+        audioElements[trackToPlay].play().catch(e => {
+            console.warn(`Couldn't play ${trackToPlay}:`, e);
+        });
+
+    }
+}
