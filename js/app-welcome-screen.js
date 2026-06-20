@@ -24,11 +24,6 @@ async function initWelcomeScreen() {
             const overlay = createWelcomeOverlay(showcasePlayers, stats);
             document.body.appendChild(overlay);
 
-            setTimeout(() => {
-                animateStats();
-                animatePMCs();
-            }, 300);
-
             const continueBtn = document.getElementById('continueBtn');
             const welcomePopup = document.getElementById('welcomePopup');
 
