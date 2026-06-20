@@ -10,9 +10,9 @@ async function getServerStatus() {
             cacheBust: true
         });
 
-        if (!response.ok) console.error('API is not responding');
+        if (!response) console.error('API is not responding');
 
-        return await response.json();
+        return response;
     } catch (err) {
         return {
             online: false,
