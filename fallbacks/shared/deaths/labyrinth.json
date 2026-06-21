@@ -1,0 +1,808 @@
+{
+    "map": "labyrinth",
+    "lastUpdated": 1781805497,
+    "players": {
+        "8476044fbae323c6c14125bd48f4c0d89fcd76a047a52f07ac91f45801e56072": {
+            "name": "Haywire Hayley",
+            "profileId": "69d404dcffcf6161c4c29f82",
+            "deaths": [
+                {
+                    "x": -13.0916729,
+                    "y": 11.9545059,
+                    "z": 1.05778229,
+                    "timestamp": 1777560938,
+                    "killer_name": "Oracle"
+                },
+                {
+                    "x": 23.7676868,
+                    "y": 55.2446632,
+                    "z": 0.0301087629,
+                    "timestamp": 1777483105,
+                    "killer_name": "Shadow of"
+                }
+            ],
+            "lastDeath": {
+                "x": -13.0916729,
+                "y": 11.9545059,
+                "z": 1.05778229,
+                "timestamp": 1777560938
+            }
+        },
+        "e2914704d8880f40cdcc04e647c4e41f43b908b1b7072e584d488a5cd4b8db76": {
+            "name": "PicaReta",
+            "profileId": "69f212e910549323a8b72084",
+            "deaths": [
+                {
+                    "x": 6.14824533,
+                    "y": 51.8448944,
+                    "z": 0.08749492,
+                    "timestamp": 1778091989
+                },
+                {
+                    "x": 30.138979,
+                    "y": 41.3273354,
+                    "z": 0.0270226113,
+                    "timestamp": 1778080563
+                },
+                {
+                    "x": 8.930863,
+                    "y": 61.36068,
+                    "z": 0.09261228,
+                    "timestamp": 1778072159
+                },
+                {
+                    "x": -4.53063965,
+                    "y": -31.6878872,
+                    "z": 0.5245194,
+                    "timestamp": 1778013221
+                }
+            ],
+            "lastDeath": {
+                "x": 6.14824533,
+                "y": 51.8448944,
+                "z": 0.08749492,
+                "timestamp": 1778091989
+            }
+        },
+        "3b91ae743171b942d8e4ccbeed13ea3d630ddafc7fb033172bb9db5cce542db8": {
+            "name": "CommetStar",
+            "profileId": "6a0a82a4c096ec0f84702191",
+            "deaths": [
+                {
+                    "x": 30.050045,
+                    "y": 40.8035164,
+                    "z": -0.349315077,
+                    "timestamp": 1779357901
+                }
+            ],
+            "lastDeath": {
+                "x": 30.050045,
+                "y": 40.8035164,
+                "z": -0.349315077,
+                "timestamp": 1779357901
+            }
+        },
+        "a077c2ad1067d53cdb4d77ee1a5fe76ee55f4fdf06bf2837f1c62d6e30d50c36": {
+            "name": "Kuro73",
+            "profileId": "6a1de242eeb9373438058a87",
+            "deaths": [
+                {
+                    "x": 38.05233,
+                    "y": 34.5497437,
+                    "z": -0.121432871,
+                    "timestamp": 1780370639
+                },
+                {
+                    "x": -0.7547322,
+                    "y": -35.0335464,
+                    "z": 0.7435414,
+                    "timestamp": 1780370453
+                },
+                {
+                    "x": 22.64466,
+                    "y": 59.53137,
+                    "z": 0.0408517271,
+                    "timestamp": 1780370311
+                },
+                {
+                    "x": -38.1846237,
+                    "y": 66.39003,
+                    "z": 0.6185367,
+                    "timestamp": 1780370180
+                }
+            ],
+            "lastDeath": {
+                "x": 38.05233,
+                "y": 34.5497437,
+                "z": -0.121432871,
+                "timestamp": 1780370639
+            }
+        },
+        "88a1532b5c933403f1f9724af0565fb48c18b4af664783c04a2ad85717c6bcd0": {
+            "name": "PhoronMakesRich",
+            "profileId": "6a1fdae3055c4835a8d72688",
+            "deaths": [
+                {
+                    "x": 5.029655,
+                    "y": -35.82231,
+                    "z": 4.407146,
+                    "timestamp": 1780672387
+                },
+                {
+                    "x": -0.417815864,
+                    "y": -32.8432426,
+                    "z": 0.5217296,
+                    "timestamp": 1780669046
+                },
+                {
+                    "x": 2.17937922,
+                    "y": -32.04295,
+                    "z": 4.50716257,
+                    "timestamp": 1780640894
+                },
+                {
+                    "x": -41.27803,
+                    "y": -13.4025507,
+                    "z": 0.5480459,
+                    "timestamp": 1780600581
+                }
+            ],
+            "lastDeath": {
+                "x": 5.029655,
+                "y": -35.82231,
+                "z": 4.407146,
+                "timestamp": 1780672387
+            }
+        },
+        "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978": {
+            "name": "GOLD_GOLD_GOLD",
+            "profileId": "6a2668d269cfd20d1077d230",
+            "deaths": [
+                {
+                    "x": -7.414744,
+                    "y": 58.0428925,
+                    "z": 0.112267554,
+                    "timestamp": 1781328057
+                },
+                {
+                    "x": -49.35634,
+                    "y": -12.3468342,
+                    "z": 0.5403008,
+                    "timestamp": 1781325649
+                },
+                {
+                    "x": 3.2922616,
+                    "y": -14.56813,
+                    "z": 0.06209162,
+                    "timestamp": 1781323868
+                },
+                {
+                    "x": 2.242844,
+                    "y": -33.3948975,
+                    "z": 0.537468851,
+                    "timestamp": 1781323456
+                },
+                {
+                    "x": 15.9427357,
+                    "y": 5.61092663,
+                    "z": 0.0869753,
+                    "timestamp": 1781179714
+                },
+                {
+                    "x": -9.338272,
+                    "y": 54.5171852,
+                    "z": 0.112268075,
+                    "timestamp": 1781177842
+                },
+                {
+                    "x": -39.2942543,
+                    "y": 43.08101,
+                    "z": 0.5842382,
+                    "timestamp": 1781176419
+                },
+                {
+                    "x": 28.1246357,
+                    "y": 61.7385864,
+                    "z": 0.105432674,
+                    "timestamp": 1781174399
+                },
+                {
+                    "x": -45.1648254,
+                    "y": -9.09875,
+                    "z": 0.554471433,
+                    "timestamp": 1781160563
+                },
+                {
+                    "x": -37.3042831,
+                    "y": 61.640995,
+                    "z": 0.5155164,
+                    "timestamp": 1781096351
+                },
+                {
+                    "x": 32.0853043,
+                    "y": 29.202734,
+                    "z": -0.320998877,
+                    "timestamp": 1781079416
+                },
+                {
+                    "x": 14.6443462,
+                    "y": 47.8904839,
+                    "z": 0.100500688,
+                    "timestamp": 1781079394
+                },
+                {
+                    "x": -25.038105,
+                    "y": 26.6495838,
+                    "z": 0.111323275,
+                    "timestamp": 1781075032
+                },
+                {
+                    "x": -13.8208284,
+                    "y": 36.69081,
+                    "z": 0.326686382,
+                    "timestamp": 1781072508
+                },
+                {
+                    "x": -1.72264564,
+                    "y": 34.618782,
+                    "z": 0.10819719,
+                    "timestamp": 1781072500
+                },
+                {
+                    "x": 27.1785774,
+                    "y": 60.46353,
+                    "z": 0.109654643,
+                    "timestamp": 1781071606
+                },
+                {
+                    "x": 23.45555,
+                    "y": 60.0506248,
+                    "z": 0.101707689,
+                    "timestamp": 1781071549
+                },
+                {
+                    "x": -38.5105438,
+                    "y": 49.82616,
+                    "z": 0.07967167,
+                    "timestamp": 1781054292
+                },
+                {
+                    "x": 2.00731468,
+                    "y": -13.58631,
+                    "z": 0.1011913,
+                    "timestamp": 1781053062
+                },
+                {
+                    "x": 43.3435249,
+                    "y": 13.4226732,
+                    "z": -1.03917313,
+                    "timestamp": 1781051575
+                },
+                {
+                    "x": 30.65265,
+                    "y": 49.3226624,
+                    "z": -0.434205949,
+                    "timestamp": 1781051153
+                },
+                {
+                    "x": -47.7464142,
+                    "y": -9.436462,
+                    "z": 0.5783417,
+                    "timestamp": 1781050671
+                },
+                {
+                    "x": 26.4438648,
+                    "y": 64.24347,
+                    "z": 0.210281134,
+                    "timestamp": 1781049037
+                },
+                {
+                    "x": -48.8941231,
+                    "y": -10.7587137,
+                    "z": 0.558871269,
+                    "timestamp": 1780914438
+                },
+                {
+                    "x": -43.14336,
+                    "y": -16.5648823,
+                    "z": 1.22203481,
+                    "timestamp": 1780914429
+                },
+                {
+                    "x": -40.6018448,
+                    "y": 48.9192,
+                    "z": 0.07928516,
+                    "timestamp": 1780913500
+                },
+                {
+                    "x": -9.254339,
+                    "y": 48.9841576,
+                    "z": 0.11589656,
+                    "timestamp": 1780913486
+                },
+                {
+                    "x": 22.2522049,
+                    "y": 58.6558228,
+                    "z": 0.250810683,
+                    "timestamp": 1780911537
+                },
+                {
+                    "x": -37.5550537,
+                    "y": 53.61812,
+                    "z": -0.735379934,
+                    "timestamp": 1780909646
+                },
+                {
+                    "x": -40.04179,
+                    "y": 44.5456848,
+                    "z": 0.531577766,
+                    "timestamp": 1780909631
+                },
+                {
+                    "x": -33.930027,
+                    "y": -15.9766264,
+                    "z": 1.25717783,
+                    "timestamp": 1780909227
+                },
+                {
+                    "x": -30.6402187,
+                    "y": -13.0258408,
+                    "z": 0.5339271,
+                    "timestamp": 1780909161
+                }
+            ],
+            "lastDeath": {
+                "x": -7.414744,
+                "y": 58.0428925,
+                "z": 0.112267554,
+                "timestamp": 1781328057
+            }
+        },
+        "5ab7f409f29022256c191ac46903fd1dda9b7eb91783a8ae9989dc1869e70a1b": {
+            "name": "Jegesmaci583",
+            "profileId": "691cee3ba810580b2420f548",
+            "deaths": [
+                {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0,
+                    "timestamp": 1781805497
+                },
+                {
+                    "x": 5.890739,
+                    "y": -35.5938034,
+                    "z": 4.37130928,
+                    "timestamp": 1781606804
+                }
+            ],
+            "lastDeath": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "timestamp": 1781805497
+            }
+        },
+        "655a007456ff59b1e6a7b1e4a4a8c5820a63a2c42ba30ebc584fda4810184ab1": {
+            "name": "cyberbobjr",
+            "profileId": "692e18c282fb730046b0b435",
+            "deaths": [
+                {
+                    "x": -39.2607765,
+                    "y": -12.5203285,
+                    "z": 0.527635038,
+                    "timestamp": 1781642675
+                }
+            ],
+            "lastDeath": {
+                "x": -39.2607765,
+                "y": -12.5203285,
+                "z": 0.527635038,
+                "timestamp": 1781642675
+            }
+        }
+    },
+    "allDeaths": [
+        {
+            "playerName": "Jegesmaci583",
+            "permaLink": "5ab7f409f29022256c191ac46903fd1dda9b7eb91783a8ae9989dc1869e70a1b",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "timestamp": 1781805497
+        },
+        {
+            "playerName": "cyberbobjr",
+            "permaLink": "655a007456ff59b1e6a7b1e4a4a8c5820a63a2c42ba30ebc584fda4810184ab1",
+            "x": -39.2607765,
+            "y": -12.5203285,
+            "z": 0.527635038,
+            "timestamp": 1781642675
+        },
+        {
+            "playerName": "Jegesmaci583",
+            "permaLink": "5ab7f409f29022256c191ac46903fd1dda9b7eb91783a8ae9989dc1869e70a1b",
+            "x": 5.890739,
+            "y": -35.5938034,
+            "z": 4.37130928,
+            "timestamp": 1781606804
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -7.414744,
+            "y": 58.0428925,
+            "z": 0.112267554,
+            "timestamp": 1781328057
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -49.35634,
+            "y": -12.3468342,
+            "z": 0.5403008,
+            "timestamp": 1781325649
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": 3.2922616,
+            "y": -14.56813,
+            "z": 0.06209162,
+            "timestamp": 1781323868
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": 2.242844,
+            "y": -33.3948975,
+            "z": 0.537468851,
+            "timestamp": 1781323456
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": 15.9427357,
+            "y": 5.61092663,
+            "z": 0.0869753,
+            "timestamp": 1781179714
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -9.338272,
+            "y": 54.5171852,
+            "z": 0.112268075,
+            "timestamp": 1781177842
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -39.2942543,
+            "y": 43.08101,
+            "z": 0.5842382,
+            "timestamp": 1781176419
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": 28.1246357,
+            "y": 61.7385864,
+            "z": 0.105432674,
+            "timestamp": 1781174399
+        },
+        {
+            "playerName": "GOLDGOLDGOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -45.1648254,
+            "y": -9.09875,
+            "z": 0.554471433,
+            "timestamp": 1781160563
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -37.3042831,
+            "y": 61.640995,
+            "z": 0.5155164,
+            "timestamp": 1781096351
+        },
+        {
+            "playerName": "GOLDGOLDGOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": 32.0853043,
+            "y": 29.202734,
+            "z": -0.320998877,
+            "timestamp": 1781079416
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": 14.6443462,
+            "y": 47.8904839,
+            "z": 0.100500688,
+            "timestamp": 1781079394
+        },
+        {
+            "playerName": "GOLDGOLDGOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -25.038105,
+            "y": 26.6495838,
+            "z": 0.111323275,
+            "timestamp": 1781075032
+        },
+        {
+            "playerName": "GOLDGOLDGOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -13.8208284,
+            "y": 36.69081,
+            "z": 0.326686382,
+            "timestamp": 1781072508
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -1.72264564,
+            "y": 34.618782,
+            "z": 0.10819719,
+            "timestamp": 1781072500
+        },
+        {
+            "playerName": "GOLDGOLDGOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": 27.1785774,
+            "y": 60.46353,
+            "z": 0.109654643,
+            "timestamp": 1781071606
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": 23.45555,
+            "y": 60.0506248,
+            "z": 0.101707689,
+            "timestamp": 1781071549
+        },
+        {
+            "playerName": "GOLDGOLDGOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -38.5105438,
+            "y": 49.82616,
+            "z": 0.07967167,
+            "timestamp": 1781054292
+        },
+        {
+            "playerName": "GOLDGOLDGOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": 2.00731468,
+            "y": -13.58631,
+            "z": 0.1011913,
+            "timestamp": 1781053062
+        },
+        {
+            "playerName": "GOLDGOLDGOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": 43.3435249,
+            "y": 13.4226732,
+            "z": -1.03917313,
+            "timestamp": 1781051575
+        },
+        {
+            "playerName": "GOLDGOLDGOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": 30.65265,
+            "y": 49.3226624,
+            "z": -0.434205949,
+            "timestamp": 1781051153
+        },
+        {
+            "playerName": "GOLDGOLDGOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -47.7464142,
+            "y": -9.436462,
+            "z": 0.5783417,
+            "timestamp": 1781050671
+        },
+        {
+            "playerName": "GOLDGOLDGOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": 26.4438648,
+            "y": 64.24347,
+            "z": 0.210281134,
+            "timestamp": 1781049037
+        },
+        {
+            "playerName": "GOLDGOLDGOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -48.8941231,
+            "y": -10.7587137,
+            "z": 0.558871269,
+            "timestamp": 1780914438
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -43.14336,
+            "y": -16.5648823,
+            "z": 1.22203481,
+            "timestamp": 1780914429
+        },
+        {
+            "playerName": "GOLDGOLDGOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -40.6018448,
+            "y": 48.9192,
+            "z": 0.07928516,
+            "timestamp": 1780913500
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -9.254339,
+            "y": 48.9841576,
+            "z": 0.11589656,
+            "timestamp": 1780913486
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": 22.2522049,
+            "y": 58.6558228,
+            "z": 0.250810683,
+            "timestamp": 1780911537
+        },
+        {
+            "playerName": "GOLDGOLDGOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -37.5550537,
+            "y": 53.61812,
+            "z": -0.735379934,
+            "timestamp": 1780909646
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -40.04179,
+            "y": 44.5456848,
+            "z": 0.531577766,
+            "timestamp": 1780909631
+        },
+        {
+            "playerName": "GOLDGOLDGOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -33.930027,
+            "y": -15.9766264,
+            "z": 1.25717783,
+            "timestamp": 1780909227
+        },
+        {
+            "playerName": "GOLD_GOLD_GOLD",
+            "permaLink": "0f931ae97a45fb73c51542630a3102a2bed1bbcaa38a81bf5faa333cf15ec978",
+            "x": -30.6402187,
+            "y": -13.0258408,
+            "z": 0.5339271,
+            "timestamp": 1780909161
+        },
+        {
+            "playerName": "PhoronMakesRich",
+            "permaLink": "88a1532b5c933403f1f9724af0565fb48c18b4af664783c04a2ad85717c6bcd0",
+            "x": 5.029655,
+            "y": -35.82231,
+            "z": 4.407146,
+            "timestamp": 1780672387
+        },
+        {
+            "playerName": "PhoronMakesRich",
+            "permaLink": "88a1532b5c933403f1f9724af0565fb48c18b4af664783c04a2ad85717c6bcd0",
+            "x": -0.417815864,
+            "y": -32.8432426,
+            "z": 0.5217296,
+            "timestamp": 1780669046
+        },
+        {
+            "playerName": "PhoronMakesRich",
+            "permaLink": "88a1532b5c933403f1f9724af0565fb48c18b4af664783c04a2ad85717c6bcd0",
+            "x": 2.17937922,
+            "y": -32.04295,
+            "z": 4.50716257,
+            "timestamp": 1780640894
+        },
+        {
+            "playerName": "PhoronMakesRich",
+            "permaLink": "88a1532b5c933403f1f9724af0565fb48c18b4af664783c04a2ad85717c6bcd0",
+            "x": -41.27803,
+            "y": -13.4025507,
+            "z": 0.5480459,
+            "timestamp": 1780600581
+        },
+        {
+            "playerName": "Kuro73",
+            "permaLink": "a077c2ad1067d53cdb4d77ee1a5fe76ee55f4fdf06bf2837f1c62d6e30d50c36",
+            "x": 38.05233,
+            "y": 34.5497437,
+            "z": -0.121432871,
+            "timestamp": 1780370639
+        },
+        {
+            "playerName": "Kuro73",
+            "permaLink": "a077c2ad1067d53cdb4d77ee1a5fe76ee55f4fdf06bf2837f1c62d6e30d50c36",
+            "x": -0.7547322,
+            "y": -35.0335464,
+            "z": 0.7435414,
+            "timestamp": 1780370453
+        },
+        {
+            "playerName": "Kuro73",
+            "permaLink": "a077c2ad1067d53cdb4d77ee1a5fe76ee55f4fdf06bf2837f1c62d6e30d50c36",
+            "x": 22.64466,
+            "y": 59.53137,
+            "z": 0.0408517271,
+            "timestamp": 1780370311
+        },
+        {
+            "playerName": "Kuro73",
+            "permaLink": "a077c2ad1067d53cdb4d77ee1a5fe76ee55f4fdf06bf2837f1c62d6e30d50c36",
+            "x": -38.1846237,
+            "y": 66.39003,
+            "z": 0.6185367,
+            "timestamp": 1780370180
+        },
+        {
+            "playerName": "CommetStar",
+            "permaLink": "3b91ae743171b942d8e4ccbeed13ea3d630ddafc7fb033172bb9db5cce542db8",
+            "x": 30.050045,
+            "y": 40.8035164,
+            "z": -0.349315077,
+            "timestamp": 1779357901
+        },
+        {
+            "playerName": "PicaReta",
+            "permaLink": "e2914704d8880f40cdcc04e647c4e41f43b908b1b7072e584d488a5cd4b8db76",
+            "x": 6.14824533,
+            "y": 51.8448944,
+            "z": 0.08749492,
+            "timestamp": 1778091989
+        },
+        {
+            "playerName": "PicaReta",
+            "permaLink": "e2914704d8880f40cdcc04e647c4e41f43b908b1b7072e584d488a5cd4b8db76",
+            "x": 30.138979,
+            "y": 41.3273354,
+            "z": 0.0270226113,
+            "timestamp": 1778080563
+        },
+        {
+            "playerName": "PicaReta",
+            "permaLink": "e2914704d8880f40cdcc04e647c4e41f43b908b1b7072e584d488a5cd4b8db76",
+            "x": 8.930863,
+            "y": 61.36068,
+            "z": 0.09261228,
+            "timestamp": 1778072159
+        },
+        {
+            "playerName": "EmptySlot",
+            "permaLink": "e2914704d8880f40cdcc04e647c4e41f43b908b1b7072e584d488a5cd4b8db76",
+            "x": -4.53063965,
+            "y": -31.6878872,
+            "z": 0.5245194,
+            "timestamp": 1778013221
+        },
+        {
+            "playerName": "Haywire Hayley",
+            "permaLink": "8476044fbae323c6c14125bd48f4c0d89fcd76a047a52f07ac91f45801e56072",
+            "x": -13.0916729,
+            "y": 11.9545059,
+            "z": 1.05778229,
+            "timestamp": 1777560938,
+            "killer_name": "Oracle"
+        },
+        {
+            "playerName": "Haywire Hayley",
+            "permaLink": "8476044fbae323c6c14125bd48f4c0d89fcd76a047a52f07ac91f45801e56072",
+            "x": 23.7676868,
+            "y": 55.2446632,
+            "z": 0.0301087629,
+            "timestamp": 1777483105,
+            "killer_name": "Shadow of"
+        }
+    ]
+}

@@ -1,0 +1,1402 @@
+{
+    "map": "shoreline",
+    "lastUpdated": 1781987294,
+    "players": {
+        "8476044fbae323c6c14125bd48f4c0d89fcd76a047a52f07ac91f45801e56072": {
+            "name": "Haywire Hayley",
+            "profileId": "69d404dcffcf6161c4c29f82",
+            "deaths": [
+                {
+                    "x": 114.842339,
+                    "y": 78.42696,
+                    "z": -48.4825478,
+                    "timestamp": 1777639145,
+                    "killer_name": "Yustin Drakon"
+                }
+            ],
+            "lastDeath": {
+                "x": 114.842339,
+                "y": 78.42696,
+                "z": -48.4825478,
+                "timestamp": 1777639145
+            }
+        },
+        "4416ae829ffa7cbfc38af53660e4048d81aa38de92c97b685ffe576b2928dbd3": {
+            "name": "NL_Revvie",
+            "profileId": "69a34ab76a3efd094c81cae7",
+            "deaths": [
+                {
+                    "x": -144.10788,
+                    "y": -85.68118,
+                    "z": -3.5002625,
+                    "timestamp": 1780950817
+                },
+                {
+                    "x": 369.31424,
+                    "y": -189.739426,
+                    "z": -46.20722,
+                    "timestamp": 1778183097
+                },
+                {
+                    "x": 205.885025,
+                    "y": -110.8166,
+                    "z": -50.91382,
+                    "timestamp": 1777920406
+                },
+                {
+                    "x": 352.9119,
+                    "y": 158.127045,
+                    "z": -56.3175926,
+                    "timestamp": 1777844773
+                }
+            ],
+            "lastDeath": {
+                "x": -144.10788,
+                "y": -85.68118,
+                "z": -3.5002625,
+                "timestamp": 1780950817
+            }
+        },
+        "876a0fbe0349b754078b0b7ad22197bb584b62fb0f092afab7c641bdac127319": {
+            "name": "f1err0",
+            "profileId": "69b2ae94b9b46807285c4cb1",
+            "deaths": [
+                {
+                    "x": 94.2423,
+                    "y": 72.61806,
+                    "z": -48.3930435,
+                    "timestamp": 1778843233
+                },
+                {
+                    "x": 251.615341,
+                    "y": 84.045845,
+                    "z": -53.91956,
+                    "timestamp": 1778060709
+                }
+            ],
+            "lastDeath": {
+                "x": 94.2423,
+                "y": 72.61806,
+                "z": -48.3930435,
+                "timestamp": 1778843233
+            }
+        },
+        "ada0c27cf50af60e1f5ff42f881e9b204244e388e073a09e9a8323b5dc2d688f": {
+            "name": "TankBwattewy",
+            "profileId": "67ecbb25c4810e43b892a528",
+            "deaths": [
+                {
+                    "x": 336.3727,
+                    "y": 164.6331,
+                    "z": -56.3790932,
+                    "timestamp": 1778095088
+                },
+                {
+                    "x": 92.56286,
+                    "y": 119.078735,
+                    "z": -48.0892067,
+                    "timestamp": 1778093552
+                }
+            ],
+            "lastDeath": {
+                "x": 336.3727,
+                "y": 164.6331,
+                "z": -56.3790932,
+                "timestamp": 1778095088
+            }
+        },
+        "abac2d7746e1faf4134794837b3eb56707013ddf313157f01b7ddcab369b16bf": {
+            "name": "MAXSEFFECT21",
+            "profileId": "69f4881a5818bb61c0b8fe9d",
+            "deaths": [
+                {
+                    "x": 405.269135,
+                    "y": 117.771858,
+                    "z": -54.5020142,
+                    "timestamp": 1778333055
+                }
+            ],
+            "lastDeath": {
+                "x": 405.269135,
+                "y": 117.771858,
+                "z": -54.5020142,
+                "timestamp": 1778333055
+            }
+        },
+        "d71580abf208616a3a619cd3194ed3751925d1844eb34aec13d5a2e578b77268": {
+            "name": "harmony",
+            "profileId": "6a2da2ed0af9c87c44b5fd5f",
+            "deaths": [
+                {
+                    "x": -483.0033,
+                    "y": 248.559509,
+                    "z": -25.5736828,
+                    "timestamp": 1781887316
+                },
+                {
+                    "x": 305.761139,
+                    "y": -233.256317,
+                    "z": -46.2532463,
+                    "timestamp": 1778444013
+                }
+            ],
+            "lastDeath": {
+                "x": -483.0033,
+                "y": 248.559509,
+                "z": -25.5736828,
+                "timestamp": 1781887316
+            }
+        },
+        "bae970bd71dbe5c64e7711075f5e92d0e7fcff78698c92188afdb0bb1cd120c3": {
+            "name": "BurntPeanut",
+            "profileId": "69f7a63da8b8585e9cc2589d",
+            "deaths": [
+                {
+                    "x": 348.751251,
+                    "y": 51.3052559,
+                    "z": -50.0751572,
+                    "timestamp": 1779055003
+                },
+                {
+                    "x": -365.3519,
+                    "y": -94.95654,
+                    "z": -5.09967756,
+                    "timestamp": 1778470930
+                },
+                {
+                    "x": 140.855255,
+                    "y": -189.76062,
+                    "z": -41.32333,
+                    "timestamp": 1778463843
+                }
+            ],
+            "lastDeath": {
+                "x": 348.751251,
+                "y": 51.3052559,
+                "z": -50.0751572,
+                "timestamp": 1779055003
+            }
+        },
+        "9eddec1e890343d1cb3539e436449947317320a9361da74d3075de08be17ede6": {
+            "name": "SereneEXE",
+            "profileId": "69f726b06e29a53db4dc468d",
+            "deaths": [
+                {
+                    "x": -722.634338,
+                    "y": 350.953033,
+                    "z": -42.7088165,
+                    "timestamp": 1778610465
+                }
+            ],
+            "lastDeath": {
+                "x": -722.634338,
+                "y": 350.953033,
+                "z": -42.7088165,
+                "timestamp": 1778610465
+            }
+        },
+        "72cc29b18f0870d8ac092f886b0a7e91b5f585ba6891de7ad45038b25c71da07": {
+            "name": "Chazut",
+            "profileId": "6a061b0eea6adf22f04e791e",
+            "deaths": [
+                {
+                    "x": -162.678131,
+                    "y": -158.840881,
+                    "z": -5.11311674,
+                    "timestamp": 1780917832
+                },
+                {
+                    "x": -259.7207,
+                    "y": -35.7226639,
+                    "z": -5.10858727,
+                    "timestamp": 1780067293
+                },
+                {
+                    "x": -259.188446,
+                    "y": -87.28894,
+                    "z": -5.015478,
+                    "timestamp": 1779817848
+                },
+                {
+                    "x": -689.8923,
+                    "y": 325.89325,
+                    "z": -45.16516,
+                    "timestamp": 1779816669
+                },
+                {
+                    "x": -259.306732,
+                    "y": -80.648,
+                    "z": -4.70562458,
+                    "timestamp": 1779808975
+                },
+                {
+                    "x": -765.625244,
+                    "y": 78.44507,
+                    "z": -43.1397743,
+                    "timestamp": 1778694796
+                }
+            ],
+            "lastDeath": {
+                "x": -162.678131,
+                "y": -158.840881,
+                "z": -5.11311674,
+                "timestamp": 1780917832
+            }
+        },
+        "b327158782efa82224849beb7462e237814ac3ff64c9300a6eae7a9186ba9f21": {
+            "name": "Bruce",
+            "profileId": "69514459a7bf4653a4a6fc14",
+            "deaths": [
+                {
+                    "x": -231.601456,
+                    "y": -131.243515,
+                    "z": -4.12933254,
+                    "timestamp": 1779198744
+                },
+                {
+                    "x": -313.7591,
+                    "y": -87.62927,
+                    "z": -3.73836136,
+                    "timestamp": 1779192809
+                },
+                {
+                    "x": -222.967285,
+                    "y": 166.462357,
+                    "z": -40.94347,
+                    "timestamp": 1778932554
+                },
+                {
+                    "x": -196.416748,
+                    "y": -74.46906,
+                    "z": -0.7980404,
+                    "timestamp": 1778850805
+                },
+                {
+                    "x": -224.139786,
+                    "y": -85.14253,
+                    "z": -0.7956121,
+                    "timestamp": 1778698782
+                }
+            ],
+            "lastDeath": {
+                "x": -231.601456,
+                "y": -131.243515,
+                "z": -4.12933254,
+                "timestamp": 1779198744
+            }
+        },
+        "5f5f95edfcb76a8acb4f85c0f5319a99b29f8176dcf90d892686ac3bf5b32d29": {
+            "name": "Foster",
+            "profileId": "69f895f3e5a2df4f489651b0",
+            "deaths": [
+                {
+                    "x": -506.507355,
+                    "y": 249.16568,
+                    "z": -25.8264885,
+                    "timestamp": 1778783621
+                }
+            ],
+            "lastDeath": {
+                "x": -506.507355,
+                "y": 249.16568,
+                "z": -25.8264885,
+                "timestamp": 1778783621
+            }
+        },
+        "380ec9008c1c4fce1cc0bf5ed1a8a66d2e9199e84b55f7ae0f72ed5cfda17445": {
+            "name": " SwiftFox",
+            "profileId": "691e5fa2d565db1e288787aa",
+            "deaths": [
+                {
+                    "x": -225.776047,
+                    "y": 148.456436,
+                    "z": -40.9234276,
+                    "timestamp": 1778920724
+                }
+            ],
+            "lastDeath": {
+                "x": -225.776047,
+                "y": 148.456436,
+                "z": -40.9234276,
+                "timestamp": 1778920724
+            }
+        },
+        "8b5caaf80dda2d2e56b7136d07e65150a981c1069e6521e80565fb5dfc7fdc35": {
+            "name": "Zephyr",
+            "profileId": "695a80bf437803173ce1d613",
+            "deaths": [
+                {
+                    "x": -780.6664,
+                    "y": 463.871643,
+                    "z": -59.60061,
+                    "timestamp": 1778947830
+                }
+            ],
+            "lastDeath": {
+                "x": -780.6664,
+                "y": 463.871643,
+                "z": -59.60061,
+                "timestamp": 1778947830
+            }
+        },
+        "83d1916300868bc96f5faec5864225b73ad24bc5c03be2614c4175f8e9acbb29": {
+            "name": "Claymore",
+            "profileId": "69e9185ddf2baaf794b7a83f",
+            "deaths": [
+                {
+                    "x": 83.69934,
+                    "y": 158.460571,
+                    "z": -47.675293,
+                    "timestamp": 1779051638
+                },
+                {
+                    "x": -168.770248,
+                    "y": -180.79129,
+                    "z": -5.13479853,
+                    "timestamp": 1779019464
+                },
+                {
+                    "x": -304.574158,
+                    "y": -83.4009857,
+                    "z": -0.8065986,
+                    "timestamp": 1778971702
+                }
+            ],
+            "lastDeath": {
+                "x": 83.69934,
+                "y": 158.460571,
+                "z": -47.675293,
+                "timestamp": 1779051638
+            }
+        },
+        "683ec26250a2cf549385f6871cbbab51f3901b84fdbdea338f1ef614b0bfacda": {
+            "name": "Hardcore",
+            "profileId": "69fea09490b964753083b197",
+            "deaths": [
+                {
+                    "x": -500.535553,
+                    "y": 239.370667,
+                    "z": -25.8193264,
+                    "timestamp": 1779649143
+                },
+                {
+                    "x": 409.210846,
+                    "y": 95.61563,
+                    "z": -54.1954727,
+                    "timestamp": 1779639445
+                },
+                {
+                    "x": -771.2967,
+                    "y": 211.461,
+                    "z": -49.7768669,
+                    "timestamp": 1778977540
+                },
+                {
+                    "x": -215.255768,
+                    "y": -96.55492,
+                    "z": -0.795404,
+                    "timestamp": 1778974078
+                }
+            ],
+            "lastDeath": {
+                "x": -500.535553,
+                "y": 239.370667,
+                "z": -25.8193264,
+                "timestamp": 1779649143
+            }
+        },
+        "11684c175d9de379e17d413edf860b0c2cac864f18f9043ae01ae3d4dc39b35f": {
+            "name": "MedalM8",
+            "profileId": "69fef74324a009443ce9827f",
+            "deaths": [
+                {
+                    "x": -694.96106,
+                    "y": 100.20536,
+                    "z": -27.462307,
+                    "timestamp": 1779032639
+                }
+            ],
+            "lastDeath": {
+                "x": -694.96106,
+                "y": 100.20536,
+                "z": -27.462307,
+                "timestamp": 1779032639
+            }
+        },
+        "01f3d19a9cb5b848187bf230c31473df6a4303b49480c0b1b04d3c5a9ee13ac8": {
+            "name": "chud",
+            "profileId": "6a27f437a0046756bc6e732d",
+            "deaths": [
+                {
+                    "x": -487.132,
+                    "y": 247.092987,
+                    "z": -25.8321667,
+                    "timestamp": 1781169992
+                },
+                {
+                    "x": -312.959229,
+                    "y": -82.8926,
+                    "z": -3.68925,
+                    "timestamp": 1780815279
+                },
+                {
+                    "x": -515.171448,
+                    "y": 229.743179,
+                    "z": -25.8123646,
+                    "timestamp": 1780812968
+                },
+                {
+                    "x": -114.87117,
+                    "y": 379.294769,
+                    "z": -46.3135071,
+                    "timestamp": 1780767838
+                },
+                {
+                    "x": -179.0611,
+                    "y": -77.80624,
+                    "z": -0.796152055,
+                    "timestamp": 1779977014
+                },
+                {
+                    "x": -160.902771,
+                    "y": 298.185,
+                    "z": -40.79847,
+                    "timestamp": 1779534046
+                },
+                {
+                    "x": 309.133057,
+                    "y": 321.374634,
+                    "z": -62.39645,
+                    "timestamp": 1779116955
+                }
+            ],
+            "lastDeath": {
+                "x": -487.132,
+                "y": 247.092987,
+                "z": -25.8321667,
+                "timestamp": 1781169992
+            }
+        },
+        "0b9fea8f48cd045fa5502cf28b851a989f9e63e9855909969465d1bb298d7e92": {
+            "name": "PissinMilk",
+            "profileId": "69d6e4f23d906a19882f088e",
+            "deaths": [
+                {
+                    "x": -245.850449,
+                    "y": 206.3069,
+                    "z": -40.9569778,
+                    "timestamp": 1779127400
+                }
+            ],
+            "lastDeath": {
+                "x": -245.850449,
+                "y": 206.3069,
+                "z": -40.9569778,
+                "timestamp": 1779127400
+            }
+        },
+        "14deb0c637f550793377cc879b93fe3bceb6cc673d87470c2cedcbc2dd3b0f8b": {
+            "name": "Cid-3",
+            "profileId": "6923d89309f4fc224c7cc114",
+            "deaths": [
+                {
+                    "x": 442.130035,
+                    "y": 133.718643,
+                    "z": -54.4786644,
+                    "timestamp": 1779353400
+                },
+                {
+                    "x": -831.3056,
+                    "y": 45.6521,
+                    "z": -39.5579147,
+                    "timestamp": 1779171833
+                }
+            ],
+            "lastDeath": {
+                "x": 442.130035,
+                "y": 133.718643,
+                "z": -54.4786644,
+                "timestamp": 1779353400
+            }
+        },
+        "244a5cdc8f7b1286e16a35aa0829b12a2b2fc1ec979e305d38ff1dd70709cafd": {
+            "name": "Battlewurst",
+            "profileId": "69f24ba84c0373d69ca8bfbf",
+            "deaths": [
+                {
+                    "x": -274.7161,
+                    "y": -66.89646,
+                    "z": -5.07194376,
+                    "timestamp": 1779192761
+                },
+                {
+                    "x": -671.512939,
+                    "y": -247.062851,
+                    "z": -26.7659683,
+                    "timestamp": 1779190516
+                }
+            ],
+            "lastDeath": {
+                "x": -274.7161,
+                "y": -66.89646,
+                "z": -5.07194376,
+                "timestamp": 1779192761
+            }
+        },
+        "4afa0f289910e723de0095f3100496fd2586b22203694036d932fbcb037759d0": {
+            "name": "Mentallyunwell",
+            "profileId": "691629de1f09fb18e49041f5",
+            "deaths": [
+                {
+                    "x": -195.906738,
+                    "y": -80.50501,
+                    "z": -3.73835826,
+                    "timestamp": 1779369343
+                }
+            ],
+            "lastDeath": {
+                "x": -195.906738,
+                "y": -80.50501,
+                "z": -3.73835826,
+                "timestamp": 1779369343
+            }
+        },
+        "e2914704d8880f40cdcc04e647c4e41f43b908b1b7072e584d488a5cd4b8db76": {
+            "name": "PicaReta",
+            "profileId": "69f212e910549323a8b72084",
+            "deaths": [
+                {
+                    "x": 420.216034,
+                    "y": 141.484375,
+                    "z": -54.5228081,
+                    "timestamp": 1779398618
+                }
+            ],
+            "lastDeath": {
+                "x": 420.216034,
+                "y": 141.484375,
+                "z": -54.5228081,
+                "timestamp": 1779398618
+            }
+        },
+        "d9d497831e0fe988e4a3e64c85d59ef9582c5cf87d03bbb31261e081c0e5f4e3": {
+            "name": "JUSTENERO",
+            "profileId": "69112d84abcab2154cad6ed2",
+            "deaths": [
+                {
+                    "x": -315.549347,
+                    "y": 455.792419,
+                    "z": -59.50465,
+                    "timestamp": 1781663690
+                },
+                {
+                    "x": -214.746155,
+                    "y": 187.014023,
+                    "z": -39.307148,
+                    "timestamp": 1779949304
+                },
+                {
+                    "x": 271.388,
+                    "y": 147.809464,
+                    "z": -56.1687927,
+                    "timestamp": 1779947113
+                },
+                {
+                    "x": 355.581543,
+                    "y": -204.822083,
+                    "z": -46.75343,
+                    "timestamp": 1779565696
+                }
+            ],
+            "lastDeath": {
+                "x": -315.549347,
+                "y": 455.792419,
+                "z": -59.50465,
+                "timestamp": 1781663690
+            }
+        },
+        "0f568c1e9de18ffb88c0248b7e1c97779c4047b4a15c4ba81b6b0b492e9eb48d": {
+            "name": "MIAGOND?",
+            "profileId": "6a02c5f2a49d00565ca727e4",
+            "deaths": [
+                {
+                    "x": 68.60904,
+                    "y": 129.380142,
+                    "z": -46.7484055,
+                    "timestamp": 1779623996
+                }
+            ],
+            "lastDeath": {
+                "x": 68.60904,
+                "y": 129.380142,
+                "z": -46.7484055,
+                "timestamp": 1779623996
+            }
+        },
+        "66d09e4609e9c18e16ea81fff8bab3aec801af87ddfd697cd85fe6b56e88d571": {
+            "name": "Kalea",
+            "profileId": "6a18314447912a986463a815",
+            "deaths": [
+                {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0,
+                    "timestamp": 1780319827
+                },
+                {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0,
+                    "timestamp": 1780118418
+                },
+                {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0,
+                    "timestamp": 1780093711
+                }
+            ],
+            "lastDeath": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "timestamp": 1780319827
+            }
+        },
+        "61812884b357f85a5bfcefd44607313c66762698f3dcc0443dda977fcc739500": {
+            "name": "Xust1ed",
+            "profileId": "68f474c726aed010087e7b11",
+            "deaths": [
+                {
+                    "x": 138.384674,
+                    "y": 243.679321,
+                    "z": -52.7865829,
+                    "timestamp": 1780155932
+                },
+                {
+                    "x": -261.579834,
+                    "y": -46.99854,
+                    "z": -5.097913,
+                    "timestamp": 1780151497
+                }
+            ],
+            "lastDeath": {
+                "x": 138.384674,
+                "y": 243.679321,
+                "z": -52.7865829,
+                "timestamp": 1780155932
+            }
+        },
+        "89af3241a70d85cb6bae5621cff84122d1ab19d2a80dc619ceebf8668ab0aff3": {
+            "name": "Moonwhalerr",
+            "profileId": "6a1bffb0e86e3559fced4799",
+            "deaths": [
+                {
+                    "x": -251.012527,
+                    "y": -68.58439,
+                    "z": -5.113012,
+                    "timestamp": 1780282509
+                }
+            ],
+            "lastDeath": {
+                "x": -251.012527,
+                "y": -68.58439,
+                "z": -5.113012,
+                "timestamp": 1780282509
+            }
+        },
+        "88a1532b5c933403f1f9724af0565fb48c18b4af664783c04a2ad85717c6bcd0": {
+            "name": "PhoronMakesRich",
+            "profileId": "6a1fdae3055c4835a8d72688",
+            "deaths": [
+                {
+                    "x": -716.08374,
+                    "y": 17.02312,
+                    "z": -42.9157257,
+                    "timestamp": 1780599270
+                },
+                {
+                    "x": -256.689423,
+                    "y": 437.9635,
+                    "z": -59.35692,
+                    "timestamp": 1780557913
+                },
+                {
+                    "x": 201.393036,
+                    "y": 79.9079,
+                    "z": -48.4139481,
+                    "timestamp": 1780519571
+                }
+            ],
+            "lastDeath": {
+                "x": -716.08374,
+                "y": 17.02312,
+                "z": -42.9157257,
+                "timestamp": 1780599270
+            }
+        },
+        "7645f25ab05339b324f419a0ee74fcbf7a78b0dd59536707b9f4cff0268a4cb0": {
+            "name": "Sabatine",
+            "profileId": "6a026f5d3c1b79506890bb6e",
+            "deaths": [
+                {
+                    "x": -622.0988,
+                    "y": 387.607544,
+                    "z": -54.79649,
+                    "timestamp": 1780892338
+                },
+                {
+                    "x": 166.308685,
+                    "y": 224.305923,
+                    "z": -50.70238,
+                    "timestamp": 1780878956
+                }
+            ],
+            "lastDeath": {
+                "x": -622.0988,
+                "y": 387.607544,
+                "z": -54.79649,
+                "timestamp": 1780892338
+            }
+        },
+        "655a007456ff59b1e6a7b1e4a4a8c5820a63a2c42ba30ebc584fda4810184ab1": {
+            "name": "cyberbobjr",
+            "profileId": "692e18c282fb730046b0b435",
+            "deaths": [
+                {
+                    "x": 392.6593,
+                    "y": 251.258377,
+                    "z": -60.5491066,
+                    "timestamp": 1781034415
+                },
+                {
+                    "x": 434.446381,
+                    "y": 84.00085,
+                    "z": -54.2857742,
+                    "timestamp": 1781027779
+                }
+            ],
+            "lastDeath": {
+                "x": 392.6593,
+                "y": 251.258377,
+                "z": -60.5491066,
+                "timestamp": 1781034415
+            }
+        },
+        "242bfe188a43dd44cb1df6e84d6b31dc46aab253178df930db664995b9caf9b5": {
+            "name": "chef",
+            "profileId": "6a22ecaf7c2085423c02219b",
+            "deaths": [
+                {
+                    "x": -197.473145,
+                    "y": -83.7543,
+                    "z": -0.708891153,
+                    "timestamp": 1781951164
+                }
+            ],
+            "lastDeath": {
+                "x": -197.473145,
+                "y": -83.7543,
+                "z": -0.708891153,
+                "timestamp": 1781951164
+            }
+        },
+        "8230d5ea3bb9706f745549fc85b2f4ce32ac7ed2c0cb1c8ed194b6ffef0b8d57": {
+            "name": "Zesty",
+            "profileId": "693644b0434969360c1286c9",
+            "deaths": [
+                {
+                    "x": -304.090179,
+                    "y": -77.00089,
+                    "z": -3.73836136,
+                    "timestamp": 1781987294
+                }
+            ],
+            "lastDeath": {
+                "x": -304.090179,
+                "y": -77.00089,
+                "z": -3.73836136,
+                "timestamp": 1781987294
+            }
+        }
+    },
+    "allDeaths": [
+        {
+            "playerName": "Zesty",
+            "permaLink": "8230d5ea3bb9706f745549fc85b2f4ce32ac7ed2c0cb1c8ed194b6ffef0b8d57",
+            "x": -304.090179,
+            "y": -77.00089,
+            "z": -3.73836136,
+            "timestamp": 1781987294
+        },
+        {
+            "playerName": "chef",
+            "permaLink": "242bfe188a43dd44cb1df6e84d6b31dc46aab253178df930db664995b9caf9b5",
+            "x": -197.473145,
+            "y": -83.7543,
+            "z": -0.708891153,
+            "timestamp": 1781951164
+        },
+        {
+            "playerName": "harmony",
+            "permaLink": "d71580abf208616a3a619cd3194ed3751925d1844eb34aec13d5a2e578b77268",
+            "x": -483.0033,
+            "y": 248.559509,
+            "z": -25.5736828,
+            "timestamp": 1781887316
+        },
+        {
+            "playerName": "JUSTENERO",
+            "permaLink": "d9d497831e0fe988e4a3e64c85d59ef9582c5cf87d03bbb31261e081c0e5f4e3",
+            "x": -315.549347,
+            "y": 455.792419,
+            "z": -59.50465,
+            "timestamp": 1781663690
+        },
+        {
+            "playerName": "chud",
+            "permaLink": "01f3d19a9cb5b848187bf230c31473df6a4303b49480c0b1b04d3c5a9ee13ac8",
+            "x": -487.132,
+            "y": 247.092987,
+            "z": -25.8321667,
+            "timestamp": 1781169992
+        },
+        {
+            "playerName": "cyberbobjr",
+            "permaLink": "655a007456ff59b1e6a7b1e4a4a8c5820a63a2c42ba30ebc584fda4810184ab1",
+            "x": 392.6593,
+            "y": 251.258377,
+            "z": -60.5491066,
+            "timestamp": 1781034415
+        },
+        {
+            "playerName": "cyberbobjr",
+            "permaLink": "655a007456ff59b1e6a7b1e4a4a8c5820a63a2c42ba30ebc584fda4810184ab1",
+            "x": 434.446381,
+            "y": 84.00085,
+            "z": -54.2857742,
+            "timestamp": 1781027779
+        },
+        {
+            "playerName": "NL_Revvie",
+            "permaLink": "4416ae829ffa7cbfc38af53660e4048d81aa38de92c97b685ffe576b2928dbd3",
+            "x": -144.10788,
+            "y": -85.68118,
+            "z": -3.5002625,
+            "timestamp": 1780950817
+        },
+        {
+            "playerName": "Chazut",
+            "permaLink": "72cc29b18f0870d8ac092f886b0a7e91b5f585ba6891de7ad45038b25c71da07",
+            "x": -162.678131,
+            "y": -158.840881,
+            "z": -5.11311674,
+            "timestamp": 1780917832
+        },
+        {
+            "playerName": "Sabatine",
+            "permaLink": "7645f25ab05339b324f419a0ee74fcbf7a78b0dd59536707b9f4cff0268a4cb0",
+            "x": -622.0988,
+            "y": 387.607544,
+            "z": -54.79649,
+            "timestamp": 1780892338
+        },
+        {
+            "playerName": "Sabatine",
+            "permaLink": "7645f25ab05339b324f419a0ee74fcbf7a78b0dd59536707b9f4cff0268a4cb0",
+            "x": 166.308685,
+            "y": 224.305923,
+            "z": -50.70238,
+            "timestamp": 1780878956
+        },
+        {
+            "playerName": "chudrage",
+            "permaLink": "01f3d19a9cb5b848187bf230c31473df6a4303b49480c0b1b04d3c5a9ee13ac8",
+            "x": -312.959229,
+            "y": -82.8926,
+            "z": -3.68925,
+            "timestamp": 1780815279
+        },
+        {
+            "playerName": "chudrage",
+            "permaLink": "01f3d19a9cb5b848187bf230c31473df6a4303b49480c0b1b04d3c5a9ee13ac8",
+            "x": -515.171448,
+            "y": 229.743179,
+            "z": -25.8123646,
+            "timestamp": 1780812968
+        },
+        {
+            "playerName": "chudrage",
+            "permaLink": "01f3d19a9cb5b848187bf230c31473df6a4303b49480c0b1b04d3c5a9ee13ac8",
+            "x": -114.87117,
+            "y": 379.294769,
+            "z": -46.3135071,
+            "timestamp": 1780767838
+        },
+        {
+            "playerName": "PhoronMakesRich",
+            "permaLink": "88a1532b5c933403f1f9724af0565fb48c18b4af664783c04a2ad85717c6bcd0",
+            "x": -716.08374,
+            "y": 17.02312,
+            "z": -42.9157257,
+            "timestamp": 1780599270
+        },
+        {
+            "playerName": "PhoronMakesRich",
+            "permaLink": "88a1532b5c933403f1f9724af0565fb48c18b4af664783c04a2ad85717c6bcd0",
+            "x": -256.689423,
+            "y": 437.9635,
+            "z": -59.35692,
+            "timestamp": 1780557913
+        },
+        {
+            "playerName": "PhoronMakesRich",
+            "permaLink": "88a1532b5c933403f1f9724af0565fb48c18b4af664783c04a2ad85717c6bcd0",
+            "x": 201.393036,
+            "y": 79.9079,
+            "z": -48.4139481,
+            "timestamp": 1780519571
+        },
+        {
+            "playerName": "Kalea",
+            "permaLink": "66d09e4609e9c18e16ea81fff8bab3aec801af87ddfd697cd85fe6b56e88d571",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "timestamp": 1780319827
+        },
+        {
+            "playerName": "Moonwhalerr",
+            "permaLink": "89af3241a70d85cb6bae5621cff84122d1ab19d2a80dc619ceebf8668ab0aff3",
+            "x": -251.012527,
+            "y": -68.58439,
+            "z": -5.113012,
+            "timestamp": 1780282509
+        },
+        {
+            "playerName": "Xust1ed",
+            "permaLink": "61812884b357f85a5bfcefd44607313c66762698f3dcc0443dda977fcc739500",
+            "x": 138.384674,
+            "y": 243.679321,
+            "z": -52.7865829,
+            "timestamp": 1780155932
+        },
+        {
+            "playerName": "Xust1ed",
+            "permaLink": "61812884b357f85a5bfcefd44607313c66762698f3dcc0443dda977fcc739500",
+            "x": -261.579834,
+            "y": -46.99854,
+            "z": -5.097913,
+            "timestamp": 1780151497
+        },
+        {
+            "playerName": "Felliai",
+            "permaLink": "66d09e4609e9c18e16ea81fff8bab3aec801af87ddfd697cd85fe6b56e88d571",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "timestamp": 1780118418
+        },
+        {
+            "playerName": "Felliai",
+            "permaLink": "66d09e4609e9c18e16ea81fff8bab3aec801af87ddfd697cd85fe6b56e88d571",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "timestamp": 1780093711
+        },
+        {
+            "playerName": "Chazut",
+            "permaLink": "72cc29b18f0870d8ac092f886b0a7e91b5f585ba6891de7ad45038b25c71da07",
+            "x": -259.7207,
+            "y": -35.7226639,
+            "z": -5.10858727,
+            "timestamp": 1780067293
+        },
+        {
+            "playerName": "trvechud",
+            "permaLink": "01f3d19a9cb5b848187bf230c31473df6a4303b49480c0b1b04d3c5a9ee13ac8",
+            "x": -179.0611,
+            "y": -77.80624,
+            "z": -0.796152055,
+            "timestamp": 1779977014
+        },
+        {
+            "playerName": "JUSTENERO",
+            "permaLink": "d9d497831e0fe988e4a3e64c85d59ef9582c5cf87d03bbb31261e081c0e5f4e3",
+            "x": -214.746155,
+            "y": 187.014023,
+            "z": -39.307148,
+            "timestamp": 1779949304
+        },
+        {
+            "playerName": "JUSTENERO",
+            "permaLink": "d9d497831e0fe988e4a3e64c85d59ef9582c5cf87d03bbb31261e081c0e5f4e3",
+            "x": 271.388,
+            "y": 147.809464,
+            "z": -56.1687927,
+            "timestamp": 1779947113
+        },
+        {
+            "playerName": "Chazut",
+            "permaLink": "72cc29b18f0870d8ac092f886b0a7e91b5f585ba6891de7ad45038b25c71da07",
+            "x": -259.188446,
+            "y": -87.28894,
+            "z": -5.015478,
+            "timestamp": 1779817848
+        },
+        {
+            "playerName": "Chazut",
+            "permaLink": "72cc29b18f0870d8ac092f886b0a7e91b5f585ba6891de7ad45038b25c71da07",
+            "x": -689.8923,
+            "y": 325.89325,
+            "z": -45.16516,
+            "timestamp": 1779816669
+        },
+        {
+            "playerName": "Chazut",
+            "permaLink": "72cc29b18f0870d8ac092f886b0a7e91b5f585ba6891de7ad45038b25c71da07",
+            "x": -259.306732,
+            "y": -80.648,
+            "z": -4.70562458,
+            "timestamp": 1779808975
+        },
+        {
+            "playerName": "Hardcore",
+            "permaLink": "683ec26250a2cf549385f6871cbbab51f3901b84fdbdea338f1ef614b0bfacda",
+            "x": -500.535553,
+            "y": 239.370667,
+            "z": -25.8193264,
+            "timestamp": 1779649143
+        },
+        {
+            "playerName": "WorriedBoutBEAR",
+            "permaLink": "683ec26250a2cf549385f6871cbbab51f3901b84fdbdea338f1ef614b0bfacda",
+            "x": 409.210846,
+            "y": 95.61563,
+            "z": -54.1954727,
+            "timestamp": 1779639445
+        },
+        {
+            "playerName": "MIAGOND?",
+            "permaLink": "0f568c1e9de18ffb88c0248b7e1c97779c4047b4a15c4ba81b6b0b492e9eb48d",
+            "x": 68.60904,
+            "y": 129.380142,
+            "z": -46.7484055,
+            "timestamp": 1779623996
+        },
+        {
+            "playerName": "JUSTENERO",
+            "permaLink": "d9d497831e0fe988e4a3e64c85d59ef9582c5cf87d03bbb31261e081c0e5f4e3",
+            "x": 355.581543,
+            "y": -204.822083,
+            "z": -46.75343,
+            "timestamp": 1779565696
+        },
+        {
+            "playerName": "chud",
+            "permaLink": "01f3d19a9cb5b848187bf230c31473df6a4303b49480c0b1b04d3c5a9ee13ac8",
+            "x": -160.902771,
+            "y": 298.185,
+            "z": -40.79847,
+            "timestamp": 1779534046
+        },
+        {
+            "playerName": "PicaReta",
+            "permaLink": "e2914704d8880f40cdcc04e647c4e41f43b908b1b7072e584d488a5cd4b8db76",
+            "x": 420.216034,
+            "y": 141.484375,
+            "z": -54.5228081,
+            "timestamp": 1779398618
+        },
+        {
+            "playerName": "Mentallyunwell",
+            "permaLink": "4afa0f289910e723de0095f3100496fd2586b22203694036d932fbcb037759d0",
+            "x": -195.906738,
+            "y": -80.50501,
+            "z": -3.73835826,
+            "timestamp": 1779369343
+        },
+        {
+            "playerName": "Cid-3",
+            "permaLink": "14deb0c637f550793377cc879b93fe3bceb6cc673d87470c2cedcbc2dd3b0f8b",
+            "x": 442.130035,
+            "y": 133.718643,
+            "z": -54.4786644,
+            "timestamp": 1779353400
+        },
+        {
+            "playerName": "Bruce",
+            "permaLink": "b327158782efa82224849beb7462e237814ac3ff64c9300a6eae7a9186ba9f21",
+            "x": -231.601456,
+            "y": -131.243515,
+            "z": -4.12933254,
+            "timestamp": 1779198744
+        },
+        {
+            "playerName": "Bruce",
+            "permaLink": "b327158782efa82224849beb7462e237814ac3ff64c9300a6eae7a9186ba9f21",
+            "x": -313.7591,
+            "y": -87.62927,
+            "z": -3.73836136,
+            "timestamp": 1779192809
+        },
+        {
+            "playerName": "Battlewurst",
+            "permaLink": "244a5cdc8f7b1286e16a35aa0829b12a2b2fc1ec979e305d38ff1dd70709cafd",
+            "x": -274.7161,
+            "y": -66.89646,
+            "z": -5.07194376,
+            "timestamp": 1779192761
+        },
+        {
+            "playerName": "Battlewurst",
+            "permaLink": "244a5cdc8f7b1286e16a35aa0829b12a2b2fc1ec979e305d38ff1dd70709cafd",
+            "x": -671.512939,
+            "y": -247.062851,
+            "z": -26.7659683,
+            "timestamp": 1779190516
+        },
+        {
+            "playerName": "Cid-3",
+            "permaLink": "14deb0c637f550793377cc879b93fe3bceb6cc673d87470c2cedcbc2dd3b0f8b",
+            "x": -831.3056,
+            "y": 45.6521,
+            "z": -39.5579147,
+            "timestamp": 1779171833
+        },
+        {
+            "playerName": "PissinMilk",
+            "permaLink": "0b9fea8f48cd045fa5502cf28b851a989f9e63e9855909969465d1bb298d7e92",
+            "x": -245.850449,
+            "y": 206.3069,
+            "z": -40.9569778,
+            "timestamp": 1779127400
+        },
+        {
+            "playerName": "chud",
+            "permaLink": "01f3d19a9cb5b848187bf230c31473df6a4303b49480c0b1b04d3c5a9ee13ac8",
+            "x": 309.133057,
+            "y": 321.374634,
+            "z": -62.39645,
+            "timestamp": 1779116955
+        },
+        {
+            "playerName": "BurntPeanut",
+            "permaLink": "bae970bd71dbe5c64e7711075f5e92d0e7fcff78698c92188afdb0bb1cd120c3",
+            "x": 348.751251,
+            "y": 51.3052559,
+            "z": -50.0751572,
+            "timestamp": 1779055003
+        },
+        {
+            "playerName": "Claymore",
+            "permaLink": "83d1916300868bc96f5faec5864225b73ad24bc5c03be2614c4175f8e9acbb29",
+            "x": 83.69934,
+            "y": 158.460571,
+            "z": -47.675293,
+            "timestamp": 1779051638
+        },
+        {
+            "playerName": "MedalM8",
+            "permaLink": "11684c175d9de379e17d413edf860b0c2cac864f18f9043ae01ae3d4dc39b35f",
+            "x": -694.96106,
+            "y": 100.20536,
+            "z": -27.462307,
+            "timestamp": 1779032639
+        },
+        {
+            "playerName": "Claymore",
+            "permaLink": "83d1916300868bc96f5faec5864225b73ad24bc5c03be2614c4175f8e9acbb29",
+            "x": -168.770248,
+            "y": -180.79129,
+            "z": -5.13479853,
+            "timestamp": 1779019464
+        },
+        {
+            "playerName": "Hardcore",
+            "permaLink": "683ec26250a2cf549385f6871cbbab51f3901b84fdbdea338f1ef614b0bfacda",
+            "x": -771.2967,
+            "y": 211.461,
+            "z": -49.7768669,
+            "timestamp": 1778977540
+        },
+        {
+            "playerName": "Hardcore",
+            "permaLink": "683ec26250a2cf549385f6871cbbab51f3901b84fdbdea338f1ef614b0bfacda",
+            "x": -215.255768,
+            "y": -96.55492,
+            "z": -0.795404,
+            "timestamp": 1778974078
+        },
+        {
+            "playerName": "Claymore",
+            "permaLink": "83d1916300868bc96f5faec5864225b73ad24bc5c03be2614c4175f8e9acbb29",
+            "x": -304.574158,
+            "y": -83.4009857,
+            "z": -0.8065986,
+            "timestamp": 1778971702
+        },
+        {
+            "playerName": "Zephyr",
+            "permaLink": "8b5caaf80dda2d2e56b7136d07e65150a981c1069e6521e80565fb5dfc7fdc35",
+            "x": -780.6664,
+            "y": 463.871643,
+            "z": -59.60061,
+            "timestamp": 1778947830
+        },
+        {
+            "playerName": "Bruce",
+            "permaLink": "b327158782efa82224849beb7462e237814ac3ff64c9300a6eae7a9186ba9f21",
+            "x": -222.967285,
+            "y": 166.462357,
+            "z": -40.94347,
+            "timestamp": 1778932554
+        },
+        {
+            "playerName": " SwiftFox",
+            "permaLink": "380ec9008c1c4fce1cc0bf5ed1a8a66d2e9199e84b55f7ae0f72ed5cfda17445",
+            "x": -225.776047,
+            "y": 148.456436,
+            "z": -40.9234276,
+            "timestamp": 1778920724
+        },
+        {
+            "playerName": "Bruce",
+            "permaLink": "b327158782efa82224849beb7462e237814ac3ff64c9300a6eae7a9186ba9f21",
+            "x": -196.416748,
+            "y": -74.46906,
+            "z": -0.7980404,
+            "timestamp": 1778850805
+        },
+        {
+            "playerName": "f1err0",
+            "permaLink": "876a0fbe0349b754078b0b7ad22197bb584b62fb0f092afab7c641bdac127319",
+            "x": 94.2423,
+            "y": 72.61806,
+            "z": -48.3930435,
+            "timestamp": 1778843233
+        },
+        {
+            "playerName": "Foster",
+            "permaLink": "5f5f95edfcb76a8acb4f85c0f5319a99b29f8176dcf90d892686ac3bf5b32d29",
+            "x": -506.507355,
+            "y": 249.16568,
+            "z": -25.8264885,
+            "timestamp": 1778783621
+        },
+        {
+            "playerName": "Bruce",
+            "permaLink": "b327158782efa82224849beb7462e237814ac3ff64c9300a6eae7a9186ba9f21",
+            "x": -224.139786,
+            "y": -85.14253,
+            "z": -0.7956121,
+            "timestamp": 1778698782
+        },
+        {
+            "playerName": "Chazut-VAGABOND",
+            "permaLink": "72cc29b18f0870d8ac092f886b0a7e91b5f585ba6891de7ad45038b25c71da07",
+            "x": -765.625244,
+            "y": 78.44507,
+            "z": -43.1397743,
+            "timestamp": 1778694796
+        },
+        {
+            "playerName": "SereneEXE",
+            "permaLink": "9eddec1e890343d1cb3539e436449947317320a9361da74d3075de08be17ede6",
+            "x": -722.634338,
+            "y": 350.953033,
+            "z": -42.7088165,
+            "timestamp": 1778610465
+        },
+        {
+            "playerName": "BurntPeanut",
+            "permaLink": "bae970bd71dbe5c64e7711075f5e92d0e7fcff78698c92188afdb0bb1cd120c3",
+            "x": -365.3519,
+            "y": -94.95654,
+            "z": -5.09967756,
+            "timestamp": 1778470930
+        },
+        {
+            "playerName": "BurntPeanut",
+            "permaLink": "bae970bd71dbe5c64e7711075f5e92d0e7fcff78698c92188afdb0bb1cd120c3",
+            "x": 140.855255,
+            "y": -189.76062,
+            "z": -41.32333,
+            "timestamp": 1778463843
+        },
+        {
+            "playerName": "doma",
+            "permaLink": "d71580abf208616a3a619cd3194ed3751925d1844eb34aec13d5a2e578b77268",
+            "x": 305.761139,
+            "y": -233.256317,
+            "z": -46.2532463,
+            "timestamp": 1778444013
+        },
+        {
+            "playerName": "MAXSEFFECT21",
+            "permaLink": "abac2d7746e1faf4134794837b3eb56707013ddf313157f01b7ddcab369b16bf",
+            "x": 405.269135,
+            "y": 117.771858,
+            "z": -54.5020142,
+            "timestamp": 1778333055
+        },
+        {
+            "playerName": "NL_Revvie",
+            "permaLink": "4416ae829ffa7cbfc38af53660e4048d81aa38de92c97b685ffe576b2928dbd3",
+            "x": 369.31424,
+            "y": -189.739426,
+            "z": -46.20722,
+            "timestamp": 1778183097
+        },
+        {
+            "playerName": "TankBwattewy",
+            "permaLink": "ada0c27cf50af60e1f5ff42f881e9b204244e388e073a09e9a8323b5dc2d688f",
+            "x": 336.3727,
+            "y": 164.6331,
+            "z": -56.3790932,
+            "timestamp": 1778095088
+        },
+        {
+            "playerName": "TankBwattewy",
+            "permaLink": "ada0c27cf50af60e1f5ff42f881e9b204244e388e073a09e9a8323b5dc2d688f",
+            "x": 92.56286,
+            "y": 119.078735,
+            "z": -48.0892067,
+            "timestamp": 1778093552
+        },
+        {
+            "playerName": "f1err0",
+            "permaLink": "876a0fbe0349b754078b0b7ad22197bb584b62fb0f092afab7c641bdac127319",
+            "x": 251.615341,
+            "y": 84.045845,
+            "z": -53.91956,
+            "timestamp": 1778060709
+        },
+        {
+            "playerName": "NL_Revvie",
+            "permaLink": "4416ae829ffa7cbfc38af53660e4048d81aa38de92c97b685ffe576b2928dbd3",
+            "x": 205.885025,
+            "y": -110.8166,
+            "z": -50.91382,
+            "timestamp": 1777920406
+        },
+        {
+            "playerName": "NL_Revvie",
+            "permaLink": "4416ae829ffa7cbfc38af53660e4048d81aa38de92c97b685ffe576b2928dbd3",
+            "x": 352.9119,
+            "y": 158.127045,
+            "z": -56.3175926,
+            "timestamp": 1777844773
+        },
+        {
+            "playerName": "Haywire Hayley",
+            "permaLink": "8476044fbae323c6c14125bd48f4c0d89fcd76a047a52f07ac91f45801e56072",
+            "x": 114.842339,
+            "y": 78.42696,
+            "z": -48.4825478,
+            "timestamp": 1777639145,
+            "killer_name": "Yustin Drakon"
+        }
+    ]
+}
