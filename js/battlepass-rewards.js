@@ -11,15 +11,14 @@ function refreshRewards(player) {
         profileCard: document.getElementById('main-profile-card'),
         profileAvatar: document.getElementById('profile-avatar'),
         profileBackground: document.getElementById('weapon-meta-section'),
-        profileCat: document.getElementById('catrew'),
-        badgerPenguin: document.getElementById('badger')
+        profileCat: document.getElementById('catrew')
     };
 
     resetStyles(elements);
 
     applyRewards(player, elements);
 
-    // Handle cat and badger visibility
+    // Handle cat visibility
     elements.profileCat.style.display = (player?.bp_cat && player?.battlePassLevel >= 20) ? 'block' : 'none';
 }
 

@@ -5149,16 +5149,7 @@ input[type="checkbox"]:checked:hover {
     font-family: sans-serif;
 }
 
-.weapon-icon-fav {
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-    width: 100%;
-    height: auto;
-    margin-top: 10px;
-    place-self: center;
-    rotate: 9deg;
-}
-
-/* Body Hits Container */
+/* Body Hits Container Selector */
 .body-hits-header {
     display: flex;
     justify-content: space-between;
@@ -5208,10 +5199,10 @@ input[type="checkbox"]:checked:hover {
 }
 
 .count-btn.active {
-    background: rgba(100, 255, 218, 0.12);
-    border-color: rgba(100, 255, 218, 0.25);
-    color: #64ffda;
-    box-shadow: 0 2px 10px rgba(100, 255, 218, 0.05);
+    background: linear-gradient(135deg, rgba(100, 255, 218, 0.15), rgba(100, 200, 255, 0.1));
+    color: var(--accent-teal, #64ffda);
+    box-shadow: 0 4px 12px rgba(100, 255, 218, 0.2);
+    border: 1px solid rgba(100, 255, 218, 0.3);
 }
 
 .body-svg-container {
@@ -7109,7 +7100,7 @@ input[type="checkbox"]:checked:hover {
     padding: 10px 20px;
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
+    border-radius: 8px;
     color: var(--text-light);
     font-size: 0.9rem;
     font-weight: 500;
@@ -7127,10 +7118,10 @@ input[type="checkbox"]:checked:hover {
 }
 
 .sort-btn.active {
-    background: linear-gradient(145deg, rgba(100, 255, 218, 0.2), rgba(100, 255, 218, 0.1));
-    border-color: rgba(100, 255, 218, 0.4);
-    color: var(--accent-teal);
-    box-shadow: 0 0 20px rgba(100, 255, 218, 0.2);
+    background: linear-gradient(135deg, rgba(100, 255, 218, 0.15), rgba(100, 200, 255, 0.1));
+    color: var(--accent-teal, #64ffda);
+    box-shadow: 0 4px 12px rgba(100, 255, 218, 0.2);
+    border: 1px solid rgba(100, 255, 218, 0.3);
 }
 
 .quests-search {
@@ -7857,73 +7848,6 @@ input[type="checkbox"]:checked:hover {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.exp-progress {
-    height: 100%;
-    background: linear-gradient(90deg,
-            #8ad0f0,
-            #90ff9f,
-            #8ad0f0);
-    background-size: 200% 100%;
-    border-radius: 8px;
-    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-    animation: gradientShift 2s ease infinite;
-    box-shadow: 0 0 10px rgba(138, 208, 240, 0.4);
-}
-
-.exp-progress.max-level {
-    background: linear-gradient(90deg,
-            #ffd700,
-            #fff8a9,
-            #ffd700);
-    background-size: 200% 100%;
-    animation: goldenGlow 1.5s ease infinite;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-}
-
-@keyframes goldenGlow {
-    0% {
-        background-position: 0 50%;
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-    }
-
-    50% {
-        background-position: 100% 50%;
-        box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
-    }
-
-    100% {
-        background-position: 0 50%;
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-    }
-}
-
-.exp-progress-wp {
-    height: 100%;
-    background: linear-gradient(90deg,
-            #f0c48a,
-            #f8ff90,
-            #f0c48a);
-    background-size: 200% 100%;
-    border-radius: 8px;
-    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-    animation: gradientShift 2s ease infinite;
-    box-shadow: 0 0 10px rgba(240, 196, 138, 0.4);
-}
-
-@keyframes gradientShift {
-    0% {
-        background-position: 0 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0 50%;
-    }
-}
-
 .exp-numbers {
     display: flex;
     justify-content: space-between;
@@ -7999,7 +7923,6 @@ input[type="checkbox"]:checked:hover {
     height: 100%;
     object-fit: cover;
     border-radius: 10%;
-
 }
 
 .trader-lock {
@@ -8032,82 +7955,266 @@ input[type="checkbox"]:checked:hover {
     color: #aaa;
 }
 
-.weapon-info {
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+/* Content */
+.fav-weapon-content {
     position: relative;
 }
 
-.weapon-name {
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #fff;
-}
-
-.weapon-mastery {
-    display: flex;
-    justify-content: space-between;
-    color: #a0a0a0;
-}
-
-.mastery-level {
-    color: #84d2ff;
-}
-
-.weapon-extra-stats {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid rgb(255 255 255 / 10%);
-    display: block;
-    text-align: center;
-}
-
-.extra-stat {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px;
-}
-
+/* Stattrack Overlay */
 .stattrack-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.25);
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 12px;
     z-index: 10;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
+    animation: overlayFadeIn 0.5s ease;
+}
+
+@keyframes overlayFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .stattrack-message {
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
     text-align: center;
+    color: rgba(255, 255, 255, 0.9);
     padding: 20px;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.stattrack-message span {
+    font-size: 1rem;
+    opacity: 0.7;
 }
 
 .stattrack-message a {
-    text-decoration: wavy;
-    transition: all 300ms ease-in-out;
-    color: rgb(192, 201, 252);
+    color: #64b4ff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.3s ease;
+    padding: 2px 10px;
+    border-radius: 6px;
+    background: rgba(100, 255, 218, 0.05);
 }
 
-.stattrack-disabled {
-    filter: blur(10px);
-    opacity: 0.8;
+.stattrack-message a:hover {
+    background: rgba(100, 255, 218, 0.1);
+}
+
+.stattrack-message a i {
+    font-size: 0.6rem;
+    opacity: 0.6;
+}
+
+.stattrack-message .sub-text {
+    font-size: 0.8rem;
+    opacity: 0.4;
+}
+
+.glass-disabled {
+    filter: blur(3px);
+    opacity: 0.4;
     pointer-events: none;
     user-select: none;
 }
 
-.hof-player-fav-weapon {
+/* Weapon Display */
+.weapon-profile-display {
+    gap: 16px;
+    align-items: stretch;
     position: relative;
+}
+
+.weapon-profile-image-wrapper {
+    backdrop-filter: blur(4px);
+    position: relative;
+    min-height: 180px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.weapon-profile-icon {
+    width: 100%;
+    height: auto;
+    max-height: 160px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.4));
+    transform: rotate(5deg);
+    position: relative;
+    z-index: 1;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 10px;
+}
+
+.fav-weapon-card:hover .weapon-profile-icon {
+    transform: scale(1.05);
+}
+
+/* Stats Overlay */
+.weapon-stats-overlay {
+    position: relative;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 5;
+}
+
+.weapon-stats-grid-single-weapon {
+    display: grid;
+    grid-template-columns: 100px;
+    gap: 12px 16px;
+    padding: 16px;
+    width: 100%;
+    grid-auto-flow: column;
+    position: relative;
+}
+
+.stat-overlay-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    color: #fff;
+}
+
+.stat-overlay-item i {
+    font-size: 1.2rem;
+    color: rgba(172, 172, 172, 0.6);
+    margin-bottom: 2px;
+}
+
+.stat-overlay-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+}
+
+.stat-overlay-label {
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.5px;
+}
+
+/* Level Badge */
+.weapon-level-badge {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    border: 1px solid rgb(255 255 255 / 20%);
+    border-radius: 8px;
+    padding: 3px 10px;
+    color: #00ffe699;
+    font-size: 0.85rem;
+    font-weight: 600;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Weapon Info */
+.weapon-profile-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+}
+
+.weapon-profile-name {
+    color: #fff;
+    font-size: 1.1rem;
+    margin: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    font-family: 'Bender Bold';
+    text-align: center;
+    text-overflow: ellipsis;
+}
+
+/* Mastery Weapon */
+.mastery-wpn-profile-container {
+    backdrop-filter: blur(5px);
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.01);
+    border-radius: 8px;
+    padding: 10px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mastery-wpn-profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.mastery-label {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.mastery-level {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Bender Bold';
+}
+
+.exp-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.exp-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #64ffda, #00bfa5);
+    border-radius: 2px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 12px rgba(100, 255, 218, 0.15);
+}
+
+.exp-numbers {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.25);
 }
 
 /* Notifications of last raid */

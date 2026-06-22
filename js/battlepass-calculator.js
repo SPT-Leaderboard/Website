@@ -16,7 +16,7 @@ function initHOF(player, bestWeapon) {
             updatePlayerProfileMastery(player, bestWeapon);
         }
 
-        // rewardSystem.js
+        // battlepass-rewards.js
         refreshRewards(player);
     } catch (error) {
         console.error("Error in initHOF:", error);
@@ -74,31 +74,63 @@ function calculateMasteryLevel(player, bestWeapon) {
 // EXP for weapon mastery
 function updatePlayerProfileMastery(player, bestWeapon) {
     try {
-
         const levelData = calculateMasteryLevel(player, bestWeapon);
 
-        // update level
-        document.querySelector(".level-value-wp").textContent = levelData.level || 0;
+        // Update mastery level
+        const masteryLevel = document.querySelector(".mastery-level");
+        const masteryLevelBadge = document.querySelector(".weapon-level-badge");
+        if (masteryLevel) {
+            masteryLevel.textContent = levelData.level || 0;
+            masteryLevelBadge.textContent = `LVL ${levelData.level || 0}`
+        }
 
-        // update exp bar
-        const expPercentage =
-            (levelData.currentExp / levelData.expForNextLevel) * 100;
-        document.querySelector(
-            ".exp-progress-wp"
-        ).style.width = `${Math.max(0, Math.min(100, expPercentage))}%`;
+        // Update exp progress bar
+        const expPercentage = (levelData.currentExp / levelData.expForNextLevel) * 100;
+        const progressBar = document.querySelector(".exp-progress");
+        if (progressBar) {
+            progressBar.style.width = `${Math.max(0, Math.min(100, expPercentage))}%`;
+        }
 
-        // update exp values
-        document.querySelector(".current-exp-wp").textContent = (levelData.currentExp || 0).toLocaleString();
-        document.querySelector(".next-level-exp-wp").textContent = (levelData.expForNextLevel || 1000).toLocaleString();
+        // Update current exp
+        const currentExp = document.querySelector(".current-exp");
+        if (currentExp) {
+            currentExp.textContent = (levelData.currentExp || 0).toLocaleString();
+        }
 
+        // Update next level exp
+        const nextLevelExp = document.querySelector(".next-level-exp");
+        if (nextLevelExp) {
+            nextLevelExp.textContent = (levelData.expForNextLevel || 1000).toLocaleString();
+        }
+
+        // Update remaining exp
         const remainingExp = levelData.expForNextLevel - levelData.currentExp;
-        document.querySelector(".remaining-value-wp").textContent = Math.max(0, remainingExp).toLocaleString();
+        const remainingValue = document.querySelector(".remaining-value");
+        if (remainingValue) {
+            remainingValue.textContent = Math.max(0, remainingExp).toLocaleString();
+        }
+
     } catch (error) {
         console.error("Error in updatePlayerProfileMastery:", error);
-        document.querySelector(".level-value-wp").textContent = "0";
-        document.querySelector(".exp-progress-wp").style.width = "0%";
-        document.querySelector(".current-exp-wp").textContent = "0";
-        document.querySelector(".next-level-exp-wp").textContent = "1000";
-        document.querySelector(".remaining-value-wp").textContent = "1000";
+
+        // Set default values on error
+        const defaults = {
+            '.mastery-level': '0',
+            '.exp-progress': '0%',
+            '.current-exp': '0',
+            '.next-level-exp': '1000',
+            '.remaining-value': '1000'
+        };
+
+        Object.entries(defaults).forEach(([selector, value]) => {
+            const element = document.querySelector(selector);
+            if (element) {
+                if (selector === '.exp-progress') {
+                    element.style.width = value;
+                } else {
+                    element.textContent = value;
+                }
+            }
+        });
     }
 }

@@ -186,14 +186,13 @@ async function showPublicProfile(container, player) {
     // Use trycatch as stattrack_weapons[player.permaLink] might not exist on a player at all
     // TEMP: Used to indicate recent errors in Stattrack data saving to the profile
     try {
-        if (player?.permaLink && player.stattrack_weapons[player.permaLink]) {
+        if (player?.permaLink && player?.stattrack_weapons[player.permaLink]) {
             bestWeapon = await getBestWeapon(player.stattrack_weapons[player.permaLink]);
             if (bestWeapon) {
                 player.isUsingStattrack = true;
             }
         }
     } catch (error) {
-        console.error("Error getting best weapon:", error);
         player.isUsingStattrack = false;
     }
 
@@ -472,29 +471,29 @@ async function showPublicProfile(container, player) {
                 <!-- Item Showcase -->
                 ${player.showcase && Object.keys(player.showcase).length > 0 ?
             `<div class="player-overview player-showcase">
-                        <div class="showcase-mini">
-                            <div class="showcase-mini-header">
-                                <span class="showcase-title">Showcase</span>
+                            <div class="showcase-mini">
+                                <div class="showcase-mini-header">
+                                    <span class="showcase-title">Showcase</span>
+                                </div>
+                                <div class="showcase-items-mini"> 
+                                    ${Object.values(player.showcase || {}).filter(item => item !== null && item !== undefined && item.item_id).map(item => ` 
+                                        <div class="showcase-item-mini" data-rarity="${item.rarity}" data-item-name="${escapeHtml(item.name)}">
+                                            <div class="rarity-badge ${item.rarity}">
+                                                <span class="rarity-text">${item.rarity.toUpperCase()}</span>
+                                            </div>
+                                            <div class="item-mini-icon">
+                                                <img src="${item.icon_path.replace(/^\/\.\.\//, '/')}" alt="${escapeHtml(item.name)}">
+                                                <div class="item-mini-glow"></div>
+                                            </div>
+                                            <div class="item-mini-tooltip">
+                                                <span class="item-mini-name">${escapeHtml(item.name)}</span>
+                                                <span class="item-mini-price">${item.base_price.toLocaleString()} LC</span>
+                                            </div>
+                                        </div> 
+                                    `).join('')}
+                                </div>
                             </div>
-                            <div class="showcase-items-mini"> 
-                                ${Object.values(player.showcase || {}).filter(item => item !== null && item !== undefined && item.item_id).map(item => ` 
-                                    <div class="showcase-item-mini" data-rarity="${item.rarity}" data-item-name="${escapeHtml(item.name)}">
-                                        <div class="rarity-badge ${item.rarity}">
-                                            <span class="rarity-text">${item.rarity.toUpperCase()}</span>
-                                        </div>
-                                        <div class="item-mini-icon">
-                                            <img src="${item.icon_path.replace(/^\/\.\.\//, '/')}" alt="${escapeHtml(item.name)}">
-                                            <div class="item-mini-glow"></div>
-                                        </div>
-                                        <div class="item-mini-tooltip">
-                                            <span class="item-mini-name">${escapeHtml(item.name)}</span>
-                                            <span class="item-mini-price">${item.base_price} LC</span>
-                                        </div>
-                                    </div> 
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>`
+                        </div>`
             : ''}
 
                 <div class="badges">${badgesHTML}</div>
@@ -736,44 +735,79 @@ async function showPublicProfile(container, player) {
                 </div>
             </div>
             <!-- Meta gun -->
-            <div class="favorite-weapons profile-section" id="weapon-meta-section">
-                <h3>Favorite Weapon</h3>
-                <div class="favorite-weapons-container" id="weapon-container">
-                ${!player?.isUsingStattrack ? ` <div class="stattrack-overlay">
-                        <div class="stattrack-message">This player is not using <a href="https://hub.sp-tarkov.com/files/file/2501-stattrack/">Stattrack Mod</a> by AcidPhantasm</div>
-                    </div> ` : ``}
-                    <div class="weapon-info ${!player?.isUsingStattrack ? 'stattrack-disabled' : ''}">
-                        <img src="media/weapon_icons/${bestWeapon?.name}.webp" alt="bestWeapon?.name" class="weapon-icon-fav" onerror="this.src='media/default_weapon_icon.png';" />
-                        <div class="weapon-name">${bestWeapon?.name ? bestWeapon.name : 'Unknown'}</div>
-                        <div class="weapon-mastery">Mastery Level: <span class="level-value-wp">0</span></div>
-                        <div class="exp-bar-container-weapon">
-                            <div class="exp-bar">
-                                <div class="exp-progress-wp" style="width: 0;"></div>
-                            </div>
-                            <div class="exp-numbers">
-                                <span class="current-exp-wp">0</span>
-                                <span class="next-level-exp-wp">0</span>
+            <div class="profile-section" id="weapon-meta-section">
+                <h3>Most Used Weapon</h3>
+                <div class="fav-weapon-content" id="weapon-container">
+                    ${!player?.isUsingStattrack ? `
+                    <div class="stattrack-overlay">
+                        <div class="stattrack-message">
+                            <span>This player is not using</span>
+                            <a href="https://hub.sp-tarkov.com/files/file/2501-stattrack/" target="_blank">
+                                Stattrack Mod
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                            <span class="sub-text">by AcidPhantasm</span>
+                        </div>
+                    </div>
+                    ` : ``}
+                    
+                    <div class="weapon-profile-display ${!player?.isUsingStattrack ? 'glass-disabled' : ''}">
+                        <!-- Weapon Image with Stats Overlay -->
+                        <div class="weapon-profile-image-wrapper">
+                        <div class="weapon-profile-name">
+                                ${bestWeapon?.name || 'Unknown Weapon'}
+                        </div>
+                        <!-- Weapon Stats Overlay -->
+                        <div class="weapon-stats-overlay">
+                            <div class="weapon-stats-grid-single-weapon">
+                                <div class="stat-overlay-item">
+                                    <i class="fa-solid fa-skull-crossbones"></i>
+                                    <span class="stat-overlay-value">${player?.isUsingStattrack ? (bestWeapon ? bestWeapon.stats.kills : 0) : '0'}</span>
+                                    <span class="stat-overlay-label">Kills</span>
+                                </div>
+                                <div class="stat-overlay-item">
+                                    <i class="fa-solid fa-bullseye"></i>
+                                    <span class="stat-overlay-value">${player?.isUsingStattrack ? (bestWeapon ? bestWeapon.stats.headshots : 0) : '0'}</span>
+                                    <span class="stat-overlay-label">Headshots</span>
+                                </div>
+                                <div class="stat-overlay-item">
+                                    <i class="fa-solid fa-gun"></i>
+                                    <span class="stat-overlay-value">${player?.isUsingStattrack ? (bestWeapon ? bestWeapon.stats.totalShots : 0) : '0'}</span>
+                                    <span class="stat-overlay-label">Shots</span>
+                                </div>
+                                <div class="stat-overlay-item">
+                                    <i class="fa-solid fa-chart-simple"></i>
+                                    <span class="stat-overlay-value">${player?.isUsingStattrack ? (bestWeapon ? (bestWeapon.stats.kills > 0 ? Math.round(bestWeapon.stats.totalShots / bestWeapon.stats.kills) : '0') : '0') : '0'}</span>
+                                    <span class="stat-overlay-label">STK</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="exp-remaining">Until next level: <span class="remaining-value-wp">0</span> EXP</div>
-                        <div class="weapon-extra-stats">
-                            <div class="raid-stats-grid">
-                                <div class="raid-stat-block">
-                                    <span class="profile-stat-label">Kills:</span>
-                                    <span class="profile-stat-value">${player?.isUsingStattrack ? (bestWeapon ? bestWeapon.stats.kills : 0) : '0'}</span>
-                                </div>
-                                <div class="raid-stat-block">
-                                    <span class="profile-stat-label">Headshots:</span>
-                                    <span class="profile-stat-value">${player?.isUsingStattrack ? (bestWeapon ? bestWeapon.stats.headshots : 0) : '0'}</span>
-                                </div>
-                                <div class="raid-stat-block">
-                                    <span class="profile-stat-label">Shots Fired:</span>
-                                    <span class="profile-stat-value">${player?.isUsingStattrack ? (bestWeapon ? bestWeapon.stats.totalShots : 0) : '0'}</span>
-                                </div>
-                                <div class="raid-stat-block">
-                                    <span class="profile-stat-label">Shots to Kill:</span>
-                                    <span class="profile-stat-value">${player?.isUsingStattrack ? (bestWeapon ? (bestWeapon.stats.kills > 0 ? Math.round(bestWeapon.stats.totalShots / bestWeapon.stats.kills) : '0') : '0') : '0'}</span>
-                                </div>
+                        
+                            <img src="media/weapon_icons/${bestWeapon?.name}.webp" 
+                                alt="${bestWeapon?.name}" 
+                                class="weapon-profile-icon" 
+                                onerror="this.src='media/default_weapon_icon.png';" />
+                            <!-- Level Badge -->
+                            <div class="weapon-level-badge">
+                                LVL ${bestWeapon?.masteryLevel || 0}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Weapon Info -->
+                    <div class="weapon-profile-info">
+                        <div class="mastery-wpn-profile-container">
+                            <div class="mastery-wpn-profile-header">
+                                <span class="mastery-label">
+                                    Mastery
+                                </span>
+                                <span class="mastery-level">${bestWeapon?.masteryLevel || 0}</span>
+                            </div>
+                            <div class="exp-bar">
+                                <div class="exp-progress" style="width: ${Math.min((bestWeapon?.currentExp / bestWeapon?.nextLevelExp) * 100 || 0, 100)}%;"></div>
+                            </div>
+                            <div class="exp-numbers">
+                                <span class="current-exp">${bestWeapon?.currentExp || 0}</span>
+                                <span class="next-level-exp">${bestWeapon?.nextLevelExp || 0}</span>
                             </div>
                         </div>
                     </div>

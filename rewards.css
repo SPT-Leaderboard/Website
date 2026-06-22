@@ -831,29 +831,22 @@
     background-image: url(media/rewards/profile_decals_mastery/scratches.png);
     background-position: center;
     background-size: cover;
-    backdrop-filter: blur(15px);
 }
 
 .cult-circle {
     background-image: url(media/rewards/profile_decals_mastery/cultist_point.png);
     background-position: center;
     background-size: cover;
-    filter: saturate(0.9);
-    backdrop-filter: blur(15px);
 }
 
 .cult-signs {
     background-image: url(media/rewards/profile_decals_mastery/cultist_point1.png);
     background-position: center;
     background-size: cover;
-    filter: saturate(0.7);
-    backdrop-filter: blur(15px);
 }
 
 .cult-signs2 {
     background-image: url(media/rewards/profile_decals_mastery/cultist_point_moresigns.png);
     background-position: center;
     background-size: cover;
-    filter: saturate(0.6);
-    backdrop-filter: blur(15px);
 }
