@@ -5606,7 +5606,7 @@ input[type="checkbox"]:checked:hover {
     background: var(--warning);
     color: var(--darker);
     font-size: 10px;
-    padding: 4px;
+    padding: 3px;
     border-radius: 50%;
     border: 2px solid var(--bg-card);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -5614,14 +5614,15 @@ input[type="checkbox"]:checked:hover {
 
 .real-badge {
     position: absolute;
-    bottom: -5px;
-    right: -8px;
+    bottom: -2px;
+    right: -2px;
+    background: var(--success);
+    color: var(--darker);
     font-size: 10px;
-    padding: 4px;
-    border-radius: 30%;
-    background: var(--darker);
-    color: var(--success);
-    font-size: 14px;
+    padding: 3px;
+    font-size: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-card);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -9705,6 +9706,203 @@ input[type="checkbox"]:checked:hover {
     box-shadow: var(--shadow-lg);
 }
 
+.comment-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.comment-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.action-cm-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.action-cm-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.like-btn {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.like-btn.liked {
+    color: #ff6b6b;
+}
+
+.like-btn.liked i {
+    animation: likeAnimation 0.3s ease;
+}
+
+.like-btn:hover {
+    color: #ff6b6b;
+}
+
+.like-btn .like-count {
+    font-weight: 600;
+    min-width: 16px;
+}
+
+@keyframes likeAnimation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.reply-btn:hover {
+    color: #64ffda;
+}
+
+.delete-btn:hover {
+    color: #ff6b6b;
+}
+
+.deleted-badge {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.replies-container {
+    margin-top: 12px;
+    padding-left: 16px;
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.reply-comment {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.reply-comment .comment-header {
+    gap: 10px;
+}
+
+.reply-comment .user-avatar {
+    width: 32px;
+    height: 32px;
+}
+
+.reply-comment .pmc-side-wrapper-comment {
+    width: 20px;
+    height: 20px;
+    bottom: -6px;
+    left: -4px;
+}
+
+.reply-comment .pmc-side-wrapper-comment img,
+.reply-comment .pmc-side-wrapper-comment svg {
+    width: 30px;
+    height: 30px;
+}
+
+.reply-comment .comment-content {
+    font-size: 0.9rem;
+    padding-left: 40px;
+}
+
+/* Reply Form */
+.reply-form {
+    margin: 8px 0;
+    padding: 10px 0;
+}
+
+.reply-form-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.reply-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    resize: vertical;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.reply-input:focus {
+    outline: none;
+    border-color: rgba(100, 255, 218, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.reply-form-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.reply-submit-btn {
+    padding: 4px 16px;
+    background: linear-gradient(135deg, rgba(100, 255, 218, 0.15), rgba(100, 255, 218, 0.05));
+    border: 1px solid rgba(100, 255, 218, 0.2);
+    border-radius: 6px;
+    color: #64ffda;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.reply-submit-btn:hover {
+    background: rgba(100, 255, 218, 0.2);
+}
+
+.reply-submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.reply-cancel-btn {
+    padding: 4px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.reply-cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Deleted content */
+.deleted-content {
+    color: rgba(255, 255, 255, 0.3);
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
 /* Avatar Wrapper */
 .avatar-wrapper {
     position: relative;
@@ -9856,6 +10054,20 @@ input[type="checkbox"]:checked:hover {
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1));
     color: #a78bfa;
     border: 1px solid rgba(139, 92, 246, 0.4);
+}
+
+/* Trusted Badge */
+.ranked-badge {
+    background: linear-gradient(135deg, rgba(246, 136, 92, 0.2), rgba(246, 136, 92, 0.1));
+    color: #fa9c8b;
+    border: 1px solid rgba(246, 92, 92, 0.4);
+}
+
+/* Trusted Badge */
+.casual-badge {
+    background: linear-gradient(135deg, rgba(92, 246, 195, 0.2), rgba(92, 246, 151, 0.1));
+    color: #8bfac2;
+    border: 1px solid rgba(92, 246, 151, 0.4);
 }
 
 /* Verified Badge */
