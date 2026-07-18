@@ -6,6 +6,7 @@
 
 let autoLoginAttempts = 0;
 const MAX_AUTO_LOGIN_ATTEMPTS = 1;
+window.global_user_data = [];
 
 async function checkAuth() {
     try {
@@ -38,6 +39,9 @@ async function checkAuth() {
             updateAuthStatus('authenticated', data.username, data.profilePicture, data.unreadCount || 0);
             isLoggedIn = true;
             autoLoginAttempts = 0;
+
+            
+            window.global_user_data = data;
 
         } else if (data.maintenance) {
             updateAuthStatus('maintenance', 'Maintenance', 0);
