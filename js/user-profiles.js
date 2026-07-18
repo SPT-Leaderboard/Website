@@ -762,22 +762,22 @@ async function showPublicProfile(container, player) {
                             <div class="weapon-stats-grid-single-weapon">
                                 <div class="stat-overlay-item">
                                     <i class="fa-solid fa-skull-crossbones"></i>
-                                    <span class="stat-overlay-value">${player?.isUsingStattrack ? (bestWeapon ? bestWeapon.stats.kills : 0) : '0'}</span>
+                                    <span class="stat-overlay-value">${player?.isUsingStattrack ? bestWeapon.stats.kills.toLocaleString() : '0'}</span>
                                     <span class="stat-overlay-label">Kills</span>
                                 </div>
                                 <div class="stat-overlay-item">
                                     <i class="fa-solid fa-bullseye"></i>
-                                    <span class="stat-overlay-value">${player?.isUsingStattrack ? (bestWeapon ? bestWeapon.stats.headshots : 0) : '0'}</span>
+                                    <span class="stat-overlay-value">${player?.isUsingStattrack ? bestWeapon.stats.headshots.toLocaleString() : '0'}</span>
                                     <span class="stat-overlay-label">Headshots</span>
                                 </div>
                                 <div class="stat-overlay-item">
                                     <i class="fa-solid fa-gun"></i>
-                                    <span class="stat-overlay-value">${player?.isUsingStattrack ? (bestWeapon ? bestWeapon.stats.totalShots : 0) : '0'}</span>
+                                    <span class="stat-overlay-value">${player?.isUsingStattrack ? bestWeapon.stats.totalShots.toLocaleString() : '0'}</span>
                                     <span class="stat-overlay-label">Shots</span>
                                 </div>
                                 <div class="stat-overlay-item">
                                     <i class="fa-solid fa-chart-simple"></i>
-                                    <span class="stat-overlay-value">${player?.isUsingStattrack ? (bestWeapon ? (bestWeapon.stats.kills > 0 ? Math.round(bestWeapon.stats.totalShots / bestWeapon.stats.kills) : '0') : '0') : '0'}</span>
+                                    <span class="stat-overlay-value">${player?.isUsingStattrack ? (bestWeapon.stats.kills > 0 ? Math.round(bestWeapon.stats.totalShots / bestWeapon.stats.kills) : '0') : '0'}</span>
                                     <span class="stat-overlay-label">STK</span>
                                 </div>
                             </div>

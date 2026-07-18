@@ -548,7 +548,7 @@ function waitForDataReady(callback, timeout = 15000) {
 
         else if (Date.now() - startTime > timeout) {
             clearInterval(intervalId);
-            showToast(`There was an error.`, 'error');
+            showToast(`We waited for an API too long. Aborting.`, 'error');
         }
     }, checkInterval);
 }
