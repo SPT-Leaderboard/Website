@@ -9,16 +9,17 @@ const seasonEndTimestamp = 1788199999 * 1000;
 let timerInterval;
 let seasonEnded = false;
 
-document.addEventListener('DOMContentLoaded', () => {
+function runTimer() {
     const endDateDisplay = document.getElementById('endDateDisplay');
 
     if (endDateDisplay) {
         const utcDate = new Date(seasonEndTimestamp).toUTCString();
         endDateDisplay.textContent = `Season ends: ${utcDate}`;
     }
+    
     updateTimer();
     timerInterval = setInterval(updateTimer, 1000);
-});
+}
 
 function updateTimer() {
     const timerDisplay = document.getElementById('timerDisplay');

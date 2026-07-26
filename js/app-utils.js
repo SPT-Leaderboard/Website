@@ -20,6 +20,9 @@ function escapeHtml(str) {
         .replace(/'/g, '&#039;');
 }
 
+// Sleep
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 function getPrettyMapName(entry) {
     const mapAliases = {
         "bigmap": "Customs",
@@ -296,12 +299,17 @@ function getCookie(name) {
     return '';
 }
 
-// Clean weapon name helper
+// Utility to help get rid of embed tags in the names
+// Primarily for ODT item info mod
 function cleanWeaponNameFunc(weaponName) {
+    if (!weaponName) return '';
+
     let cleaned = weaponName.replace(/<color=.*?>/g, "");
 
     cleaned = cleaned.replace(/<\/color>/g, "");
     cleaned = cleaned.replace(/[★☆]/g, "");
+    cleaned = cleaned.replace(/<b>/g, "");
+    cleaned = cleaned.replace(/[</b>]/g, "");
 
     return cleaned.replace(/"/g, "").trim();
 }
@@ -425,7 +433,6 @@ function formatPlayTimeShort(seconds) {
     return `${hours}h`;
 }
 
-
 /**
  * Format UNIX timestamp to return "Xm ago || Xd ago"
  * @deprecated Use formatLastPlayedRaid() instead
@@ -541,7 +548,7 @@ function waitForDataReady(callback, timeout = 15000) {
     const checkInterval = 500;
 
     const intervalId = setInterval(() => {
-        if (isDataReady) {
+        if (EngineState.isDataReady) {
             clearInterval(intervalId);
             setTimeout(callback, 100);
         }
@@ -569,7 +576,6 @@ function formatSalesNum(num) {
 
     return num.toLocaleString();
 }
-
 
 /**
  * Check if user actually owns premium

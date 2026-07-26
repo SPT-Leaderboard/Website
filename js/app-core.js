@@ -7,16 +7,25 @@
 let leaderboardData = []; // For keeping current season data
 let oldLeaderboardData = [];
 let seasons = []; // Storing available seasons
-let ranOnlyOnce = false; // Run only once (ie winners)
 let leaderboardConfig = []; // Storing main config off API
 let seasonNumber = 10;
 
-// DYNAMIC: Tells whenever the live update was finished and data is ready
-// Better to use in pair with waitForDataReady(() => myFunction()); - automatic callback upon data load
-let isDataReady = false;
-
 // DYNAMIC: Indicates when user is logged in Network or not
 let isLoggedIn = false;
+
+/**
+ * Main dynamic state of the leaderboard engine, which can easily be checked from any space utilizing app-core.js
+ * @param {boolean} isDataReady - Tells whenever the live update was finished and data is ready. Better to use in pair with waitForDataReady(() => myFunction()); - automatic callback upon data load
+ * @param {boolean} isOnMainPage - Tells whenever engine is running on the main page, or not.
+ * @param {boolean} isRenderingLeaderboard - Whenever engine is in leaderboard rendering state.
+ * @param {boolean} onDOMRanOnce - Tells whenever DOMContentLoaded has fired to counter run-once functions
+ */
+const EngineState = {
+    isDataReady: false,
+    isOnMainPage: false,
+    isRenderingLeaderboard: false,
+    onDOMRanOnce: false
+};
 
 // For debugging purposes
 // Will use local paths for some files/fallbacks
@@ -52,14 +61,13 @@ const ApiPaths = {
     achievementsPath: '/api/data/shared/achievement_counters.json',
     pmcPfpsPath: '/api/data/pmc_avatars/',
     globalCounters: '/api/data/shared/global_counters.json',
-    adminsOnline: '/api/admins_online.json',
-    dripDataPath: `/api/network/functions/dripfest/drip_data.json?t=${Date.now()}`,
     achievementsDataPath: `achievements/js/compiledAchData.json`,
     achievementsCustomDataPath: `achievements/js/compiledAchSEData.json`
 };
 
 // Paths for local files if debug is on
 if (isLocalhost) {
+    ApiPaths.equipmentBlobStatsPath = `../fallbacks/equipment_history_blob.json`;
     ApiPaths.pmcPfpsPath = `../fallbacks/pmc_avatars/`;
     ApiPaths.currentSeason = `/fallbacks/season10.json`;
     ApiPaths.seasonPath = `../fallbacks/season`;
@@ -72,37 +80,46 @@ if (isLocalhost) {
     ApiPaths.achievementsPath = `../fallbacks/shared/achievement_counters.json`;
     ApiPaths.lastRaidsPath = `../fallbacks/player_raids/`;
     ApiPaths.globalCounters = `../fallbacks/shared/global_counters.json`;
-    ApiPaths.adminsOnline = `fallbacks/admins_online.json`;
-    ApiPaths.dripDataPath = `/fallbacks/drip_data.json`;
 }
 
 // Call main init on DOM load
-document.addEventListener("DOMContentLoaded", async () => {
-    // Load previous global stats from localStorage if can
-    const savedStats = localStorage.getItem('leaderboardStats');
-    if (savedStats) {
-        try {
-            const stats = JSON.parse(savedStats);
-            PrevStats.raids = stats.raids || 0;
-            PrevStats.kills = stats.kills || 0;
-            PrevStats.deaths = stats.deaths || 0;
-            PrevStats.damage = stats.damage || 0;
-            PrevStats.kdr = stats.kdr || 0;
-            PrevStats.survival = stats.survival || 0;
-            PrevStats.validPlayers = stats.players || 0;
-        } catch (e) {
-            console.error('Failed to parse saved stats', e);
-        }
+async function initEngine() {
+    const currentUrl = window.location.href.replace(/\/$/, "");
+    const originUrl = window.location.origin;
+
+    if (currentUrl === originUrl) {
+        console.warn('Leaderboard Engine running on the main page, all tasks remain default config...')
+        EngineState.isOnMainPage = true;
+    } else {
+        console.warn('Leaderboard Engine running out of the main page, using different approach...')
+        EngineState.isOnMainPage = false;
     }
 
-    // app-utils.js
+    await initSeasonList();
     initNavbar();
 
-    await initSeasonList();
+    // Load previous global stats from localStorage if can
+    if (EngineState.isOnMainPage) {
+        const savedStats = localStorage.getItem('leaderboardStats');
+        if (savedStats) {
+            try {
+                const stats = JSON.parse(savedStats);
+                PrevStats.raids = stats.raids || 0;
+                PrevStats.kills = stats.kills || 0;
+                PrevStats.deaths = stats.deaths || 0;
+                PrevStats.damage = stats.damage || 0;
+                PrevStats.kdr = stats.kdr || 0;
+                PrevStats.survival = stats.survival || 0;
+                PrevStats.validPlayers = stats.players || 0;
+            } catch (e) {
+                console.error('Failed to parse saved stats', e);
+            }
+        }
 
-    await loadAchievementsData();
-});
-
+        // app-utils.js
+        await loadAchievementsData();
+    }
+}
 /**
  * Checks if a season JSON file exists on the server by making a fetch request.
  * @param {number} seasonNumber - The season number to check (e.g. 4, 5, 6)
@@ -112,7 +129,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function checkSeasonExists(seasonNumber) {
     const serverUrl = `${ApiPaths.seasonPath}${seasonNumber}${ApiPaths.seasonPathEnd}`;
     const data = await apiFetch(serverUrl, { showErrorToast: false, cacheBust: false });
-    
+
     return data !== null;
 }
 
@@ -141,7 +158,8 @@ async function initAllSeasons() {
         seasons.sort((a, b) => b - a);
 
         await prepareSeasonData();
-        populateSeasonDropdown();
+
+        if (EngineState.isOnMainPage) populateSeasonDropdown();
     }
 }
 
@@ -193,7 +211,10 @@ async function initSeasonList() {
     }
 
     await prepareSeasonData();
-    populateSeasonDropdown();
+
+    if (EngineState.isOnMainPage) {
+        populateSeasonDropdown();
+    }
 }
 
 /**
@@ -207,12 +228,12 @@ async function prepareSeasonData() {
         await loadSeasonData(seasons[0]);
 
         // Load previous winners and run it only once
-        if (!ranOnlyOnce) {
-            ranOnlyOnce = true;
+        if (!EngineState.onDOMRanOnce && EngineState.isOnMainPage) {
+            EngineState.onDOMRanOnce = true;
             await loadPreviousSeasonWinners();
+        } else {
+            saveCurrentStats();
         }
-
-        saveCurrentStats();
     }
 }
 
@@ -349,7 +370,7 @@ function populateSeasonDropdown() {
  * Fetches leaderboard data for a given season from the server, processes it, and renders it.
  * Calculates player rankings via {@link calculatePlaces}
  * Delegates rendering to either {@link displaySimpleLeaderboard} or {@link displayLeaderboard}
- * based on the user's toggle setting. Sets the global {@link isDataReady} flag when complete.
+ * based on the user's toggle setting. Sets the global {@link EngineState.isDataReady} flag when complete.
  * @param {number} season - The season number to load
  * @returns {Promise<void>}
  * @throws {Error} When the fetch request or data processing fails unexpectedly
@@ -363,7 +384,7 @@ async function loadSeasonData(season = seasons[0]) {
     const emptyLeaderboardNotification = document.getElementById('emptyLeaderboardNotification');
     if (emptyLeaderboardNotification) emptyLeaderboardNotification.style.display = 'none';
 
-    isDataReady = false;
+    EngineState.isDataReady = false;
 
     let newLeaderboardData = null;
 
@@ -373,6 +394,7 @@ async function loadSeasonData(season = seasons[0]) {
         if (!data) {
             if (emptyLeaderboardNotification) emptyLeaderboardNotification.style.display = 'block';
             await resetStats();
+
             return;
         }
 
@@ -387,14 +409,17 @@ async function loadSeasonData(season = seasons[0]) {
         // Update everything
         leaderboardData = newLeaderboardData;
         calculatePlaces(leaderboardData);
-        addColorIndicators(leaderboardData);
-        calculateOverallStats(leaderboardData);
 
-        // raid-notifications.js
-        checkRecentPlayers(leaderboardData);
+        if (EngineState.isOnMainPage) {
+            addColorIndicators(leaderboardData);
+            calculateOverallStats(leaderboardData);
 
-        // ui-navigation.js
-        initProfileWatchList(leaderboardData);
+            // raid-notifications.js
+            checkRecentPlayers(leaderboardData);
+
+            // ui-navigation.js
+            initProfileWatchList(leaderboardData);
+        }
     } catch (error) {
         console.error('Error loading season data:', error);
         if (emptyLeaderboardNotification) emptyLeaderboardNotification.style.display = 'block';
@@ -405,36 +430,38 @@ async function loadSeasonData(season = seasons[0]) {
             return;
         }
 
-        const updateMode = AutoUpdater.getUpdateMode();
-        const isAutoUpdateEnabled = AutoUpdater.getStatus();
+        if (EngineState.isOnMainPage) {
+            const updateMode = AutoUpdater.getUpdateMode();
+            const isAutoUpdateEnabled = AutoUpdater.getStatus();
 
-        const shouldSkipUpdate =
-            areLeaderboardsEqual(oldLeaderboardData, newLeaderboardData) &&
-            isAutoUpdateEnabled &&
-            updateMode === 'normal';
+            const shouldSkipUpdate =
+                areLeaderboardsEqual(oldLeaderboardData, newLeaderboardData) &&
+                isAutoUpdateEnabled &&
+                updateMode === 'normal';
 
-        if (shouldSkipUpdate) {
-            console.log(`[loadSeasonData] Skipping update - normal mode, data unchanged`);
-        } else {
-            if (!areLeaderboardsEqual(oldLeaderboardData, newLeaderboardData)) {
-                console.log(`[loadSeasonData] Data changed, updating...`);
-            } else if (updateMode === 'force') {
-                console.log(`[loadSeasonData] Force mode enabled, updating even without changes...`);
-            } else if (updateMode === 'heartbeat') {
-                console.log(`[loadSeasonData] Called from HeartbeatManager, updating...`);
-            } else if (!isAutoUpdateEnabled) {
-                console.log(`[loadSeasonData] Auto-update disabled.`);
-            }
-
-            if (SettingsHelper.get('lbToggle')) {
-                await displaySimpleLeaderboard(leaderboardData);
+            if (shouldSkipUpdate) {
+                console.log(`[loadSeasonData] Skipping update - normal mode, data unchanged`);
             } else {
-                await displayLeaderboard(leaderboardData);
+                if (!areLeaderboardsEqual(oldLeaderboardData, newLeaderboardData)) {
+                    console.log(`[loadSeasonData] Data changed, updating...`);
+                } else if (updateMode === 'force') {
+                    console.log(`[loadSeasonData] Force mode enabled, updating even without changes...`);
+                } else if (updateMode === 'heartbeat') {
+                    console.log(`[loadSeasonData] Called from HeartbeatManager, updating...`);
+                } else if (!isAutoUpdateEnabled) {
+                    console.log(`[loadSeasonData] Auto-update disabled.`);
+                }
+
+                if (SettingsHelper.get('lbToggle')) {
+                    await displaySimpleLeaderboard(leaderboardData);
+                } else {
+                    await displayLeaderboard(leaderboardData);
+                }
+                oldLeaderboardData = [...leaderboardData];
             }
-            oldLeaderboardData = [...leaderboardData];
         }
 
-        isDataReady = true;
+        EngineState.isDataReady = true;
     }
 }
 
@@ -461,6 +488,7 @@ async function displayLeaderboard(data) {
         return true;
     });
 
+    EngineState.isRenderingLeaderboard = true;
     const BATCH_SIZE = 50;
     let currentIndex = 0;
 
@@ -521,7 +549,7 @@ async function displayLeaderboard(data) {
     mainTable.removeEventListener('click', tableClickHandler);
     mainTable.addEventListener('click', tableClickHandler);
 
-    isDataReady = true;
+    EngineState.isRenderingLeaderboard = false;
 }
 
 // Extracted row rendering

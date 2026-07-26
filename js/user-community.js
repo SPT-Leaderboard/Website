@@ -581,7 +581,7 @@ class FriendManager {
  */
 class CommentsManager {
     /**
-     * @param {Object} [config={}] - Configuration options
+     * @param {Object} [config={}]
      * @param {number} [config.commentsPerPage=5] - Number of comments to display per page
      */
     constructor(config = {}) {
@@ -607,33 +607,63 @@ class CommentsManager {
 
         // State
         this.isLoggedIn = isLoggedIn;
+        this.currentUser = global_user_data || null;
+
         this.permaLink = null;
         this.playerId = null;
+
         this.apiEndpoints = {
             sendComment: '/api/network/functions/comment/send_comment.php',
-            loadComments: '/api/data/user-comments/'
+            loadComments: '/api/data/user-comments/',
+            likeComment: '/api/network/functions/comment/like_comment.php',
+            deleteComment: '/api/network/functions/comment/delete_comment.php',
+            replyComment: '/api/network/functions/comment/reply_comment.php'
         };
     }
 
     /**
-     * Initializes the comments system for a specific player profile. Binds DOM elements,
-     * disables the form if not logged in, sets up pagination, and loads existing comments.
-     * @param {string} permaLink - The player's permaLink
-     * @param {string} playerId - The player's unique ID
+     * Initializes the comments system for a specific player profile.
+     * @param {string} permaLink - Target profile permaLink
+     * @param {string} playerId - Target profile profile ID
      */
     init(permaLink, playerId) {
-        this.permaLink = permaLink;
-        this.playerId = playerId;
+        this.targetPermaLink = permaLink;
+        this.targetPlayerId = playerId;
+
+        this.currentUser = window.global_user_data || null;
 
         this.initElements();
+        this.initPaginationControls();
+        this.attachEventListeners();
+        this.loadComments();
 
         if (!this.isLoggedIn) {
             this.disableCommentForm();
         }
+    }
 
-        this.initPaginationControls();
-        this.attachEventListeners();
-        this.loadComments();
+    isAuthor(authorId) {
+        if (!this.isLoggedIn || !this.currentUser) return false;
+
+        return this.currentUser.profileId === authorId;
+    }
+
+    canDeleteComment(comment) {
+        if (!this.isLoggedIn || !this.currentUser) return false;
+
+        if (this.isAuthor(comment.author_id)) return true;
+
+        if (this.currentUser.role > 5) return true;
+
+        return false;
+    }
+
+    getCurrentUserId() {
+        return this.currentUser?.profileId || null;
+    }
+
+    getCurrentPermaLink() {
+        return this.currentUser?.permaLink || null;
     }
 
     initElements() {
@@ -885,52 +915,46 @@ class CommentsManager {
         const originalText = this.elements.commentSubmit.innerHTML;
 
         try {
-            this.elements.commentSubmit.innerHTML = 'Sending...';
-            this.elements.commentSubmit.classList.add('loading');
             this.elements.commentSubmit.disabled = true;
 
-            const response = await apifetch(this.apiEndpoints.sendComment, {
+            const response = await apiFetch(this.apiEndpoints.sendComment, {
                 method: 'POST',
-                cacheBust: false,
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
                 },
-                body: new URLSearchParams({
-                    'comment': this.elements.commentInput.value.trim(),
-                    'receiverId': this.playerId,
-                    'receiverPermaLink': this.permaLink,
-                    'timestamp': Date.now()
-                })
+                body: {
+                    comment: this.elements.commentInput.value.trim(),
+                    receiverId: this.targetPlayerId,
+                    receiverPermaLink: this.targetPermaLink
+                }
             });
 
             if (!response) {
-                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-                throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+                showToast(`There was an error sending your comment.`, 'error');
             }
-
-            const data = response;
 
             this.elements.commentInput.value = '';
 
             // Add comment visually
             this.addCommentToUI({
-                id: data.id,
-                text: data.text,
-                author: data.author,
-                author_id: data.author_id,
-                avatar: data.avatar,
-                date: data.date,
-                timestamp: data.timestamp
+                id: response.id,
+                text: response.text,
+                author: response.author,
+                author_id: response.author_id,
+                avatar: response.avatar,
+                date: response.date,
+                timestamp: response.timestamp,
+                likes: [],
+                replies: [],
+                is_deleted: false
             });
 
             this.showCommentSuccess();
 
         } catch (error) {
-            console.error('Error sending comment:', error);
+            showToast('Error sending comment:', error);
             this.showCommentError(error.message);
         } finally {
-            this.elements.commentSubmit.innerHTML = originalText;
-            this.elements.commentSubmit.classList.remove('loading');
             this.elements.commentSubmit.disabled = false;
         }
     }
@@ -986,7 +1010,7 @@ class CommentsManager {
     }
 
     /**
-     * Temporarily shows an error message on the submit button with a red styling for 3 seconds.
+     * Temporarily shows an error message on the submit button
      * @param {string} errorMessage - The error text to display
      */
     showCommentError(errorMessage) {
@@ -1010,19 +1034,18 @@ class CommentsManager {
      * and renders the first page with pagination controls.
      */
     async loadComments() {
-        if (!this.apiEndpoints.loadComments) {
-            console.error('Load comments endpoint not configured');
-            return;
-        }
-
         try {
-            const response = await apiFetch(`${this.apiEndpoints.loadComments}player_${this.permaLink}.json?t=${Date.now()}`);
+            const url = `${this.apiEndpoints.loadComments}player_${this.targetPermaLink}.json`;
+            const response = await apiFetch(url, {
+                cacheBust: true,
+                showErrorToast: false
+            });
 
             if (!response) {
                 console.error('Failed to load comments');
 
                 this.displayNoComments();
-                
+
                 return;
             }
 
@@ -1056,9 +1079,10 @@ class CommentsManager {
      * @param {string} [comment.avatar] - URL to the author's avatar image (falls back to leaderboard data)
      * @returns {HTMLDivElement} The constructed comment DOM element
      */
-    createCommentElement(comment) {
+    createCommentElement(comment, isReply = false) {
         const commentDiv = document.createElement('div');
-        commentDiv.className = 'comment';
+        commentDiv.className = `comment ${isReply ? 'reply-comment' : ''}`;
+        commentDiv.dataset.commentId = comment.id;
 
         let playerData = null;
         let profileId = null;
@@ -1073,13 +1097,13 @@ class CommentsManager {
             }
         }
 
-        // Cache computed values
         let authorName = comment.author || 'Anonymous';
         let avatarUrl = comment.avatar || 'media/default_avatar.png';
         let hasPlayerData = false;
         let playerRaidCount = 0;
         let isStaff = false;
         let isTrusted = false;
+        let isCasual = false;
 
         if (playerData) {
             hasPlayerData = true;
@@ -1089,20 +1113,62 @@ class CommentsManager {
             playerRaidCount = playerData.networkRaids || playerData.totalRaids || 0;
             isStaff = playerData.dev === true;
             isTrusted = playerData.trusted === true;
+            isCasual = playerData.isCasual === true;
             isOnline = window.heartbeatMonitor?.isOnline?.(profileId) || false;
         }
 
-        const commentDate = new Date(comment.timestamp * 1000);
-        const formattedDate = this.formatDate(commentDate);
+        const isAuthor = this.isAuthor(comment.author_id);
+        const canDelete = this.canDeleteComment(comment);
+        const isDeleted = comment.is_deleted || false;
+        const userProfileId = this.getCurrentUserId();
+        const isLiked = comment.likes && comment.likes.includes(userProfileId);
+        const likeCount = comment.likes ? comment.likes.length : 0;
+
         const decodedText = this.decodeHtmlEntities(comment.text);
         const pmcSideHtml = hasPlayerData ? window.getPlayerSideImageHTML(playerData) : '';
-        const roleBadgesHtml = this.getRoleBadgesHtml({ isStaff, isTrusted });
+        const roleBadgesHtml = this.getRoleBadgesHtml({ isStaff, isTrusted, isCasual });
         const onlineStatusHtml = hasPlayerData ? `
             <div class="online-status-indicator ${isOnline ? 'online' : 'offline'}"
                 title="${isOnline ? 'Currently Online' : 'Last seen recently'}">
                 <span class="status-dot"></span>
             </div>
         ` : '';
+
+        let actionButtonsHtml = `
+            <div class="comment-actions">
+                <button class="action-cm-btn like-btn ${isLiked ? 'liked' : ''}" data-comment-id="${comment.id}">
+                    <i class="fa-solid fa-heart"></i>
+                    <span class="like-count">${likeCount}</span>
+                </button>
+        `;
+
+        if (!isReply && !isDeleted) {
+            actionButtonsHtml += `
+                <button class="action-cm-btn reply-btn" data-comment-id="${comment.id}">
+                    <i class="fa-solid fa-reply"></i>
+                    <span>Reply</span>
+                </button>
+            `;
+        }
+
+        if (canDelete && !isDeleted) {
+            actionButtonsHtml += `
+                <button class="action-cm-btn delete-btn" data-comment-id="${comment.id}">
+                    <i class="fa-solid fa-trash-can"></i>
+                    <span>Delete</span>
+                </button>
+            `;
+        }
+
+        if (isDeleted) {
+            actionButtonsHtml += `
+                <span class="deleted-badge">
+                    <i class="fa-solid fa-trash-can"></i> Deleted
+                </span>
+            `;
+        }
+
+        actionButtonsHtml += `</div>`;
 
         let userInfoHtml = '';
 
@@ -1113,9 +1179,9 @@ class CommentsManager {
                         <a href="javascript:void(0)"
                         onclick="openProfile('${this.escapeHtml(profileId)}', true)"
                         class="user-name-link ${hasPlayerData ? 'verified-user' : ''}">
-                            ${this.escapeHtml(authorName)}
+                            ${isDeleted ? '[Deleted]' : this.escapeHtml(authorName)}
                         </a>
-                        ${hasPlayerData ? `
+                        ${hasPlayerData && !isDeleted ? `
                             <div class="player-stats-comment">
                                 <span class="verified-badge">
                                     <i class="fa-solid fa-user-check"></i>
@@ -1129,7 +1195,7 @@ class CommentsManager {
                             </div>
                         ` : ''}
                     </div>
-                    <div class="comment-date">${formattedDate}</div>
+                    <div class="comment-date">${window.formatLastPlayedRaid(comment.timestamp)}</div>
                 </div>
             `;
         } else {
@@ -1137,11 +1203,11 @@ class CommentsManager {
                 <div class="user-info">
                     <div class="user-name-wrapper">
                         <span class="user-name ${hasPlayerData ? 'verified-user' : 'guest-user'}">
-                            ${this.escapeHtml(authorName)}
+                            ${isDeleted ? '[Deleted]' : this.escapeHtml(authorName)}
                         </span>
-                        ${!hasPlayerData ? '<span class="guest-badge">Guest</span>' : ''}
+                        ${!hasPlayerData && !isDeleted ? '<span class="guest-badge">Guest</span>' : ''}
                     </div>
-                    <div class="comment-date">${formattedDate}</div>
+                    <div class="comment-date">${window.formatLastPlayedRaid(comment.timestamp)}</div>
                 </div>
             `;
         }
@@ -1159,12 +1225,261 @@ class CommentsManager {
                 </div>
                 ${userInfoHtml}
             </div>
-            <div class="comment-content">
-                ${this.escapeHtml(decodedText)}
+            ${!isDeleted ? `
+                <div class="comment-content">
+                    ${this.escapeHtml(decodedText)}
+                </div>
+            ` : `
+                <div class="comment-content deleted-content">
+                    <em>This comment has been deleted</em>
+                </div>
+            `}
+            <div class="comment-footer">
+                ${actionButtonsHtml}
             </div>
         `;
 
+        setTimeout(() => {
+            const likeBtn = commentDiv.querySelector('.like-btn');
+            if (likeBtn) {
+                likeBtn.addEventListener('click', () => this.handleLike(comment.id));
+            }
+
+            const replyBtn = commentDiv.querySelector('.reply-btn');
+            if (replyBtn) {
+                replyBtn.addEventListener('click', () => this.handleReply(comment.id));
+            }
+
+            const deleteBtn = commentDiv.querySelector('.delete-btn');
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', () => this.handleDelete(comment.id));
+            }
+        }, 0);
+
+        if (comment.replies && comment.replies.length > 0 && !isReply) {
+            const repliesContainer = document.createElement('div');
+            repliesContainer.className = 'replies-container';
+
+            comment.replies.forEach(reply => {
+                if (!reply.is_deleted || (reply.is_deleted && this.isAuthor(reply.author_id))) {
+                    const replyElement = this.createCommentElement(reply, true);
+                    repliesContainer.appendChild(replyElement);
+                }
+            });
+
+            commentDiv.appendChild(repliesContainer);
+        }
+
         return commentDiv;
+    }
+
+    async handleLike(commentId) {
+        if (!this.isLoggedIn) {
+            this.showLoginPrompt();
+            return;
+        }
+
+        try {
+            const response = await apiFetch(this.apiEndpoints.likeComment, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: {
+                    comment_id: commentId,
+                    permaLink: this.targetPermaLink,
+                    liker_profile_id: this.getCurrentUserId()
+                }
+            });
+
+            if (!response) {
+                throw new Error('Failed to like comment');
+            }
+
+            if (response.success) {
+                const comment = this.findComment(commentId);
+                if (comment) {
+                    if (response.liked) {
+                        if (!comment.likes) comment.likes = [];
+                        comment.likes.push(this.getCurrentUserId());
+                    } else {
+                        comment.likes = comment.likes.filter(id => id !== this.getCurrentUserId());
+                    }
+
+                    // UI
+                    const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
+                    if (commentElement) {
+                        const likeBtn = commentElement.querySelector('.like-btn');
+                        const likeCount = commentElement.querySelector('.like-count');
+                        if (likeBtn) {
+                            likeBtn.classList.toggle('liked', response.liked);
+                        }
+                        if (likeCount) {
+                            likeCount.textContent = comment.likes.length;
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            showToast('Failed to like comment', 'error');
+        }
+    }
+
+    async handleReply(commentId) {
+        if (!this.isLoggedIn) {
+            this.showLoginPrompt();
+            return;
+        }
+
+        const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
+        if (!commentElement) return;
+
+        // remove existing reply form
+        const existingForm = commentElement.querySelector('.reply-form');
+        if (existingForm) {
+            existingForm.remove();
+            return;
+        }
+
+        const replyForm = document.createElement('div');
+        replyForm.className = 'reply-form';
+        replyForm.innerHTML = `
+            <div class="reply-form-content">
+                <input class="reply-input" placeholder="Write a reply..." rows="2"></input>
+                <div class="reply-form-actions">
+                    <button class="reply-submit-btn">Reply</button>
+                    <button class="reply-cancel-btn">Cancel</button>
+                </div>
+            </div>
+        `;
+
+        const repliesContainer = commentElement.querySelector('.replies-container') || commentElement;
+        repliesContainer.appendChild(replyForm);
+
+        const textarea = replyForm.querySelector('.reply-input');
+        const submitBtn = replyForm.querySelector('.reply-submit-btn');
+        const cancelBtn = replyForm.querySelector('.reply-cancel-btn');
+
+        textarea.focus();
+
+        submitBtn.addEventListener('click', async () => {
+            const text = textarea.value.trim();
+            if (!text) return;
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Sending...';
+
+                const response = await apiFetch(this.apiEndpoints.replyComment, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: {
+                        parent_id: commentId,
+                        receiverPermaLink: this.targetPermaLink,
+                        comment: text,
+                        receiverId: this.targetPlayerId
+                    }
+                });
+
+                if (!response) {
+                    throw new Error('Failed to send reply');
+                }
+
+                if (response.success) {
+                    const parentComment = this.findComment(commentId);
+                    if (parentComment) {
+                        if (!parentComment.replies) parentComment.replies = [];
+                        parentComment.replies.push(response.reply);
+
+                        this.rebuildCommentElement(commentId);
+                    }
+                }
+            } catch (error) {
+                showToast('Failed to send reply', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Reply';
+            }
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            replyForm.remove();
+        });
+
+        textarea.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                submitBtn.click();
+            }
+            if (e.key === 'Escape') {
+                cancelBtn.click();
+            }
+        });
+    }
+
+    async handleDelete(commentId) {
+        if (!this.isLoggedIn) return;
+
+        if (!confirm('Are you sure you want to delete this comment?')) return;
+
+        try {
+            const response = await apiFetch(this.apiEndpoints.deleteComment, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: {
+                    comment_id: commentId,
+                    permaLink: this.targetPermaLink
+                }
+            });
+
+            if (!response) {
+                showToast('Failed to delete comment', 'error');
+            }
+
+            if (response.success) {
+                const comment = this.findComment(commentId);
+                if (comment) {
+                    comment.is_deleted = true;
+                    comment.deleted_at = Date.now();
+                    this.rebuildCommentElement(commentId);
+                }
+            }
+        } catch (error) {
+            showToast('Failed to delete comment', 'error');
+        }
+    }
+
+    findComment(commentId) {
+        for (const comment of this.pagination.allComments) {
+            if (comment.id === commentId) return comment;
+            if (comment.replies) {
+                for (const reply of comment.replies) {
+                    if (reply.id === commentId) return reply;
+                }
+            }
+        }
+        return null;
+    }
+
+    rebuildCommentElement(commentId) {
+        const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
+        if (commentElement) {
+            const comment = this.findComment(commentId);
+            if (comment) {
+                const newElement = this.createCommentElement(comment);
+                commentElement.replaceWith(newElement);
+            }
+        } else {
+            this.loadComments();
+        }
+    }
+
+    isAuthor(authorId) {
+        return this.currentUserId === authorId;
     }
 
     /**
@@ -1180,6 +1495,21 @@ class CommentsManager {
             badges.push(`
                 <span class="role-badge staff-badge" title="Staff Member">
                     <i class="fa-solid fa-user-shield promo-name"></i> Staff
+                </span>
+            `);
+        }
+
+        // Staff badge
+        if (roles.isCasual) {
+            badges.push(`
+                <span class="role-badge casual-badge" title="Casual Player">
+                    <i class="fa-solid fa-star-half"></i> Casual
+                </span>
+            `);
+        } else {
+            badges.push(`
+                <span class="role-badge ranked-badge" title="Ranked Player">
+                    <i class="fa-solid fa-star-half-stroke"></i> Ranked
                 </span>
             `);
         }

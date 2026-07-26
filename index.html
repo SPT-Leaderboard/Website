@@ -14,7 +14,7 @@
         <meta property="og:type" content="website" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-        <link rel="stylesheet" href="https://github.hubspot.com/odometer/themes/odometer-theme-default.css">
+        <link rel="stylesheet" href="media/utility/odometer-theme-default.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Orbitron:wght@400..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -215,16 +215,16 @@
         <div id="infoModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <h2>Ranking System Explained</h2>
+                <h2>Ranking System</h2>
                 <p>The leaderboard uses a weighted scoring system to calculate player performance (later on as Skill Score) across multiple metrics.</p>
                 <h3>1. Leaderboard Terminology</h3>
                 <ul>
                     <li><strong>KDR:</strong> Kill-to-Death Ratio (PMC Kills ÷ Deaths)</li>
                     <li><strong>SR:</strong> Survival Rate</li>
-                    <li><strong>Standing:</strong> Profile standing. Depends on various suspicious detection from the server, or low trust factor.</li>
+                    <li><strong>Standing:</strong> Profile standing. Depends on various suspicious detection from the server, low trust factor or any other suspicious detections.</li>
                 </ul>
                 <h3>2. Season System</h3>
-                <p>Competitive cycles with unique leaderboard:</p>
+                <p>Ranked and Casual profiles, during a season cycles with unique leaderboard:</p>
                 <ul>
                     <li><strong>Duration:</strong> 1-3 months per season</li>
                     <li><strong>Reset:</strong> New season automatically starts when SPT major version releases or SPT Leaderboard mod. Moderation of SPTLB Team reserves a right to change its duration at any time.</li>
@@ -237,7 +237,7 @@
                     <li><strong>Kill/Death Ratio (25%)</strong></li>
                     <li><strong>Survival Rate (20%)</strong></li>
                     <li><strong>Average Life Time (20%)</strong></li>
-                    <li><strong>PMC Raids (25%)</strong></li>
+                    <li><strong>PMC Raids (30%)</strong></li>
                     <li><strong>Best of the Best Bonus (10%):</strong>
                         <ul>
                             <li>Best average kills/damage/loot per raid</li>
@@ -246,13 +246,13 @@
                         </ul>
                     </li>
                 </ul>
-                <p><strong>Leaderboard Calibration & Penalties:</strong></p>
+                <p><strong>Leaderboard Calibration:</strong></p>
                 <ul>
                     <li><strong>Raid Requirements:</strong>
                         <ul>
-                            <li>70% penalty with linear reduction until 50 PMC raids</li>
-                            <li>Full skill score multiplier is unlocked at 100+ PMC raids</li>
-                            <li>Small bonus for players who achieved 200+ PMC raids if Season takes longer than expected</li>
+                            <li>70% penalty with linear reduction until 30 PMC raids</li>
+                            <li>Full skill score multiplier is unlocked at 80+ PMC raids</li>
+                            <li>Small bonus for players who achieved 150+ PMC raids if Season takes longer than expected</li>
                         </ul>
                     </li>
                     <li><strong>Life Time Penalty:</strong> 30% penalty if average life time below 10 minutes</li>
@@ -512,7 +512,7 @@
                 </div>
             </div>
         </footer>
-        <script src="https://github.hubspot.com/odometer/odometer.js"></script>
+        <script src="media/utility/odometer.js"></script>
         <div class="snowflake"></div>
     </body>
 

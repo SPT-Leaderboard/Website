@@ -169,7 +169,3 @@ async function silentAuthCheck() {
         autoLoginAttempts++;
     }
 }
-
-document.addEventListener('DOMContentLoaded', function () {
-    checkAuth();
-});

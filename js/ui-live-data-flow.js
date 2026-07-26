@@ -260,7 +260,3 @@ const AutoUpdater = (() => {
         }
     };
 })();
-
-document.addEventListener('DOMContentLoaded', () => {
-    AutoUpdater.init('autoUpdateToggle', 'timeToUpdate', 'forceUpdateRadio', 'heartbeatRadio', 'normalRadio');
-});

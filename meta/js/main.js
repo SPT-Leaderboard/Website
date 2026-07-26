@@ -5,6 +5,8 @@
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
 let allWeapons = [];
+let allEquipmentData = {};
+let weaponAttachmentsMap = new Map();
 
 const weaponCategories = {
     // Assault carabines
@@ -201,9 +203,6 @@ const weaponCategories = {
 document.addEventListener('DOMContentLoaded', async function () {
     runWeaponBuilder();
 
-    setTimeout(adjustTooltipPosition, 100);
-    window.addEventListener('resize', adjustTooltipPosition);
-
     document.getElementById('weaponSearch').addEventListener('input', filterWeapons);
     document.getElementById('mainCategory').addEventListener('change', function () {
         populateSubCategories();
@@ -225,9 +224,26 @@ async function runWeaponBuilder() {
         timeout: 10000
     }).then(weaponData => {
         if (weaponData !== null) {
-            processWeaponData(weaponData);
-            populateSubCategories();
-            populateCalibers();
+            processWeaponData(weaponData).then(() => {
+                // Use whenever we want to use leaderboardData
+                initEngine();
+
+                waitForDataReady(() => loadEquipmentData());
+            });
+        }
+    });
+}
+
+async function loadEquipmentData() {
+    apiFetch(ApiPaths.equipmentBlobStatsPath, {
+        method: 'GET',
+        cacheBust: true,
+        showErrorToast: true,
+        timeout: 10000
+    }).then(data => {
+        if (data !== null) {
+            allEquipmentData = data;
+            processWeaponDataWithAttachments(data);
         }
     });
 }
@@ -241,6 +257,12 @@ async function processWeaponData(weaponData) {
         const userLevel = userData.level || 0;
         const userName = userData.name || 'Unknown';
         const userMaps = userData.playedMaps || {};
+
+        // store object reference
+        let playerObject = null;
+        if (window.findPlayerByPermaLink) {
+            playerObject = window.findPlayerByPermaLink(userId);
+        }
 
         // Weapons
         if (userData.weapons) {
@@ -259,7 +281,8 @@ async function processWeaponData(weaponData) {
                         levels: [],
                         originalIds: [],
                         maps: {},
-                        players: []
+                        players: [],
+                        playerObjects: []
                     });
                 }
 
@@ -270,16 +293,22 @@ async function processWeaponData(weaponData) {
                 weaponEntry.timesLost += stats.timesLost;
                 weaponEntry.levels.push(userLevel);
 
-                // Add info about player
-                weaponEntry.players.push({
+                // Add info about player with playerObject reference
+                const playerInfo = {
                     id: userId,
                     name: userName,
                     level: userLevel,
                     kills: stats.kills,
                     headshots: stats.headshots,
                     totalShots: stats.totalShots,
-                    timesLost: stats.timesLost
-                });
+                    timesLost: stats.timesLost,
+                    playerObject: playerObject
+                };
+                weaponEntry.players.push(playerInfo);
+
+                if (playerObject) {
+                    weaponEntry.playerObjects.push(playerObject);
+                }
 
                 if (weaponInfo.originalId) {
                     weaponEntry.originalIds.push(weaponInfo.originalId);
@@ -313,20 +342,20 @@ async function processWeaponData(weaponData) {
             .sort((a, b) => b.kills - a.kills)
             .slice(0, 5)
             .map(player => ({
-                name: player.name,
-                level: player.level,
-                kills: player.kills,
-                headshots: player.headshots
+                ...player,
+                playerObject: player.playerObject || null
             }));
 
         // Set weapon categories
         let mainCategory = "Unknown";
         let subCategory = "Unknown";
+        let originalWeaponId = 0;
+
         if (stats.originalIds.length > 0) {
-            const mostCommonOriginalId = stats.originalIds.reduce((a, b, i, arr) =>
+            originalWeaponId = stats.originalIds.reduce((a, b, i, arr) =>
                 (arr.filter(v => v === a).length >= arr.filter(v => v === b).length ? a : b));
 
-            const categoryInfo = weaponCategories[mostCommonOriginalId];
+            const categoryInfo = weaponCategories[originalWeaponId];
             if (categoryInfo) {
                 mainCategory = categoryInfo.main;
                 subCategory = categoryInfo.sub;
@@ -335,17 +364,18 @@ async function processWeaponData(weaponData) {
 
         let caliber = "No caliber";
         if (stats.originalIds.length > 0) {
-            const mostCommonOriginalId = stats.originalIds.reduce((a, b, i, arr) =>
+            originalWeaponId = stats.originalIds.reduce((a, b, i, arr) =>
                 (arr.filter(v => v === a).length >= arr.filter(v => v === b).length ? a : b));
 
-            const categoryInfo = weaponCategories[mostCommonOriginalId];
+            const categoryInfo = weaponCategories[originalWeaponId];
             if (categoryInfo) {
                 caliber = categoryInfo.caliber || "No caliber";
             }
         }
 
         return {
-            name: name.replace(/[★☆]/g, ""),
+            name: cleanWeaponNameFunc(name),
+            originalId: originalWeaponId,
             mainCategory,
             subCategory,
             caliber,
@@ -368,134 +398,14 @@ async function processWeaponData(weaponData) {
                 ? (stats.kills / (stats.timesLost + stats.kills) * 100).toFixed(2)
                 : 0,    // NOT a survival rate but is meant for total times lost 
             topMaps, // Top 3 maps for each weapon
-            topPlayers
+            topPlayers,
+            allPlayers: stats.players,
+            playerObjects: stats.playerObjects
         };
     });
 
     // Sort by kills
     allWeapons.sort((a, b) => b.kills - a.kills);
-
-    // Get max kills
-    const maxKills = Math.max(...allWeapons.map(w => w.kills));
-    const maxPlayerCount = Math.max(...allWeapons.map(w => w.playerCount));
-
-    // Tags
-    allWeapons.forEach(weapon => {
-        weapon.tags = [];
-        weapon.mapTags = [];
-
-        // Weapon tags
-        if (weapon.avgLevel < 15) weapon.tags.push({ text: 'Fresh Wipe Meta', type: 'level' });
-        if (weapon.avgLevel > 30) weapon.tags.push({ text: 'Veteran Choice', type: 'level' });
-        if (weapon.kills === maxKills) weapon.tags.push({ text: 'Most Kills', type: 'kills' });
-        if (weapon.kills > 1000 && weapon.avgLevel > 25) weapon.tags.push({ text: 'Hot', type: 'kills' });
-        if (weapon.headshotsPercent > 60 && weapon.headshotsPercent !== 100) weapon.tags.push({ text: 'Headhunter', type: 'accuracy' });
-        if (weapon.playerCount === maxPlayerCount) weapon.tags.push({ text: 'Popular', type: 'popularity' });
-
-        // Map tags
-        if (weapon.topMaps.includes('factory4_day')) weapon.mapTags.push({ text: 'Factory Dominator', type: 'factory' });
-        if (weapon.topMaps.includes('factory4_night')) weapon.mapTags.push({ text: 'Cultist Hunter', type: 'factory' });
-        if (weapon.topMaps.includes('Woods')) weapon.mapTags.push({ text: 'Woods Stalker', type: 'woods' });
-        if (weapon.topMaps.includes('bigmap')) weapon.mapTags.push({ text: 'Export Specialist', type: 'customs' });
-        if (weapon.topMaps.includes('RezervBase')) weapon.mapTags.push({ text: 'Military Prototype', type: 'reserve' });
-        if (weapon.topMaps.includes('Shoreline')) weapon.mapTags.push({ text: 'Shoreline Monster', type: 'shoreline' });
-        if (weapon.topMaps.includes('Lighthouse')) weapon.mapTags.push({ text: 'Light Keeper', type: 'lighthouse' });
-        if (weapon.topMaps.includes('Sandbox')) weapon.mapTags.push({ text: 'Ground Zero Dominator', type: 'reserve' });
-        if (weapon.topMaps.includes('Sandbox_high')) weapon.mapTags.push({ text: 'Ground Zero Hero', type: 'woods' });
-        if (weapon.topMaps.includes('Interchange')) weapon.mapTags.push({ text: 'Inter-raptor', type: 'factory' });
-        if (weapon.topMaps.includes('TarkovStreets')) weapon.mapTags.push({ text: 'Streets Ruler', type: 'lighthouse' });
-        if (weapon.topMaps.includes('laboratory')) weapon.mapTags.push({ text: 'Labs Demolisher', type: 'lighthouse' });
-    });
-
-    // Render cards
-    const container = document.getElementById('weaponsContainer');
-    container.innerHTML = '';
-
-    allWeapons.forEach((weapon, index) => {
-        const card = document.createElement('div');
-        card.classList.add('weapon-card');
-
-        const cleanWeaponName = cleanWeaponNameFunc(weapon.name);
-
-        const weaponTagsHTML = weapon.tags.map(tag =>
-            `<span class="weapon-tag weapon-tag--${tag.type}">${tag.text}</span>`
-        ).join('');
-
-        const mapTagsHTML = weapon.mapTags.map(tag =>
-            `<span class="map-tag map-tag--${tag.type}">${tag.text}</span>`
-        ).join('');
-
-        // Create player card
-        const playersHTML = weapon.topPlayers.map((player) => {
-            const headshotsPercent = player.kills > 0
-                ? ((player.headshots / player.kills) * 100).toFixed(1)
-                : 0;
-
-            return `
-                    <li class="player-item">
-                        <span class="player-wpnp-name">${player.name}</span>
-                        <span class="player-stats">
-                            <span class="player-level">${player.level} LVL</span>
-                            <span class="player-kills">${player.kills} K</span>
-                            <span class="player-headshots">${headshotsPercent}% HS</span>
-                        </span>
-                    </li>
-                `;
-        }).join('');
-
-        card.innerHTML = `
-            <div class="weapon-header">
-                <div class="weapon-name-wrapper">
-                    <img src="../media/weapon_icons/${cleanWeaponName}.webp" alt="${cleanWeaponName}" class="weapon-icon" onerror="this.src='../media/default_weapon_icon.png';" />
-                    <div class="weapon-name-container">
-                        <span class="weapon-caliber">${weapon.caliber}</span>
-                        <span class="weapon-name">${cleanWeaponName}</span>
-                        <div class="weapon-tags">${weaponTagsHTML}</div>
-                    </div>
-                </div>
-                <span class="weapon-rank">#${index + 1}</span>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-label">Kills</div>
-                    <div class="stat-value">${weapon.kills.toLocaleString('en-US')} <span class="stat-extra">(${weapon.killsPercent}%)</span></div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Headshot Rate</div>
-                    <div class="stat-value">${weapon.headshotsPercent}%</div>
-                    <div class="progress-container">
-                        <div class="progress-bar" style="width: ${weapon.headshotsPercent}%;"></div>
-                    </div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">AVG Shots to kill</div>
-                    <div class="stat-value">${weapon.avgShots}</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Used by (Lvl avg)</div>
-                    <div class="stat-value">${weapon.playerCount.toLocaleString('en-US')} <span class="stat-extra">(${weapon.avgLevel})</span></div>
-                </div>
-            </div>
-            <div class="map-tags-container">
-                <div class="map-tags">${mapTagsHTML}</div>
-            </div>
-
-            <div class="player-tooltip">
-                <div class="player-tooltip-title">Top 5 Players</div>
-                <ul class="player-list">
-                    ${playersHTML}
-                </ul>
-            </div>
-            `;
-
-        // Add weapon categories to a card
-        card.dataset.mainCategory = weapon.mainCategory;
-        card.dataset.subCategory = weapon.subCategory;
-        card.dataset.caliber = weapon.caliber;
-
-        container.appendChild(card);
-    });
 
     return true;
 }
@@ -608,38 +518,634 @@ function populateCalibers() {
     caliberSelect.disabled = filteredCalibers.size === 0;
 }
 
-// Using this so tooltip doesn't go off screen
-function adjustTooltipPosition() {
-    const cards = document.querySelectorAll('.weapon-card');
+// Modal works
+function openWeaponModal(weaponId) {
+    const weapon = allWeapons[weaponId];
+    if (!weapon) {
+        console.error('Weapon not found:', weaponId);
+        return;
+    }
 
-    cards.forEach(card => {
-        const tooltip = card.querySelector('.player-tooltip');
-        if (!tooltip) return;
+    let modal = document.getElementById('weaponModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'weaponModal';
+        modal.className = 'weapon-modal-overlay';
+        document.body.appendChild(modal);
+    }
 
-        card.addEventListener('mouseenter', function () {
-            const cardRect = card.getBoundingClientRect();
-            const tooltipRect = tooltip.getBoundingClientRect();
-            const viewportWidth = window.innerWidth;
+    const cleanWeaponName = cleanWeaponNameFunc(weapon.name);
 
-            // If tooltip goes right off screen
-            if (cardRect.right + tooltipRect.width + 20 > viewportWidth) {
-                tooltip.style.left = 'auto';
-                tooltip.style.right = 'calc(100% + 10px)';
-                tooltip.style.transform = 'translateX(20px)';
-                card.querySelector('.player-tooltip::before').style.cssText = `
-                        left: auto;
-                        right: -6px;
-                        transform: rotate(-45deg);
-                        border-left: none;
-                        border-right: 1px solid var(--primary-color);
-                        border-bottom: 1px solid var(--primary-color);
-                    `;
-            } else {
-                // Reset arrow
-                tooltip.style.left = 'calc(100% + 30px)';
-                tooltip.style.right = 'auto';
-                tooltip.style.transform = 'translateX(-20px)';
+    // Sort players by kills
+    const sortedPlayers = [...(weapon.allPlayers || [])].sort((a, b) => (b.kills || 0) - (a.kills || 0));
+
+    let playerDisplayName = null;
+
+    const playersHTML = sortedPlayers.slice(0, 10).map((player, index) => {
+        const hsPercent = player.kills > 0 ? ((player.headshots / player.kills) * 100).toFixed(1) : 0;
+        const medal = `${index + 1}.`;
+
+        let playerDisplayName = player.name || 'Unknown';
+
+        if (typeof renderUsernameHTML === 'function') {
+            if (player.playerObject) {
+                playerDisplayName = renderUsernameHTML(player.playerObject);
             }
+
+            else if (player.id && typeof findPlayerByPermaLink === 'function') {
+                const fullPlayer = findPlayerByPermaLink(player.id);
+                if (fullPlayer) {
+                    playerDisplayName = renderUsernameHTML(fullPlayer);
+                }
+            }
+        }
+
+        return `
+            <div class="modal-player-item">
+                <span class="modal-player-rank">${medal}</span>
+                <span class="modal-player-name">${playerDisplayName}</span>
+                <span class="modal-player-level">Lvl ${player.level || 0}</span>
+                <span class="modal-player-stats">
+                    ${player.kills || 0} kills | ${hsPercent}% HS
+                </span>
+            </div>
+        `;
+    }).join('');
+
+    // Attachments data from weapon
+    const attachmentsHTML = weapon.groupedAttachments ?
+        Object.entries(weapon.groupedAttachments).map(([category, items]) => {
+            if (!items || items.length === 0) return '';
+
+            const categoryNames = {
+                scope: 'Scopes & Optics',
+                magazine: 'Magazines',
+                barrel: 'Barrel & Muzzle',
+                stock: 'Stocks',
+                grip: 'Grips',
+                ammo: 'Ammunition',
+                tactical: 'Tactical',
+                other: 'Other'
+            };
+
+            const categoryName = categoryNames[category] || category;
+
+            return `
+            <div class="modal-attachment-category" data-category="${category}">
+                <div class="modal-category-title">${categoryName} <span class="modal-category-count">(${items.length})</span></div>
+                ${items.map((item, index) => {
+                const itemId = item.template_id || item.id;
+                const iconUrl = itemId ? `https://assets.tarkov.dev/${itemId}-512.webp` : null;
+                const shortName = cleanWeaponNameFunc(item.showrtName) || cleanWeaponNameFunc(item.name) || 'Unknown';
+                const fullName = cleanWeaponNameFunc(item.name) || '';
+
+                return `
+                        <div class="modal-attachment-item" style="--item-index: ${index};" title="${fullName}">
+                            <div class="modal-attachment-icon-wrapper">
+                                ${iconUrl ? `
+                                    <img src="${iconUrl}" 
+                                         alt="${shortName}" 
+                                         class="modal-attachment-icon"
+                                         onerror="this.style.display='none';"
+                                         loading="lazy">
+                                ` : `
+                                <div class="modal-attachment-fallback">
+                                    <span>${shortName.charAt(4).toUpperCase()}</span>
+                                </div>`}
+
+                            </div>
+                            <div class="modal-attachment-info">
+                                <span class="modal-attachment-name">${shortName}</span>
+                                ${fullName && fullName !== shortName ? `<span class="modal-attachment-fullname">${fullName}</span>` : ''}
+                            </div>
+                            <div class="modal-attachment-stats">
+                                <span class="modal-attachment-rate">${(item.pickRate || 0).toFixed(1)}%</span>
+                                <div class="modal-attachment-bar">
+                                    <div class="modal-attachment-fill" style="width: ${Math.min(item.pickRate || 0, 100)}%;"></div>
+                                </div>
+                                <span class="modal-attachment-count">${item.count || 0}x</span>
+                            </div>
+                        </div>
+                    `;
+            }).join('')}
+            </div>
+        `;
+        }).join('') :
+        '<div class="modal-empty">No attachments data available</div>';
+
+    // Loadouts preview
+    const loadoutsHTML = (weapon.loadouts || []).slice(0, 5).map((loadout, idx) => {
+        const attachments = loadout.attachments || [];
+        return `
+            <div class="modal-loadout-item">
+                <div class="modal-loadout-header">
+                    <span class="modal-loadout-number">Loadout #${idx + 1}</span>
+                    <span class="modal-loadout-time">${loadout.timestamp ? new Date(loadout.timestamp * 1000).toLocaleDateString() : 'Unknown date'}</span>
+                </div>
+                <div class="modal-loadout-attachments">
+                    ${attachments.slice(0, 15).map(att => `
+                        <span class="modal-loadout-tag">${att.name || 'Unknown'}</span>
+                    `).join('')}
+                    ${attachments.length > 15 ? `<span class="modal-loadout-tag">+${attachments.length - 15} more</span>` : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    modal.innerHTML = `
+        <div class="modal-content">
+            <button class="weapon-modal-close" onclick="closeWeaponModal()">×</button>
+            
+            <div class="weapon-modal-header">
+                <img src="../media/weapon_icons/${cleanWeaponName}.webp" alt="${cleanWeaponName}" class="modal-weapon-icon" onerror="this.src='../media/default_weapon_icon.png';" />
+                <div class="modal-weapon-info">
+                    <span class="modal-weapon-caliber">${weapon.caliber || 'Unknown'}</span>
+                    <h2 class="modal-weapon-name">${cleanWeaponName}</h2>
+                    <div class="modal-weapon-stats">
+                        <span>${weapon.loadoutCount || 0} loadouts</span>
+                        <span>${weapon.attachments?.length || 0} unique attachments</span>
+                        <span>${weapon.loadoutCount > 0 ? ((weapon.attachments?.length || 0) / weapon.loadoutCount).toFixed(1) : '0'} avg mods</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="weapon-modal-tabs">
+                <button class="weapon-modal-tab active" data-tab="attachments">Attachments Pick Rate</button>
+                <button class="weapon-modal-tab" data-tab="players">Top Players</button>
+                <button class="weapon-modal-tab" data-tab="loadouts">Loadouts</button>
+            </div>
+
+            <div class="modal-tab-content active" id="tab-attachments">
+                <div class="modal-attachments-container">
+                    ${attachmentsHTML || '<div class="modal-empty">We have no recordings available :(</div>'}
+                </div>
+            </div>
+
+            <div class="modal-tab-content" id="tab-players">
+                <div class="modal-players-list">
+                    ${playersHTML || '<div class="modal-empty">No player data available :(</div>'}
+                </div>
+            </div>
+
+            <div class="modal-tab-content" id="tab-loadouts">
+                <div class="modal-loadouts-container">
+                    ${loadoutsHTML || '<div class="modal-empty">No loadout data available :(</div>'}
+                    ${(weapon.loadouts?.length || 0) > 5 ? `<div class="modal-loadout-more">+ ${weapon.loadouts.length - 5} more loadouts</div>` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Tab switching
+    const tabs = modal.querySelectorAll('.weapon-modal-tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            modal.querySelectorAll('.modal-tab-content').forEach(c => c.classList.remove('active'));
+            tab.classList.add('active');
+            const tabId = tab.dataset.tab;
+            const content = modal.querySelector(`#tab-${tabId}`);
+            if (content) content.classList.add('active');
         });
     });
+
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeWeaponModal() {
+    const modal = document.getElementById('weaponModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+}
+
+// Close modal on overlay click
+document.addEventListener('click', (e) => {
+    const modal = document.getElementById('weaponModal');
+    if (modal && e.target === modal) {
+        closeWeaponModal();
+    }
+});
+
+// Close modal on ESC key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeWeaponModal();
+    }
+});
+
+document.addEventListener('click', (e) => {
+    const showMoreBtn = e.target.closest('.modal-show-more');
+    if (showMoreBtn) {
+        const categoryContainer = showMoreBtn.closest('.modal-attachment-category');
+        if (!categoryContainer) return;
+
+        const hiddenItems = categoryContainer.querySelectorAll('.modal-attachment-item.hidden');
+
+        hiddenItems.forEach((item, index) => {
+            setTimeout(() => {
+                item.classList.remove('hidden');
+                item.style.animation = 'attachmentSlideIn 0.3s ease forwards';
+                item.style.animationDelay = `${index * 0.05}s`;
+            }, index * 50);
+        });
+
+        showMoreBtn.style.display = 'none';
+    }
+});
+
+// Helpers
+async function processWeaponDataWithAttachments(equipmentData) {
+    const weaponMap = new Map();
+
+    allWeapons.forEach(weapon => {
+        weaponMap.set(weapon.originalId || weapon.templateId, {
+            ...weapon,
+            attachments: [],
+            loadouts: [],
+            groupedAttachments: {},
+            topAttachments: []
+        });
+    });
+
+    // Process each equipment history entry
+    for (const profileId in equipmentData) {
+        const entries = equipmentData[profileId];
+        if (!entries || !Array.isArray(entries)) continue;
+
+        for (const entry of entries) {
+            const equipment = entry.equipment;
+            if (!equipment) continue;
+
+            // Process First Primary Weapon
+            if (equipment.FirstPrimaryWeapon && equipment.FirstPrimaryWeapon.length > 0) {
+                const weaponAttachments = equipment.FirstPrimaryWeapon;
+                const weaponType = weaponAttachments[0];
+
+                if (!weaponType || !weaponType.template_id) continue;
+
+                const weaponTemplateId = weaponType.template_id;
+
+                let weaponEntry = weaponMap.get(weaponTemplateId);
+
+                if (!weaponEntry) {
+                    for (const [key, value] of weaponMap) {
+                        if (value.originalId === weaponTemplateId) {
+                            weaponEntry = value;
+                            break;
+                        }
+                    }
+                }
+
+                if (weaponEntry) {
+                    // Store attachments (skip the weapon itself)
+                    const attachments = weaponAttachments.slice(1);
+                    if (!weaponEntry.attachments) weaponEntry.attachments = [];
+                    weaponEntry.attachments.push(...attachments);
+
+                    // Store loadout with unique attachment IDs
+                    if (!weaponEntry.loadouts) weaponEntry.loadouts = [];
+                    const loadoutAttachments = attachments.map(att => ({
+                        ...att,
+                        uniqueId: att.template_id || att.id
+                    }));
+
+                    weaponEntry.loadouts.push({
+                        attachments: loadoutAttachments,
+                        timestamp: entry.timestamp,
+                        profileId: profileId,
+                        uniqueAttachmentIds: new Set(loadoutAttachments.map(a => a.uniqueId))
+                    });
+
+                    // Increment loadout count
+                    weaponEntry.loadoutCount = (weaponEntry.loadoutCount || 0) + 1;
+                }
+            }
+        }
+    }
+
+    allWeapons = Array.from(weaponMap.values()).map(weapon => {
+        // Calculate top attachments
+        const attachmentCounts = {};
+        const attachmentDetails = {};
+
+        if (weapon.attachments && weapon.attachments.length > 0) {
+            weapon.attachments.forEach(att => {
+                const id = att.template_id || att.id;
+                if (!attachmentCounts[id]) {
+                    attachmentCounts[id] = 0;
+                    attachmentDetails[id] = {
+                        name: att.name || att.shortName || 'Unknown',
+                        shortName: att.shortName || '',
+                        template_id: id,
+                        amount: att.amount || 1
+                    };
+                }
+                attachmentCounts[id] += (att.amount || 1);
+            });
+        }
+
+        // Sort attachments by count
+        const loadoutCount = weapon.loadoutCount || 1;
+        const sortedAttachments = Object.entries(attachmentCounts)
+            .sort((a, b) => b[1] - a[1])
+            .map(([id, count]) => ({
+                ...attachmentDetails[id],
+                count: count,
+                pickRate: loadoutCount > 0 ? (count / loadoutCount) * 100 : 0
+            }));
+
+        // Group attachments by type
+        const groupedAttachments = groupAttachmentsByType(sortedAttachments);
+
+        return {
+            ...weapon,
+            attachments: sortedAttachments,
+            groupedAttachments: groupedAttachments,
+            topAttachments: sortedAttachments.slice(0, 5),
+            loadoutCount: loadoutCount
+        };
+    });
+
+    renderWeaponCards(allWeapons);
+
+    return true;
+}
+
+function renderWeaponCards(weapons) {
+    const container = document.getElementById('weaponsContainer');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    // Calculate max values for tags
+    const maxPlayerCount = Math.max(...weapons.map(w => w.playerCount || 0));
+    const maxKills = Math.max(...weapons.map(w => w.kills || 0));
+
+    weapons.forEach((weapon, index) => {
+        const card = document.createElement('div');
+        card.classList.add('weapon-card');
+        card.dataset.weaponId = index;
+
+        const cleanWeaponName = cleanWeaponNameFunc(weapon.name);
+
+        // Generate tags
+        const tags = [];
+        const killPercentile = (weapon.kills || 0) / (maxKills || 1);
+        const playerPercentile = (weapon.playerCount || 0) / (maxPlayerCount || 1);
+
+        if (weapon.avgLevel < 20) tags.push({ text: 'Early Game', type: 'level', rarity: 'common' });
+        if (weapon.avgLevel >= 20 && weapon.avgLevel < 35) tags.push({ text: 'Mid-Wipe', type: 'level', rarity: 'common' });
+        if (weapon.avgLevel >= 35 && weapon.avgLevel < 50) tags.push({ text: 'Endgame', type: 'level', rarity: 'epic' });
+        if (weapon.avgLevel >= 50) tags.push({ text: 'Veteran', type: 'level', rarity: 'legendary' });
+
+        if (playerPercentile > 0.9) tags.push({ text: 'Community Favorite', type: 'popularity', rarity: 'legendary' });
+        if (playerPercentile > 0.7 && playerPercentile <= 0.9) tags.push({ text: 'Popular Choice', type: 'popularity', rarity: 'epic' });
+
+        if ((weapon.playerCount || 0) > 50 && weapon.avgLevel < 15) {
+            tags.push({ text: 'Noob Stomper', type: 'kills', rarity: 'rare' });
+        }
+
+        if ((weapon.loadoutCount || 0) > 10 && (weapon.attachments?.length || 0) > 10) {
+            tags.push({ text: 'Highly Modded', type: 'efficiency', rarity: 'epic' });
+        }
+
+        const tagRarityStyles = {
+            common: '',
+            rare: 'weapon-tag--rare',
+            epic: 'weapon-tag--epic',
+            legendary: 'weapon-tag--legendary'
+        };
+
+        const weaponTagsHTML = tags.map(tag => {
+            const rarityClass = tagRarityStyles[tag.rarity] || '';
+            return `<span class="weapon-tag weapon-tag--${tag.type} ${rarityClass}">${tag.text}</span>`;
+        }).join('');
+
+        // Map tags
+        const mapTagsHTML = (weapon.topMaps || []).map(mapName => {
+            const mapType = getMapType(mapName);
+            return `<span class="map-tag map-tag--${mapType}">${formatMapName(mapName)}</span>`;
+        }).join('');
+
+        // Top players preview
+        const topPlayersPreview = (weapon.topPlayers || []).slice(0, 3).map(player => {
+            const hsPercent = player.kills > 0 ? ((player.headshots / player.kills) * 100).toFixed(1) : 0;
+            return `
+                <div class="player-preview-item">
+                    <span class="player-preview-name">${player.name || 'Unknown'}</span>
+                    <span class="player-preview-stats">${player.kills || 0}K | ${hsPercent || 0}% HS</span>
+                </div>
+            `;
+        }).join('');
+
+        // Attachment count display
+        const attachmentCount = weapon.attachments?.length || 0;
+        const loadoutCount = weapon.loadoutCount || 0;
+        const avgMods = loadoutCount > 0 ? (attachmentCount / loadoutCount).toFixed(1) : '0';
+
+        card.innerHTML = `
+            <div class="weapon-header">
+                <div class="weapon-name-wrapper">
+                    <span class="weapon-caliber">${weapon.caliber || 'Unknown'}</span>
+                    <img src="../media/weapon_icons/${cleanWeaponName}.webp" alt="${cleanWeaponName}" class="weapon-icon" onerror="this.src='../media/default_weapon_icon.png';" />
+                    <div class="weapon-name-container">
+                        <span class="weapon-name">${cleanWeaponName}</span>
+                        <div class="weapon-tags">${weaponTagsHTML}</div>
+                    </div>
+                </div>
+                <span class="weapon-rank">#${index + 1}</span>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-label">Kills</div>
+                    <div class="stat-value">${(weapon.kills || 0).toLocaleString('en-US')} <span class="stat-extra">(${weapon.killsPercent || 0}%)</span></div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Headshot Rate</div>
+                    <div class="stat-value">${weapon.headshotsPercent || 0}%</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: ${Math.min(weapon.headshotsPercent || 0, 100)}%;"></div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">AVG Shots to kill</div>
+                    <div class="stat-value">${weapon.avgShots}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Used by (Lvl avg)</div>
+                    <div class="stat-value">${weapon.playerCount.toLocaleString('en-US')} <span class="stat-extra">(${weapon.avgLevel})</span></div>
+                </div>
+            </div>
+
+            <div class="map-tags-container">
+                <div class="map-tags">${mapTagsHTML || '<span class="map-tag" style="color: var(--text-tertiary);">No map data</span>'}</div>
+            </div>
+
+            <div class="card-footer">
+                <div class="player-preview">
+                    ${topPlayersPreview || '<div class="player-preview-item" style="color: var(--text-tertiary);">No player data</div>'}
+                </div>
+                <button class="analytics-btn" data-weapon-id="${index}">
+                    <span class="btn-text">See More Analytics</span>
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        // Add weapon categories to a card
+        card.dataset.mainCategory = weapon.mainCategory || 'Unknown';
+        card.dataset.subCategory = weapon.subCategory || 'Unknown';
+        card.dataset.caliber = weapon.caliber || 'Unknown';
+
+        container.appendChild(card);
+
+        // click listener for analytics
+        const analyticsBtn = card.querySelector('.analytics-btn');
+        if (analyticsBtn) {
+            analyticsBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const weaponId = parseInt(e.currentTarget.dataset.weaponId);
+                openWeaponModal(weaponId);
+            });
+        }
+    });
+}
+
+/**
+ * Groups weapon attachments into categories based on name keywords.
+ * @param {Array<Object>} attachments - Array of attachment items with `name` properties
+ * @returns {{scope: Array, magazine: Array, barrel: Array, stock: Array, grip: Array, ammo: Array, tactical: Array, other: Array}} Grouped attachments
+ */
+function groupAttachmentsByType(attachments) {
+    const groups = {
+        scope: [],
+        magazine: [],
+        barrel: [],
+        stock: [],
+        grip: [],
+        ammo: [],
+        tactical: [],
+        other: []
+    };
+
+    attachments.forEach(item => {
+        const name = (item.name || '').toLowerCase();
+        const shortName = (item.shortName || '').toLowerCase();
+        const fullName = name + ' ' + shortName;
+
+        if (fullName.includes('riflescope') ||
+            fullName.includes('scope') ||
+            fullName.includes('optic') ||
+            fullName.includes('holographic') ||
+            fullName.includes('reflex sight') ||
+            fullName.includes('vudu') ||
+            fullName.includes('trijicon') ||
+            fullName.includes('leupold') ||
+            fullName.includes('eotech') ||
+            fullName.includes('aimpoint')) {
+            groups.scope.push(item);
+        }
+        else if (fullName.includes('magazine')) {
+            groups.magazine.push(item);
+        }
+        else if (fullName.includes('tactical') ||
+            fullName.includes('flashlight') ||
+            fullName.includes('laser') ||
+            fullName.includes('klesch') ||
+            fullName.includes('x400') ||
+            fullName.includes('light')) {
+            groups.tactical.push(item);
+        }
+        else if (fullName.includes('barrel') ||
+            fullName.includes('receiver') ||
+            fullName.includes('bolt release') ||
+            fullName.includes('flash hider') ||
+            fullName.includes('silencer') ||
+            fullName.includes('suppressor') ||
+            fullName.includes('muzzle') ||
+            fullName.includes('brake') ||
+            fullName.includes('compensator') ||
+            fullName.includes('warcomp')) {
+            groups.barrel.push(item);
+        }
+        else if (fullName.includes('stock') ||
+            fullName.includes('buttstock') ||
+            fullName.includes('recoil pad')) {
+            groups.stock.push(item);
+        }
+        else if (fullName.includes('pistol grip') ||
+            fullName.includes('foregrip') ||
+            fullName.includes('handguard') ||
+            fullName.includes('forend') ||
+            fullName.includes('vert') ||
+            fullName.includes('se-5')) {
+            groups.grip.push(item);
+        }
+        else if (fullName.includes('mm') ||
+            fullName.includes('x') ||
+            fullName.includes('ammo') ||
+            fullName.includes('cartridge') ||
+            fullName.includes('round') ||
+            fullName.includes('m855') ||
+            fullName.includes('m995') ||
+            fullName.includes('m80') ||
+            fullName.includes('m62') ||
+            fullName.includes('lapua') ||
+            fullName.includes('magnum')) {
+            groups.ammo.push(item);
+        } else {
+            groups.other.push(item);
+        }
+    });
+
+    // Sort each group by pick rate (count / total)
+    for (const key in groups) {
+        groups[key].sort((a, b) => (b.count || 0) - (a.count || 0));
+    }
+
+    return groups;
+}
+
+function getMapType(mapName) {
+    if (!mapName) return 'factory';
+    const mapTypes = {
+        'factory4_day': 'factory',
+        'factory4_night': 'factory',
+        'woods': 'woods',
+        'bigmap': 'customs',
+        'rezervbase': 'reserve',
+        'shoreline': 'shoreline',
+        'lighthouse': 'lighthouse',
+        'sandbox': 'reserve',
+        'sandbox_high': 'woods',
+        'interchange': 'factory',
+        'tarkovstreets': 'lighthouse',
+        'laboratory': 'lighthouse'
+    };
+    return mapTypes[mapName.toLowerCase()] || 'factory';
+}
+
+function formatMapName(mapName) {
+    if (!mapName) return 'Unknown';
+    const mapNames = {
+        'factory4_day': 'Factory Dominator',
+        'factory4_night': 'Cultist Hunter',
+        'woods': 'Woods Stalker',
+        'bigmap': 'Export Specialist',
+        'rezervbase': 'Military Prototype',
+        'shoreline': 'Shoreline Monster',
+        'lighthouse': 'Light Keeper',
+        'sandbox': 'Ground Zero Dominator',
+        'sandbox_high': 'Ground Zero Hero',
+        'interchange': 'Inter-raptor',
+        'tarkovstreets': 'Streets Ruler',
+        'laboratory': 'Labs Demon'
+    };
+    return mapNames[mapName.toLowerCase()] || mapName;
 }

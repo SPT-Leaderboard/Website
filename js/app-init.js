@@ -11,8 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorContainer = document.getElementById('error-container');
     const errorMessage = document.getElementById('error-message');
     const retryButton = document.getElementById('retry-button');
-
-    // Resources to load
     const resources = [
         { name: "Connectivity with API", url: "/api/main/online.json", weight: 25 },
         { name: "Core Logic", url: "js/app-core.js", weight: 25 },
@@ -32,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filteredResources = isLocalhost ? resources.slice(2) : resources;
     let loadedResources = 0;
     let totalWeight = filteredResources.reduce((sum, resource) => sum + resource.weight, 0);
-    
+
     // Function to load a resource
     function loadResource(resource, index) {
         return new Promise((resolve, reject) => {
@@ -65,10 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const elapsedTime = Date.now() - startTime;
                 const remainingTime = Math.max(0, minLoadTime - elapsedTime);
 
-                setTimeout(() => {
+                setTimeout(async () => {
                     loadedResources += resource.weight;
-                    updateProgress();
-
+                    await updateProgress();
                     resolve();
                 }, remainingTime);
             }).catch(error => {
@@ -77,21 +74,35 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function updateProgress() {
+    async function updateProgress() {
         const progress = Math.round((loadedResources / totalWeight) * 100);
 
         if (progress < 25) {
             animateStatusText("Loading system core...");
+            await initEngine();
         } else if (progress < 60) {
-            animateStatusText("Loading essentials...");
+            animateStatusText("Checking User...");
+            await checkAuth();
         } else if (progress < 75) {
-            animateStatusText("Initializing...");
+            animateStatusText("Starting Leaderboard Engine...");
+
+            // UI Live data flow
+            AutoUpdater.init('autoUpdateToggle', 'timeToUpdate', 'forceUpdateRadio', 'heartbeatRadio', 'normalRadio');
+
+            // system-timer
+            runTimer();
+
+            // user-search.js
+            initSearch();
+
+            // Show welcome screen (app-welcome-screen.js)
+            initWelcomeScreen();
         } else if (progress < 90) {
             animateStatusText("Finalizing...");
         } else if (progress < 100) {
             animateStatusText("Almost ready...");
         } else {
-            animateStatusText("Awaiting data from API...");
+            animateStatusText("Waiting for an API response...");
             waitForDataReady(() => completeLoading());
         }
     }
@@ -106,9 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
         animateStatusText("Welcome to SPTLB!");
 
         loader.classList.add('complete');
-
-        // Show welcome screen (app-welcome-screen.js)
-        initWelcomeScreen();
 
         setTimeout(() => {
             loader.classList.add('hidden');

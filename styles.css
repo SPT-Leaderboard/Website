@@ -2126,30 +2126,23 @@ td:nth-child(4) {
 }
 
 .modal-content {
-    background: linear-gradient(135deg,
-            rgba(10, 25, 47, 0.98),
-            rgba(15, 30, 55, 0.98));
+    background: linear-gradient(145deg, #1f2b3d, #0f172a);
     margin: 5% auto;
-    padding: 30px;
-    border: 1px solid var(--accent-teal);
+    padding: 35px;
+    border: 2px solid rgba(255, 255, 255, 0.10);
     border-radius: 20px;
     width: 90%;
     max-width: 700px;
     max-height: 75vh;
-    overflow-y: auto;
+    overflow-y: scroll;
     color: var(--text-light);
-    backdrop-filter: blur(20px) saturate(180%);
-    box-shadow:
-        0 25px 50px rgba(0, 0, 0, 0.5),
-        0 0 0 1px rgba(100, 255, 218, 0.1),
-        inset 0 1px 1px rgba(255, 255, 255, 0.1);
     position: relative;
-    transform: translateY(-50px) scale(0.9);
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: translateY(-30px);
+    transition: all 0.5s ease-in-out;
 }
 
 .modal.active .modal-content {
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
 }
 
 .modal-content h2 {
@@ -2185,10 +2178,6 @@ td:nth-child(4) {
     color: var(--accent-blue);
     background: rgba(100, 255, 218, 0.1);
     transform: rotate(90deg);
-}
-
-.modal-content {
-    animation: fadeIn 0.3s ease;
 }
 
 .modal img {
@@ -6528,42 +6517,10 @@ input[type="checkbox"]:checked:hover {
     font-size: 0.9em;
 }
 
-.pmc-faction {
-    background: rgba(132, 210, 255, 0.2);
-    color: #84d2ff;
-    border: 1px solid rgba(132, 210, 255, 0.3);
-}
-
-.scav-faction {
-    background: rgba(255, 158, 100, 0.2);
-    color: #ff9e64;
-    border: 1px solid rgba(255, 158, 100, 0.3);
-}
-
-.map-duration {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: #a0a0c0;
-    font-size: 0.9em;
-}
-
 .raid-score-section {
     display: flex;
     gap: 15px;
     align-items: center;
-}
-
-.lc-points {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    background: rgba(245, 158, 11, 0.2);
-    color: #f59e0b;
-    border-radius: 8px;
-    font-weight: 600;
-    border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
 .badge-success {
@@ -9762,9 +9719,17 @@ input[type="checkbox"]:checked:hover {
 }
 
 @keyframes likeAnimation {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .reply-btn:hover {
@@ -10389,29 +10354,20 @@ input[type="checkbox"]:checked:hover {
 }
 
 .progress-dot {
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 14px;
-    height: 6px;
+    width: 100%;
+    height: 100%;
     background: var(--accent-teal);
-    box-shadow: 0 0 10px rgba(100, 255, 218, 0.5),
-        0 0 20px rgba(100, 255, 218, 0.3),
-        0 0 30px rgba(100, 255, 218, 0.1);
-    animation: dotBounce 1s ease-in-out infinite;
+    border-radius: 2px;
+    animation: loadingProgress 0.6s ease-in-out infinite;
 }
 
-@keyframes dotBounce {
+@keyframes loadingProgress {
     0% {
-        left: 0%;
-    }
-
-    50% {
-        left: 100%;
+        transform: translateX(-100%);
     }
 
     100% {
-        left: 0%;
+        transform: translateX(100%);
     }
 }
 
@@ -10575,11 +10531,11 @@ input[type="checkbox"]:checked:hover {
     z-index: 1;
     padding: 35px 40px;
     transform: translateY(25px);
-    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.3s ease-in-out;
 }
 
 .team-modal-container.active .team-modal-content {
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
 }
 
 .team-modal-close {

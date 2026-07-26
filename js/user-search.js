@@ -130,7 +130,7 @@ function searchPlayers() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+function initSearch() {
     const searchInput = document.getElementById('playerSearch');
     const clearButton = document.getElementById('clearSearch');
     const searchTypeButtons = document.querySelectorAll('.search-type-btn');
@@ -205,4 +205,5 @@ document.addEventListener('DOMContentLoaded', function () {
         AutoUpdater.init();
         AppState.setAutoUpdate(AutoUpdater.getStatus());
     }
-});
+
+}

@@ -130,8 +130,6 @@
     outline: none;
     border-color: var(--primary);
     background: rgba(15, 23, 42, 0.8);
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1),
-        var(--glow-primary);
 }
 
 .filters {
@@ -183,11 +181,9 @@
     border: 1px solid rgba(255, 255, 255, 0.05);
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    cursor: pointer;
 }
 
 .item-card:hover {
-    transform: scale(1.01);
     border-color: rgba(139, 92, 246, 0.3);
 }
 
@@ -214,8 +210,6 @@
 
 .item-card:hover .item-image {
     border-color: var(--primary);
-    transform: scale(1.1);
-    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
 }
 
 .item-info {
@@ -364,7 +358,6 @@
 
 .page-btn:hover:not(:disabled) {
     border-color: var(--primary);
-    box-shadow: var(--glow-primary);
 }
 
 .page-btn:disabled {
@@ -398,7 +391,6 @@
 .page-number:hover {
     color: var(--text-white);
     border-color: rgba(139, 92, 246, 0.3);
-    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2);
 }
 
 .page-number:hover::before {

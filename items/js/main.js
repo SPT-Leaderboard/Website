@@ -209,7 +209,7 @@ class ItemsRenderer {
             'Aluminum insert',
             `Accountant's notes`,
             'Aramid insert',
-            "DO NOT USE"
+            "!!!DO_NOT_USE!!!AI AXMC 7.62x51mm bolt assembly"
         ]);
 
         if (badItems.has(item.name)) {
