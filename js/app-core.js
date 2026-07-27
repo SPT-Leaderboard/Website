@@ -94,9 +94,8 @@ async function initEngine() {
         console.warn('Leaderboard Engine running out of the main page, using different approach...')
         EngineState.isOnMainPage = false;
     }
-
+    
     await initSeasonList();
-    initNavbar();
 
     // Load previous global stats from localStorage if can
     if (EngineState.isOnMainPage) {
