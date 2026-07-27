@@ -47,7 +47,7 @@ const PrevStats = {
 
 // Paths
 const ApiPaths = {
-    seasonPath: '/api/data/seasons/season',
+    seasonPath: '../api/data/seasons/season',
     seasonLocalPath: 'fallbacks/',
     currentSeason: '/api/data/seasons/season10.json',
     seasonPathEnd: '.json',
@@ -62,14 +62,15 @@ const ApiPaths = {
     pmcPfpsPath: '/api/data/pmc_avatars/',
     globalCounters: '/api/data/shared/global_counters.json',
     achievementsDataPath: `achievements/js/compiledAchData.json`,
-    achievementsCustomDataPath: `achievements/js/compiledAchSEData.json`
+    achievementsCustomDataPath: `achievements/js/compiledAchSEData.json`,
+    equipmentBlobStatsPath = `../api/data/pmc_equipment_blob/equipment_history_blob.json`
 };
 
 // Paths for local files if debug is on
 if (isLocalhost) {
     ApiPaths.equipmentBlobStatsPath = `../fallbacks/equipment_history_blob.json`;
     ApiPaths.pmcPfpsPath = `../fallbacks/pmc_avatars/`;
-    ApiPaths.currentSeason = `/fallbacks/season10.json`;
+    ApiPaths.currentSeason = `/fallbacks/season11.json`;
     ApiPaths.seasonPath = `../fallbacks/season`;
     ApiPaths.profileAppearencePath = `http://localhost:3000/api/network/functions/get_player_customization.php`;
     ApiPaths.weaponStatsPath = `../fallbacks/shared/weapon_counters.json?t=${Date.now()}`;
