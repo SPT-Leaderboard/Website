@@ -1071,6 +1071,7 @@ function groupAttachmentsByType(attachments) {
             fullName.includes('muzzle') ||
             fullName.includes('brake') ||
             fullName.includes('compensator') ||
+            fullName.includes('handguard') ||
             fullName.includes('warcomp')) {
             groups.barrel.push(item);
         }
@@ -1080,11 +1081,7 @@ function groupAttachmentsByType(attachments) {
             groups.stock.push(item);
         }
         else if (fullName.includes('pistol grip') ||
-            fullName.includes('foregrip') ||
-            fullName.includes('handguard') ||
-            fullName.includes('forend') ||
-            fullName.includes('vert') ||
-            fullName.includes('se-5')) {
+            fullName.includes('foregrip')) {
             groups.grip.push(item);
         }
         else if (fullName.includes('mm') ||

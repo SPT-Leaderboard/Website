@@ -63,7 +63,7 @@ const ApiPaths = {
     globalCounters: '/api/data/shared/global_counters.json',
     achievementsDataPath: `achievements/js/compiledAchData.json`,
     achievementsCustomDataPath: `achievements/js/compiledAchSEData.json`,
-    equipmentBlobStatsPath = `../api/data/pmc_equipment_blob/equipment_history_blob.json`
+    equipmentBlobStatsPath: `../api/data/pmc_equipment_blob/equipment_history_blob.json`
 };
 
 // Paths for local files if debug is on
