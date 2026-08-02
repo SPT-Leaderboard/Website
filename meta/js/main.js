@@ -217,24 +217,33 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 async function runWeaponBuilder() {
-    apiFetch(ApiPaths.weaponStatsPath, {
-        method: 'GET',
-        cacheBust: true,
-        showErrorToast: true,
-        timeout: 10000
-    }).then(weaponData => {
-        if (weaponData !== null) {
-            processWeaponData(weaponData).then(() => {
-                // Use whenever we want to use leaderboardData
-                initEngine();
+    let weaponLoader = document.getElementById('weapon-loader-text');
 
-                waitForDataReady(() => loadEquipmentData());
-            });
+    try {
+        weaponLoader.innerHTML = `Getting weapons...`;
+        
+        const weaponData = await apiFetch(ApiPaths.weaponStatsPath, {
+            method: 'GET',
+            cacheBust: true,
+            showErrorToast: true,
+            timeout: 10000
+        });
+
+        if (weaponData !== null) {
+            await processWeaponData(weaponData);
+
+            weaponLoader.innerHTML = `Awaiting Leaderboard Engine...`;
+            await initEngine();
+
+            weaponLoader.innerHTML = `Waiting for API...`;
+            await waitForDataReady(() => loadEquipmentData(weaponLoader));
         }
-    });
+    } catch (error) {
+        console.error("Error in runWeaponBuilder:", error);
+    }
 }
 
-async function loadEquipmentData() {
+async function loadEquipmentData(weaponLoader) {
     apiFetch(ApiPaths.equipmentBlobStatsPath, {
         method: 'GET',
         cacheBust: true,
@@ -243,6 +252,8 @@ async function loadEquipmentData() {
     }).then(data => {
         if (data !== null) {
             allEquipmentData = data;
+
+            weaponLoader.innerHTML = `Awaiting attachments data...`;
             processWeaponDataWithAttachments(data);
         }
     });
@@ -1051,6 +1062,14 @@ function groupAttachmentsByType(attachments) {
             fullName.includes('aimpoint')) {
             groups.scope.push(item);
         }
+        else if (fullName.includes('mm') ||
+            fullName.includes('ammo') ||
+            fullName.includes('cartridge') ||
+            fullName.includes('round') ||
+            fullName.includes('lapua') ||
+            fullName.includes('magnum')) {
+            groups.ammo.push(item);
+        }
         else if (fullName.includes('magazine')) {
             groups.magazine.push(item);
         }
@@ -1071,8 +1090,7 @@ function groupAttachmentsByType(attachments) {
             fullName.includes('muzzle') ||
             fullName.includes('brake') ||
             fullName.includes('compensator') ||
-            fullName.includes('handguard') ||
-            fullName.includes('warcomp')) {
+            fullName.includes('handguard')) {
             groups.barrel.push(item);
         }
         else if (fullName.includes('stock') ||
@@ -1084,19 +1102,7 @@ function groupAttachmentsByType(attachments) {
             fullName.includes('foregrip')) {
             groups.grip.push(item);
         }
-        else if (fullName.includes('mm') ||
-            fullName.includes('x') ||
-            fullName.includes('ammo') ||
-            fullName.includes('cartridge') ||
-            fullName.includes('round') ||
-            fullName.includes('m855') ||
-            fullName.includes('m995') ||
-            fullName.includes('m80') ||
-            fullName.includes('m62') ||
-            fullName.includes('lapua') ||
-            fullName.includes('magnum')) {
-            groups.ammo.push(item);
-        } else {
+         else {
             groups.other.push(item);
         }
     });
