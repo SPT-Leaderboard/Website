@@ -270,7 +270,7 @@ function calculateSeasonStats(players) {
 }
 
 function getCurrentSeason() {
-    return seasons?.[0] || '1';
+    return seasons[0] || '11';
 }
 
 function getTopPlayers(players, count = 3) {

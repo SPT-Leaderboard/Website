@@ -48,7 +48,7 @@ const PrevStats = {
 // Paths
 const ApiPaths = {
     seasonPath: '../api/data/seasons/season',
-    seasonLocalPath: 'fallbacks/',
+    seasonLocalPath: '../fallbacks/',
     currentSeason: '/api/data/seasons/season11.json',
     seasonPathEnd: '.json',
     lastRaidsPath: '/api/data/player_raids/',
@@ -70,7 +70,7 @@ const ApiPaths = {
 if (isLocalhost) {
     ApiPaths.equipmentBlobStatsPath = `../fallbacks/equipment_history_blob.json`;
     ApiPaths.pmcPfpsPath = `../fallbacks/pmc_avatars/`;
-    ApiPaths.currentSeason = `/fallbacks/season11.json`;
+    ApiPaths.currentSeason = `../fallbacks/season11.json`;
     ApiPaths.seasonPath = `../fallbacks/season`;
     ApiPaths.profileAppearencePath = `http://localhost:3000/api/network/functions/get_player_customization.php`;
     ApiPaths.weaponStatsPath = `../fallbacks/shared/weapon_counters.json?t=${Date.now()}`;
@@ -120,6 +120,22 @@ async function initEngine() {
         await loadAchievementsData();
     }
 }
+
+async function initSeasonList() {
+    if (!isLocalhost) {
+            leaderboardConfig = await apiFetch('api/network/functions/get_lb_config.php', { method: 'GET', showErrorToast: true, cacheBust: false });
+            seasons = parseSeasonConfig(leaderboardConfig);
+    } else {
+        await initAllSeasons();
+    }
+
+    await prepareSeasonData();
+
+    if (EngineState.isOnMainPage) {
+        populateSeasonDropdown();
+    }
+}
+
 /**
  * Checks if a season JSON file exists on the server by making a fetch request.
  * @param {number} seasonNumber - The season number to check (e.g. 4, 5, 6)
@@ -156,10 +172,6 @@ async function initAllSeasons() {
     } finally {
         // Sort from newest to oldest
         seasons.sort((a, b) => b - a);
-
-        await prepareSeasonData();
-
-        if (EngineState.isOnMainPage) populateSeasonDropdown();
     }
 }
 
@@ -195,21 +207,6 @@ function parseSeasonConfig(config) {
     }
 
     return Array.from(seasonSet).sort((a, b) => b - a);
-}
-
-async function initSeasonList() {
-    if (isLocalhost) {
-            leaderboardConfig = await apiFetch('api/network/functions/get_lb_config.php', { method: 'GET', showErrorToast: true, cacheBust: false });
-            seasons = parseSeasonConfig(leaderboardConfig);
-    } else {
-        await initAllSeasons();
-    }
-
-    await prepareSeasonData();
-
-    if (EngineState.isOnMainPage) {
-        populateSeasonDropdown();
-    }
 }
 
 /**
@@ -822,7 +819,7 @@ async function displaySimpleLeaderboard(data) {
         }
     });
 
-    isDataReady = true;
+    EngineState.isDataReady = true;
 }
 
 /**

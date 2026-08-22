@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
             await initEngine();
         } else if (progress < 60) {
             animateStatusText("Checking User...");
-            await checkAuth();
+            checkAuth();
         } else if (progress < 75) {
             animateStatusText("Starting Leaderboard Engine...");
 
