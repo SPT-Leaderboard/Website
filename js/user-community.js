@@ -772,7 +772,6 @@ class CommentsManager {
         const endIndex = startIndex + this.pagination.commentsPerPage;
         const pageComments = this.pagination.allComments.slice(startIndex, endIndex);
 
-        // Clear existing comments efficiently
         while (this.elements.commentsList.firstChild) {
             this.elements.commentsList.removeChild(this.elements.commentsList.firstChild);
         }
@@ -782,7 +781,7 @@ class CommentsManager {
         if (pageComments.length === 0) {
             this.displayNoComments();
         } else {
-            // batch DOM insert
+            // just DOM insert
             const fragment = document.createDocumentFragment();
             pageComments.forEach(comment => {
                 const commentElement = this.createCommentElement(comment);
@@ -961,7 +960,6 @@ class CommentsManager {
 
     /**
      * Prepends a new comment to the internal comments array and re-renders the first page.
-     * Applies a brief highlight animation to the newly added comment element.
      * @param {Object} comment - The comment data object returned from the server
      * @param {string} comment.id - Comment ID
      * @param {string} comment.text - Comment body text
@@ -1030,8 +1028,7 @@ class CommentsManager {
     }
 
     /**
-     * Fetches comments from the server JSON endpoint, sorts them by timestamp descending,
-     * and renders the first page with pagination controls.
+     * Fetches comments from the server JSON and renders the first page with pagination controls.
      */
     async loadComments() {
         try {

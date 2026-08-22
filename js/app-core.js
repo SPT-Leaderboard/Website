@@ -49,7 +49,7 @@ const PrevStats = {
 const ApiPaths = {
     seasonPath: '../api/data/seasons/season',
     seasonLocalPath: 'fallbacks/',
-    currentSeason: '/api/data/seasons/season10.json',
+    currentSeason: '/api/data/seasons/season11.json',
     seasonPathEnd: '.json',
     lastRaidsPath: '/api/data/player_raids/',
     profileAppearencePath: '/api/network/functions/get_player_customization.php',
@@ -198,16 +198,11 @@ function parseSeasonConfig(config) {
 }
 
 async function initSeasonList() {
-    leaderboardConfig = await apiFetch('api/network/functions/get_lb_config.php', { method: 'GET', showErrorToast: true, cacheBust: false });
-
-    if (leaderboardConfig) {
-        seasons = parseSeasonConfig(leaderboardConfig);
-    }
-
-    // fallback to legacy discovery
-    if (!Array.isArray(seasons) || seasons.length === 0) {
+    if (isLocalhost) {
+            leaderboardConfig = await apiFetch('api/network/functions/get_lb_config.php', { method: 'GET', showErrorToast: true, cacheBust: false });
+            seasons = parseSeasonConfig(leaderboardConfig);
+    } else {
         await initAllSeasons();
-        return;
     }
 
     await prepareSeasonData();
