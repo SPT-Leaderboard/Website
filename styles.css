@@ -8646,6 +8646,7 @@ input[type="checkbox"]:checked:hover {
     height: 100vh;
     padding: 40px;
     gap: 40px;
+    backdrop-filter: blur(20px);
 }
 
 .season-stats-column {
