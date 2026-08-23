@@ -78,13 +78,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const progress = Math.round((loadedResources / totalWeight) * 100);
 
         if (progress < 25) {
-            animateStatusText("Loading system core...");
+            animateStatusText("Starting Leaderboard Engine...");
             await initEngine();
         } else if (progress < 60) {
             animateStatusText("Checking User...");
             checkAuth();
         } else if (progress < 75) {
-            animateStatusText("Starting Leaderboard Engine...");
+            animateStatusText("Warming up...");
 
             // UI Live data flow
             AutoUpdater.init('autoUpdateToggle', 'timeToUpdate', 'forceUpdateRadio', 'heartbeatRadio', 'normalRadio');

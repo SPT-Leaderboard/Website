@@ -29,19 +29,19 @@ async function updateServerStatus() {
     statusElement.className = 'live-data-label server-status';
     statusElement.removeAttribute('data-tooltip');
 
-    if (status.outage) {
+    if (status?.outage) {
         statusElement.textContent = 'API Degradation';
         statusElement.classList.add('server-maintenance');
         if (status.workText) {
             statusElement.setAttribute('data-tooltip', status.workText);
         }
-    } else if (status.underWork) {
+    } else if (status?.underWork) {
         statusElement.textContent = 'API is Updating';
         statusElement.classList.add('server-maintenance');
-        if (status.workText) {
+        if (status?.workText) {
             statusElement.setAttribute('data-tooltip', status.workText);
         }
-    } else if (status.online) {
+    } else if (status?.online) {
         statusElement.textContent = 'API is Online';
         statusElement.classList.add('server-online');
     } else {

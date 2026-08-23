@@ -97,6 +97,7 @@ async function initEngine() {
     }
     
     await initSeasonList();
+    console.log('Initialized Season List');
 
     // Load previous global stats from localStorage if can
     if (EngineState.isOnMainPage) {
@@ -126,6 +127,7 @@ async function initSeasonList() {
             leaderboardConfig = await apiFetch('api/network/functions/get_lb_config.php', { method: 'GET', showErrorToast: true, cacheBust: false });
             seasons = parseSeasonConfig(leaderboardConfig);
     } else {
+        console.log('Localhost - switching to initAllSeason() legacy function');
         await initAllSeasons();
     }
 
