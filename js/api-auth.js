@@ -5,10 +5,18 @@
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
 let autoLoginAttempts = 0;
+let authCheckInProgress = false;
+let authCheckCompleted = false;
 const MAX_AUTO_LOGIN_ATTEMPTS = 1;
 window.global_user_data = [];
 
 async function checkAuth() {
+    if (authCheckInProgress || authCheckCompleted) {
+        return;
+    }
+    
+    authCheckInProgress = true;
+    
     try {
         updateAuthStatus('checking', 'Checking...');
 
@@ -39,7 +47,6 @@ async function checkAuth() {
             updateAuthStatus('authenticated', data.username, data.profilePicture, data.unreadCount || 0);
             isLoggedIn = true;
             autoLoginAttempts = 0;
-
             
             window.global_user_data = data;
 
@@ -50,14 +57,6 @@ async function checkAuth() {
             // unauth
             updateAuthStatus('not-authenticated', 'Unauthorized', 0);
             isLoggedIn = false;
-
-            if (autoLoginAttempts < MAX_AUTO_LOGIN_ATTEMPTS) {
-                autoLoginAttempts++;
-                // console.log(`Auto-login attempt ${autoLoginAttempts}/${MAX_AUTO_LOGIN_ATTEMPTS}`);
-
-                // retry
-                setTimeout(() => checkAuth(), 2000);
-            }
         }
 
     } catch (error) {
@@ -71,9 +70,9 @@ async function checkAuth() {
 
         isLoggedIn = false;
         autoLoginAttempts++;
-
-        // retry
-        setTimeout(() => checkAuth(), 5000);
+    } finally {
+        authCheckInProgress = false;
+        authCheckCompleted = true;
     }
 }
 
@@ -134,6 +133,10 @@ function updateAuthStatus(status, message, profilePicture, notifications = 0) {
 }
 
 async function silentAuthCheck() {
+    if (authCheckCompleted) {
+        return;
+    }
+    
     try {
         const response = await apiFetch('/api/network/login/check_auth.php', {
             method: 'GET',
@@ -157,12 +160,6 @@ async function silentAuthCheck() {
                     notificationElement.style.display = 'none';
                 }
             }
-        } else {
-            const authResponse = await apiFetch('/api/network/login/check_auth.php', {
-                method: 'GET',
-                cacheBust: false,
-                credentials: 'include'
-            });
         }
     } catch (error) {
         console.error('Silent auth check failed:', error);
