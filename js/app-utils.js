@@ -37,7 +37,9 @@ function getPrettyMapName(entry) {
         "TarkovStreets": "Streets of Tarkov",
         "Sandbox": "Ground Zero - Low",
         "Sandbox_high": "Ground Zero - High",
-        "labyrinth": "The Labyrinth"
+        "labyrinth": "The Labyrinth",
+        "boreas": "Icebreaker",
+        "terminal": "Terminal"
     };
 
     return mapAliases[entry] || entry; // returning raw if not found
