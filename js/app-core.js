@@ -95,8 +95,7 @@ async function initEngine() {
         EngineState.isOnMainPage = false;
     }
 
-    await initSeasonList();
-    console.log('Initialized Season List');
+    await prepareSeasonData();
 
     // Load previous global stats from localStorage if can
     if (EngineState.isOnMainPage) {
@@ -121,17 +120,17 @@ async function initEngine() {
     }
 }
 
-async function initSeasonList() {
-    // if (!isLocalhost) {
-    //         leaderboardConfig = await apiFetch('api/network/functions/get_lb_config.php', { method: 'GET', showErrorToast: true, cacheBust: false });
-    //         seasons = parseSeasonConfig(leaderboardConfig);
-    // } else {
-    //     console.log('Localhost - switching to initAllSeason() legacy function');
-    //     await initAllSeasons();
-    // }
+// async function initSeasonList() {
+//     // if (!isLocalhost) {
+//     //         leaderboardConfig = await apiFetch('api/network/functions/get_lb_config.php', { method: 'GET', showErrorToast: true, cacheBust: false });
+//     //         seasons = parseSeasonConfig(leaderboardConfig);
+//     // } else {
+//     //     console.log('Localhost - switching to initAllSeason() legacy function');
+//     //     await initAllSeasons();
+//     // }
 
-    await prepareSeasonData();
-}
+//     await prepareSeasonData();
+// }
 
 /**
  * Loads the latest season's leaderboard data and performs one-time initialization tasks.
@@ -158,7 +157,6 @@ async function prepareSeasonData() {
  * @returns {Promise<void>} Doesn't return any value
  */
 async function loadPreviousSeasonWinners() {
-    if (seasons.length < 2) return;
 
     const previousSeason = CURRENT_SEASON - 1;
 

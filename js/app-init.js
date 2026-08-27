@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filteredResources = isLocalhost ? resources.slice(2) : resources;
     let loadedResources = 0;
     let totalWeight = filteredResources.reduce((sum, resource) => sum + resource.weight, 0);
+    let welcomeScreenInitialized = false;
 
     // Function to load a resource
     function loadResource(resource, index) {
@@ -77,6 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
     async function updateProgress() {
         const progress = Math.round((loadedResources / totalWeight) * 100);
 
+        if (progress >= 75 && !welcomeScreenInitialized) {
+            welcomeScreenInitialized = true;
+            initWelcomeScreen();
+        }
+
         if (progress < 25) {
             animateStatusText("Starting Leaderboard Engine...");
             await initEngine();
@@ -95,8 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // user-search.js
             initSearch();
 
-            // Show welcome screen (app-welcome-screen.js)
-            initWelcomeScreen();
         } else if (progress < 90) {
             animateStatusText("Finalizing...");
         } else if (progress < 100) {

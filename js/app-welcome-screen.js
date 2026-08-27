@@ -11,7 +11,8 @@ const phrases = [
     'connection with players worldwide.',
     'welcome for everyone.',
     'tracking of your progress.',
-    'glory of yours.'
+    'glory of yours.',
+    'legends born here.'
 ]
 
 async function initWelcomeScreen() {

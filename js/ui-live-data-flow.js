@@ -40,7 +40,7 @@ const AutoUpdater = (() => {
             if (timeLeft <= 0) {
                 isUpdating = true;
                 try {
-                    waitForDataReady(() => loadSeasonData(seasons[0]))
+                    waitForDataReady(() => loadSeasonData(CURRENT_SEASON))
                 } finally {
                     timeLeft = updateInterval;
                     isUpdating = false;
@@ -252,7 +252,7 @@ const AutoUpdater = (() => {
                     timeLeft = updateInterval;
                 }
 
-                await loadSeasonData(seasons[0]);
+                await loadSeasonData(CURRENT_SEASON);
             } finally {
                 isUpdating = false;
                 updateTimeDisplay();

@@ -2478,7 +2478,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 /* Announcement */
-/* Even video */
+/* Event video */
 .announcement-container {
     position: relative;
     width: 100%;
@@ -2497,6 +2497,16 @@ input[type="checkbox"]:checked:hover {
     height: 100%;
     z-index: 0;
     overflow: hidden;
+}
+
+.video-background-event img {
+    transform: translate(-20%, -15%);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+    filter: blur(4px) brightness(0.5);
 }
 
 .video-background-event video {
@@ -2593,21 +2603,6 @@ input[type="checkbox"]:checked:hover {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.announcement-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, #3b3f9e, #6d28d9);
-    color: white;
-    padding: 8px 20px;
-    border-radius: 30px;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(4px);
-}
-
 .announcement-title {
     font-weight: 800;
     font-size: 1.8rem;
@@ -2625,8 +2620,6 @@ input[type="checkbox"]:checked:hover {
 .announcement-text {
     font-size: 1rem;
     line-height: 1.7;
-    opacity: 0.98;
-    margin-bottom: 25px;
     font-weight: 400;
     color: rgba(255, 255, 255, 0.95);
     padding: 5px 0;
@@ -2664,9 +2657,6 @@ input[type="checkbox"]:checked:hover {
     font-size: 0.95rem;
     color: rgba(255, 255, 255, 0.7);
     text-align: right;
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: column;
     align-items: flex-end;
