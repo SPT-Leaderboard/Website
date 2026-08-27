@@ -5,10 +5,9 @@
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
 let leaderboardData = []; // For keeping current season data
-let oldLeaderboardData = [];
-let seasons = []; // Storing available seasons
+let oldLeaderboardData = []; // Storing available seasons
 let leaderboardConfig = []; // Storing main config off API
-let seasonNumber = 10;
+const CURRENT_SEASON = 11;
 
 // DYNAMIC: Indicates when user is logged in Network or not
 let isLoggedIn = false;
@@ -92,10 +91,10 @@ async function initEngine() {
         console.warn('Leaderboard Engine running on the main page, all tasks remain default config...')
         EngineState.isOnMainPage = true;
     } else {
-        console.warn('Leaderboard Engine running out of the main page, using different approach...')
+        console.warn('Leaderboard Engine running out of the main page, using alternative approach...')
         EngineState.isOnMainPage = false;
     }
-    
+
     await initSeasonList();
     console.log('Initialized Season List');
 
@@ -123,92 +122,15 @@ async function initEngine() {
 }
 
 async function initSeasonList() {
-    if (!isLocalhost) {
-            leaderboardConfig = await apiFetch('api/network/functions/get_lb_config.php', { method: 'GET', showErrorToast: true, cacheBust: false });
-            seasons = parseSeasonConfig(leaderboardConfig);
-    } else {
-        console.log('Localhost - switching to initAllSeason() legacy function');
-        await initAllSeasons();
-    }
+    // if (!isLocalhost) {
+    //         leaderboardConfig = await apiFetch('api/network/functions/get_lb_config.php', { method: 'GET', showErrorToast: true, cacheBust: false });
+    //         seasons = parseSeasonConfig(leaderboardConfig);
+    // } else {
+    //     console.log('Localhost - switching to initAllSeason() legacy function');
+    //     await initAllSeasons();
+    // }
 
     await prepareSeasonData();
-
-    if (EngineState.isOnMainPage) {
-        populateSeasonDropdown();
-    }
-}
-
-/**
- * Checks if a season JSON file exists on the server by making a fetch request.
- * @param {number} seasonNumber - The season number to check (e.g. 4, 5, 6)
- * @returns {Promise<boolean>} Resolves to true if the season file exists and returns valid data, false otherwise
- * @deprecated See initSeasonList()
- */
-async function checkSeasonExists(seasonNumber) {
-    const serverUrl = `${ApiPaths.seasonPath}${seasonNumber}${ApiPaths.seasonPathEnd}`;
-    const data = await apiFetch(serverUrl, { showErrorToast: false, cacheBust: false });
-
-    return data !== null;
-}
-
-/**
- * Discovers all available seasons by probing the server.
- * Increments the season number and calls {@link checkSeasonExists} until a missing season is found.
- * @returns {Promise<void>}
- * @throws {Error} When an unexpected network or parsing error occurs during season probing
- * @deprecated See initSeasonList()
- */
-async function initAllSeasons() {
-    seasons = [];
-
-    try {
-        while (true) {
-            const exists = await checkSeasonExists(seasonNumber);
-            if (!exists) break;
-
-            seasons.push(seasonNumber);
-            seasonNumber++;
-        }
-    } catch (error) {
-        console.error('Error checking number of seasons:', error);
-    } finally {
-        // Sort from newest to oldest
-        seasons.sort((a, b) => b - a);
-    }
-}
-
-function parseSeasonConfig(config) {
-    if (!config || typeof config !== 'object') {
-        return [];
-    }
-
-    const seasonSet = new Set();
-
-    if (Array.isArray(config.seasons_range) && config.seasons_range.length > 0) {
-        config.seasons_range.forEach((entry) => {
-            const season = Number(entry);
-            if (!Number.isNaN(season) && season > 0) {
-                seasonSet.add(season);
-            }
-        });
-    }
-
-    const minSeason = Number(config.min_season ?? config.minSeason ?? 1);
-    const maxSeason = Number(config.max_season ?? config.maxSeason ?? config.current_season ?? config.currentSeason ?? config.total_seasons ?? config.totalSeasons);
-
-    if (!Number.isNaN(minSeason) && !Number.isNaN(maxSeason) && maxSeason >= minSeason) {
-        for (let season = minSeason; season <= maxSeason; season++) {
-            seasonSet.add(season);
-        }
-    }
-
-    if (seasonSet.size === 0 && !Number.isNaN(maxSeason) && maxSeason > 0) {
-        for (let season = 1; season <= maxSeason; season++) {
-            seasonSet.add(season);
-        }
-    }
-
-    return Array.from(seasonSet).sort((a, b) => b - a);
 }
 
 /**
@@ -218,16 +140,14 @@ function parseSeasonConfig(config) {
  */
 async function prepareSeasonData() {
     // Load data if we found any seasons
-    if (seasons.length > 0) {
-        await loadSeasonData(seasons[0]);
+    await loadSeasonData(CURRENT_SEASON);
 
-        // Load previous winners and run it only once
-        if (!EngineState.onDOMRanOnce && EngineState.isOnMainPage) {
-            EngineState.onDOMRanOnce = true;
-            await loadPreviousSeasonWinners();
-        } else {
-            saveCurrentStats();
-        }
+    // Load previous winners and run it only once
+    if (!EngineState.onDOMRanOnce && EngineState.isOnMainPage) {
+        EngineState.onDOMRanOnce = true;
+        await loadPreviousSeasonWinners();
+    } else {
+        saveCurrentStats();
     }
 }
 
@@ -240,7 +160,7 @@ async function prepareSeasonData() {
 async function loadPreviousSeasonWinners() {
     if (seasons.length < 2) return;
 
-    const previousSeason = seasons[1];
+    const previousSeason = CURRENT_SEASON - 1;
 
     // Try server first, fall back to local
     let data = await apiFetch(`${ApiPaths.seasonPath}${previousSeason}${ApiPaths.seasonPathEnd}`, { showErrorToast: false });
@@ -255,112 +175,6 @@ async function loadPreviousSeasonWinners() {
 }
 
 /**
- * For each existing season fills the dropdown menu where you can select seasons
- */
-function populateSeasonDropdown() {
-    const dropdown = document.getElementById('customSeasonDropdown');
-    const dropdownToggle = dropdown.querySelector('.dropdown-toggle');
-    const dropdownSelected = dropdown.querySelector('.dropdown-selected');
-    const dropdownItems = document.getElementById('dropdownItems');
-    const dropdownMenu = dropdown.querySelector('.dropdown-menu');
-    const hiddenSelect = document.getElementById('seasonSelect');
-
-    let currentSeason = seasons[0];
-
-    // Initialize hidden select for compatibility
-    hiddenSelect.innerHTML = '';
-    seasons.forEach(season => {
-        const option = document.createElement('option');
-        option.value = season;
-        option.textContent = `Season ${season}`;
-        hiddenSelect.appendChild(option);
-    });
-
-    // Populate dropdown items
-    function populateItems() {
-        dropdownItems.innerHTML = '';
-
-        seasons.forEach(season => {
-            const item = document.createElement('div');
-            item.className = `season-dropdown-item ${season === currentSeason ? 'selected' : ''}`;
-            item.setAttribute('role', 'option');
-            item.setAttribute('data-value', season);
-            item.textContent = `Season ${season}`;
-
-            item.addEventListener('click', () => {
-                selectSeason(season);
-                closeDropdown();
-            });
-
-            dropdownItems.appendChild(item);
-        });
-    }
-
-    // Select season
-    function selectSeason(season) {
-        currentSeason = season;
-        dropdownSelected.textContent = `Season ${season}`;
-
-        // Update selected state
-        document.querySelectorAll('.season-dropdown-item').forEach(item => {
-            item.classList.remove('selected');
-            if (parseInt(item.getAttribute('data-value'), 10) === season) {
-                item.classList.add('selected');
-            }
-        });
-
-        // Update hidden select
-        hiddenSelect.value = season;
-
-        // Trigger change event
-        const event = new Event('change');
-        hiddenSelect.dispatchEvent(event);
-
-        loadSeasonData(season).then(r => {
-            // Update auto-update state
-            if (season === seasons[0]) {
-                AppState.setAutoUpdate(true);
-            } else {
-                AppState.setAutoUpdate(false);
-
-                if (!AppState.isAutoUpdateEnabled) {
-                    showToast('Live Data Flow was automatically disabled', 'info', 8000);
-                }
-            }
-        });
-    }
-
-    // Toggle dropdown
-    function toggleDropdown() {
-        const isExpanded = dropdownToggle.getAttribute('aria-expanded') === 'true';
-        dropdownToggle.setAttribute('aria-expanded', !isExpanded);
-
-        if (!isExpanded) {
-            dropdownMenu.classList.add('show');
-        } else {
-            closeDropdown();
-        }
-    }
-
-    function closeDropdown() {
-        dropdownToggle.setAttribute('aria-expanded', 'false');
-        dropdownMenu.classList.remove('show');
-    }
-
-    dropdownToggle.addEventListener('click', toggleDropdown);
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!dropdown.contains(e.target)) {
-            closeDropdown();
-        }
-    });
-
-    selectSeason(seasons[0]);
-    populateItems();
-}
-
-/**
  * Fetches leaderboard data for a given season from the server, processes it, and renders it.
  * Calculates player rankings via {@link calculatePlaces}
  * Delegates rendering to either {@link displaySimpleLeaderboard} or {@link displayLeaderboard}
@@ -369,7 +183,7 @@ function populateSeasonDropdown() {
  * @returns {Promise<void>}
  * @throws {Error} When the fetch request or data processing fails unexpectedly
  */
-async function loadSeasonData(season = seasons[0]) {
+async function loadSeasonData(season) {
     if (!season) {
         console.warn('loadSeasonData called without a valid season');
         return;

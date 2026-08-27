@@ -478,127 +478,6 @@ h1 {
     border: 1px solid rgba(100, 255, 219, 0.5);
 }
 
-/* Season Selector */
-.season-selector {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-    position: relative;
-}
-
-.season-selector label {
-    font-size: 1rem;
-    color: var(--accent-teal);
-    font-weight: 500;
-}
-
-.custom-dropdown {
-    position: relative;
-    z-index: 100;
-}
-
-.dropdown-toggle {
-    font-family: 'Bender Bold';
-    display: flex;
-    text-align: center;
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    background: linear-gradient(145deg, rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.7));
-    border: 1px solid var(--accent-teal);
-    color: var(--text-light);
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.dropdown-toggle:hover {
-    cursor: pointer;
-    background: linear-gradient(145deg, rgba(23, 42, 69, 0.9), rgba(23, 42, 69, 0.7));
-    border-color: var(--accent-blue);
-    box-shadow: 0 0 15px rgba(100, 255, 218, 0.2);
-}
-
-.dropdown-toggle[aria-expanded="true"] {
-    border-radius: 8px 8px 0 0;
-    background: linear-gradient(145deg, rgba(23, 42, 69, 0.95), rgba(23, 42, 69, 0.8));
-}
-
-.dropdown-selected {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-weight: 500;
-}
-
-.dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background: linear-gradient(145deg, rgba(10, 25, 47, 0.98), rgba(10, 25, 47, 0.95));
-    backdrop-filter: blur(10px);
-    border-radius: 0 0 8px 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-    max-height: 250px;
-    overflow-y: auto;
-    z-index: 1000;
-}
-
-.dropdown-menu.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.dropdown-menu::-webkit-scrollbar {
-    width: 6px;
-}
-
-.dropdown-menu::-webkit-scrollbar-track {
-    background: rgba(23, 42, 69, 0.3);
-    border-radius: 3px;
-}
-
-.dropdown-menu::-webkit-scrollbar-thumb {
-    background: var(--accent-teal);
-    border-radius: 3px;
-}
-
-.dropdown-menu::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-blue);
-}
-
-.season-dropdown-item {
-    padding: 10px;
-    color: var(--text-light);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
-    font-size: 0.9rem;
-    display: flex;
-    place-content: center;
-    gap: 10px;
-}
-
-.season-dropdown-item:hover {
-    background: rgba(100, 255, 218, 0.1);
-    color: var(--accent-teal);
-}
-
-.season-dropdown-item.selected {
-    background: rgba(100, 255, 218, 0.15);
-    color: var(--accent-teal);
-    font-weight: 500;
-}
-
 /* Other navbar selectors */
 .navbar-compact-menu {
     display: flex;
@@ -6097,11 +5976,6 @@ input[type="checkbox"]:checked:hover {
     cursor: pointer;
 }
 
-.last-raid-map:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-}
-
 .last-raid-map img {
     width: 100%;
     height: 100%;
@@ -6434,25 +6308,6 @@ input[type="checkbox"]:checked:hover {
 .meta-item i {
     font-size: 1.1em;
     opacity: 0.8;
-}
-
-.map-hover-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 4px;
-    text-align: center;
-    font-size: 11px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 0 0 10px 10px;
-}
-
-.last-raid-map:hover .map-hover-info {
-    opacity: 1;
 }
 
 .last-raid-feed.expanded .raid-stats-grid {

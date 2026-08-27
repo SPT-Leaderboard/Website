@@ -539,9 +539,6 @@ function createMapSection(raid, raidStatus) {
             <img src="media/leaderboard_icons/maps/${raid.lastRaidMap}.png" 
                  alt="${raid.lastRaidMap}"
                  loading="lazy">
-            <div class="map-hover-info">
-                ${raid.lastRaidMap}
-            </div>
         </div>
     `;
 }

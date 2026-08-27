@@ -14,9 +14,9 @@ async function checkAuth() {
     if (authCheckInProgress || authCheckCompleted) {
         return;
     }
-    
+
     authCheckInProgress = true;
-    
+
     try {
         updateAuthStatus('checking', 'Checking...');
 
@@ -47,7 +47,7 @@ async function checkAuth() {
             updateAuthStatus('authenticated', data.username, data.profilePicture, data.unreadCount || 0);
             isLoggedIn = true;
             autoLoginAttempts = 0;
-            
+
             window.global_user_data = data;
 
         } else if (data.maintenance) {
@@ -136,7 +136,7 @@ async function silentAuthCheck() {
     if (authCheckCompleted) {
         return;
     }
-    
+
     try {
         const response = await apiFetch('/api/network/login/check_auth.php', {
             method: 'GET',

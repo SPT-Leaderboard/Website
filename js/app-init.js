@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showError(error) {
-        animateStatusText("Connection interrupted. Retrying...");
+        animateStatusText("Something went wrong. Retrying...");
         errorMessage.textContent = error.message || "Network connection failed";
         errorContainer.classList.add('visible');
     }
