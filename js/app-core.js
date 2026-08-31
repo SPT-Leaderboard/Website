@@ -4,16 +4,15 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ /
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
-let leaderboardData = []; // For keeping current season data
-let oldLeaderboardData = []; // Storing available seasons
-let leaderboardConfig = []; // Storing main config off API
+let leaderboardData = []; // DYNAMIC: Main leaderboard data for the current season
+let oldLeaderboardData = []; // DYNAMIC: Previous leaderboard data for the current season
 const CURRENT_SEASON = 11;
 
 // DYNAMIC: Indicates when user is logged in Network or not
 let isLoggedIn = false;
 
 /**
- * Main dynamic state of the leaderboard engine, which can easily be checked from any space utilizing app-core.js
+ * Main dynamic state of the leaderboard engine, which can easily be checked from any space utilizing app-core.js. For this, you must emit initEngine() first, which will set the states properly.
  * @param {boolean} isDataReady - Tells whenever the live update was finished and data is ready. Better to use in pair with waitForDataReady(() => myFunction()); - automatic callback upon data load
  * @param {boolean} isOnMainPage - Tells whenever engine is running on the main page, or not.
  * @param {boolean} isRenderingLeaderboard - Whenever engine is in leaderboard rendering state.
@@ -119,18 +118,6 @@ async function initEngine() {
         await loadAchievementsData();
     }
 }
-
-// async function initSeasonList() {
-//     // if (!isLocalhost) {
-//     //         leaderboardConfig = await apiFetch('api/network/functions/get_lb_config.php', { method: 'GET', showErrorToast: true, cacheBust: false });
-//     //         seasons = parseSeasonConfig(leaderboardConfig);
-//     // } else {
-//     //     console.log('Localhost - switching to initAllSeason() legacy function');
-//     //     await initAllSeasons();
-//     // }
-
-//     await prepareSeasonData();
-// }
 
 /**
  * Loads the latest season's leaderboard data and performs one-time initialization tasks.
