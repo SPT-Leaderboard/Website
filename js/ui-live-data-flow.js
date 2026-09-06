@@ -21,7 +21,6 @@ const AutoUpdater = (() => {
     let timeToUpdateSpan;
     let autoUpdateToggle;
     let forceUpdateRadio;
-    let heartbeatRadio;
     let normalRadio;
     let isUpdating = false;
 
@@ -63,14 +62,7 @@ const AutoUpdater = (() => {
             return;
         }
 
-        if (updateMode === 'heartbeat') {
-            timeToUpdateSpan.innerHTML = `
-                <span class="update-status">
-                    <span class="status-dot heartbeat"></span>
-                    Live updates via heartbeat
-                </span>
-            `;
-        } else if (updateMode === 'force') {
+        if (updateMode === 'force') {
             timeToUpdateSpan.innerHTML = `
                 <span class="update-status">
                     <span class="status-dot force"></span>
@@ -94,27 +86,24 @@ const AutoUpdater = (() => {
          * @param {string} [updateToggleId='autoUpdateToggle'] - ID of the auto-update toggle checkbox
          * @param {string} [timeDisplayId='timeToUpdate'] - ID of the element displaying update time
          * @param {string} [forceRadioId='forceUpdateRadio'] - ID of the force update mode radio button
-         * @param {string} [heartbeatRadioId='heartbeatRadio'] - ID of the heartbeat mode radio button
          * @param {string} [normalRadioId='normalRadio'] - ID of the normal update mode radio button
          */
         init(updateToggleId = 'autoUpdateToggle', timeDisplayId = 'timeToUpdate',
-            forceRadioId = 'forceUpdateRadio', heartbeatRadioId = 'heartbeatRadio',
+            forceRadioId = 'forceUpdateRadio',
             normalRadioId = 'normalRadio') {
             autoUpdateToggle = document.getElementById(updateToggleId);
             forceUpdateRadio = document.getElementById(forceRadioId);
-            heartbeatRadio = document.getElementById(heartbeatRadioId);
             normalRadio = document.getElementById(normalRadioId);
             timeToUpdateSpan = document.getElementById(timeDisplayId);
 
             autoUpdateEnabled = getCookie('autoUpdateEnabled') !== 'false';
             const savedMode = getCookie('updateMode');
-            updateMode = (savedMode === 'force' || savedMode === 'heartbeat' || savedMode === 'normal')
+            updateMode = (savedMode === 'force' || savedMode === 'normal')
                 ? savedMode
                 : 'normal';
 
             if (autoUpdateToggle) autoUpdateToggle.checked = autoUpdateEnabled;
             if (forceUpdateRadio) forceUpdateRadio.checked = (updateMode === 'force');
-            if (heartbeatRadio) heartbeatRadio.checked = (updateMode === 'heartbeat');
             if (normalRadio) normalRadio.checked = (updateMode === 'normal');
 
             if (autoUpdateToggle) {
@@ -127,14 +116,6 @@ const AutoUpdater = (() => {
                 forceUpdateRadio.addEventListener('change', (e) => {
                     if (e.target.checked) {
                         this.setUpdateMode('force');
-                    }
-                });
-            }
-
-            if (heartbeatRadio) {
-                heartbeatRadio.addEventListener('change', (e) => {
-                    if (e.target.checked) {
-                        this.setUpdateMode('heartbeat');
                     }
                 });
             }
@@ -175,25 +156,20 @@ const AutoUpdater = (() => {
 
         /**
          * Sets the update mode for the AutoUpdater
-         * @param {string} mode - Update mode (normal, force, heartbeat)
+         * @param {string} mode - Update mode (normal, force)
          */
         setUpdateMode(mode) {
-            if (mode !== 'force' && mode !== 'heartbeat' && mode !== 'normal') return;
+            if (mode !== 'force' && mode !== 'normal') return;
 
             updateMode = mode;
             setCookie('updateMode', mode);
 
             if (forceUpdateRadio) forceUpdateRadio.checked = (mode === 'force');
-            if (heartbeatRadio) heartbeatRadio.checked = (mode === 'heartbeat');
             if (normalRadio) normalRadio.checked = (mode === 'normal');
 
             if (autoUpdateEnabled) {
-                if (mode === 'force' || mode === 'normal') {
-                    timeLeft = updateInterval;
-                    startUpdateTimer();
-                } else { // heartbeat
-                    clearInterval(updateTimer);
-                }
+                timeLeft = updateInterval;
+                startUpdateTimer();
             }
 
             updateTimeDisplay();
@@ -206,21 +182,6 @@ const AutoUpdater = (() => {
             if (forceUpdateToggle) forceUpdateToggle.checked = enabled;
         },
 
-        setHeartbeatEnabled(enabled) {
-            autoUpdateFromHeartbeats = enabled;
-            setCookie('autoUpdateFromHeartbeats', enabled);
-            if (forceHeartbeatToggle) forceHeartbeatToggle.checked = enabled;
-
-            if (enabled) {
-                clearInterval(updateTimer);
-            } else if (autoUpdateEnabled) {
-                timeLeft = updateInterval;
-                startUpdateTimer();
-            }
-
-            updateTimeDisplay();
-        },
-
         getUpdateMode() {
             return updateMode;
         },
@@ -231,10 +192,6 @@ const AutoUpdater = (() => {
 
         isForceUpdateEnabled() {
             return updateMode === 'force' && autoUpdateEnabled;
-        },
-
-        isHeartbeatEnabled() {
-            return updateMode === 'heartbeat' && autoUpdateEnabled;
         },
 
         getStatus() {

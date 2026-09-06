@@ -93,7 +93,7 @@ class ToastManager {
                 const computedStyle = getComputedStyle(progressBar);
                 const currentWidth = parseFloat(computedStyle.width);
                 const totalWidth = parseFloat(computedStyle.maxWidth) || progressBar.parentElement.offsetWidth;
-                const remainingPercent = ((totalWidth - currentWidth) / totalWidth) * 100;
+
                 progressBar.style.transition = 'none';
             });
 
@@ -122,7 +122,7 @@ class ToastManager {
 
     /**
      * Dismiss a toast
-     * @param {HTMLElement} toast - Toast element to dismiss
+     * @param {HTMLElement} toast - Toast element
      */
     dismiss(toast) {
         if (!toast || toast.dataset.dismissing === 'true') return;
