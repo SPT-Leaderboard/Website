@@ -12,7 +12,8 @@ const CURRENT_SEASON = 11;
 let isLoggedIn = false;
 
 /**
- * Main dynamic state of the leaderboard engine, which can easily be checked from any space utilizing app-core.js. For this, you must emit initEngine() first, which will set the states properly.
+ * Main dynamic state of the leaderboard engine, which can easily be checked from any space utilizing app-core.js.
+ * For this, you must emit initEngine() first, which will set the states properly.
  * @param {boolean} isDataReady - Tells whenever the live update was finished and data is ready. Better to use in pair with waitForDataReady(() => myFunction()); - automatic callback upon data load
  * @param {boolean} isOnMainPage - Tells whenever engine is running on the main page, or not.
  * @param {boolean} isRenderingLeaderboard - Whenever engine is in leaderboard rendering state.
@@ -64,7 +65,7 @@ const ApiPaths = {
     equipmentBlobStatsPath: `../api/data/pmc_equipment_blob/equipment_history_blob.json`
 };
 
-// Paths for local files if debug is on
+// Paths for local files if testing locally
 if (isLocalhost) {
     ApiPaths.equipmentBlobStatsPath = `../fallbacks/equipment_history_blob.json`;
     ApiPaths.pmcPfpsPath = `../fallbacks/pmc_avatars/`;
@@ -83,14 +84,22 @@ if (isLocalhost) {
 
 // Call main init on DOM load
 async function initEngine() {
-    const currentUrl = window.location.href.replace(/\/$/, "");
-    const originUrl = window.location.origin;
+    const { pathname, search, hash } = window.location;
 
-    if (currentUrl === originUrl) {
-        console.warn('Leaderboard Engine running on the main page, all tasks remain default config...')
+    const mainPagePaths = ['/', '/index.html', '/index.htm', '/index.php'];
+
+    const isMainPage =
+        pathname === '/' ||
+        mainPagePaths.includes(pathname) &&
+        search === '' &&
+        hash === '';
+
+    if (isMainPage) {
+        console.warn('[Engine] Running on the main page, all tasks remain default config...');
         EngineState.isOnMainPage = true;
     } else {
-        console.warn('Leaderboard Engine running out of the main page, using alternative approach...')
+        if (isLocalhost)
+            console.warn('[Engine] Running out of the main page, using alternative approach...');
         EngineState.isOnMainPage = false;
     }
 
@@ -98,6 +107,9 @@ async function initEngine() {
 
     // Load previous global stats from localStorage if can
     if (EngineState.isOnMainPage) {
+        if(isLocalhost)
+            console.warn('[Engine] Loading previous global stats from localStorage (main page)')
+
         const savedStats = localStorage.getItem('leaderboardStats');
         if (savedStats) {
             try {
@@ -239,8 +251,6 @@ async function loadSeasonData(season) {
                     console.log(`[loadSeasonData] Data changed, updating...`);
                 } else if (updateMode === 'force') {
                     console.log(`[loadSeasonData] Force mode enabled, updating even without changes...`);
-                } else if (updateMode === 'heartbeat') {
-                    console.log(`[loadSeasonData] Called from HeartbeatManager, updating...`);
                 } else if (!isAutoUpdateEnabled) {
                     console.log(`[loadSeasonData] Auto-update disabled.`);
                 }
