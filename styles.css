@@ -925,11 +925,11 @@ h1 {
     flex-grow: 1;
     padding: 16px 16px 16px 25px;
     font-size: 16px;
-    background: linear-gradient(145deg, var(--bg-dark-secondary), var(--darker));
+    background: var(--bg-dark-secondary);
     border: 2px solid var(--text-muted);
     border-radius: 16px;
     color: var(--text-light);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease-in-out;
     box-shadow: var(--shadow-md);
     position: relative;
     font-weight: 500;
@@ -942,10 +942,7 @@ h1 {
 #playerSearch:focus {
     outline: none;
     border-color: var(--accent-teal);
-    box-shadow:
-        0 0 0 4px rgba(100, 255, 218, 0.15),
-        var(--shadow-lg);
-    background: linear-gradient(145deg, var(--bg-dark-secondary), var(--bg-dark));
+    background: var(--bg-dark);
 }
 
 #playerSearch::placeholder {
