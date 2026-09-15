@@ -2520,6 +2520,11 @@ input[type="checkbox"]:checked:hover {
     z-index: 0;
 }
 
+.announcement-container {
+    border: 1px solid rgba(99, 255, 190, 0.12);
+    border-radius: 12px;
+}
+
 .announcement-wrapper {
     margin: 0;
     max-width: 100%;
@@ -2531,12 +2536,6 @@ input[type="checkbox"]:checked:hover {
     align-items: flex-start;
     position: relative;
     z-index: 2;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 24px;
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        0 0 60px rgba(99, 102, 241, 0.2);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -2606,11 +2605,11 @@ input[type="checkbox"]:checked:hover {
     margin: 15px 0 12px 0;
     color: var(--text-white);
     line-height: 1.2;
-    background: linear-gradient(135deg, #ffffff, #a5b4fc);
+    background: linear-gradient(321deg, #ffffff, #bbff66);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
+    text-shadow: 0 4px 20px rgb(70 229 78 / 40%);
     letter-spacing: -0.5px;
 }
 
