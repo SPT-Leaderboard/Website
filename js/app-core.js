@@ -6,7 +6,7 @@
 
 let leaderboardData = []; // DYNAMIC: Main leaderboard data for the current season
 let oldLeaderboardData = []; // DYNAMIC: Previous leaderboard data for the current season
-const CURRENT_SEASON = 12;
+const CURRENT_SEASON = 11;
 
 // DYNAMIC: Indicates when user is logged in Network or not
 let isLoggedIn = false;
@@ -287,6 +287,7 @@ async function displayLeaderboard(data) {
     // Pre-filter
     const validPlayers = data.filter(player => {
         if (player.isCasual && SettingsHelper.get('casualToggle')) return false;
+        if (player.isHardcore && SettingsHelper.get('casualToggle')) return false;
         if (player.permBanned) return false;
         return true;
     });
@@ -466,7 +467,7 @@ function createPlayerRow(player) {
         : '';
 
     // Skill rank label
-    const rankLabel = player.isCasual ? 'Casual' : getRankLabel(player.totalScore);
+    const rankLabel = player.isCasual ? 'Casual' : player.isHardcore ? 'Hardcore' : getRankLabel(player.totalScore);
 
     row.innerHTML = `
         <td class="rank">${player.rank}</td>
@@ -592,7 +593,8 @@ async function displaySimpleLeaderboard(data) {
         }
 
         // Skill rank label
-        const rankLabel = player.isCasual ? 'Casual' : getRankLabel(player.totalScore);
+        const rankLabel = player.isCasual ? 'Casual' : player.isHardcore ? 'Hardcore' : getRankLabel(player.totalScore);
+
         row.innerHTML = `
             <td class="rank">${player.rank}</td>
             <td class="teamtag" data-team="${escapeHtml(player.teamTag ? player.teamTag : ``)}">${player.teamTag ? `[${escapeHtml(player.teamTag)}]` : ``}</td>
@@ -766,6 +768,10 @@ async function calculatePlaces(data) {
 
         if (player.isCasual) {
             player.rank = "Casual";
+        }
+
+        if (player.isHardcore) {
+            player.rank = "Hardcore";
         }
     });
 
