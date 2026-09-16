@@ -515,7 +515,7 @@ async function showPublicProfile(container, player) {
                                 ${rank.name}
                             </div>
                             <div class="rank-progress-text">
-                                <span class="rank-progress-label">Progress to next rank</span>
+                                <span class="rank-progress-label">Overall Progress</span>
                                 <span class="rank-progress-value">${rank.progress}%</span>
                             </div>
                         </div>
@@ -1260,16 +1260,6 @@ async function renderWeaponList(playerId, modWeaponStats) {
 
         const weaponItem = document.createElement('li');
         weaponItem.className = 'weapon-item';
-
-        if (index === 0) {
-            weaponItem.classList.add('weapon-gold');
-        } else if (index === 1) {
-            weaponItem.classList.add('weapon-silver');
-        } else if (index === 2) {
-            weaponItem.classList.add('weapon-bronze');
-        }
-
-        weaponItem.classList.add('profile-section');
 
         const headshotPrc = calculateHeadshotPercent(headshots, kills);
 

@@ -2315,7 +2315,6 @@ input[type="checkbox"]:checked::before {
 
 input[type="checkbox"]:hover {
     border-color: var(--accent-blue);
-    box-shadow: 0 0 15px rgba(100, 255, 218, 0.4);
 }
 
 input[type="checkbox"]:checked:hover {
@@ -2471,7 +2470,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .save-btn:hover {
-    box-shadow: 0 5px 15px rgba(100, 255, 218, 0.4);
+    box-shadow: 0 5px 15px rgba(100, 255, 219, 0.1);
 }
 
 /* Announcement */
@@ -5105,7 +5104,7 @@ input[type="checkbox"]:checked:hover {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border);
-    border-radius: 16px;
+    border-radius: 8px;
     box-shadow: var(--glass-shadow), inset 0 0 0 1px rgba(255, 255, 255, 0.02);
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -7496,7 +7495,7 @@ input[type="checkbox"]:checked:hover {
     font-size: 18px;
     font-weight: 700;
     padding: 6px 16px;
-    border-radius: 12px;
+    border-radius: 4px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -7518,7 +7517,7 @@ input[type="checkbox"]:checked:hover {
     color: rgba(255, 255, 255, 0.7);
     padding: 4px 8px;
     background: rgba(255, 255, 255, 0.03);
-    border-radius: 8px;
+    border-radius: 4px;
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -7533,9 +7532,7 @@ input[type="checkbox"]:checked:hover {
 .rank-progress-value {
     font-weight: 700;
     font-size: 14px;
-    background: linear-gradient(135deg, #fff, var(--progress-color, #4285f4));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--gray);
     background-clip: text;
 }
 
