@@ -579,7 +579,6 @@ function createProfitSection(raid) {
 
     return `
         <div class="raid-profit ${profitClass}">
-            <i class="fa-solid fa-money-bill-trend-up"></i>
             <i class="${profitIcon}"></i>
             <span>${formatSalesNum(raid.lastRaidProfit)} ₽</span>
         </div>
@@ -601,7 +600,7 @@ function createScoreSection(raid) {
             ${raid.TotalScoreDiff ? `
                 <div class="score-diff ${raid.TotalScoreDiff >= 0 ? 'stat-positive' : 'stat-negative'}">
                     <i class='${raid.TotalScoreDiff >= 0 ? 'fa-solid fa-arrow-trend-up' : 'fa-solid fa-arrow-trend-down'}'></i>
-                    ${raid.TotalScoreDiff > 0 ? '+' : ''}${raid.TotalScoreDiff} SS
+                    ${raid.TotalScoreDiff > 0 ? '+' : ''}${raid.TotalScoreDiff} Skill Score
                 </div>
             ` : ''}
         </div>
