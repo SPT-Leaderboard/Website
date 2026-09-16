@@ -8665,26 +8665,66 @@ input[type="checkbox"]:checked:hover {
 
 .pmc-hero {
     opacity: 0;
+    transform: translateX(50px);
+    position: relative;
+    right: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
-    animation: slideInRightPMC 1s ease-in-out forwards;
-    animation-delay: 1s;
-    transform: translateX(50px);
-    right: 100px;
 }
 
 .pmc-hero:nth-child(2) {
-    animation-delay: 3s;
     right: 180px;
     z-index: 1;
 }
 
 .pmc-hero:nth-child(3) {
-    animation-delay: 5s;
     right: 280px;
     z-index: 0;
+}
+
+.pmc-hero.animate-in {
+    animation: slideInRightPMC 1s ease-in-out forwards;
+}
+
+.pmc-hero.swapping {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+}
+
+.pmc-hero.swapping-out {
+    opacity: 0;
+    transform: translateY(-30px);
+}
+
+.pmc-hero.swapping-in {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+@keyframes swapOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+}
+
+@keyframes swapIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 @keyframes slideInRightPMC {
@@ -8692,6 +8732,36 @@ input[type="checkbox"]:checked:hover {
         opacity: 1;
         transform: translateX(0) scale(1);
     }
+}
+
+/* Loading end season */
+.season-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 100;
+    background: rgba(10, 15, 25, 0.85);
+    backdrop-filter: blur(10px);
+}
+
+.season-loading p {
+    color: #94a3b8;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--accent-teal, #00d4aa);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
 .animated-text-glitch {

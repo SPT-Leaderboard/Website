@@ -4,6 +4,14 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ / 
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/  
 
+// Update timer and preload audio for season end
+const imageCache = new Map(); // permaLink -> bool
+let audioElements = {};
+let lastPlayed = null;
+let playerRotationInterval = null;
+let rotationIndex = 3; // Start from 4th player (index 3)
+let isSwapping = false;
+
 // #region Main
 async function endSeason() {
     try {
@@ -11,8 +19,7 @@ async function endSeason() {
         const top3 = getTopPlayers(players, 3);
         const stats = calculateSeasonStats(players);
 
-        const overlay = createSeasonOverlay(top3, stats);
-        document.body.appendChild(overlay);
+        await createSeasonOverlay(top3, stats);
 
         setTimeout(() => {
             animateStats();
@@ -26,11 +33,97 @@ async function endSeason() {
     }
 }
 
-function createSeasonOverlay(top3, stats) {
+async function createSeasonOverlay(top3, stats) {
     const overlay = document.createElement('div');
     overlay.id = 'seasonOverlay';
 
+    // Get all eligible players, sorted by score
+    const allEligiblePlayers = leaderboardData
+        .filter(p => !p.banned && !p.isCasual && p.permaLink)
+        .sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0));
+
+    // Pre-validate images (excluding top3)
+    const top3Links = new Set(top3.map(p => p.permaLink));
+    const candidatesForRotation = allEligiblePlayers.filter(p => !top3Links.has(p.permaLink));
+
     overlay.innerHTML = `
+        <div class="season-end-container">
+            <div class="video-background">
+                <video autoplay muted loop playsinline>
+                    <source src="media/season_end/test.mp4" type="video/mp4">
+                </video>
+                <div class="video-overlay-gradient"></div>
+            </div>
+            <div class="season-loading">
+                <div class="loading-spinner"></div>
+                <p>Preparing season finale...</p>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    // Validate all
+    let validRotationPlayers = [];
+    try {
+        validRotationPlayers = await filterPlayersWithImages(candidatesForRotation);
+    } catch (e) {
+        console.warn('Image validation failed, using empty rotation pool:', e);
+    }
+
+    const top3Validated = [];
+    for (const player of top3) {
+        const hasImage = await checkPMCExists(player);
+        console.log(`[Season] Player ${player.name} (${player.permaLink}): image valid = ${hasImage}`);
+        if (hasImage) {
+            top3Validated.push(player);
+        } else {
+            const replacement = validRotationPlayers.shift();
+            if (replacement) {
+                console.log(`[Season] Replacing ${player.name} with ${replacement.name}`);
+                top3Validated.push(replacement);
+            } else {
+                console.warn(`[Season] No replacement for ${player.name}, dropping them`);
+            }
+        }
+    }
+
+    // Store for rotation
+    window.seasonRotationPlayers = validRotationPlayers;
+    window.seasonTopPlayers = top3Validated;
+
+    overlay.innerHTML = renderSeasonOverlayContent(top3Validated, stats);
+
+    setTimeout(() => {
+        top3Validated.forEach((player, index) => {
+            const imgElement = overlay.querySelector(`.pmc-hero[data-index="${index}"] .pmc-image`);
+            if (imgElement) {
+                loadAndCropPlayerImageUtil(player, imgElement);
+            }
+        });
+    }, 100);
+
+    setTimeout(() => {
+        const heroes = overlay.querySelectorAll('.pmc-hero');
+        heroes.forEach((hero, index) => {
+            setTimeout(() => {
+                hero.classList.add('animate-in');
+            }, index * 2000); // 2s apart - card 0 at 0s, card 1 at 2s, card 2 at 4s
+        });
+    }, 400);
+
+    if (validRotationPlayers.length > 0) {
+        const initialDelay = 400 + (top3Validated.length * 2000) + 3000; // entrance + 3s hold
+        setTimeout(() => {
+            startPlayerRotation(overlay);
+        }, initialDelay);
+    }
+
+    return overlay;
+}
+
+function renderSeasonOverlayContent(top3, stats) {
+    return `
         <div class="season-end-container">
             <div class="video-background">
                 <video autoplay muted loop playsinline>
@@ -42,7 +135,7 @@ function createSeasonOverlay(top3, stats) {
             <div class="season-end-layout">
                 <div class="season-stats-column">
                     <div class="season-header">
-                        <h1>SEASON ${getCurrentSeason()} FINALE</h1>
+                        <h1>SEASON ${CURRENT_SEASON} FINALE</h1>
                         <p class="season-end-subtitle">The battle is over... for now.</p>
                     </div>
 
@@ -68,7 +161,7 @@ function createSeasonOverlay(top3, stats) {
                             <div class="season-end-stat-label">Hours Played</div>
                         </div>
                         <div class="season-end-stats-stat-card">
-                            <div class="season-end-stat-value"  data-target="${stats.averageSurvivalRate}" data-type="percent">0%</div>
+                            <div class="season-end-stat-value" data-target="${stats.averageSurvivalRate}" data-type="percent">0%</div>
                             <div class="season-end-stat-label">Avg Survival Rate</div>
                         </div>
                     </div>
@@ -93,69 +186,216 @@ function createSeasonOverlay(top3, stats) {
                     </div>
                 </div>
 
-                <!-- PMC -->
                 <div class="season-pmc-column">
                     <div class="pmc-heroes-container">
-                        ${top3.map((player, index) => {
-                            const rank = getRank(player.networkRaids, 2000, 32);
-
-                            const colorMatch = rank.textColor.match(/hsl\((\d+)/);
-                            const hue = colorMatch ? parseInt(colorMatch[1]) : 200;
-                            const glowColor = `hsla(${hue}, 100%, 70%, 0.3)`;
-                            const glowColorHover = `hsla(${hue}, 100%, 80%, 0.5)`;
-                            const glowColorStrong = `hsla(${hue}, 100%, 60%, 0.4)`;
-
-                            return `
-                                <div class="pmc-hero" 
-                                    data-index="${index}"
-                                    data-rank-hue="${hue}">
-                                    <div class="pmc-rank-badge" style="background: ${rank.gradient}; border-color: ${rank.borderColor};">
-                                        <span class="rank-number" style="color: ${rank.textColor};">
-                                            #${index + 1}
-                                        </span>
-                                        <span class="rank-name" style="color: ${rank.textColor};">
-                                            ${rank.name}
-                                        </span>
-                                        <span class="rank-level" style="color: ${rank.textColor}; opacity: 0.7;">
-                                            LVL ${rank.level}
-                                        </span>
-                                    </div>
-                                    <div class="pmc-image-wrapper">
-                                        <img src="${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png" 
-                                            alt="${escapeHtml(player.name)}"
-                                            class="pmc-image"
-                                            loading="lazy"
-                                            style="filter: drop-shadow(0 0 3px rgba(${rank.RGB}, 0.5));"
-                                            data-glow="${glowColor}"
-                                            data-glow-hover="${glowColorHover}">
-                                    </div>
-                                    <div class="pmc-info">
-                                        <div class="pmc-name">${renderUsernameHTML(player)}</div>
-                                        <div class="pmc-stats">
-                                            <span class="pmc-stat"><i class="fa-solid fa-skull-crossbones"></i> ${player.pmcKills || 0} KILLS</span>
-                                            <span class="pmc-stat"><i class="fas fa-trophy"></i> ${(player.killToDeathRatio || 0).toFixed(1)} K/D</span>
-                                            <span class="pmc-stat"><i class="fa-solid fa-user-clock"></i> ${formatPlayTimeShort(player.totalPlayTime || 0)}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        }).join('')}
+                        ${top3.map((player, index) => renderHeroElement(player, index)).join('')}
                     </div>
                 </div>
             </div>
         </div>
     `;
+}
 
-        setTimeout(() => {
-        top3.forEach((player, index) => {
-            const imgElement = overlay.querySelector(`.pmc-hero[data-index="${index}"] .pmc-image`);
-            if (imgElement) {
-                loadAndCropPlayerImageUtil(player, imgElement);
-            }
+// #region Player Rotation
+function startPlayerRotation(overlay) {
+    const players = window.seasonRotationPlayers;
+    if (!players || players.length === 0) return;
+
+    shuffleArray(players);
+
+    playerRotationInterval = setInterval(async () => {
+        if (isSwapping) return;
+        isSwapping = true;
+        try {
+            await swapRandomPlayer(overlay, players);
+        } catch (e) {
+            console.warn('Swap failed:', e);
+        } finally {
+            isSwapping = false;
+        }
+    }, 5000);
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+async function swapRandomPlayer(overlay, remainingPlayers) {
+    if (!remainingPlayers || remainingPlayers.length === 0) return;
+
+    // Pick random slot
+    const slotIndex = Math.floor(Math.random() * 3);
+    const heroElement = overlay.querySelector(`.pmc-hero[data-index="${slotIndex}"]`);
+    if (!heroElement) return;
+
+    // Don't show a player who's already in another slot
+    const displayedIds = new Set(
+        Array.from(overlay.querySelectorAll('.pmc-hero'))
+            .map(h => h.dataset.playerId)
+            .filter(id => id)
+    );
+
+    // Find next and not already displayed
+    let newPlayer = null;
+    let attempts = 0;
+    while (attempts < remainingPlayers.length) {
+        const candidate = remainingPlayers.shift();
+        remainingPlayers.push(candidate); // cycle back
+        attempts++;
+        if (!displayedIds.has(candidate.permaLink)) {
+            newPlayer = candidate;
+            break;
+        }
+    }
+
+    if (!newPlayer) return;
+
+    await animatePlayerOut(heroElement);
+    updateHeroContent(heroElement, newPlayer, slotIndex);
+
+    const imgElement = heroElement.querySelector('.pmc-image');
+    if (imgElement) {
+        await new Promise(resolve => {
+            loadAndCropPlayerImageUtil(newPlayer, imgElement);
+            // loadAndCropPlayerImageUtil doesn't return a promise so we wait a lil
+            setTimeout(resolve, 300);
         });
-    }, 100);
+    }
 
-    return overlay;
+    // Animate in
+    await animatePlayerIn(heroElement);
+}
+
+function animatePlayerOut(heroElement) {
+    return new Promise(resolve => {
+        heroElement.getAnimations().forEach(a => a.cancel());
+        heroElement.classList.remove('animate-in');
+
+        const anim = heroElement.animate(
+            [
+                { opacity: 1, transform: 'translateY(0)' },
+                { opacity: 0, transform: 'translateY(-30px)' }
+            ],
+            { duration: 800, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', fill: 'forwards' }
+        );
+        anim.onfinish = () => resolve();
+    });
+}
+
+function animatePlayerIn(heroElement) {
+    return new Promise(resolve => {
+        heroElement.getAnimations().forEach(a => a.cancel());
+
+        const anim = heroElement.animate(
+            [
+                { opacity: 0, transform: 'translateY(30px)' },
+                { opacity: 1, transform: 'translateY(0)' }
+            ],
+            { duration: 800, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', fill: 'forwards' }
+        );
+        anim.onfinish = () => resolve();
+    });
+}
+
+function updateHeroContent(heroElement, player, slotIndex) {
+    const rank = getRank(player.networkRaids, 2000, 32);
+    const colorMatch = rank.textColor.match(/hsl\((\d+)/);
+    const hue = colorMatch ? parseInt(colorMatch[1]) : 200;
+    const glowColor = `hsla(${hue}, 100%, 70%, 0.3)`;
+
+    heroElement.dataset.playerId = player.permaLink;
+    heroElement.dataset.rankHue = hue;
+
+    const rankBadge = heroElement.querySelector('.pmc-rank-badge');
+    if (rankBadge) {
+        rankBadge.style.background = rank.gradient;
+        rankBadge.style.borderColor = rank.borderColor;
+
+        const rankNumber = rankBadge.querySelector('.rank-number');
+        const rankName = rankBadge.querySelector('.rank-name');
+        const rankLevel = rankBadge.querySelector('.rank-level');
+
+        if (rankNumber) {
+            rankNumber.style.color = rank.textColor;
+            rankNumber.textContent = `#${slotIndex + 1}`;
+        }
+        if (rankName) {
+            rankName.style.color = rank.textColor;
+            rankName.textContent = rank.name;
+        }
+        if (rankLevel) {
+            rankLevel.style.color = rank.textColor;
+            rankLevel.textContent = `LVL ${rank.level}`;
+        }
+    }
+
+    const imgElement = heroElement.querySelector('.pmc-image');
+    if (imgElement) {
+        imgElement.src = `${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png`;
+        imgElement.alt = escapeHtml(player.name);
+        imgElement.style.filter = `drop-shadow(0 0 3px rgba(${rank.RGB}, 0.5))`;
+        imgElement.dataset.glow = glowColor;
+    }
+
+    const nameElement = heroElement.querySelector('.pmc-name');
+    if (nameElement) {
+        nameElement.innerHTML = renderUsernameHTML(player);
+    }
+
+    const statsElement = heroElement.querySelector('.pmc-stats');
+    if (statsElement) {
+        statsElement.innerHTML = `
+            <span class="pmc-stat"><i class="fa-solid fa-skull-crossbones"></i> ${player.pmcKills || 0} KILLS</span>
+            <span class="pmc-stat"><i class="fas fa-trophy"></i> ${(player.killToDeathRatio || 0).toFixed(1)} K/D</span>
+            <span class="pmc-stat"><i class="fa-solid fa-user-clock"></i> ${formatPlayTimeShort(player.totalPlayTime || 0)}</span>
+        `;
+    }
+}
+
+function stopPlayerRotation() {
+    if (playerRotationInterval) {
+        clearInterval(playerRotationInterval);
+        playerRotationInterval = null;
+    }
+}
+
+function renderHeroElement(player, index) {
+    const rank = getRank(player.networkRaids, 2000, 32);
+    const colorMatch = rank.textColor.match(/hsl\((\d+)/);
+    const hue = colorMatch ? parseInt(colorMatch[1]) : 200;
+    const glowColor = `hsla(${hue}, 100%, 70%, 0.3)`;
+
+    return `
+        <div class="pmc-hero" 
+            data-index="${index}"
+            data-rank-hue="${hue}"
+            data-player-id="${player.permaLink}">
+            <div class="pmc-rank-badge" style="background: ${rank.gradient}; border-color: ${rank.borderColor};">
+                <span class="rank-number" style="color: ${rank.textColor};">#${index + 1}</span>
+                <span class="rank-name" style="color: ${rank.textColor};">${rank.name}</span>
+                <span class="rank-level" style="color: ${rank.textColor}; opacity: 0.7;">LVL ${rank.level}</span>
+            </div>
+            <div class="pmc-image-wrapper">
+                <img src="${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png" 
+                    alt="${escapeHtml(player.name)}"
+                    class="pmc-image"
+                    loading="lazy"
+                    style="filter: drop-shadow(0 0 3px rgba(${rank.RGB}, 0.5));"
+                    data-glow="${glowColor}">
+            </div>
+            <div class="pmc-info">
+                <div class="pmc-name">${renderUsernameHTML(player)}</div>
+                <div class="pmc-stats">
+                    <span class="pmc-stat"><i class="fa-solid fa-skull-crossbones"></i> ${player.pmcKills || 0} KILLS</span>
+                    <span class="pmc-stat"><i class="fas fa-trophy"></i> ${(player.killToDeathRatio || 0).toFixed(1)} K/D</span>
+                    <span class="pmc-stat"><i class="fa-solid fa-user-clock"></i> ${formatPlayTimeShort(player.totalPlayTime || 0)}</span>
+                </div>
+            </div>
+        </div>
+    `;
 }
 
 // #region Calculations
@@ -216,7 +456,6 @@ function calculateSeasonStats(players) {
             }
         }
 
-        // mapFatigue collection
         if (player.mapFatigue && player.mapFatigue.mapCounts) {
             const mapCounts = player.mapFatigue.mapCounts;
             for (const [mapKey, count] of Object.entries(mapCounts)) {
@@ -244,7 +483,6 @@ function calculateSeasonStats(players) {
         }
     }
 
-    // Most popular map
     let maxMapCount = 0;
     let mostPopularMapKey = null;
     for (const [mapKey, count] of Object.entries(mapStats)) {
@@ -267,10 +505,6 @@ function calculateSeasonStats(players) {
         : 0;
 
     return stats;
-}
-
-function getCurrentSeason() {
-    return CURRENT_SEASON;
 }
 
 function getTopPlayers(players, count = 3) {
@@ -359,7 +593,6 @@ async function playSeasonMusic() {
             contMusic.volume = 0.3;
             contMusic.loop = true;
 
-
             window.seasonMusic = finalMusic;
             contMusic.play();
         });
@@ -382,6 +615,7 @@ function stopSeasonEffects() {
         clearInterval(seasonAnimationFrame);
         seasonAnimationFrame = null;
     }
+    stopPlayerRotation();
 }
 
 // #region Utils
@@ -398,25 +632,18 @@ function cleanupSeasonEnd() {
     }
 }
 
-// Update timer and preload audio for season end
-let audioElements = {};
-let lastPlayed = null;
-
-// Season end screen
 function playAppropriateTrack(diff) {
     let trackToPlay = null;
 
-    if (diff <= 30000) { // 0:30
+    if (diff <= 30000) {
         trackToPlay = 'season/season_end3';
-    } else if (diff <= 85000) { // 1:25
+    } else if (diff <= 85000) {
         trackToPlay = 'season/season_end2';
-    } else if (diff <= 145000) { // 2:25
+    } else if (diff <= 145000) {
         trackToPlay = 'season/season_end1';
     }
 
-    // If track changed
     if (trackToPlay && lastPlayed !== trackToPlay) {
-        // Stop all tracks
         Object.values(audioElements).forEach(audio => {
             audio.pause();
             audio.currentTime = 0;
@@ -426,6 +653,57 @@ function playAppropriateTrack(diff) {
         audioElements[trackToPlay].play().catch(e => {
             console.warn(`Couldn't play ${trackToPlay}:`, e);
         });
-
     }
+}
+
+function checkPMCExists(player) {
+    return new Promise((resolve) => {
+        const permaLink = player.permaLink;
+        const url = `${ApiPaths.pmcPfpsPath}${permaLink}_full.png`;
+        console.log(`[ImageCheck] Trying: ${url}`);
+
+        console.log('permaLink type:', typeof player.permaLink);
+        console.log('permaLink value:', player.permaLink);
+        console.log('player keys:', Object.keys(player));
+
+        if (imageCache.has(permaLink)) {
+            resolve(imageCache.get(permaLink));
+            return;
+        }
+
+        const img = new Image();
+        const timeout = setTimeout(() => {
+            console.warn(`[ImageCheck] TIMEOUT for ${url}`);
+            img.src = '';
+            imageCache.set(permaLink, false);
+            resolve(false);
+        }, 5000);
+
+        img.onload = () => {
+            clearTimeout(timeout);
+            console.log(`[ImageCheck] LOADED ${url} — ${img.naturalWidth}x${img.naturalHeight}`);
+            const isValid = img.naturalWidth > 10 && img.naturalHeight > 10;
+            imageCache.set(permaLink, isValid);
+            resolve(isValid);
+        };
+
+        img.onerror = (e) => {
+            clearTimeout(timeout);
+            console.error(`[ImageCheck] ERROR for ${url}`, e);
+            imageCache.set(permaLink, false);
+            resolve(false);
+        };
+
+        img.src = url;
+    });
+}
+
+async function filterPlayersWithImages(players) {
+    const results = await Promise.all(
+        players.map(async (player) => {
+            const hasImage = await checkPMCExists(player);
+            return hasImage ? player : null;
+        })
+    );
+    return results.filter(p => p !== null);
 }
