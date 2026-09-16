@@ -64,14 +64,16 @@ function applyRewards(player, elements) {
 
     // Apply card background
     const cardBgMap = {
-        "labs": { level: 25, class: 'labs-bg' },
-        "purple": { level: 15, class: 'purple-bg' },
-        "streets3": { level: 10, class: 'streets3-bg' },
-        "streets2": { level: 7, class: 'streets2-bg' },
         "streets": { level: 4, class: 'streets-bg' },
-        "waves": { level: 20, class: 'waves-bg' },
+        "lighthouse": { level: 5, class: 'lighthouse-background' },
         "sunset": { level: 6, class: 'sunset-bg' },
+        "streets2": { level: 7, class: 'streets2-bg' },
+        "streets3": { level: 10, class: 'streets3-bg' },
+        "hardcore": { level: 10, class: 'hardcore-bg' },
         "grenades": { level: 12, class: 'grenades-bg' },
+        "purple": { level: 15, class: 'purple-bg' },
+        "waves": { level: 20, class: 'waves-bg' },
+        "labs": { level: 25, class: 'labs-bg' }
     };
 
     if (cardBgMap[player.bp_cardbg]?.level <= bpLevel) {
@@ -80,8 +82,11 @@ function applyRewards(player, elements) {
 
     // Apply main background
     const mainBgMap = {
+        'gz': { level: 5, class: 'gz-background' },
         'usec': { level: 10, class: 'usec-background' },
         'bear': { level: 10, class: 'bear-background' },
+        'boreas': { level: 13, class: 'boreas-background' },
+        'tarkovbrothers': { level: 15, class: 'tarkovbrothers-background' },
         'labs': { level: 20, class: 'labs-background' },
         // Achievement backgrounds
         'goons': {

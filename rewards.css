@@ -80,6 +80,38 @@
     backdrop-filter: none;
 }
 
+/* Hardcore Only */
+.hardcore-bg {
+    background: url(media/rewards/card_background/hardcore.png) no-repeat center;
+    background-size: cover;
+}
+
+/* Main backgrounds */
+.boreas-background {
+    background: url(media/rewards/main_background/boreas.png) no-repeat center;
+    background-size: cover;
+}
+
+.gz-background {
+    background: url(media/rewards/main_background/gz.jpg) no-repeat center;
+    background-size: cover;
+}
+
+.tarkovbrothers-background {
+    background: url(media/rewards/main_background/tarkovbrothers.png) no-repeat center;
+    background-size: cover;
+}
+
+.usec-background {
+    background: url(media/rewards/main_background/Usec.jpg) no-repeat center;
+    background-size: cover;
+}
+
+.usec-background {
+    background: url(media/rewards/main_background/Usec.jpg) no-repeat center;
+    background-size: cover;
+}
+
 .usec-background {
     background: url(media/rewards/main_background/Usec.jpg) no-repeat center;
     background-size: cover;
