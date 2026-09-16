@@ -7,7 +7,6 @@
 let autoLoginAttempts = 0;
 let authCheckInProgress = false;
 let authCheckCompleted = false;
-const MAX_AUTO_LOGIN_ATTEMPTS = 1;
 window.global_user_data = [];
 
 async function checkAuth() {

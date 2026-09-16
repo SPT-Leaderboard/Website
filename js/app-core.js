@@ -68,7 +68,7 @@ const ApiPaths = {
 // Paths for local files if testing locally
 if (isLocalhost) {
     ApiPaths.equipmentBlobStatsPath = `../fallbacks/equipment_history_blob.json`;
-    ApiPaths.pmcPfpsPath = `../fallbacks/pmc_avatars/`;
+    ApiPaths.pmcPfpsPath = `/fallbacks/pmc_avatars/`;
     ApiPaths.currentSeason = `../fallbacks/season11.json`;
     ApiPaths.seasonPath = `../fallbacks/season`;
     ApiPaths.profileAppearencePath = `http://localhost:3000/api/network/functions/get_player_customization.php`;

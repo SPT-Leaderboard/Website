@@ -480,8 +480,8 @@ function formatTime(seconds) {
 /**
  * Formats a duration in seconds into a compact multi-unit string that to the date in the future
  * Minutes are omitted when months are present.
- * @param {number} seconds - Total number of seconds
  * @returns {string} Formatted duration string
+ * @param timestamp
  */
 function howMuchUntilFutureDateWeHaveLeft(timestamp) {
     const now = Date.now();
@@ -605,23 +605,20 @@ async function loadJSON(url) {
  * Find player object by id
  */
 window.findPlayer = function (playerId) {
-    const player = leaderboardData.find((p) => p.id === playerId);
-
-    return player;
+    return leaderboardData.find((p) => p.id === playerId);
 }
 
 /**
  * Find player object by permaLink
  */
 window.findPlayerByPermaLink = function (permaLink) {
-    const player = leaderboardData.find((p) => p.permaLink === permaLink);
-
-    return player;
+    return leaderboardData.find((p) => p.permaLink === permaLink);
 }
 
 /**
  * Gets classes or icons for the name in ready HTML format, depending on the custom roles, or something else.
  * @param {Array<Object>} player - Player object
+ * @param shouldRenderTeamTag - Should we include player team tag inside HTML?
  * @returns {string} Formatted HTML
  */
 function renderUsernameHTML(player, shouldRenderTeamTag = null) {

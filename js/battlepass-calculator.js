@@ -4,10 +4,6 @@
 //   ___/ / ____/ / /    / /___/ /___/ ___ |/ /_/ / /___/ _, _/ /_/ / /_/ / ___ |/ _, _/ /_/ /
 //  /____/_/     /_/    /_____/_____/_/  |_/_____/_____/_/ |_/_____/\____/_/  |_/_/ |_/_____/
 
-const BASE_EXP_PER_LEVEL = 2200;
-const MAX_LEVEL = 30;
-const MIN_LEVEL = 1;
-
 function initHOF(player, bestWeapon) {
     try {
         calculatePlayerLevel(player);
