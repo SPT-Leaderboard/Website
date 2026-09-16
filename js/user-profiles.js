@@ -1553,6 +1553,14 @@ function generateBadgesHTML(player) {
         </div>`;
     }
 
+    // Hardcore
+    if (player.isHardcore) {
+        badges += `<div class="badge tooltip">
+            <img src="/media/legacy/icon_kia.png" width="30" height="30" alt="Hardcore">
+            <span class="tooltiptext">Hardcore Player</span>
+        </div>`;
+    }
+
     if (player.seasonsPlayed && player.seasonsPlayed > 1) {
         const seasons = player.seasonsPlayed;
         const tier = seasonTiers.find(t => t.condition(seasons));

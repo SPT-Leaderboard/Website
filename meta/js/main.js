@@ -252,8 +252,8 @@ async function loadEquipmentData(weaponLoader) {
     }).then(data => {
         if (data !== null) {
             allEquipmentData = data;
-
             weaponLoader.innerHTML = `Awaiting attachments data...`;
+            
             processWeaponDataWithAttachments(data);
         }
     });
