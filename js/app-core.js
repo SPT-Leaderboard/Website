@@ -107,7 +107,7 @@ async function initEngine() {
 
     // Load previous global stats from localStorage if can
     if (EngineState.isOnMainPage) {
-        if(isLocalhost)
+        if (isLocalhost)
             console.warn('[Engine] Loading previous global stats from localStorage (main page)')
 
         const savedStats = localStorage.getItem('leaderboardStats');
@@ -402,12 +402,19 @@ function createPlayerRow(player) {
             <em class="fa-solid fa-triangle-exclamation" style="color:rgba(255, 110, 100, 1);"></em>
             <span class="tooltiptext">Profile is banned</span>
         </div>`;
-    } else if (player?.suspicious && !player.isCasual) {
+    } else if (player?.suspicious && !player.isCasual && !player.isHardcore) {
         badge = `
         <div class="badge-lb tooltip">
             <em class="fa-solid fa-triangle-exclamation" style="color:rgb(255, 214, 100);"></em>
             <span class="tooltiptext">Marked as suspicious by SkillIssueDetector™ (Beta)</span>
         </div>`;
+    } else if (player.isHardcore) {
+        badge=`     
+        <div class="badge-lb tooltip">
+            <img src="../media/legacy/icon_kia.png" width="30" height="30">
+            <span class="tooltiptext">Player is in Hardcore Mode</span>
+        </div>`;
+        
     } else {
         const boostValue = player.boostPerc || 0;
         const boostColor = boostValue >= 1 && boostValue <= 3 ? 'rgba(142, 255, 189, 1)' :
