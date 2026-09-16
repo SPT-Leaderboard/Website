@@ -46,8 +46,7 @@ async function loadQuestData(quests) {
             console.error(`HTTP error! status: ${response.status}`);
         }
 
-        const compiledQuests = response;
-        currentQuests = processQuestsData(quests, compiledQuests.questsCompiled);
+        currentQuests = processQuestsData(quests, response.questsCompiled);
         await displayQuestsWithControls(currentQuests, questsContainer);
 
     } catch (error) {

@@ -103,8 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } else if (progress < 90) {
             animateStatusText("Finalizing...");
-        } else if (progress < 100) {
-            animateStatusText("Almost ready...");
         } else {
             animateStatusText("Waiting for an API response...");
             waitForDataReady(() => completeLoading());
