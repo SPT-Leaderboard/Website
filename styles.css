@@ -3252,6 +3252,7 @@ input[type="checkbox"]:checked:hover {
 
 .showcase-mini {
     width: 100%;
+    padding: 8px
 }
 
 .showcase-mini-header {
@@ -3537,6 +3538,174 @@ input[type="checkbox"]:checked:hover {
 .showcase-item-mini[data-rarity="limited"] .item-mini-glow {
     background: radial-gradient(circle, rgba(239, 68, 68, 0.5), rgba(220, 38, 38, 0.15));
     box-shadow: inset 0 0 35px rgba(239, 68, 68, 1);
+}
+
+/* Breach */
+.player-breaches {
+    z-index: 3 !important;
+}
+
+.breaches-mini {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+}
+
+.breaches-items-mini {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-content: center;
+    gap: 6px;
+    width: 100%;
+}
+
+.breach-item-mini {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    border-radius: 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition:
+        transform 0.12s ease,
+        box-shadow 0.15s ease,
+        border-color 0.15s ease,
+        background 0.15s ease;
+    overflow: visible;
+}
+
+.breach-item-mini:hover {
+    z-index: 4;
+}
+
+.breach-item-mini img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.65));
+    pointer-events: none;
+    transition: transform 0.15s ease;
+}
+
+.breach-item-mini[data-tone="positive"] {
+    background: linear-gradient(180deg, rgba(42, 92, 58, 0.55), rgba(18, 52, 30, 0.8));
+    border-color: rgba(90, 230, 140, 0.45);
+}
+
+.breach-item-mini[data-tone="positive"]:hover {
+    border-color: rgba(130, 255, 180, 0.75);
+}
+
+.breach-item-mini[data-tone="negative"] {
+    background: linear-gradient(180deg, rgba(112, 26, 26, 0.55), rgba(66, 10, 10, 0.82));
+    border-color: rgba(255, 90, 90, 0.5);
+}
+
+.breach-item-mini[data-tone="negative"]:hover {
+    border-color: rgba(255, 130, 130, 0.8);
+}
+
+.breach-tooltip {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgb(31 31 31);
+    border: 1px solid #ffffff1a;
+    color: #f0f0f5;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border-radius: 6px;
+    box-shadow:
+        0 6px 14px rgba(0, 0, 0, 0.55),
+        0 0 0 1px rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10;
+    transition: opacity 0.14s ease, transform 0.14s ease;
+}
+
+.breach-tooltip--name {
+    bottom: calc(100% + 8px);
+    padding: 5px 9px;
+    white-space: nowrap;
+    transform: translateX(-50%) translateY(4px);
+}
+
+.breach-tooltip--name::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: rgba(10, 10, 14, 0.96);
+}
+
+.breach-tooltip--desc {
+    top: calc(100% + 8px);
+    padding: 6px 10px;
+    max-width: 220px;
+    width: max-content;
+    white-space: normal;
+    text-align: center;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #d8d8e4;
+    transform: translateX(-50%) translateY(-4px);
+}
+
+.breach-tooltip--desc::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-bottom-color: rgba(10, 10, 14, 0.96);
+}
+
+/* --- Show both on hover --- */
+.breach-item-mini:hover .breach-tooltip--name {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.breach-item-mini:hover .breach-tooltip--desc {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* --- Tone-colored borders on hover --- */
+.breach-item-mini[data-tone="positive"]:hover .breach-tooltip {
+    border-color: rgba(90, 230, 140, 0.5);
+}
+
+.breach-item-mini[data-tone="negative"]:hover .breach-tooltip {
+    border-color: rgba(255, 90, 90, 0.5);
+}
+
+.breaches-banner {
+    width: 400px;
+    height: 320px;
+    object-fit: contain;
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    left: 175px;
+}
+
+.breach-item-mini[data-tone="positive"]:hover .breach-tooltip {
+    border-color: rgba(90, 230, 140, 0.5);
+}
+
+.breach-item-mini[data-tone="negative"]:hover .breach-tooltip {
+    border-color: rgba(255, 90, 90, 0.5);
 }
 
 /* Stat value */

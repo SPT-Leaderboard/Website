@@ -137,6 +137,26 @@
           "disabled": false
         }
       },
+      "breachTraits": {
+            "completed": true,
+            "selected_at": 1789638038,
+            "positive": [
+            "lucky_charm",
+            "additional_daily_case"
+            ],
+            "negative": [
+            "cost_items_25",
+            "trader_tax"
+            ],
+            "score_remaining": 4,
+            "modifiers": [
+            "one_more_case",
+            "expensive_market_items_25",
+            "less_sell_30",
+            "cant_sell_items"
+            ],
+            "counters": []
+        },
       "pmcSide": "Bear",
       "scavLevel": 1,
       "prestige": 0,

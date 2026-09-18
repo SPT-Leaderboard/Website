@@ -16,6 +16,122 @@ let ProfileState = {
     playerHitDefaultRender: 10
 };
 
+// Icon base path
+const BREACH_ICON_BASE = '/media/cord_breach/modifiers/';
+
+// Catalog keyed by the value that actually appears in breachTraits.modifiers
+const BREACH_MODIFIER_META = {
+    // Positive
+    'champion': {
+        label: 'Champion',
+        tone: 'positive',
+        description: 'Your Skill Score will always be boosted by 3%',
+        icon: 'champion.png'
+    },
+    'one_more_case': {
+        label: 'Well-Crafted Connections',
+        description: 'Always receive an extra daily case in your inventory each login.',
+        tone: 'positive',
+        icon: 'connections.png'
+    },
+    'kappa_path': {
+        label: 'Kappa Path',
+        description: 'Immediately receive Kappa secure container.',
+        tone: 'positive',
+        icon: 'kappa.png'
+    },
+    'loot_goblin': {
+        label: 'Loot Goblin',
+        description: 'Instantly receive 3 random rare loot items (value 35k-75k LC each).',
+        tone: 'positive',
+        icon: 'loot_goblin.png'
+    },
+    'weekly_drop_higher_pool': {
+        label: 'Weekly Hero',
+        description: 'Raise your weekly drops to a higher pool (by ~10-15k LC).',
+        tone: 'positive',
+        icon: 'weekly_hero.png'
+    },
+    'marathonist': {
+        label: 'Marathonist',
+        description: 'Nothing stops you. Map fatigue will be applied in less percentage than usual.',
+        tone: 'positive',
+        icon: 'marathonist.png'
+    },
+
+
+    // Negative
+    'expensive_market_items_25': {
+        label: 'Fail-Sales-Man',
+        description: 'All Tarkov Market items will additionally cost 25% more LC.',
+        tone: 'negative',
+        icon: 'fail_salesman.png'
+    },
+    'unlucky_streak': {
+        label: 'Unlucky Streak',
+        description: 'With a certain chance you will receive 70% less LC for a raid.',
+        tone: 'negative',
+        icon: 'unlucky_streak.png'
+    },
+    'less_sell_30': {
+        label: 'Trader Tax',
+        description: 'All items sold on Tarkov Market will give 30% less LC.',
+        tone: 'negative',
+        icon: 'trader_tax.png'
+    },
+    'cant_sell_items': {
+        label: '(Dis)respected',
+        description: 'You will no longer be able to sell any Tarkov Market items, nor use Trading.',
+        tone: 'negative',
+        icon: 'disrespected.png'
+    },
+    'lower_bp_exp_35': {
+        label: 'Hard Learner',
+        description: 'You will immidiately be set to 35 level of current BattlePass (disregarding higher or lower level), but permanently gain 30% less BP EXP.',
+        tone: 'negative',
+        icon: 'hard_learner.png'
+    },
+    'no_daily_cases': {
+        label: 'Forgotten',
+        description: 'You will no longer recieve daily cases.',
+        tone: 'negative',
+        icon: 'no_daily.png'
+    },
+    'busy_hands': {
+        label: 'Busy Hands',
+        description: 'With a certain chance, you will spend a key use and the door still would not budge.',
+        tone: 'negative',
+        icon: 'busy_hands.png'
+    },
+    'the_dark_side': {
+        label: 'Against All',
+        description: 'Your positive mods will no longer contribute to skill score boost.',
+        tone: 'negative',
+        icon: 'the_dark_side.png'
+    },
+
+    'receieve_200k_bp_exp': {
+        label: 'Expertise from Experts',
+        description: 'Recieve +200,000 BattlePass EXP immediately.',
+        tone: 'positive',
+        icon: 'expert.png'
+    },
+    'fifteen_k_immidiately': {
+        label: 'Dealership',
+        description: 'Receive 15,000 LC immediately.',
+        tone: 'positive',
+        icon: 'dealership.png'
+    },
+    'lucky_charm': {
+        label: 'Lucky Charm',
+        description: 'Receive 5 BattlePass boosts immediately.',
+        tone: 'positive',
+        icon: 'lucky_charm.png'
+    },
+};
+
+const BREACH_FALLBACK_ICON = BREACH_ICON_BASE + '_unknown.png';
+
 /**
  * Opens a player's profile modal by looking up the player in leaderboardData.
  * @param {string} playerId - The unique identifier of the player to display.
@@ -468,6 +584,28 @@ async function showPublicProfile(container, player) {
                     </div>
                 </div>
 
+                ${player.breachTraits && Array.isArray(player.breachTraits.modifiers) && player.breachTraits.modifiers.length > 0 ?
+            `<div class="player-overview player-breaches">
+                        <div class="breaches-mini">
+                            <div class="showcase-mini-header">
+                                <span class="showcase-title">Breach Modifiers</span>
+                                <img class="breaches-banner" src="/media/cord_breach/banner.jpg" alt="" aria-hidden="true">
+                            </div>
+                            <div class="breaches-items-mini">
+                                ${player.breachTraits.modifiers.map(key => {
+                const meta = resolveBreachModifier(key);
+                return `
+                                    <div class="breach-item-mini" data-tone="${meta.tone}" data-modifier="${escapeHtml(key)}">
+                                        <img src="${meta.iconUrl}" alt="" loading="lazy" decoding="async" onerror="this.src='${BREACH_FALLBACK_ICON}';this.classList.add('is-fallback')">
+                                            <span class="breach-tooltip breach-tooltip--name">${escapeHtml(meta.label)}</span>
+                                            <span class="breach-tooltip breach-tooltip--desc">${escapeHtml(meta.description || '')}</span>
+                                    </div>`;
+            }).join('')}
+                            </div>
+                        </div>
+                    </div>`
+            : ''}
+
                 <!-- Item Showcase -->
                 ${player.showcase && Object.keys(player.showcase).length > 0 ?
             `<div class="player-overview player-showcase">
@@ -683,7 +821,7 @@ async function showPublicProfile(container, player) {
                 <div class="divider"></div>
                 <div class="comments-header">
                     <h3>Comments (<span id="comments-count">0</span>)</h3>
-                    <div class="pagination-info" id="pagination-info">Page 1 of 1</div>
+                    <div class="pagination-info" id="pagination-info">1 of 1</div>
                 </div>
                 <div class="comments-list" id="comments-list">
                     <!-- JS -->
@@ -1470,6 +1608,24 @@ function startStatusUpdater(player, container) {
 // #endregion
 
 // #region Utils
+function resolveBreachModifier(key) {
+    const meta = BREACH_MODIFIER_META[key];
+    if (meta) {
+        return {
+            label: meta.label,
+            description: meta.description || '',
+            tone: meta.tone,
+            iconUrl: BREACH_ICON_BASE + meta.icon,
+        };
+    }
+    return {
+        label: key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+        description: '',
+        tone: 'neutral',
+        iconUrl: BREACH_FALLBACK_ICON,
+    };
+}
+
 function generateBadgesHTML(player) {
     let badges = "";
 
