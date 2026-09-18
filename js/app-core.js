@@ -694,14 +694,11 @@ function addColorIndicators(data) {
         if (player.sptVer) {
             const playerParts = player.sptVer.split('.').map(Number);
 
-            if (playerParts[0] === 4 && playerParts[1] === 0) {
-                // 4.0.x
+            if (playerParts[0] === 4 && playerParts[1] === 1) {
+                // 4.1.x
                 player.versionStatus = 'good';
-            } else if (playerParts[0] === 3 && playerParts[1] === 11) {
-                // Versions 3.11.x (LTS)
-                player.versionStatus = 'lts';
             } else {
-                player.versionStatus = 'bad';
+                player.versionStatus = 'lts';
             }
         }
 
