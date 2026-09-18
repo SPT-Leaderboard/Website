@@ -6,7 +6,7 @@
 
 let leaderboardData = []; // DYNAMIC: Main leaderboard data for the current season
 let oldLeaderboardData = []; // DYNAMIC: Previous leaderboard data for the current season
-const CURRENT_SEASON = 11;
+const CURRENT_SEASON = 12;
 
 // DYNAMIC: Indicates when user is logged in Network or not
 let isLoggedIn = false;
