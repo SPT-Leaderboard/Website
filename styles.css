@@ -8666,6 +8666,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .season-header {
+    position: relative;
     text-align: left;
 }
 
@@ -8680,6 +8681,19 @@ input[type="checkbox"]:checked:hover {
     -webkit-text-fill-color: transparent;
     animation: shimmerW 3s linear infinite;
     margin-bottom: 8px;
+}
+
+.season-welcome-banner {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -100px;
+}
+
+.season-welcome-banner img {
+    display: block;
+    max-width: 100%;
+    height: auto;
 }
 
 @keyframes shimmerW {

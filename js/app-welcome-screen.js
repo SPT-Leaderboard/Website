@@ -17,7 +17,7 @@ const phrases = [
 
 async function initWelcomeScreen() {
     try {
-        if (localStorage.getItem('WelcomeSplashScreen') !== 'true') {
+        if (localStorage.getItem('SPTLBWelcome') !== 'true') {
             const players = leaderboardData;
             const showcasePlayers = await getPlayersWithImages(players, 3);
             const stats = calculateSeasonStats(players);
@@ -48,7 +48,7 @@ async function initWelcomeScreen() {
                 welcomePopup.style.opacity = '0';
                 welcomePopup.style.transform = 'translateY(-20px)';
                 welcomePopup.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                localStorage.setItem('WelcomeSplashScreen', 'true');
+                localStorage.setItem('SPTLBWelcome', 'true');
                 setTimeout(() => {
                     welcomePopup.remove();
                 }, 400);
@@ -75,6 +75,7 @@ function createWelcomeOverlay(showcasePlayers, stats) {
             <div class="season-end-layout">
                 <div class="season-stats-column">
                     <div class="season-header">
+                    <img class="season-welcome-banner" src="/media/cord_breach/banner.jpg" alt="" aria-hidden="true">
                         <h1>Welcome to SPTLB</h1>
                         <p class="season-end-subtitle">With everlasting <span class="animated-text-glitch" id="journey-text"> </span></p>
                         <div class="welcome-description">
