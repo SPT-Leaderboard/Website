@@ -447,6 +447,7 @@ async function showPublicProfile(container, player) {
                         <div class="name-wrapper">
                             <span class="name">${name}</span>
                         </div>
+                        <div class="profile-raid-streak" id="profile-raid-streak" aria-live="polite"></div>
                     </div>
                     <!-- Status and info -->
                     <div class="meta-footer">
@@ -639,7 +640,7 @@ async function showPublicProfile(container, player) {
             
             <div class="battlepass-level profile-section">
                 <h3>Leaderboard Rank</h3>
-                <div class="rank-display-wrapper" id="playerRankDisplay">
+                <div class="rank-display-wrapper${rank.isLegendary ? ' legendary' : ''}" id="playerRankDisplay">
                     <!-- Rank Display -->
                     <div class="rank-display-new">
                         <div class="rank-icon-container-new">
@@ -656,6 +657,25 @@ async function showPublicProfile(container, player) {
                                 <span class="rank-progress-label">Overall Progress</span>
                                 <span class="rank-progress-value">${rank.progress}%</span>
                             </div>
+                        </div>
+                    </div>
+                    <!-- Rank Details -->
+                    <div class="rank-details-new">
+                        <div class="rank-detail-item">
+                            <span class="rank-detail-label">Level</span>
+                            <span class="rank-detail-value" style="color: ${rank.textColor};">${rank.level} / 50</span>
+                        </div>
+                        <div class="rank-detail-item">
+                            <span class="rank-detail-label">Tier</span>
+                            <span class="rank-detail-value" style="color: ${rank.textColor};">${rank.levelGroup} / 5</span>
+                        </div>
+                        <div class="rank-detail-item">
+                            <span class="rank-detail-label">Tier Rank</span>
+                            <span class="rank-detail-value" style="color: ${rank.textColor};">${rank.rankInGroup} / 10</span>
+                        </div>
+                        <div class="rank-detail-item">
+                            <span class="rank-detail-label">Rating</span>
+                            <span class="rank-detail-value" style="color: ${rank.textColor};">${playerRating.toLocaleString()}</span>
                         </div>
                     </div>
                 </div>
@@ -1090,6 +1110,7 @@ async function showPublicProfile(container, player) {
 
     //user-hideout.js
     loadHideoutData(player.hideout);
+    
     // Records
     ProfileState.tabManager = new TabManager(player.id, leaderboardData);
 
@@ -1436,9 +1457,13 @@ async function renderWeaponList(playerId, modWeaponStats) {
                         </div>
                     </div>
                 </div>
-                <div class="weapon-micro-stats" data-label="HS Rate">
-                    <div class="progress-bar" style="width: ${headshotPrc}%">
-                        ${headshotPrc}%
+                <div class="weapon-micro-stats">
+                    <div class="weapon-micro-stats-row">
+                        <span class="weapon-micro-stats-label">Headshot Rate</span>
+                        <span class="weapon-micro-stats-value">${headshotPrc}%</span>
+                    </div>
+                    <div class="weapon-micro-stats-track">
+                        <div class="progress-bar" style="width: ${headshotPrc}%"></div>
                     </div>
                 </div>
             </div>
@@ -1539,6 +1564,7 @@ function startStatusUpdater(player, container) {
                     statusElement.replaceWith(newElement);
                 }
 
+                // Update profile
                 await loadAndCropPlayerImage(player);
                 await loadQuestData(player.completed_quests);
                 await initLastRaids(player.id, player.permaLink);
@@ -2009,6 +2035,9 @@ function setupModalCloseHandlers() {
             restoreScrollPosition();
         }, 10);
     }
+
+    // Expose close function globally so hash/back navigation (user-share.js) can close it
+    window.closeProfile = closeProfile;
 }
 
 function restoreScrollPosition() {

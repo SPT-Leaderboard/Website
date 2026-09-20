@@ -119,12 +119,21 @@ async function initLastRaids(playerId, permaLink) {
                     <h3>No raids recorded</h3>
                     <p>This player doesn't have any raids recorded yet.</p>
                 </div>`;
+            recentStatsContainer.innerHTML = `
+                <div class="no-stats-message compact-empty-state">
+                    <p>No raid summary available.</p>
+                </div>`;
+            mapStatsContainer.innerHTML = `
+                <div class="no-stats-message compact-empty-state">
+                    <p>No map statistics available.</p>
+                </div>`;
             return;
         }
 
         // Render summary
         renderRaidsSummary(allRaids, playerId, leaderboardData);
         renderMapStats(allRaids);
+        renderProfileRaidStreak(allRaids);
 
         // Display first batch
         renderDisplayBatch();
@@ -219,17 +228,26 @@ function renderDisplayBatch() {
     const startIdx = currentDisplayOffset;
     const endIdx = Math.min(currentDisplayOffset + DISPLAY_BATCH_SIZE, allRaids.length);
     const batchToDisplay = allRaids.slice(startIdx, endIdx);
+    const renderRaid = (raid, batchIndex) => createRaidCard(
+        raid,
+        currentPlayerIdGlobal,
+        leaderboardData,
+        allRaids[startIdx + batchIndex + 1]
+    );
+    const renderBatchCard = (raid, batchIndex) => {
+        const absoluteIndex = startIdx + batchIndex;
+        const previousRaid = allRaids[absoluteIndex + 1];
+        const groupMarker = createRaidGroupMarker(raid, previousRaid);
+
+        return `${groupMarker}${renderRaid(raid, batchIndex)}`;
+    };
 
     if (currentDisplayOffset === 0) {
         // First batch
-        statsContainer.innerHTML = batchToDisplay.map(raid =>
-            createRaidCard(raid, currentPlayerIdGlobal, leaderboardData)
-        ).join('');
+        statsContainer.innerHTML = batchToDisplay.map(renderBatchCard).join('');
     } else {
         // Subsequent batches
-        const newRaidsHtml = batchToDisplay.map(raid =>
-            createRaidCard(raid, currentPlayerIdGlobal, leaderboardData)
-        ).join('');
+        const newRaidsHtml = batchToDisplay.map(renderBatchCard).join('');
 
         statsContainer.insertAdjacentHTML('beforeend', newRaidsHtml);
     }
@@ -265,6 +283,104 @@ function renderDisplayBatch() {
     }
 }
 
+function renderProfileRaidStreak(raids) {
+    const streak = calculateRaidStreak(raids);
+    const streakContainer = document.getElementById('profile-raid-streak');
+
+    if (!streakContainer) return;
+
+    streakContainer.innerHTML = `
+        <div class="profile-raid-streak-badge">
+            <i class="fa-solid fa-fire-flame-curved"></i>
+            <span>${streak} day${streak === 1 ? '' : 's'} active streak</span>
+        </div>
+    `;
+}
+
+function calculateRaidStreak(raids) {
+    const activeDays = [...new Set(raids
+        .map(raid => getRaidDayKey(raid.absoluteLastTime))
+        .filter(Boolean))];
+
+    if (!activeDays.length) return 0;
+
+    let streak = 1;
+    for (let index = 1; index < activeDays.length; index++) {
+        const currentDay = new Date(`${activeDays[index - 1]}T00:00:00`);
+        const previousDay = new Date(`${activeDays[index]}T00:00:00`);
+        const difference = Math.round((currentDay - previousDay) / 86400000);
+
+        if (difference !== 1) break;
+        streak++;
+    }
+
+    return streak;
+}
+
+function createRaidGroupMarker(raid, previousRaid) {
+    const currentKey = getRaidDayKey(raid.absoluteLastTime);
+    const previousKey = previousRaid ? getRaidDayKey(previousRaid.absoluteLastTime) : null;
+    const gapSeconds = previousRaid
+        ? Number(raid.absoluteLastTime) - Number(previousRaid.absoluteLastTime)
+        : 0;
+    const currentDate = new Date(Number(raid.absoluteLastTime) * 1000);
+    const groupMode = gapSeconds > 7 * 86400 ? 'week' : 'day';
+    const currentGroupKey = groupMode === 'week'
+        ? getRaidWeekKey(currentDate)
+        : `day:${currentKey}`;
+    const previousGroupKey = previousRaid
+        ? (groupMode === 'week'
+            ? getRaidWeekKey(new Date(Number(previousRaid.absoluteLastTime) * 1000))
+            : `day:${previousKey}`)
+        : null;
+
+    if (previousRaid && currentGroupKey === previousGroupKey) return '';
+
+    const dateLabel = currentDate.toLocaleDateString(undefined, {
+        weekday: 'long',
+        month: 'short',
+        day: 'numeric',
+        ...(currentDate.getFullYear() !== new Date().getFullYear() ? { year: 'numeric' } : {})
+    });
+    const relativeLabel = `<span class="raid-relative-time">(${formatRaidRelativeTime(currentDate)})</span>`;
+    const label = groupMode === 'week'
+        ? `Week of ${dateLabel} ${relativeLabel}`
+        : `${dateLabel} ${relativeLabel}`;
+
+    return `<div class="raid-group-marker"><span>${label}</span></div>`;
+}
+
+function formatRaidRelativeTime(date) {
+    const now = new Date();
+    const currentDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const days = Math.round((today - currentDay) / 86400000);
+
+    if (days === 0) return 'today';
+    if (days === 1) return 'yesterday';
+    if (days > 1 && days < 14) return `${days} days ago`;
+    if (days < 60) return `${Math.max(2, Math.round(days / 7))} weeks ago`;
+    if (days < 365) return `${Math.round(days / 30.44)} months ago`;
+
+    return `${Math.round(days / 365.25 * 10) / 10} years ago`;
+}
+
+function getRaidDayKey(timestamp) {
+    const date = new Date(Number(timestamp) * 1000);
+    if (!Number.isFinite(date.getTime())) return '';
+
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+function getRaidWeekKey(date) {
+    const weekStart = new Date(date);
+    const day = weekStart.getDay() || 7;
+
+    weekStart.setDate(weekStart.getDate() - day + 1);
+
+    return `week:${weekStart.getFullYear()}-${weekStart.getMonth()}-${weekStart.getDate()}`;
+}
+
 function addShowMoreButton() {
     // Remove existing button if any
     const existingContainer = document.getElementById('show-more-btn-container');
@@ -281,7 +397,7 @@ function addShowMoreButton() {
         <div id="show-more-btn-container" class="show-more-container">
             <button id="show-more-raids" class="show-more-btn">
                 <i class="fa-solid fa-arrow-down"></i>
-                Show More Raids (${remainingRaids} remaining)
+                Show More (${remainingRaids} left)
             </button>
         </div>
     `;
@@ -307,46 +423,19 @@ function handleShowMore() {
     }, 100);
 }
 
-// #region Render raid history
-function renderCurrentBatch(currentPlayerId) {
-    const statsContainer = document.getElementById('raids-stats-container');
-
-    if (currentRaidOffset === 0) {
-        // First batch - replace content
-        statsContainer.innerHTML = allRaids.map(raid =>
-            createRaidCard(raid, currentPlayerIdGlobal, leaderboardData)
-        ).join('');
-    } else {
-        // Subsequent batches - append
-        const newRaidsHtml = allRaids.slice(currentRaidOffset).map(raid =>
-            createRaidCard(raid, currentPlayerIdGlobal, leaderboardData)
-        ).join('');
-
-        statsContainer.insertAdjacentHTML('beforeend', newRaidsHtml);
-    }
-
-    currentRaidOffset = allRaids.length;
-    attachEventListeners();
-
-    // Remove loader if present
-    const loader = document.getElementById('raids-loading-more');
-    if (loader) loader.remove();
-}
-
-function createRaidCard(raid, currentPlayerId, leaderboardData) {
+function createRaidCard(raid, currentPlayerId, leaderboardData, previousRaid) {
     const raidStatus = getRaidStatus(raid);
     const shouldShowStats = shouldDisplayStats(raid);
     const crossProfileIndicator = createCrossProfileIndicator(raid, currentPlayerId, leaderboardData);
+    const returnIndicator = createReturnIndicator(raid, previousRaid);
 
     return `
         <div class="last-raid-feed ${raidStatus.class}-bg">
             ${createBackgroundImage(raid)}
             
             <div class="raid-header">
-                <h3 class="section-title ${raidStatus.class}">
-                    ${formatDateTime(raid.absoluteLastTime)}
-                    ${crossProfileIndicator}
-                </h3>
+                ${crossProfileIndicator ? `<div class="raid-header-meta">${crossProfileIndicator}</div>` : ''}
+                ${returnIndicator}
             </div>
             
             <div class="raid-overview">
@@ -357,6 +446,43 @@ function createRaidCard(raid, currentPlayerId, leaderboardData) {
             ${shouldShowStats ? createStatsGrid(raid) : ''}
         </div>
     `;
+}
+
+function createReturnIndicator(raid, previousRaid) {
+    const currentTimestamp = Number(raid.absoluteLastTime);
+    const previousTimestamp = Number(previousRaid?.absoluteLastTime);
+    const gapSeconds = currentTimestamp - previousTimestamp;
+    const returnThreshold = 14 * 24 * 60 * 60;
+
+    if (!Number.isFinite(gapSeconds) || gapSeconds <= returnThreshold) {
+        return '';
+    }
+
+    return `
+        <div class="raid-return-marker">
+            <i class="fa-solid fa-person-walking-arrow-right"></i>
+            <span>Returned into battle after ${formatRaidGap(gapSeconds)}</span>
+        </div>
+    `;
+}
+
+function formatRaidGap(gapSeconds) {
+    const days = gapSeconds / (24 * 60 * 60);
+    let value;
+    let unit;
+
+    if (days < 60) {
+        value = Math.max(2, Math.round(days / 7));
+        unit = 'week';
+    } else if (days < 365) {
+        value = Math.round(days / 30.44);
+        unit = 'month';
+    } else {
+        value = Math.round(days / 365.25 * 10) / 10;
+        unit = 'year';
+    }
+
+    return `${value} ${unit}${value === 1 ? '' : 's'}`;
 }
 
 function createVisualSection(raid, raidStatus) {
@@ -524,7 +650,8 @@ function createBackgroundImage(raid) {
         <div class="last-raid-full-background">
             <img src="media/leaderboard_icons/maps/${raid.lastRaidMap}.png" 
                 loading="lazy"
-                alt="${raid.lastRaidMap} background">
+                alt="${raid.lastRaidMap} background"
+                onerror="this.onerror=null; this.src='media/leaderboard_icons/maps/Default.png';">
         </div>
     `;
 }
@@ -538,7 +665,8 @@ function createMapSection(raid, raidStatus) {
         <div class="last-raid-map ${raidStatus.class}-border">
             <img src="media/leaderboard_icons/maps/${raid.lastRaidMap}.png" 
                  alt="${raid.lastRaidMap}"
-                 loading="lazy">
+                 loading="lazy"
+                 onerror="this.onerror=null; this.src='media/leaderboard_icons/maps/Default.png';">
         </div>
     `;
 }
@@ -775,14 +903,10 @@ function renderMapStats(raids) {
         mapStatsHtml = `
             <div class="maps-stats-grid">
                 ${mapStats.map(map => `
-                    <div class="map-stat-card ${map.isFavourite ? 'favourite-map' : ''}">
+                    <div class="map-stat-card ${map.isFavourite ? 'favourite-map' : ''}" style="--map-card-image: url('media/leaderboard_icons/maps/${map.map}.png');">
                         <div class="map-header">
-                            <div class="map-image">
-                                <img loading="lazy" src="media/leaderboard_icons/maps/${map.map}.png" alt="${map.map}" 
-                                    onerror="this.src='media/leaderboard_icons/maps/Default.png'">
-                            </div>
                             <div class="map-info">
-                                <h4 class="map-name">
+                                <h4 class="map-name map-name-overview">
                                     ${map.map}
                                     ${map.isFavourite ? '<span class="favourite-badge">FAVOURITE</span>' : ''}
                                 </h4>
@@ -842,14 +966,14 @@ function renderMapStats(raids) {
                                 <div class="map-stat-value">${map.avgEXP.toLocaleString()}</div>
                             </div>
 
-                            <div class="map-stat-item">
+                            <div class="map-stat-item map-stat-item--profit">
                                 <div class="map-stat-label">Avg. Profit</div>
-                                <div class="map-stat-value ${map.avgProfit >= 30000 ? 'stat-positive' : 'stat-negative'}">
+                                <div class="map-stat-value ${map.avgProfit >= 0 ? 'stat-positive' : 'stat-negative'}">
                                     ${map.avgProfit >= 0 ? '+' : ''}${map.formattedProfit} ₽
                                 </div>
                             </div>
                             
-                            <div class="map-stat-item">
+                            <div class="map-stat-item map-stat-item--profit">
                                 <div class="map-stat-label">Total Profit</div>
                                 <div class="map-stat-value ${map.totalProfit >= 0 ? 'stat-positive' : 'stat-negative'}">
                                     ${map.totalProfit >= 0 ? '+' : ''}${formatSalesNum(map.totalProfit)} ₽
@@ -878,7 +1002,7 @@ function renderRaidsSummary(raids, currentPlayerId, leaderboardData) {
     const recentStats = calculateRecentStats(raids);
 
     // Find player
-    const extraPlayerData = leaderboardData.find(player => player.id === currentPlayerId);
+    const extraPlayerData = leaderboardData?.find(player => player.id === currentPlayerId) || {};
 
     recentStatsContainer.innerHTML = `
         <div class="recent-stats-header">
@@ -937,7 +1061,9 @@ function calculateRecentStats(raids) {
         stats.totalDamage += raid.raidDamage || 0;
         stats.totalEXP += raid.lastRaidEXP || 0;
         stats.totalLC += raid.lcPointsEarned || 0;
-        stats.totalProfit += raid.lastRaidProfit || 0;
+        if (raid.lastRaidProfit !== -1) {
+            stats.totalProfit += raid.lastRaidProfit || 0;
+        }
 
         if (raid.lastRaidSurvived || raid.lastRaidRanThrough || raid.discFromRaid || raid.isTransition) {
             stats.survived++;
@@ -976,7 +1102,9 @@ function calculateMapStats(raids) {
         const stats = mapStats[map];
         stats.totalRaids++;
         stats.totalTime += raid.raidTime || 0;
-        stats.totalProfit += raid.lastRaidProfit || 0;
+        if (raid.lastRaidProfit !== -1) {
+            stats.totalProfit += raid.lastRaidProfit || 0;
+        }
         stats.totalKills += (raid.raidKills || 0) + (raid.scavsKilled || 0) + (raid.bossesKilled || 0);
         stats.totalEXP += raid.lastRaidEXP || 0;
 

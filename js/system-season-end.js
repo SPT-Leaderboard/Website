@@ -140,17 +140,14 @@ function renderSeasonOverlayContent(top3, stats) {
                     </div>
 
                     <div class="season-end-stats-grid">
-                        <div class="season-end-stats-stat-card">
+                        <div class="season-end-stats-stat-card stat-card-featured">
                             <div class="season-end-stat-value" data-target="${stats.totalKills}">0</div>
-                            <div class="season-end-stat-label">PMCs Killed</div>
-                        </div>
-                        <div class="season-end-stats-stat-card">
-                            <div class="season-end-stat-value" data-target="${stats.totalDeaths}">0</div>
-                            <div class="season-end-stat-label">Total Deaths</div>
-                        </div>
-                        <div class="season-end-stats-stat-card">
-                            <div class="season-end-stat-value" data-target="${stats.totalDamage}">0</div>
-                            <div class="season-end-stat-label">Damage Dealt</div>
+                            <div class="season-end-stat-label">Total Kills</div>
+                            <div class="season-end-stat-divider"></div>
+                            <div class="stat-featured-sub">
+                                <span class="stat-featured-sub-label">with Avg Survival Rate</span>
+                                <span class="stat-featured-sub-value" data-target="${stats.averageSurvivalRate}" data-type="percent">0%</span>
+                            </div>
                         </div>
                         <div class="season-end-stats-stat-card">
                             <div class="season-end-stat-value" data-target="${stats.totalRaids}">0</div>
@@ -160,24 +157,26 @@ function renderSeasonOverlayContent(top3, stats) {
                             <div class="season-end-stat-value" data-target="${stats.totalPlayTime}" data-type="time">0h 0m</div>
                             <div class="season-end-stat-label">Hours Played</div>
                         </div>
-                        <div class="season-end-stats-stat-card">
-                            <div class="season-end-stat-value" data-target="${stats.averageSurvivalRate}" data-type="percent">0%</div>
-                            <div class="season-end-stat-label">Avg Survival Rate</div>
-                        </div>
                     </div>
 
                     <div class="season-facts">
                         <div class="fact-item">
-                            <span class="fact-text">Most kills: <strong>${stats.topKillsPlayer || 'N/A'}</strong> (${stats.topKills || 0})</span>
+                            <span class="fact-text"><strong>Top fragger:</strong> ${stats.topKillsPlayer || 'N/A'} (${stats.topKills || 0} kills)</span>
                         </div>
                         <div class="fact-item">
-                            <span class="fact-text">Deadliest weapon: <strong>${stats.topKillsWeapon || 'N/A'}</strong> (${stats.topKillsWeaponCount || 0} kills)</span>
+                            <span class="fact-text"><strong>Deadliest weapon:</strong> ${stats.topKillsWeapon || 'N/A'} (${stats.topKillsWeaponCount || 0} kills)</span>
                         </div>
                         <div class="fact-item">
-                            <span class="fact-text">Most played map: <strong>${stats.mostPopularMap || 'N/A'}</strong></span>
+                            <span class="fact-text"><strong>Most played map:</strong> ${stats.mostPopularMap || 'N/A'}</span>
                         </div>
                         <div class="fact-item">
-                            <span class="fact-text">Total sales: <strong>${formatSalesNum(stats.totalSalesSum || 0)} ₽</strong></span>
+                            <span class="fact-text"><strong>Trade volume:</strong> ${formatSalesNum(stats.totalSalesSum || 0)} ₽</span>
+                        </div>
+                        <div class="fact-item">
+                            <span class="fact-text"><strong>Season survivor:</strong> ${stats.topSurvivalPlayer || 'N/A'} (${stats.topSurvival || 0}% survival)</span>
+                        </div>
+                        <div class="fact-item">
+                            <span class="fact-text"><strong>Season grinder:</strong> ${stats.topPlayTimePlayer || 'N/A'} (${formatPlayTimeShort(stats.topPlayTime || 0)})</span>
                         </div>
                     </div>
 
@@ -417,7 +416,11 @@ function calculateSeasonStats(players) {
         mostPopularMapCount: 0,
         averageSurvivalRate: 0,
         topScore: 0,
-        topScorePlayer: null
+        topScorePlayer: null,
+        topSurvival: 0,
+        topSurvivalPlayer: null,
+        topPlayTime: 0,
+        topPlayTimePlayer: null
     };
 
     const mapStats = {};
@@ -443,6 +446,16 @@ function calculateSeasonStats(players) {
         if ((player.totalScore || 0) > stats.topScore) {
             stats.topScore = player.totalScore;
             stats.topScorePlayer = player.name;
+        }
+
+        if ((player.survivalRate || 0) > stats.topSurvival && (player.totalRaids || 0) > 30) {
+            stats.topSurvival = player.survivalRate;
+            stats.topSurvivalPlayer = player.name;
+        }
+
+        if ((player.totalPlayTime || 0) > stats.topPlayTime) {
+            stats.topPlayTime = player.totalPlayTime;
+            stats.topPlayTimePlayer = player.name;
         }
 
         if (player.stattrack_weapons) {
@@ -516,7 +529,7 @@ function getTopPlayers(players, count = 3) {
 
 // #region Anims
 function animateStats() {
-    document.querySelectorAll('.season-end-stat-value').forEach(el => {
+    document.querySelectorAll('.season-end-stat-value, .stat-featured-sub-value').forEach(el => {
         const target = el.dataset.target;
         if (!target) return;
 
@@ -660,11 +673,11 @@ function checkPMCExists(player) {
     return new Promise((resolve) => {
         const permaLink = player.permaLink;
         const url = `${ApiPaths.pmcPfpsPath}${permaLink}_full.png`;
-        console.log(`[ImageCheck] Trying: ${url}`);
+        //console.log(`[ImageCheck] Trying: ${url}`);
 
-        console.log('permaLink type:', typeof player.permaLink);
-        console.log('permaLink value:', player.permaLink);
-        console.log('player keys:', Object.keys(player));
+        //console.log('permaLink type:', typeof player.permaLink);
+        //console.log('permaLink value:', player.permaLink);
+        //console.log('player keys:', Object.keys(player));
 
         if (imageCache.has(permaLink)) {
             resolve(imageCache.get(permaLink));
@@ -673,7 +686,7 @@ function checkPMCExists(player) {
 
         const img = new Image();
         const timeout = setTimeout(() => {
-            console.warn(`[ImageCheck] TIMEOUT for ${url}`);
+            //console.warn(`[ImageCheck] TIMEOUT for ${url}`);
             img.src = '';
             imageCache.set(permaLink, false);
             resolve(false);
@@ -681,7 +694,7 @@ function checkPMCExists(player) {
 
         img.onload = () => {
             clearTimeout(timeout);
-            console.log(`[ImageCheck] LOADED ${url} — ${img.naturalWidth}x${img.naturalHeight}`);
+            //console.log(`[ImageCheck] LOADED ${url} — ${img.naturalWidth}x${img.naturalHeight}`);
             const isValid = img.naturalWidth > 10 && img.naturalHeight > 10;
             imageCache.set(permaLink, isValid);
             resolve(isValid);
@@ -689,7 +702,7 @@ function checkPMCExists(player) {
 
         img.onerror = (e) => {
             clearTimeout(timeout);
-            console.error(`[ImageCheck] ERROR for ${url}`, e);
+            //console.error(`[ImageCheck] ERROR for ${url}`, e);
             imageCache.set(permaLink, false);
             resolve(false);
         };

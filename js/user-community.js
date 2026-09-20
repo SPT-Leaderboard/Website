@@ -6,8 +6,7 @@
 
 /**
  * @class FriendManager
- * @description Manages the friend system for player profiles, including friend status checks,
- * friend request sending, friend list rendering, and real-friend vs local-friend tagging.
+ * @description Manages the friend system for player profile
  */
 class FriendManager {
 
@@ -81,8 +80,7 @@ class FriendManager {
     }
 
     /**
-     * Checks the friendship status between the logged-in user and the current player.
-     * Uses caching to avoid redundant API calls.
+     * Checks the friendship status between the logged-in user and the current player
      * @returns {Promise<string>} One of "canAdd", "isFriend", "requestPending", "cannotAdd", or "error"
      */
     async checkFriendStatus() {
@@ -135,7 +133,7 @@ class FriendManager {
     }
 
     /**
-     * Renders the appropriate friend action button based on friendship status.
+     * Renders the appropriate friend action button based on friendship status
      * @param {string} status - ("isFriend", "requestPending", "canAdd", or other)
      */
     renderFriendButton(status) {
@@ -224,7 +222,7 @@ class FriendManager {
     }
 
     /**
-     * Sends a friend request to the current player via the API
+     * Sends a friend request to the current player via API
      */
     async sendFriendRequest() {
         try {
@@ -276,7 +274,7 @@ class FriendManager {
     }
 
     /**
-     * Fetches the list of "real" (non-local) friends IDs for the current player from the API.
+     * Fetches the list of "real" (non-local) friends for the current player
      * @returns {Promise<Array<string>>} Array of friend IDs
      */
     async fetchRealFriends() {
@@ -368,7 +366,7 @@ class FriendManager {
     }
 
     /**
-     * Fetches and merges the player's friend list, tagging each friend as real or local.
+     * Fetches and merges the player's friend list, tagging each friend as real or local
      * @returns {Promise<Array<Object>>} friend objects with `isRealFriend` flag
      */
     async checkFriends() {
@@ -523,7 +521,7 @@ class FriendManager {
     }
 
     /**
-     * Generates HTML for the last game status.
+     * Generate HTML for the last game status
      */
     getLastGameHTML(isOnline, playerStatus, lastUpdateTime) {
         if (isOnline) {
@@ -576,8 +574,7 @@ class FriendManager {
 // #region Comments Manager
 /**
  * @class CommentsManager
- * @description Handles the profile comment system including posting, loading, paginating,
- * and rendering comments on a player's profile page.
+ * @description Handles the profile comment system including posting, loading, paginating, and rendering comments on a player's profile page
  */
 class CommentsManager {
     /**
@@ -622,7 +619,7 @@ class CommentsManager {
     }
 
     /**
-     * Initializes the comments system for a specific player profile.
+     * Initializes the comments system for a specific player profile
      * @param {string} permaLink - Target profile permaLink
      * @param {string} playerId - Target profile profile ID
      */
@@ -743,8 +740,7 @@ class CommentsManager {
     }
 
     /**
-     * Navigates to a specific comment page, re-renders the visible comments,
-     * and smoothly scrolls the comment list into view.
+     * Navigates to a specific comment page
      * @param {number} pageNumber - The 1-based page number to navigate to
      */
     goToPage(pageNumber) {
@@ -908,7 +904,7 @@ class CommentsManager {
     }
 
     /**
-     * Submits the comment to the server, adds the returned comment to the UI on success
+     * Submit the comment to API, add to UI on success
      */
     async submitComment() {
         const originalText = this.elements.commentSubmit.innerHTML;
@@ -1141,18 +1137,16 @@ class CommentsManager {
 
         if (!isReply && !isDeleted) {
             actionButtonsHtml += `
-                <button class="action-cm-btn reply-btn" data-comment-id="${comment.id}">
+                <button class="action-cm-btn reply-btn" data-comment-id="${comment.id}" title="Reply">
                     <i class="fa-solid fa-reply"></i>
-                    <span>Reply</span>
                 </button>
             `;
         }
 
         if (canDelete && !isDeleted) {
             actionButtonsHtml += `
-                <button class="action-cm-btn delete-btn" data-comment-id="${comment.id}">
+                <button class="action-cm-btn delete-btn" data-comment-id="${comment.id}" title="Delete comment">
                     <i class="fa-solid fa-trash-can"></i>
-                    <span>Delete</span>
                 </button>
             `;
         }

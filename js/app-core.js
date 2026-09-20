@@ -409,12 +409,11 @@ function createPlayerRow(player) {
             <span class="tooltiptext">Marked as suspicious by SkillIssueDetector™ (Beta)</span>
         </div>`;
     } else if (player.isHardcore) {
-        badge=`     
+        badge = `     
         <div class="badge-lb tooltip">
             <img src="../media/legacy/icon_kia.png" width="30" height="30">
             <span class="tooltiptext">Player is in Hardcore Mode</span>
         </div>`;
-        
     } else {
         const boostValue = player.boostPerc || 0;
         const boostColor = boostValue >= 1 && boostValue <= 3 ? 'rgba(142, 255, 189, 1)' :

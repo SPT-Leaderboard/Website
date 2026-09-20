@@ -24,91 +24,135 @@ function openTeam(tag) {
     const modal = document.getElementById('teamModal');
     const teamNameElement = document.getElementById('teamName');
 
-    currentTeamData = leaderboardData.filter(player =>
-        player.teamTag && player.teamTag.toLowerCase() === tag.toLowerCase()
-    );
+    const seen = new Set();
 
-    currentTeamData.sort((a, b) => b.pmcLevel - a.pmcLevel);
+    currentTeamData = leaderboardData
+        .filter(player =>
+            player.teamTag && player.teamTag.toLowerCase() === tag.toLowerCase()
+        )
+        .filter(player => {
+            const key = (player.permaLink || player.id || '').toLowerCase();
+            if (!key || seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        })
+        .map(player => ({
+            ...player,
+            rating: player.networkRaids || 0
+        }))
+        .sort((a, b) => b.rating - a.rating || (b.pmcLevel || 0) - (a.pmcLevel || 0));
+
     teamNameElement.textContent = tag;
 
-    const playerCount = currentTeamData.length;
-    const totalLevel = currentTeamData.reduce((sum, player) => sum + (player.pmcLevel || 0), 0);
-    const totalWins = currentTeamData.reduce((sum, player) => sum + (player.survived || 0), 0);
-    const averageLevel = playerCount > 0 ? Math.round(totalLevel / playerCount) : 0;
-
-    animateNumber('teamPlayersCount', playerCount, 0, 0);
-    animateNumber('teamAvgLevel', averageLevel, 0, 0);
-    animateNumber('teamTotalWins', totalWins, 0, 0);
-
+    renderTeamStats();
     renderTeamPlayers();
 
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
+function renderTeamStats() {
+    const playerCount = currentTeamData.length;
+
+    if (playerCount === 0) {
+        setTeamStat('teamPlayersCount', 0);
+        setTeamStat('teamAvgLevel', 0);
+        setTeamStat('teamTotalRaids', 0);
+        setTeamStat('teamTotalKills', 0);
+        setTeamStat('teamAvgSurvival', '0%');
+        setTeamStat('teamMembersCount', 0);
+        return;
+    }
+
+    const totalLevel = currentTeamData.reduce((sum, p) => sum + (p.pmcLevel || 0), 0);
+    const totalRaids = currentTeamData.reduce((sum, p) => sum + (p.pmcRaids || 0), 0);
+    const totalKills = currentTeamData.reduce((sum, p) => sum + (p.pmcKills || 0), 0);
+    const avgSurvival = Math.round(
+        currentTeamData.reduce((sum, p) => sum + (p.survivalRate || 0), 0) / playerCount
+    );
+
+    setTeamStat('teamPlayersCount', playerCount.toLocaleString());
+    setTeamStat('teamAvgLevel', Math.round(totalLevel / playerCount));
+    setTeamStat('teamTotalRaids', totalRaids.toLocaleString());
+    setTeamStat('teamTotalKills', totalKills.toLocaleString());
+    setTeamStat('teamAvgSurvival', `${avgSurvival}%`);
+    setTeamStat('teamMembersCount', playerCount);
+}
+
+function setTeamStat(id, value) {
+    const element = document.getElementById(id);
+    if (element) {
+        element.textContent = value;
+    }
+}
+
 function renderTeamPlayers() {
     const container = document.getElementById('teamPlayersContainer');
     container.innerHTML = '';
 
-    const displayData = currentTeamData.slice(0, 5);
+    if (currentTeamData.length === 0) {
+        container.innerHTML = `
+            <div class="team-modal-empty">
+                <i class="fa-solid fa-users-slash"></i>
+                <p>No members found for this team.</p>
+            </div>
+        `;
+        return;
+    }
 
-    displayData.forEach((player, index) => {
-        const playerCard = document.createElement('div');
-        playerCard.className = 'player-card-team';
-        playerCard.style.animationDelay = `${index * 0.15}s`;
+    const fragment = document.createDocumentFragment();
 
+    currentTeamData.forEach((player, index) => {
         const imagePath = `${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png`;
+        const rank = player.rating > 0 ? getRank(player.rating) : null;
 
-        playerCard.innerHTML = `
-            <img src="${imagePath}" 
-                 alt="${escapeHtml(player.name || 'Player')}"
-                 class="player-image-team"
-                 data-player-id="${player.id || ''}"
-                 loading="lazy"
-                 this.src='media/default_full_pmc_avatar.png'">
-            
-            <div class="team-player-stats-wrapper">
-                <div class="player-name-team" data-player-id="${player.id || ''}">
-                    ${escapeHtml(player.name || 'Unknown Player')}
+        const stats = [
+            { label: 'PMC Raids', value: (player.pmcRaids || 0).toLocaleString() },
+            { label: 'KDR', value: (player.killToDeathRatio || 0).toFixed(2) },
+            { label: 'Survival', value: `${player.survivalRate || 0}%` },
+            { label: 'Lifetime', value: formatSeconds(player.averageLifeTime || 0) }
+        ];
+
+        const card = document.createElement('div');
+        card.className = 'player-card-team';
+        card.style.animationDelay = `${Math.min(index * 0.04, 0.3)}s`;
+        card.dataset.playerId = player.id || '';
+
+        card.innerHTML = `
+            <div class="player-card-image-wrap">
+                <img src="${imagePath}"
+                     alt="${escapeHtml(player.name || 'Player')}"
+                     class="player-image-team"
+                     loading="lazy"
+                     onerror="this.onerror=null; this.src='media/default_full_pmc_avatar.png';">
+                <div class="player-card-level-badge">
+                    ${rank ? `<img src="${rank.image}" alt="">` : ''}
+                    LVL ${player.pmcLevel || 0}
                 </div>
             </div>
-            <div class="player-level-team">LVL ${player.pmcLevel || 0}</div>
-            <div class="player-wins-team">${player.survived || 0} Extractions</div>
+            <div class="player-card-team-body">
+                <div class="player-name-team">${player.name ? renderUsernameHTML(player) : escapeHtml('Unknown Player')}</div>
+                <div class="player-card-team-stats">
+                    ${stats.map(stat => `
+                        <div class="player-stat-team">
+                            <span class="player-stat-team-label">${stat.label}</span>
+                            <span class="player-stat-team-value">${stat.value}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
         `;
 
-        playerCard.addEventListener('click', (e) => {
-            let playerId = player.id;
-            const clickedElement = e.target;
-
-            if (clickedElement.classList.contains('player-image-team') ||
-                clickedElement.classList.contains('player-name-team')) {
-                playerId = clickedElement.dataset.playerId;
-            }
-
-            // Open profile on click
-            if (playerId) {
-                openProfile(playerId);
+        card.addEventListener('click', () => {
+            if (card.dataset.playerId) {
+                openProfile(card.dataset.playerId);
             }
         });
 
-        playerCard.addEventListener('mouseenter', () => {
-            const img = playerCard.querySelector('.player-image-team');
-            if (img) {
-                img.style.transform = 'scale(1.08)';
-                img.style.filter = 'drop-shadow(0 15px 30px rgba(99, 102, 241, 0.3))';
-            }
-        });
-
-        playerCard.addEventListener('mouseleave', () => {
-            const img = playerCard.querySelector('.player-image-team');
-            if (img) {
-                img.style.transform = 'scale(1)';
-                img.style.filter = 'drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4))';
-            }
-        });
-
-        container.appendChild(playerCard);
+        fragment.appendChild(card);
     });
+
+    container.appendChild(fragment);
 }
 
 function closeTeamModal() {

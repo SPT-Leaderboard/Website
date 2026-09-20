@@ -40,7 +40,11 @@ window.addEventListener('hashchange', () => {
     checkUrlHash();
 });
 
+let _profileOpenTimeout = null;
+
 function checkUrlHash() {
+    window.clearTimeout(_profileOpenTimeout);
+
     const hash = window.location.hash;
     const match = hash.match(/id=([^&]+)/);
 
@@ -48,8 +52,11 @@ function checkUrlHash() {
         const playerId = match[1];
 
         // Waiting for data to be ready to open profile
-        setTimeout(() => {
+        _profileOpenTimeout = setTimeout(() => {
             waitForDataReady(() => openProfile(playerId));
         }, 500);
+    } else if (ProfileState.isProfileOpened && typeof window.closeProfile === 'function') {
+        // Going back (hash removed)
+        window.closeProfile();
     }
 }

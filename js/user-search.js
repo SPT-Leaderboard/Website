@@ -205,5 +205,4 @@ function initSearch() {
         AutoUpdater.init();
         AppState.setAutoUpdate(AutoUpdater.getStatus());
     }
-
 }

@@ -26,24 +26,34 @@ function displayWinners(data) {
     winnersTab.innerHTML = `
     <div class="winners-wrapper-center">
         <div class="winners-horizontal-container">
-            ${orderedPlayers.map(player => `
-                <div class="winner-horizontal-card ${player.rank === 1 ? 'first-place' : ''}">
+            ${orderedPlayers.map(player => {
+                const medalClass = getMedalClass(player.rank);
+                const medalIcon = player.rank === 1 ? 'fa-crown' : 'fa-medal';
+                const avatarSrc = player.permaLink
+                    ? `${ApiPaths.pmcPfpsPath}${player.permaLink}.png`
+                    : (player.profilePicture || 'media/default_avatar.png');
+                const name = escapeHtml(player.name);
+                const displayName = escapeHtml(player.name.length > 15 ? player.name.substring(0, 12) + '...' : player.name);
+                const score = Number(player.totalScore).toFixed(0);
+
+                return `
+                <div class="winner-horizontal-card ${medalClass}">
                     <div class="winner-avatar-container">
-                        <img src="${player.profilePicture || 'media/default_avatar.png'}" 
-                             class="winner-avatar" 
+                        <div class="winner-medal-icon"><i class="fa-solid ${medalIcon}"></i></div>
+                        <img src="${avatarSrc}"
+                             class="winner-avatar"
                              loading="lazy"
-                             onerror="this.src='media/default_avatar.png'"
-                             alt="${escapeHtml(player.name)}">
+                             onerror="this.onerror=null; this.src='media/default_avatar.png';"
+                             alt="${name}">
                     </div>
                     <div class="winner-info">
-                        <div class="winner-name" title="${escapeHtml(player.name)}">
-                            ${escapeHtml(player.name.length > 15 ? player.name.substring(0, 12) + '...' : player.name)}
-                        </div>
-                        <div class="winner-rank-badge">${getRankText(player.rank)}</div>
-                        <div class="winner-score">${player.totalScore.toFixed(0)} SS</div>
+                        <div class="winner-name" title="${name}">${displayName}</div>
+                        <span class="winner-rank-badge">${getRankText(player.rank)}</span>
+                        <div class="winner-score">${score}<span class="winner-score-label">SS</span></div>
                     </div>
                 </div>
-            `).join('')}
+                `;
+            }).join('')}
         </div>
     </div>
     `;

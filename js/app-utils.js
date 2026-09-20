@@ -144,6 +144,9 @@ function initNavbar() {
  * // rank.progress => 25
  */
 function getRank(rating, maxRating = 2000, res = 32) {
+    rating = Number.isFinite(rating) ? rating : 0;
+    maxRating = Number.isFinite(maxRating) && maxRating > 0 ? maxRating : 2000;
+
     const totalRanks = 50;
     let rankIndex = Math.floor((rating / maxRating) * totalRanks);
     rankIndex = Math.min(totalRanks - 1, Math.max(0, rankIndex));
@@ -566,17 +569,21 @@ function waitForDataReady(callback, timeout = 15000) {
  * Format number and add 'Bil', 'Mil, 'K' suffixes to it
  */
 function formatSalesNum(num) {
-    if (num >= 1000000000) {
-        return (num / 1000000000).toFixed(1) + 'B';
+    const value = Number(num) || 0;
+    const sign = value < 0 ? '-' : '';
+    const absoluteValue = Math.abs(value);
+
+    if (absoluteValue >= 1000000000) {
+        return sign + (absoluteValue / 1000000000).toFixed(1) + 'B';
     }
-    if (num >= 1000000) {
-        return (num / 1000000).toFixed(1) + 'M';
+    if (absoluteValue >= 1000000) {
+        return sign + (absoluteValue / 1000000).toFixed(1) + 'M';
     }
-    if (num >= 1000) {
-        return (num / 1000).toFixed(1) + 'K';
+    if (absoluteValue >= 1000) {
+        return sign + (absoluteValue / 1000).toFixed(1) + 'K';
     }
 
-    return num.toLocaleString();
+    return value.toLocaleString();
 }
 
 /**

@@ -74,7 +74,6 @@
                     <!-- Stats -->
                     <div class="compact-dropdown">
                         <button class="compact-toggle" aria-expanded="false" aria-haspopup="true">
-                            <span class="compact-icon"><i class="fa-solid fa-chart-column"></i></span>
                             <span class="compact-text">Stats</span>
                             <span class="dropdown-arrow"><i class="fa-solid fa-caret-down"></i></span>
                         </button>
@@ -100,7 +99,6 @@
                     <!-- Info -->
                     <div class="compact-dropdown">
                         <button class="compact-toggle" aria-expanded="false" aria-haspopup="true">
-                            <span class="compact-icon"><i class="fa-solid fa-circle-question"></i></span>
                             <span class="compact-text">Info</span>
                             <span class="dropdown-arrow"><i class="fa-solid fa-caret-down"></i></span>
                         </button>
@@ -122,7 +120,6 @@
                     <!-- Settings -->
                     <div class="compact-dropdown">
                         <button class="compact-toggle" aria-expanded="false" aria-haspopup="true">
-                            <span class="compact-icon"><i class="fa-solid fa-gear"></i></span>
                             <span class="compact-text">System</span>
                             <span class="dropdown-arrow"><i class="fa-solid fa-caret-down"></i></span>
                         </button>
@@ -134,7 +131,6 @@
                         </div>
                     </div>
                     <a href="/api/network/login/index.php" class="navbar-link navbar-link--login compact-login-btn" id="loginButton">
-                        <span class="login-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></span>
                         <span id="loginButtonText">Login</span>
                         <div class="user-profile-pfp" id="userProfilePfp" style="display: none;">
                             <img id="userAvatar" src="" alt="Profile" class="avatar-img">
@@ -145,50 +141,72 @@
             </nav>
         </header>
         <h1 style="margin-top: 180px;" class="animate__animated animate__fadeInDown">SPT Leaderboard</h1>
-        <div id="teamModal" class="team-modal-container">
+        <div id="teamModal" class="team-modal-container" role="dialog" aria-modal="true" aria-label="Team members">
             <div class="team-modal-overlay"></div>
             <div class="team-modal-content">
-                <button class="team-modal-close">
-                    <svg width="24" height="24" viewBox="0 0 24 24">
+                <button class="team-modal-close" aria-label="Close team">
+                    <svg width="20" height="20" viewBox="0 0 24 24">
                         <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                     </svg>
                 </button>
-                <div class="team-modal-header">
-                    <div class="team-modal-title-wrapper">
+                <header class="team-modal-header">
+                    <div class="team-modal-title-row">
                         <h2 class="team-modal-title"><span id="teamName" class="team-modal-tag"></span></h2>
-                        <div class="team-modal-subtitle">Team Overview & Members</div>
+                        <span class="team-modal-subtitle">Team Overview</span>
                     </div>
-                    <div class="team-modal-stats-grid">
-                        <div class="team-modal-stat-item">
-                            <div class="team-modal-stat-icon">
-                                <i class="fa-solid fa-people-group"></i>
-                            </div>
-                            <div class="team-modal-stat-content">
-                                <div class="team-modal-stat-label">Members</div>
-                                <div class="team-modal-stat-value"><span id="teamPlayersCount" class="odometer">0</span></div>
-                            </div>
+                </header>
+                <div class="team-modal-stats-grid">
+                    <div class="team-modal-stat-item">
+                        <div class="team-modal-stat-icon">
+                            <i class="fa-solid fa-users"></i>
                         </div>
-                        <div class="team-modal-stat-item">
-                            <div class="team-modal-stat-icon">
-                                <i class="fa-solid fa-globe"></i>
-                            </div>
-                            <div class="team-modal-stat-content">
-                                <div class="team-modal-stat-label">Avg Level</div>
-                                <div class="team-modal-stat-value"><span id="teamAvgLevel" class="odometer">0</span></div>
-                            </div>
+                        <div class="team-modal-stat-content">
+                            <div class="team-modal-stat-label">Members</div>
+                            <div class="team-modal-stat-value"><span id="teamPlayersCount">0</span></div>
                         </div>
-                        <div class="team-modal-stat-item">
-                            <div class="team-modal-stat-icon">
-                                <i class="fa-solid fa-person-hiking"></i>
-                            </div>
-                            <div class="team-modal-stat-content">
-                                <div class="team-modal-stat-label">Total Extractions</div>
-                                <div class="team-modal-stat-value"><span id="teamTotalWins" class="odometer">0</span></div>
-                            </div>
+                    </div>
+                    <div class="team-modal-stat-item">
+                        <div class="team-modal-stat-icon">
+                            <i class="fa-solid fa-signal"></i>
+                        </div>
+                        <div class="team-modal-stat-content">
+                            <div class="team-modal-stat-label">Avg Level</div>
+                            <div class="team-modal-stat-value"><span id="teamAvgLevel">0</span></div>
+                        </div>
+                    </div>
+                    <div class="team-modal-stat-item">
+                        <div class="team-modal-stat-icon">
+                            <i class="fa-solid fa-crosshairs"></i>
+                        </div>
+                        <div class="team-modal-stat-content">
+                            <div class="team-modal-stat-label">PMC Raids</div>
+                            <div class="team-modal-stat-value"><span id="teamTotalRaids">0</span></div>
+                        </div>
+                    </div>
+                    <div class="team-modal-stat-item">
+                        <div class="team-modal-stat-icon">
+                            <i class="fa-solid fa-biohazard"></i>
+                        </div>
+                        <div class="team-modal-stat-content">
+                            <div class="team-modal-stat-label">Team Kills</div>
+                            <div class="team-modal-stat-value"><span id="teamTotalKills">0</span></div>
+                        </div>
+                    </div>
+                    <div class="team-modal-stat-item">
+                        <div class="team-modal-stat-icon">
+                            <i class="fa-solid fa-heartbeat"></i>
+                        </div>
+                        <div class="team-modal-stat-content">
+                            <div class="team-modal-stat-label">Avg Survival</div>
+                            <div class="team-modal-stat-value"><span id="teamAvgSurvival">0%</span></div>
                         </div>
                     </div>
                 </div>
                 <div class="team-modal-players-section">
+                    <h3 class="team-modal-members-title">
+                        Members
+                        <span class="team-modal-members-count" id="teamMembersCount">0</span>
+                    </h3>
                     <div class="team-modal-players-container" id="teamPlayersContainer">
                         <!-- JS -->
                     </div>

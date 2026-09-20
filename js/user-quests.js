@@ -170,10 +170,12 @@ async function displayQuestsWithControls(quests, container) {
     `;
 
     const filteredQuests = filterAndSortQuests(quests);
-    const questsHTML = await createQuestsHTML(filteredQuests);
+    const questsHTML = filteredQuests.length > 0
+        ? await createQuestsHTML(filteredQuests)
+        : createEmptyQuestsHTML();
 
     container.innerHTML = controlsHTML + `<div class="quests-grid">${questsHTML}</div>`;
-    updateQuestCounter(quests.length);
+    updateQuestCounter(filteredQuests.length);
 }
 
 function calculateQuestStats(quests) {
@@ -350,10 +352,41 @@ async function refreshQuestsDisplay() {
     questsGrid.classList.add('updating');
 
     setTimeout(async () => {
-        questsGrid.innerHTML = await createQuestsHTML(filteredQuests);
+        questsGrid.innerHTML = filteredQuests.length > 0
+            ? await createQuestsHTML(filteredQuests)
+            : createEmptyQuestsHTML();
         updateQuestCounter(filteredQuests.length);
         questsGrid.classList.remove('updating');
     }, 200);
+}
+
+function createEmptyQuestsHTML() {
+    const hasSearch = currentSearch.trim() !== '';
+    const searchInput = hasSearch ? document.querySelector('.search-input') : null;
+    const rawSearch = searchInput ? searchInput.value.trim() : currentSearch;
+    const filterLabel = currentFilter === 'completed' ? 'completed' :
+        currentFilter === 'in-progress' ? 'in progress' :
+            currentFilter === 'not-accepted' ? 'not accepted' : '';
+
+    let title, message;
+
+    if (hasSearch) {
+        title = 'No matching quests';
+        message = `No quests match your search for &quot;${escapeHtml(rawSearch)}&quot;.`;
+    } else if (filterLabel) {
+        title = `No ${filterLabel} quests`;
+        message = `There are no ${filterLabel} quests for this player.`;
+    } else {
+        title = 'No quests to display';
+        message = 'There are no quests matching the current filters.';
+    }
+
+    return `
+        <div class="quests-empty">
+            <h3>${title}</h3>
+            <p>${message}</p>
+        </div>
+    `;
 }
 
 function updateQuestCounter(visible) {

@@ -104,59 +104,7 @@ function createWelcomeOverlay(showcasePlayers, stats) {
 
                 <div class="season-pmc-column">
                     <div class="pmc-heroes-container">
-                        ${showcasePlayers.map((player, index) => {
-                        const rank = getRank(player.networkRaids || 0, 2000, 32);
-                        const colorMatch = rank.textColor.match(/hsl\((\d+)/);
-                        const hue = colorMatch ? parseInt(colorMatch[1]) : 200;
-                        const glowColor = `hsla(${hue}, 100%, 70%, 0.3)`;
-                        const glowColorHover = `hsla(${hue}, 100%, 80%, 0.5)`;
-                        const glowColorStrong = `hsla(${hue}, 100%, 60%, 0.4)`;
-
-                        let playerType = '';
-                        let playerTypeIcon = '';
-                        if (index === 0) {
-                            playerType = 'Newcomer';
-                        } else if (index === 1) {
-                            playerType = 'Veteran';
-                        } else {
-                            playerType = 'Champion';
-                        }
-
-                        return `
-                                <div class="pmc-hero"
-                                    data-index="${index}"
-                                    data-rank-hue="${hue}">
-                                    <div class="pmc-rank-badge" style="background: ${rank.gradient}; border-color: ${rank.borderColor};">
-                                        <span class="rank-name" style="color: ${rank.textColor};">
-                                            ${playerType}
-                                        </span>
-                                        <span class="rank-level" style="color: ${rank.textColor}; opacity: 0.7;">
-                                            ${rank.name}
-                                        </span>
-                                    </div>
-                                    <div class="pmc-image-wrapper">
-                                        <img src="${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png" 
-                                            alt="${escapeHtml(player.name)}"
-                                            class="pmc-image"
-                                            loading="lazy"
-                                            style="filter: drop-shadow(0 0 3px rgba(${rank.RGB}, 0.5));"
-                                            data-glow="${glowColor}"
-                                            data-glow-hover="${glowColorHover}">
-                                    </div>
-                                    <div class="pmc-info">
-                                        <div class="pmc-name" style="color: ${rank.textColor};">${renderUsernameHTML(player)}</div>
-                                        <div class="pmc-stats">
-                                            <span class="pmc-stat"><i class="fa-solid fa-skull-crossbones"></i> ${player.pmcKills || 0} KILLS</span>
-                                            <span class="pmc-stat"><i class="fas fa-trophy"></i> ${(player.killToDeathRatio || 0).toFixed(1)} K/D</span>
-                                            <span class="pmc-stat"><i class="fa-solid fa-user-clock"></i> ${formatPlayTimeShort(player.totalPlayTime || 0)}</span>
-                                            ${index === 0 ? `<span class="pmc-stat"><i class="fa-solid fa-seedling"></i> New</span>` : ''}
-                                            ${index === 1 ? `<span class="pmc-stat"><i class="fa-solid fa-clock"></i> ${player.seasonsPlayed || 0} Seasons</span>` : ''}
-                                            ${index === 2 ? `<span class="pmc-stat"><i class="fa-solid fa-crown"></i> #${player.rank || 'N/A'}</span>` : ''}
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-    }).join('')}
+                        ${showcasePlayers.map((player, index) => renderHeroElement(player, index)).join('')}
                     </div>
                 </div>
             </div>
@@ -173,136 +121,75 @@ function createWelcomeOverlay(showcasePlayers, stats) {
         });
     }, 100);
 
+    setTimeout(() => {
+        overlay.querySelectorAll('.pmc-hero').forEach((hero, index) => {
+            setTimeout(() => {
+                hero.classList.add('animate-in');
+            }, 800 + index * 500);
+        });
+    }, 400);
+
     return overlay;
 }
 
 async function getPlayersWithImages(players, count = 3) {
     const validPlayers = players.filter(p => !p.banned && !p.isCasual && !p.dev);
 
-    if (validPlayers.length < 3) {
-        return validPlayers.sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0)).slice(0, count);
+    if (validPlayers.length === 0) {
+        return [];
     }
 
-    const imageCache = new Map();
+    // Validate thumbnail
+    // (system-season-end.js)
+    let playersWithImages = [];
+    try {
+        playersWithImages = await filterPlayersWithImages(validPlayers);
+    } catch (e) {
+        console.warn('Image validation failed, falling back to all eligible players:', e);
+        playersWithImages = validPlayers;
+    }
 
-    const checkImageExists = async (url) => {
-        if (imageCache.has(url)) return imageCache.get(url);
-        try {
-            const response = await apiFetch(url, { method: 'HEAD' });
-            const exists = response.ok;
-            imageCache.set(url, exists);
-            return exists;
-        } catch {
-            imageCache.set(url, false);
-            return false;
-        }
-    };
+    if (playersWithImages.length === 0) {
+        playersWithImages = validPlayers;
+    }
 
-    const getPlayerWithImage = async (playerPool, excludeIds = []) => {
-        if (!playerPool || playerPool.length === 0) return null;
+    const unseen = playersWithImages.filter(p => !lastShownPlayers.includes(p.id));
+    const pickPool = unseen.length > 0 ? unseen : playersWithImages;
 
-        const freshPool = playerPool.filter(p => !lastShownPlayers.includes(p.id) && !excludeIds.includes(p.id));
-        const poolToCheck = freshPool.length > 0 ? freshPool : playerPool.filter(p => !excludeIds.includes(p.id));
+    const pickBest = (list) => list[0] || null;
 
-        const shuffled = [...poolToCheck].sort(() => Math.random() - 0.5);
-
-        for (const player of shuffled) {
-            if (!player.permaLink) continue;
-            const imageUrl = `${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png`;
-            const exists = await checkImageExists(imageUrl);
-            if (exists) {
-                return player;
-            }
-        }
-        return null;
-    };
-
-    const top20ByScore = [...validPlayers]
-        .sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0))
-        .slice(0, 20);
-
-    // seasonsPlayed = 1, >totalPlayTime
-    const newbieCandidates = validPlayers
+    // Newcomer: first season, least played
+    const newbieCandidates = pickPool
         .filter(p => (p.seasonsPlayed || 0) === 1)
         .sort((a, b) => (a.totalPlayTime || 0) - (b.totalPlayTime || 0));
+    let newbie = pickBest(newbieCandidates);
 
-    let newbie = await getPlayerWithImage(newbieCandidates);
     if (!newbie) {
-        // seasonsPlayed = 1
-        newbie = newbieCandidates[0];
-    }
-    if (!newbie) {
-        // >totalPlayTime
-        const fallbackNewbie = validPlayers
-            .sort((a, b) => (a.totalPlayTime || 0) - (b.totalPlayTime || 0));
-        newbie = await getPlayerWithImage(fallbackNewbie);
-    }
-    if (!newbie) {
-        newbie = validPlayers.sort((a, b) => (a.totalPlayTime || 0) - (b.totalPlayTime || 0))[0];
+        newbie = pickBest([...pickPool].sort((a, b) => (a.totalPlayTime || 0) - (b.totalPlayTime || 0)));
     }
 
-    // seasonsPlayed >= 3, <totalPlayTime
-    const veteranCandidates = validPlayers
+    // Veteran: 3+ seasons, most played
+    const veteranCandidates = pickPool
         .filter(p => p.id !== newbie?.id && (p.seasonsPlayed || 0) >= 3)
         .sort((a, b) => (b.totalPlayTime || 0) - (a.totalPlayTime || 0));
+    let veteran = pickBest(veteranCandidates);
 
-    let veteran = await getPlayerWithImage(veteranCandidates);
     if (!veteran) {
-        // seasonsPlayed >= 3
-        veteran = veteranCandidates[0];
-    }
-    if (!veteran) {
-        // totalPlayTime
-        const fallbackVeteran = validPlayers
+        veteran = pickBest(pickPool
             .filter(p => p.id !== newbie?.id)
-            .sort((a, b) => (b.totalPlayTime || 0) - (a.totalPlayTime || 0));
-        veteran = await getPlayerWithImage(fallbackVeteran);
-    }
-    if (!veteran) {
-        veteran = validPlayers
-            .filter(p => p.id !== newbie?.id)
-            .sort((a, b) => (b.totalPlayTime || 0) - (a.totalPlayTime || 0))[0];
+            .sort((a, b) => (b.totalPlayTime || 0) - (a.totalPlayTime || 0)));
     }
 
-    const championCandidates = top20ByScore
-        .filter(p => p.id !== newbie?.id && p.id !== veteran?.id);
-
-    let champion = await getPlayerWithImage(championCandidates);
-    if (!champion) {
-        champion = championCandidates[0];
-    }
-    if (!champion) {
-        const fallbackChampion = validPlayers
-            .filter(p => p.id !== newbie?.id && p.id !== veteran?.id)
-            .sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0));
-        champion = await getPlayerWithImage(fallbackChampion);
-    }
-    if (!champion) {
-        champion = validPlayers
-            .filter(p => p.id !== newbie?.id && p.id !== veteran?.id)
-            .sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0))[0];
-    }
+    // Top score remaining
+    const champion = pickBest(pickPool
+        .filter(p => p.id !== newbie?.id && p.id !== veteran?.id)
+        .sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0)));
 
     const result = [newbie, veteran, champion].filter(Boolean);
 
     lastShownPlayers = result.map(p => p.id);
 
-    if (result.length < 3) {
-        const remaining = top20ByScore
-            .filter(p => !result.some(r => r.id === p.id));
-
-        for (const player of remaining) {
-            if (result.length >= 3) break;
-            if (!player.permaLink) continue;
-            const imageUrl = `${ApiPaths.pmcPfpsPath}${player.permaLink}_full.png`;
-            const exists = await imageExists(imageUrl);
-            if (exists) {
-                result.push(player);
-            }
-        }
-    }
-
-    return result.slice(0, 3);
+    return result.slice(0, count);
 }
 
 // Make text animated (from NVV)
