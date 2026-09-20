@@ -1637,28 +1637,80 @@ class RaidTimeAnimator {
         this.animationFrame = null;
         this.lastUpdate = null;
         this.currentTime = null;
+        this.lastDisplayTime = null;
     }
 
     /**
-     * Starts the time animation from an initial HH:MM:SS string. Stops any existing animation first.
-     * @param {string} initialTime - Time string in "Time: HH:MM:SS" or "HH:MM:SS" format
+     * Parses an "HH:MM:SS" string into seconds
+     * @param {string} timeString - Time string to parse
+     * @returns {number|null} Total seconds
+     */
+    static parseTime(timeString) {
+        if (typeof timeString !== 'string') return null;
+
+        const match = timeString.trim().replace(/^Time:\s*/, '').match(/^(\d{1,2}):(\d{2}):(\d{2})$/);
+        if (!match) return null;
+
+        return Number(match[1]) * 3600 + Number(match[2]) * 60 + Number(match[3]);
+    }
+
+    /**
+     * Starts the time animation from an initial HH:MM:SS string. Stops any existing animation first
+     * @param {string} initialTime - Time string in "Time: HH:MM:SS" or "HH:MM:SS"
+     * @returns {boolean} True when the time was valid and the animation started
      */
     start(initialTime) {
         this.stop();
 
-        // Parse format HH:MM:SS
-        const timeStr = initialTime.replace('Time: ', '');
-        const [hours, minutes, seconds] = timeStr.split(':').map(Number);
-
-        // Convert
-        this.currentTime = hours * 3600 + minutes * 60 + seconds;
-        this.lastDisplayTime = this.currentTime; // Track last displayed time
+        if (!this.setTime(initialTime)) return false;
 
         this.animate();
+        return true;
+    }
+
+    /**
+     * Re-synchronizes the animation with a fresher heartbeat time without restarting the animation loop
+     * @param {string} timeString - Time string in "Time: HH:MM:SS" or "HH:MM:SS"
+     * @returns {boolean} True when the time was valid and applied
+     */
+    sync(timeString) {
+        const seconds = RaidTimeAnimator.parseTime(timeString);
+        if (seconds === null) return false;
+
+        const isStale = this.currentTime !== null && seconds < this.currentTime;
+
+        if (!isStale) {
+            this.currentTime = seconds;
+            this.lastDisplayTime = seconds;
+            this.updateDisplay();
+        }
+
+        // Keep the loop alive
+        if (this.animationFrame === null) {
+            this.animate();
+        }
+
+        return !isStale;
+    }
+
+    /**
+     * Applies a time string to the animation state and repaints clock
+     * @param {string} timeString - Time string in "Time: HH:MM:SS" or "HH:MM:SS"
+     * @returns {boolean} True when the time was valid and applied
+     */
+    setTime(timeString) {
+        const seconds = RaidTimeAnimator.parseTime(timeString);
+        if (seconds === null) return false;
+
+        this.currentTime = seconds;
+        this.lastDisplayTime = seconds;
+        this.updateDisplay();
+
+        return true;
     }
 
     animate() {
-        if (!this.currentTime) return;
+        if (this.currentTime === null) return;
 
         const now = Date.now();
 
@@ -1679,7 +1731,7 @@ class RaidTimeAnimator {
     }
 
     stop() {
-        if (this.animationFrame) {
+        if (this.animationFrame !== null) {
             cancelAnimationFrame(this.animationFrame);
             this.animationFrame = null;
         }
@@ -1687,7 +1739,7 @@ class RaidTimeAnimator {
     }
 
     updateDisplay() {
-        if (!this.currentTime) return;
+        if (this.currentTime === null) return;
 
         const totalSeconds = Math.floor(this.currentTime) % (24 * 3600);
 
@@ -1711,7 +1763,7 @@ class RaidTimeAnimator {
  * @class PlayerEquipmentDisplay
  * @description Renders a player's equipped gear (headwear, armor, weapons, backpack) as
  * a visual overlay with CDN-sourced item icons. Supports weapon attachment tooltips with
- * grouped attachment categories (scope, magazine, barrel, stock, grip, ammo, tactical).
+ * grouped attachment categories.
  */
 class PlayerEquipmentDisplay {
     constructor(playerId) {
