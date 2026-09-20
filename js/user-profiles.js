@@ -1610,7 +1610,7 @@ function startStatusUpdater(player, container, initialStatus = null) {
 
         const gameTime = typeof raidDetails.gameTime === 'string' ? raidDetails.gameTime : '';
 
-        // Anything that is not HH:MM:SS (an empty value, "Unknown", ...) is shown as-is.
+        // Anything that is not HH:MM:SS is shown as-is
         if (!RAID_TIME_PATTERN.test(gameTime)) {
             stopRaidClock();
             timeSpan.textContent = `Time: ${gameTime || 'Unknown'}`;
