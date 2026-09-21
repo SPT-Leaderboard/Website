@@ -287,7 +287,8 @@ async function displayLeaderboard(data) {
     // Pre-filter
     const validPlayers = data.filter(player => {
         if (player.isCasual && SettingsHelper.get('casualToggle')) return false;
-        if (player.isHardcore && SettingsHelper.get('casualToggle')) return false;
+        // TODO: Make the selection tool to filter players instead of single toggles
+        //if (player.isHardcore && SettingsHelper.get('casualToggle')) return false;
         if (player.permBanned) return false;
         return true;
     });
@@ -473,7 +474,7 @@ function createPlayerRow(player) {
         : '';
 
     // Skill rank label
-    const rankLabel = player.isCasual ? 'Casual' : player.isHardcore ? 'Hardcore' : getRankLabel(player.totalScore);
+    const rankLabel = player.isCasual ? 'Casual' : getRankLabel(player.totalScore);
 
     row.innerHTML = `
         <td class="rank">${player.rank}</td>
@@ -599,7 +600,7 @@ async function displaySimpleLeaderboard(data) {
         }
 
         // Skill rank label
-        const rankLabel = player.isCasual ? 'Casual' : player.isHardcore ? 'Hardcore' : getRankLabel(player.totalScore);
+        const rankLabel = player.isCasual ? 'Casual' : getRankLabel(player.totalScore);
 
         row.innerHTML = `
             <td class="rank">${player.rank}</td>
