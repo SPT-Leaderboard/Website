@@ -20,7 +20,7 @@ Submit them here on GitHub or contact through other channels.
 Don't like how the leaderboard is open for everyone else and want to set it up just for your friends? Now you can do that!
 
 ### Requirements
-- **SPT 4.0.12** (or latest SPT Version)
+- **SPT 4.1.x** (or latest SPT Version)
 - Interdemate knowledge of **PHP** along basic knowledge of **JavaScript**
 - Web Server with **PHP** support
 
