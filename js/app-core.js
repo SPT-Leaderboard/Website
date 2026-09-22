@@ -773,10 +773,6 @@ async function calculatePlaces(data) {
         if (player.isCasual) {
             player.rank = "Casual";
         }
-
-        if (player.isHardcore) {
-            player.rank = "Hardcore";
-        }
     });
 
     // Sorting only non banned players
