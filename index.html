@@ -111,6 +111,10 @@
                                 <span class="item-icon"><i class="fa-solid fa-ban"></i></span>
                                 <span>Banned Mods</span>
                             </button>
+                            <button class="compact-item" id="whiteListModsButton">
+                                <span class="item-icon"><i class="fa-solid fa-ban"></i></span>
+                                <span>Hardcore Whitelisted Mods</span>
+                            </button>
                             <button class="compact-item" id="tosButton">
                                 <span class="item-icon"><i class="fa-solid fa-rectangle-list"></i></span>
                                 <span>LA/TOS</span>
@@ -291,8 +295,15 @@
         <div id="bannedModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <h2>Globally Banned Mods by Leaderboard (Ranked only)</h2>
+                <h2>Globally Banned Mods (Ranked only)</h2>
                 <div id="bannedModsContainer"></div>
+            </div>
+        </div>
+        <div id="whiteListModsModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Whitelisted Mods (Hardcore Only)</h2>
+                <div id="whitelistModsContainer"></div>
             </div>
         </div>
         <div id="tosModal" class="modal">

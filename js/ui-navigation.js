@@ -148,7 +148,9 @@ class SettingsManager {
             settingsModal: document.getElementById('settingsModal'),
             settingsButton: document.getElementById('settingsButton'),
             bannedModal: document.getElementById('bannedModal'),
-            bannedButton: document.getElementById('bannedButton')
+            bannedButton: document.getElementById('bannedButton'),
+            whitelistModal: document.getElementById('whiteListModsModal'),
+            whitelistButton: document.getElementById('whiteListModsButton')
         };
 
         // Check existing elements
@@ -192,6 +194,22 @@ class SettingsManager {
 
         if (elements.tosButton && elements.tosModal) {
             elements.tosButton.addEventListener('click', () => toggleModal(elements.tosModal, true));
+        }
+
+        if (elements.whitelistButton && elements.whitelistModal) {
+            elements.whitelistButton.addEventListener('click', async () => {
+                try {
+                    this.whitelistmods = await this.getWhiteListMods();
+                    if (this.whitelistmods && !this.whitelistmods.error) {
+                        toggleModal(elements.whitelistModal, true);
+                        this.displayWhitelistMods(this.whitelistmods);
+                    } else {
+                        console.error('Error loading banned mods:', this.whitelistmods?.error);
+                    }
+                } catch (error) {
+                    console.error('Error loading banned mods:', error);
+                }
+            });
         }
 
         if (elements.bannedButton && elements.bannedModal) {
@@ -262,6 +280,14 @@ class SettingsManager {
     async getBannedMods() {
         const data = await apiFetch(`/api/network/functions/get_banned_mods.php`, { showErrorToast: false });
         if (!data) return { error: 'Failed to fetch banned mods' };
+
+        return data;
+    }
+
+    async getWhiteListMods() {
+        const data = await apiFetch(`/api/network/functions/get_whitelist_mods.php`, { showErrorToast: false });
+        if (!data) return { error: 'Failed to fetch banned mods' };
+
         return data;
     }
 
@@ -282,6 +308,47 @@ class SettingsManager {
 
         if (mods.length === 0) {
             container.innerHTML = '<p class="no-mods-message">No banned mods</p>';
+            return;
+        }
+
+        const middleIndex = Math.ceil(mods.length / 2);
+        container.innerHTML = `
+            <div class="banned-mods-grid">
+                <div class="mods-column">
+                    ${mods.slice(0, middleIndex).map((mod, index) => `
+                        <div class="mod-item" data-index="${index}">
+                            <span class="ban-mod-name">${this.escapeHtml(mod)}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="mods-column">
+                    ${mods.slice(middleIndex).map((mod, index) => `
+                        <div class="mod-item" data-index="${index + middleIndex}">
+                            <span class="ban-mod-name">${this.escapeHtml(mod)}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Renders the list of whitelisted mods into a two-column grid layout
+     * @param {Array<string>} mods - Array of whitelisted mod name strings to display
+     */
+    displayWhitelistMods(mods) {
+        const container = document.getElementById('whitelistModsContainer');
+        if (!container) {
+            return;
+        }
+
+        if (!Array.isArray(mods)) {
+            container.innerHTML = '<p class="error-message">Error loading mods</p>';
+            return;
+        }
+
+        if (mods.length === 0) {
+            container.innerHTML = '<p class="no-mods-message">No whitelisted mods</p>';
             return;
         }
 
