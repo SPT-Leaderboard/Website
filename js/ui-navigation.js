@@ -204,10 +204,10 @@ class SettingsManager {
                         toggleModal(elements.whitelistModal, true);
                         this.displayWhitelistMods(this.whitelistmods);
                     } else {
-                        console.error('Error loading banned mods:', this.whitelistmods?.error);
+                        console.error('Error loading whitelisted mods:', this.whitelistmods?.error);
                     }
                 } catch (error) {
-                    console.error('Error loading banned mods:', error);
+                    console.error('Error loading whitelisted mods:', error);
                 }
             });
         }
