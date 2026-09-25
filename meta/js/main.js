@@ -236,7 +236,9 @@ async function runWeaponBuilder() {
             await initEngine();
 
             weaponLoader.innerHTML = `Waiting for API...`;
-            await waitForDataReady(() => loadEquipmentData(weaponLoader));
+            await waitForDataReady()
+            
+            loadEquipmentData(weaponLoader);
         }
     } catch (error) {
         console.error("Error in runWeaponBuilder:", error);

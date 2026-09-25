@@ -246,7 +246,7 @@ h1 {
     font-size: 2.5rem;
     margin-bottom: 20px;
     font-weight: 700;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Orbitron', sans-serif;
     text-transform: uppercase;
     letter-spacing: 2px;
     text-shadow: 0 0 1px rgba(100, 255, 218, 0.4), 0 0 3px rgba(100, 255, 218, 0.2);
@@ -417,7 +417,7 @@ h1 {
 }
 
 .navbar-logo {
-    height: 45px;
+    height: 48px;
     width: auto;
     flex-shrink: 0;
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -584,7 +584,7 @@ h1 {
             rgba(10, 25, 47, 0.98),
             rgba(10, 25, 47, 0.95));
     backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(100, 255, 218, 0.2);
+    border: 1px solid rgba(100, 224, 255, 0.5);
     border-top: none;
     border-radius: 0 0 var(--border-default) var(--border-default);
     opacity: 0;
@@ -1779,17 +1779,8 @@ td:nth-child(4) {
     flex-wrap: wrap;
 }
 
-.player-count strong {
-    color: #ffa64d;
-}
-
 .online-count strong {
     color: #66ff66;
-}
-
-.stats-item.player-count,
-.stats-item.online-count {
-    background: rgba(255, 255, 255, 0.03);
 }
 
 #serverStatus {
@@ -2850,7 +2841,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .action-btn.primary:hover {
-    transform: scale(1.02);
+    transform: scale(1.01);
 }
 
 .action-btn.primary:active {
@@ -2880,10 +2871,8 @@ input[type="checkbox"]:checked:hover {
 
 .action-btn.secondary:hover {
     background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(0, 255, 242, 0.3);
+    border-color: var(--accent-blue);
     color: #ffffff;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .action-btn.secondary:active {
@@ -2893,10 +2882,6 @@ input[type="checkbox"]:checked:hover {
 .action-btn.secondary i {
     font-size: 16px;
     transition: transform 0.3s ease;
-}
-
-.action-btn.secondary:hover i {
-    transform: scale(1.1) rotate(-5deg);
 }
 
 .welcome-description {
@@ -8745,14 +8730,15 @@ input[type="checkbox"]:checked:hover {
 
 .season-header h1 {
     font-size: 2.8rem;
+    font-family: 'Orbitron', sans-serif;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 6px;
-    background: linear-gradient(135deg, #00ffb3, #ff6b6b, #00ffb3);
-    background-size: 200% auto;
+    background: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-blue) 50%, #5232c7 100%);
+    background-size: 200% 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: shimmerW 3s linear infinite;
+    animation: logoGradient 3s ease infinite;
     margin-bottom: 8px;
 }
 

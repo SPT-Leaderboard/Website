@@ -548,21 +548,22 @@ async function getCustomProfileSettings(profileId) {
  * @param {timeout} timeout - Timeout for the callback if for some reason data doesn't load or function never calls back
  * @returns {void}
  */
-function waitForDataReady(callback, timeout = 15000) {
-    const startTime = Date.now();
-    const checkInterval = 500;
+function waitForDataReady(timeout = 15000) {
+    return new Promise((resolve, reject) => {
+        const startTime = Date.now();
 
-    const intervalId = setInterval(() => {
-        if (EngineState.isDataReady) {
-            clearInterval(intervalId);
-            setTimeout(callback, 100);
-        }
+        const intervalId = setInterval(() => {
+            if (EngineState.isDataReady) {
+                clearInterval(intervalId);
+                setTimeout(resolve, 100);
+            } else if (Date.now() - startTime > timeout) {
+                clearInterval(intervalId);
 
-        else if (Date.now() - startTime > timeout) {
-            clearInterval(intervalId);
-            showToast(`We waited for an API too long. Aborting.`, 'error');
-        }
-    }, checkInterval);
+                showToast(`We waited for an API too long. Aborting.`, 'error');
+                reject(new Error('Data ready timeout'));
+            }
+        }, 500);
+    });
 }
 
 /**

@@ -9,19 +9,19 @@ const seasonEndTimestamp = 1796083200 * 1000;
 let timerInterval;
 let seasonEnded = false;
 
-function runTimer() {
+async function runTimer() {
     const endDateDisplay = document.getElementById('endDateDisplay');
 
     if (endDateDisplay) {
         const utcDate = new Date(seasonEndTimestamp).toUTCString();
         endDateDisplay.textContent = `Season ends: ${utcDate}`;
     }
-    
-    updateTimer();
+
+    await updateTimer();
     timerInterval = setInterval(updateTimer, 1000);
 }
 
-function updateTimer() {
+async function updateTimer() {
     const timerDisplay = document.getElementById('timerDisplay');
 
     const now = Date.now();
@@ -33,7 +33,9 @@ function updateTimer() {
 
         if (!seasonEnded) {
             seasonEnded = true;
-            waitForDataReady(() => endSeason());
+
+            await waitForDataReady();
+            endSeason();
         }
     } else {
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));

@@ -32,17 +32,17 @@ function copyProfile(playerId) {
 }
 
 // Upon page loading check URL for profile link hash
-window.addEventListener('DOMContentLoaded', () => {
-    checkUrlHash();
+window.addEventListener('DOMContentLoaded', async () => {
+    await checkUrlHash();
 });
 
-window.addEventListener('hashchange', () => {
-    checkUrlHash();
+window.addEventListener('hashchange', async () => {
+    await checkUrlHash();
 });
 
 let _profileOpenTimeout = null;
 
-function checkUrlHash() {
+async function checkUrlHash() {
     window.clearTimeout(_profileOpenTimeout);
 
     const hash = window.location.hash;
@@ -52,8 +52,9 @@ function checkUrlHash() {
         const playerId = match[1];
 
         // Waiting for data to be ready to open profile
-        _profileOpenTimeout = setTimeout(() => {
-            waitForDataReady(() => openProfile(playerId));
+        _profileOpenTimeout = setTimeout(async () => {
+            await waitForDataReady();
+            openProfile(playerId);
         }, 500);
     } else if (ProfileState.isProfileOpened && typeof window.closeProfile === 'function') {
         // Going back (hash removed)

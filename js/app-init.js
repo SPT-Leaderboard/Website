@@ -105,7 +105,9 @@ document.addEventListener('DOMContentLoaded', () => {
             animateStatusText("Finalizing...");
         } else {
             animateStatusText("Waiting for an API response...");
-            waitForDataReady(() => completeLoading());
+
+            await waitForDataReady();
+            completeLoading();
         }
     }
 

@@ -29,17 +29,20 @@ const AutoUpdater = (() => {
         updateTimeDisplay();
 
         updateTimer = setInterval(async () => {
-            if (isUpdating) {
-                return;
-            }
+            if (isUpdating) return;
 
             timeLeft--;
             updateTimeDisplay();
 
             if (timeLeft <= 0) {
                 isUpdating = true;
+                updateTimeDisplay();
+
                 try {
-                    waitForDataReady(() => loadSeasonData(CURRENT_SEASON))
+                    await waitForDataReady();
+                    await loadSeasonData(CURRENT_SEASON);
+                } catch (err) {
+                    console.warn('Update failed:', err);
                 } finally {
                     timeLeft = updateInterval;
                     isUpdating = false;

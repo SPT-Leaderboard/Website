@@ -496,6 +496,28 @@ async function showPublicProfile(container, player) {
 
                 <div class="friend-button-container"></div>
 
+                ${player.breachTraits && Array.isArray(player.breachTraits.modifiers) && player.breachTraits.modifiers.length > 0 ?
+                    `<div class="player-overview player-breaches">
+                        <div class="breaches-mini">
+                            <div class="showcase-mini-header">
+                                <span class="showcase-title">Breach Modifiers</span>
+                                <img class="breaches-banner" src="/media/cord_breach/banner.jpg" alt="" aria-hidden="true">
+                            </div>
+                            <div class="breaches-items-mini">
+                                ${player.breachTraits.modifiers.map(key => {
+                                    const meta = resolveBreachModifier(key);
+                                    return `
+                                    <div class="breach-item-mini" data-tone="${meta.tone}" data-modifier="${escapeHtml(key)}">
+                                        <img src="${meta.iconUrl}" alt="" loading="lazy" decoding="async" onerror="this.src='${BREACH_FALLBACK_ICON}';this.classList.add('is-fallback')">
+                                            <span class="breach-tooltip breach-tooltip--name">${escapeHtml(meta.label)}</span>
+                                            <span class="breach-tooltip breach-tooltip--desc">${escapeHtml(meta.description || '')}</span>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>`
+            : ''}
+
                 <!-- PMC Overview -->
                 <div class="player-overview">
                     <div class="player-overview-side player-overview-pmc">PMC</div>
@@ -536,28 +558,6 @@ async function showPublicProfile(container, player) {
                         <div class="stat-name">In-Raid Time</div>
                     </div>
                 </div>
-
-                ${player.breachTraits && Array.isArray(player.breachTraits.modifiers) && player.breachTraits.modifiers.length > 0 ?
-            `<div class="player-overview player-breaches">
-                        <div class="breaches-mini">
-                            <div class="showcase-mini-header">
-                                <span class="showcase-title">Breach Modifiers</span>
-                                <img class="breaches-banner" src="/media/cord_breach/banner.jpg" alt="" aria-hidden="true">
-                            </div>
-                            <div class="breaches-items-mini">
-                                ${player.breachTraits.modifiers.map(key => {
-                const meta = resolveBreachModifier(key);
-                return `
-                                    <div class="breach-item-mini" data-tone="${meta.tone}" data-modifier="${escapeHtml(key)}">
-                                        <img src="${meta.iconUrl}" alt="" loading="lazy" decoding="async" onerror="this.src='${BREACH_FALLBACK_ICON}';this.classList.add('is-fallback')">
-                                            <span class="breach-tooltip breach-tooltip--name">${escapeHtml(meta.label)}</span>
-                                            <span class="breach-tooltip breach-tooltip--desc">${escapeHtml(meta.description || '')}</span>
-                                    </div>`;
-            }).join('')}
-                            </div>
-                        </div>
-                    </div>`
-            : ''}
 
                 <!-- Item Showcase -->
                 ${player.showcase && Object.keys(player.showcase).length > 0 ?
