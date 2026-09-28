@@ -53,9 +53,6 @@
 
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
     --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
-    --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.2);
-    --shadow-glow: 0 20px 40px rgba(139, 92, 246, 0.3);
 
     --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
@@ -70,7 +67,6 @@
     --glow-primary: 0 0 30px rgba(139, 92, 246, 0.5);
     --glow-success: 0 0 30px rgba(16, 185, 129, 0.5);
     --glow-danger: 0 0 30px rgba(239, 68, 68, 0.5);
-    --glow-neon: 0 0 40px rgba(59, 130, 246, 0.3);
 }
 
 @font-face {
@@ -336,7 +332,7 @@ h1 {
     align-items: center;
     gap: 12px;
     padding: 16px 20px;
-    color: var(--danger, #ff4757);
+    color: var(--danger);
 }
 
 .el-notification-text {
@@ -345,7 +341,7 @@ h1 {
     font-size: 0.95rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #ff4757;
+    color: var(--danger);
 }
 
 #leaderboardTable tbody {
@@ -362,8 +358,8 @@ h1 {
     display: none;
     font-size: 16px;
     font-weight: 600;
-    text-shadow: 1px 0 1px rgb(255 255 255 / 70%);
-    color: #f0f0f0;
+    text-shadow: var(--glass-shadow);
+    color: var(--text-light);
     background: #ffffff0e;
     border: 1px solid var(--gray-ultradark);
     padding: 5px 10px;
@@ -718,7 +714,7 @@ h1 {
     border-radius: var(--border-50);
     overflow: hidden;
     border: 2px solid rgba(100, 255, 219, 0.6);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--glass-shadow);
     margin-left: 4px;
     flex-shrink: 0;
 }
@@ -765,7 +761,7 @@ h1 {
     padding: 0 6px;
     border: 2px solid rgba(0, 0, 0, 0.3);
     color: white;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--glass-shadow);
 }
 
 #networkNotifies[data-count] {
@@ -1449,7 +1445,7 @@ td:nth-child(4) {
 .main-button:hover {
     cursor: pointer;
     background-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.15);
+    box-shadow: var(--glass-shadow);
 }
 
 .player-name-wrapper-main {
@@ -1538,7 +1534,7 @@ td:nth-child(4) {
 .bronze-name {
     position: relative;
     font-weight: 800;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    text-shadow: var(--glass-shadow);
 }
 
 .gold-name {
@@ -1699,7 +1695,7 @@ td:nth-child(4) {
     top: 0;
     left: 0;
     width: 100%;
-    background: rgba(57, 89, 131, 0.205);
+    background: var(--glass-bg);
     backdrop-filter: blur(15px);
     display: flex;
     justify-content: space-between;
@@ -1707,10 +1703,10 @@ td:nth-child(4) {
     padding: 14px 28px;
     z-index: 3;
     box-sizing: border-box;
-    font-size: 0.96rem;
-    min-width: 1000px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: 'Bender Bold';
+    font-size: 1rem;
+    box-shadow: var(--glass-shadow);
+    border-bottom: 1px solid var(--glass-border);
 }
 
 .stats-line {
@@ -1721,9 +1717,6 @@ td:nth-child(4) {
     justify-content: center;
     flex-wrap: wrap;
     flex-grow: 1;
-    /* temporary solution to stats not being centered */
-    margin-left: 10px;
-    margin-right: 10px;
 }
 
 .stats-item {
@@ -1733,10 +1726,11 @@ td:nth-child(4) {
     align-items: flex-end;
     gap: 6px;
     font-weight: 600;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     padding: 6px 12px;
     border-radius: var(--border-default);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    box-shadow: var(--shadow-sm);
     transition: background 0.2s ease, transform 0.2s ease;
     white-space: nowrap;
 }
@@ -1757,7 +1751,7 @@ td:nth-child(4) {
     position: relative;
     overflow: hidden;
     color: rgba(255, 255, 255, 0.7);
-    background-color: #ffffff10;
+    background-color: var(--glass-bg);
     font-weight: 500;
     padding: 6px 20px;
     border-radius: var(--border-default);
@@ -1787,8 +1781,8 @@ td:nth-child(4) {
     font-weight: 600;
     padding: 6px 16px;
     border-radius: var(--border-default);
-    background-color: rgba(255, 255, 255, 0.05);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    background-color: var(--glass-bg);
+    box-shadow: inset 0 0 0 1px var(--shadow-sm);
     transition: all 0.3s ease;
     white-space: nowrap;
 }
@@ -1897,10 +1891,10 @@ td:nth-child(4) {
     text-align: center;
     z-index: 1000;
     pointer-events: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--glass-shadow);
     animation: fadeIn 0.2s ease-out;
     backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
 }
 
 .server-tooltip::after {
@@ -1946,7 +1940,7 @@ td:nth-child(4) {
     background-color: rgba(0, 0, 0, 0.7);
     opacity: 0;
     visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease-in-out;
     backdrop-filter: blur(8px);
 }
 
@@ -1974,7 +1968,7 @@ td:nth-child(4) {
     background: linear-gradient(145deg, #1f2b3d, #0f172a);
     margin: 5% auto;
     padding: 35px;
-    border: 2px solid rgba(255, 255, 255, 0.10);
+    border: 2px solid var(--glass-border);
     border-radius: var(--border-default);
     width: 90%;
     max-width: 700px;
@@ -1982,12 +1976,7 @@ td:nth-child(4) {
     overflow-y: scroll;
     color: var(--text-light);
     position: relative;
-    transform: translateY(-30px);
     transition: all 0.5s ease-in-out;
-}
-
-.modal.active .modal-content {
-    transform: translateY(0);
 }
 
 .modal-content h2 {
@@ -2043,10 +2032,10 @@ td:nth-child(4) {
 }
 
 .mods-section {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
     border-radius: var(--border-default);
     padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -2109,8 +2098,8 @@ td:nth-child(4) {
 }
 
 .mod-item {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     padding: 12px 15px;
     transition: all 0.3s ease;
@@ -2120,7 +2109,7 @@ td:nth-child(4) {
 
 .mod-item:hover {
     border-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow:  var(--glass-shadow);
 }
 
 .banned-mods .mod-item {
@@ -2211,7 +2200,7 @@ td:nth-child(4) {
             rgba(255, 255, 255, 0.02));
     padding: 20px;
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -2294,130 +2283,20 @@ input[type="checkbox"]:checked:hover {
 @keyframes modalSlideIn {
     from {
         opacity: 0;
-        transform: translateY(-50px) scale(0.9);
+        transform: translateY(-10px);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateY(0);
     }
 }
 
 .modal.active .modal-content {
-    animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.player-compare-wrapper {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.player-input {
-    flex: 1 1 45%;
-    background-color: #243447;
-    padding: 0.55rem;
-    border-radius: var(--border-default);
-}
-
-/* Widget for watch list */
-.draggable-widget {
-    position: fixed;
-    background: rgba(10, 25, 47, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    box-shadow: 0 8px 32px rgba(2, 12, 27, 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    z-index: 1000;
-    overflow: hidden;
-}
-
-.widget-header {
-    padding: 12px 16px;
-    background: rgba(34, 61, 95, 0.8);
-    color: var(--text-light);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: move;
-    font-weight: 600;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.widget-header h3 {
-    margin: 0;
-    font-size: 15px;
-}
-
-.close-widget {
-    background: none;
-    border: none;
-    color: var(--accent-teal);
-    font-size: 18px;
-    cursor: pointer;
-    padding: 0 6px;
-    transition: color 0.2s ease;
-}
-
-.close-widget:hover {
-    color: var(--accent-blue);
+    animation: modalSlideIn 0.3s ease-in-out;
 }
 
 /* Main content */
-.widget-content {
-    padding: 16px;
-}
-
-.player-inputs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-    flex-wrap: wrap;
-}
-
-.player-input-group {
-    flex: 1;
-    min-width: 140px;
-}
-
-.player-input-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 11px;
-    color: var(--text-muted);
-}
-
-.player-id-input {
-    width: 250px;
-    padding: 6px 10px;
-    background: rgba(15, 23, 42, 0.7);
-    border: 1px solid rgba(100, 255, 218, 0.2);
-    color: var(--text-light);
-    border-radius: 5px;
-    font-size: 13px;
-    outline: none;
-    transition: border 0.2s ease;
-}
-
-.player-id-input:focus {
-    border-color: var(--accent-teal);
-}
-
-.player-stats-container {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin-bottom: 15px;
-}
-
-.not-found {
-    color: #ff5555;
-    font-size: 13px;
-    margin: 0;
-}
-
 .modal-footer {
     margin-top: 25px;
     padding-top: 20px;
@@ -2564,7 +2443,7 @@ input[type="checkbox"]:checked:hover {
     width: 100%;
     position: relative;
     z-index: 3;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: var(--glass-shadow);
 }
 
 .announcement-title {
@@ -2670,8 +2549,8 @@ input[type="checkbox"]:checked:hover {
     flex: 0 0 auto;
     text-align: center;
     padding: 18px 20px 16px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     min-width: 130px;
     transition: border-color 0.25s ease, background 0.25s ease;
@@ -2694,7 +2573,7 @@ input[type="checkbox"]:checked:hover {
     height: 60px;
     border-radius: var(--border-50);
     object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid var(--glass-border);
     background: rgba(0, 0, 0, 0.3);
 }
 
@@ -2724,7 +2603,7 @@ input[type="checkbox"]:checked:hover {
     justify-content: center;
     font-size: 12px;
     color: #0f172a;
-    border: 2px solid rgba(255, 255, 255, 0.12);
+    border: 2px solid var(--glass-border);
     z-index: 1;
 }
 
@@ -2762,8 +2641,8 @@ input[type="checkbox"]:checked:hover {
     font-size: 0.65rem;
     font-weight: 700;
     padding: 3px 10px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     display: inline-block;
     white-space: nowrap;
@@ -2857,10 +2736,10 @@ input[type="checkbox"]:checked:hover {
 }
 
 .action-btn.secondary {
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--glass-bg);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--glass-border);
     color: #cbd5e1;
     padding: 10px 20px;
     font-size: 14px;
@@ -2930,7 +2809,7 @@ input[type="checkbox"]:checked:hover {
 
 .profile-modal-content {
     position: relative;
-    border: 1px solid #ffffff21;
+    border: 1px solid var(--glass-border);
     padding: 25px;
     transition: all 300ms ease-in-out;
     height: 100%;
@@ -2954,12 +2833,12 @@ input[type="checkbox"]:checked:hover {
 
 .profile-section {
     background: linear-gradient(145deg, #00000008, #00000012);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
     border-radius: var(--border-default);
     padding: 20px;
     margin-bottom: 18px;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s ease-in-out;
     position: relative;
     animation: fadeIn 0.4s ease-in-out;
 }
@@ -3020,10 +2899,8 @@ input[type="checkbox"]:checked:hover {
     background: linear-gradient(145deg, #ffffff0a, #ffffff12);
     border-radius: var(--border-default);
     backdrop-filter: blur(10px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow:
-        0 4px 20px rgba(0, 0, 0, 0.1),
-        inset 0 1px 1px rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
 }
@@ -3032,9 +2909,9 @@ input[type="checkbox"]:checked:hover {
     align-self: center;
     font-weight: 700;
     padding: 10px 15px;
-    background: linear-gradient(145deg, #ffffff15, #ffffff0d);
+    background: var(--glass-bg);
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     min-width: 60px;
     position: relative;
     overflow: hidden;
@@ -3061,7 +2938,7 @@ input[type="checkbox"]:checked:hover {
     left: 0;
     right: 0;
     background: rgb(31 31 31);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1);
     opacity: 0;
@@ -3166,10 +3043,10 @@ input[type="checkbox"]:checked:hover {
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     width: 100%;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
     backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.1);
     color: var(--text-light);
     position: relative;
@@ -3189,7 +3066,7 @@ input[type="checkbox"]:checked:hover {
     -webkit-backdrop-filter: blur(12px) saturate(180%);
     border: 1px solid rgba(99, 102, 241, 0.3);
     color: white;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-shadow: var(--glass-shadow);
 }
 
 .friend-button.add:hover:not(:disabled) {
@@ -3235,7 +3112,7 @@ input[type="checkbox"]:checked:hover {
     border: 1px solid rgba(245, 158, 11, 0.3);
     color: rgba(245, 158, 11, 0.9);
     cursor: default;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-shadow: var(--glass-shadow);
 }
 
 /* Showcases */
@@ -3323,7 +3200,7 @@ input[type="checkbox"]:checked:hover {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
 }
@@ -3387,7 +3264,7 @@ input[type="checkbox"]:checked:hover {
     left: 50%;
     transform: translateX(-50%) translateY(10px);
     background: rgb(31 31 31);
-    border: 1px solid #ffffff1a;
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     padding: 8px 12px;
     min-width: 180px;
@@ -3491,7 +3368,7 @@ input[type="checkbox"]:checked:hover {
 
 .rarity-text {
     font-weight: 800;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    text-shadow: var(--glass-shadow);
 }
 
 @keyframes badgeGlowLegendary {
@@ -3566,8 +3443,8 @@ input[type="checkbox"]:checked:hover {
     align-items: center;
     justify-content: center;
     cursor: default;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     transition:
         transform 0.12s ease,
         box-shadow 0.15s ease,
@@ -3612,7 +3489,7 @@ input[type="checkbox"]:checked:hover {
     left: 50%;
     transform: translateX(-50%);
     background: rgb(31 31 31);
-    border: 1px solid #ffffff1a;
+    border: 1px solid var(--glass-border);
     color: #f0f0f5;
     font-size: 10px;
     font-weight: 600;
@@ -3753,7 +3630,7 @@ input[type="checkbox"]:checked:hover {
 
 .level-badge {
     margin-top: 6px;
-    border: 1px solid #ffffff05;
+    border: 1px solid var(--glass-border);
     padding: 4px 8px;
     border-radius: var(--border-default);
     font-size: 12px;
@@ -3795,7 +3672,7 @@ input[type="checkbox"]:checked:hover {
     font-size: 15px;
     backdrop-filter: blur(5px);
     border-radius: var(--border-default);
-    border: 1px solid #ffffff1a;
+    border: 1px solid var(--glass-border);
     max-width: fit-content;
     font-weight: 600;
     color: #cdcdcd;
@@ -3808,8 +3685,8 @@ input[type="checkbox"]:checked:hover {
     flex-wrap: wrap;
     justify-content: space-evenly;
     gap: 8px;
-    background-color: #ffffff05;
-    border: 1px solid #ffffff21;
+    background-color: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     backdrop-filter: blur(5px);
     border-radius: var(--border-default);
     padding: 8px;
@@ -3822,8 +3699,8 @@ input[type="checkbox"]:checked:hover {
     right: -15px;
     width: 50px;
     height: 50px;
-    background-color: #ffffff05;
-    border: 1px solid #ffffff21;
+    background-color: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     backdrop-filter: blur(5px);
     border-radius: var(--border-50);
     display: flex;
@@ -3854,10 +3731,10 @@ input[type="checkbox"]:checked:hover {
     align-items: center;
     gap: 6px;
     padding: 6px 12px;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--glass-bg);
     backdrop-filter: blur(8px) saturate(180%);
     -webkit-backdrop-filter: blur(8px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     font-size: 12px;
     color: #cdcdcd;
@@ -3906,15 +3783,15 @@ input[type="checkbox"]:checked:hover {
     top: calc(100% + 10px);
     right: 0;
     min-width: 350px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px) scale(0.95);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease-in-out;
     z-index: 10;
     overflow: hidden;
     pointer-events: none;
@@ -3949,7 +3826,7 @@ input[type="checkbox"]:checked:hover {
     color: white;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-shadow: var(--glass-shadow);
 }
 
 /* Dropdown Content */
@@ -3985,10 +3862,10 @@ input[type="checkbox"]:checked:hover {
     font-size: 12px;
     font-weight: 500;
     color: white;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--glass-bg);
     padding: 4px 10px;
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
     max-width: 170px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -4245,17 +4122,17 @@ input[type="checkbox"]:checked:hover {
     margin-bottom: 20px;
     font-size: 1.4rem;
     font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: var(--glass-shadow);
     position: relative;
     display: inline-block;
 }
 
 /* Equipment */
 .mainvm {
-    background: rgba(39, 39, 39, 0.6);
+    background: var(--glass-bg);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
 }
@@ -4313,7 +4190,7 @@ input[type="checkbox"]:checked:hover {
     font-size: 14px;
     color: #fff;
     font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: var(--glass-shadow);
 }
 
 .slot-item.empty {
@@ -4387,7 +4264,7 @@ input[type="checkbox"]:checked:hover {
     background: rgba(20, 20, 20, 0.15);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--glass-border);
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
@@ -4456,7 +4333,7 @@ input[type="checkbox"]:checked:hover {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border: 1px solid #4a4a6a;
+    border: 1px solid var(--glass-border);
 }
 
 .attachment-icon img {
@@ -4492,15 +4369,15 @@ input[type="checkbox"]:checked:hover {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: rgb(15 15 15 / 21%);
+    background: var(--glass-bg);
     backdrop-filter: blur(5px);
     padding: 6px 12px 6px 6px;
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--glass-border);
     font-size: 12px;
     color: #fff;
     white-space: nowrap;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--glass-shadow);
     transition: all 0.2s ease;
     pointer-events: auto;
 }
@@ -4529,7 +4406,7 @@ input[type="checkbox"]:checked:hover {
     backdrop-filter: blur(5px);
     padding: 6px 12px 6px 6px;
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--glass-border);
     font-size: 12px;
     color: #fff;
     white-space: nowrap;
@@ -4565,7 +4442,7 @@ input[type="checkbox"]:checked:hover {
     backdrop-filter: blur(5px);
     padding: 8px 16px 8px 8px;
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--glass-border);
     font-size: 13px;
     color: #fff;
     white-space: nowrap;
@@ -4591,7 +4468,7 @@ input[type="checkbox"]:checked:hover {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border: 1px solid #4a4a6a;
+    border: 1px solid var(--glass-border);
 }
 
 .viewmodel-icon-square img {
@@ -4610,7 +4487,7 @@ input[type="checkbox"]:checked:hover {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border: 1px solid #4a4a6a;
+    border: 1px solid var(--glass-border);
     padding: 0 4px;
 }
 
@@ -4666,7 +4543,7 @@ input[type="checkbox"]:checked:hover {
 .attachment-icon-loading {
     width: 16px;
     height: 16px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--glass-border);
     border-top-color: #4a90e2;
     border-radius: var(--border-small);
     animation: spin 0.6s linear infinite;
@@ -4682,11 +4559,11 @@ input[type="checkbox"]:checked:hover {
     position: absolute;
     bottom: 0;
     right: 0;
-    background: rgb(15 15 15 / 50%);
+    background: var(--glass-bg);
     backdrop-filter: blur(5px);
     padding: 6px 15px;
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     font-size: 13px;
     color: #fff;
     display: flex;
@@ -4743,7 +4620,7 @@ input[type="checkbox"]:checked:hover {
     padding: 6px 12px;
     color: #f3f3f3;
     width: fit-content;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--glass-border);
     font-family: 'Bender Bold';
     border-radius: var(--border-default);
     backdrop-filter: blur(5px);
@@ -4756,7 +4633,7 @@ input[type="checkbox"]:checked:hover {
     margin: 2px 8px;
     position: relative;
     z-index: 2;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: var(--glass-shadow);
 }
 
 .raid-details::before {
@@ -4850,7 +4727,6 @@ input[type="checkbox"]:checked:hover {
     gap: 8px;
     padding: 10px 20px;
     background: transparent;
-    border: none;
     border-radius: var(--border-default);
     color: var(--text-muted, #8892b0);
     border: 1px solid var(--glass-border);
@@ -4930,9 +4806,9 @@ input[type="checkbox"]:checked:hover {
 }
 
 .stat-comparison-card {
-    background: linear-gradient(145deg, #ffffff08, #ffffff12);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
     border-radius: var(--border-default);
     padding: 16px;
     transition: all 0.2s ease;
@@ -5129,7 +5005,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .hits-past-raids {
-    border: 1px solid #ffffff1a;
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     padding: 15px;
     min-height: 120px;
@@ -5190,17 +5066,17 @@ input[type="checkbox"]:checked:hover {
 }
 
 .count-btn {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
     color: rgba(255, 255, 255, 0.5);
     padding: 4px 12px;
     border-radius: var(--border-default);
     cursor: pointer;
     font-size: 0.8rem;
     font-weight: 400;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease-in-out;
     letter-spacing: 0.3px;
 }
 
@@ -5267,7 +5143,7 @@ input[type="checkbox"]:checked:hover {
     border-radius: var(--border-default);
     box-shadow: var(--glass-shadow), inset 0 0 0 1px rgba(255, 255, 255, 0.02);
     overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease-in-out;
 
     &:hover {
         border-color: rgba(255, 255, 255, 0.1);
@@ -5292,7 +5168,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .profile-raid-streak-badge i {
-    color: #f59e0b;
+    color: var(--accent);
 }
 
 .raid-group-marker {
@@ -5354,8 +5230,8 @@ input[type="checkbox"]:checked:hover {
 }
 
 .weapon-kills-badge {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     padding: 3px 10px;
     border-radius: var(--border-default);
     font-size: 12px;
@@ -5387,8 +5263,8 @@ input[type="checkbox"]:checked:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.10);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     padding: 6px;
 }
@@ -5466,8 +5342,8 @@ input[type="checkbox"]:checked:hover {
 
 .weapon-micro-stats-track {
     height: 7px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: 999px;
     overflow: hidden;
 }
@@ -5505,9 +5381,9 @@ input[type="checkbox"]:checked:hover {
 
 /* Player Info for profile */
 .player-avatar {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--glass-shadow);
     border-radius: var(--border-large);
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--glass-border);
     width: 120px;
     height: 120px;
     object-fit: cover;
@@ -5521,7 +5397,7 @@ input[type="checkbox"]:checked:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #ffffff21;
+    border: 1px solid var(--glass-border);
     transition: transform 0.2s;
     font-size: 0.9em;
     will-change: transform;
@@ -5561,8 +5437,8 @@ input[type="checkbox"]:checked:hover {
     font-size: 0.9em;
     backdrop-filter: blur(5px);
     justify-self: center;
-    background-color: #ffffff0f;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: var(--glass-bg);
+    border: 1px solid var(--glass-border);
 }
 
 .boost-container em {
@@ -5613,11 +5489,11 @@ input[type="checkbox"]:checked:hover {
     border-radius: var(--border-default);
     margin-bottom: 8px;
     background: rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
     gap: 12px;
     cursor: pointer;
     position: relative;
-    border: 1px solid transparent;
+    border: 1px solid var(--glass-border);
 }
 
 .friend-item.real-friend {
@@ -5651,7 +5527,7 @@ input[type="checkbox"]:checked:hover {
     border-radius: var(--border-50);
     border: 2px solid rgba(132, 210, 255, 0.7);
     object-fit: cover;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 .friend-item.real-friend .friend-avatar {
@@ -5704,99 +5580,6 @@ input[type="checkbox"]:checked:hover {
     margin-bottom: 4px;
 }
 
-.friend-status {
-    font-size: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    min-width: 70px;
-}
-
-.no-friends {
-    color: rgba(255, 255, 255, 0.7);
-    text-align: center;
-    padding: 16px;
-    font-size: 15px;
-}
-
-/* Private Profile Styles */
-.private-profile-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    backdrop-filter: blur(8px) brightness(0.4);
-    background: linear-gradient(45deg, rgba(255, 0, 0, 0.1), rgba(139, 0, 0, 0.2));
-}
-
-.private-profile-content {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    border: 2px solid #ff4757;
-    border-radius: var(--border-default);
-    padding: 35px;
-    width: 380px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.private-profile-content h3 {
-    color: #ff6b6b;
-    margin: 20px 0;
-    font-size: 24px;
-    text-shadow:
-        0 0 10px rgba(255, 107, 107, 0.5),
-        0 0 20px rgba(255, 107, 107, 0.3);
-}
-
-.private-profile-content p {
-    color: #b0b0c0;
-    margin-bottom: 15px;
-    line-height: 1.6;
-    font-size: 16px;
-}
-
-.ban-details {
-    background: linear-gradient(135deg, rgba(255, 71, 87, 0.1) 0%, rgba(255, 107, 107, 0.15) 100%);
-    padding: 20px;
-    border-radius: var(--border-default);
-    margin: 20px 0;
-    border: 1px solid rgba(255, 71, 87, 0.3);
-    position: relative;
-}
-
-.ban-details::before {
-    content: '⚠️';
-    position: absolute;
-    top: -14px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 0 10px;
-    font-size: 18px;
-}
-
-.ban-details p {
-    margin: 12px 0;
-    font-size: 14px;
-}
-
-.ban-details strong {
-    color: #ff6b6b;
-    font-weight: 600;
-}
-
-.ban-icon {
-    width: 220px;
-    height: 140px;
-    margin-bottom: 20px;
-    border-radius: var(--border-default);
-    border: 2px solid rgba(255, 71, 86, 0.096);
-}
 
 /* Profile loader container */
 .shimmer-bg {
@@ -5895,10 +5678,10 @@ input[type="checkbox"]:checked:hover {
 
 .loader-glass {
     height: 600px;
-    background: rgba(255, 255, 255, 0.048);
+    background: var(--glass-bg);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--glass-border);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     padding: 30px;
     display: flex;
@@ -5919,7 +5702,7 @@ input[type="checkbox"]:checked:hover {
 .loader-glass h3 {
     color: white;
     margin: 0;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-shadow: var(--glass-shadow);
 }
 
 .lock-icon {
@@ -5954,14 +5737,14 @@ input[type="checkbox"]:checked:hover {
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--glass-border);
     color: #e0e0e0;
     padding: 8px 16px;
     border-radius: var(--border-default);
     cursor: pointer;
     font-size: 15px;
     font-weight: 500;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease-in-out;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.06);
     letter-spacing: 0.3px;
     position: relative;
@@ -6024,10 +5807,10 @@ input[type="checkbox"]:checked:hover {
     text-align: center;
     margin: 25px 0;
     padding: 20px;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--glass-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
 }
 
@@ -6043,14 +5826,14 @@ input[type="checkbox"]:checked:hover {
     position: relative;
     border-radius: var(--border-default);
     padding: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--glass-border);
     backdrop-filter: blur(20px);
     height: fit-content;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease-in-out;
     margin-bottom: 20px;
     box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.15),
-        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        inset 0 1px 1px var(--glass-border);
     overflow: clip
 }
 
@@ -6100,7 +5883,7 @@ input[type="checkbox"]:checked:hover {
     object-fit: cover;
     object-position: center;
     filter: blur(2px) brightness(0.7);
-    transition: all 0.5s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 .section-title {
@@ -6114,7 +5897,7 @@ input[type="checkbox"]:checked:hover {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     position: relative;
     font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: var(--glass-shadow);
 }
 
 .raid-return-marker {
@@ -6193,9 +5976,9 @@ input[type="checkbox"]:checked:hover {
     overflow: hidden;
     border-radius: var(--border-default);
     position: relative;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid var(--glass-border);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease-in-out;
     cursor: pointer;
 }
 
@@ -6233,8 +6016,8 @@ input[type="checkbox"]:checked:hover {
     padding: 12px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s ease-in-out;
 }
 
 .raid-profit {
@@ -6244,18 +6027,18 @@ input[type="checkbox"]:checked:hover {
     font-size: 1.1em;
     padding: 4px 8px;
     border-radius: var(--border-default);
-    background: rgba(0, 0, 0, 0.3);
-    border: 2px solid transparent;
+    border: solid 1px var(--glass-border);
+    background: var(--glass-bg);
 }
 
 .good {
     margin: 5px;
-    color: #10b981;
+    color: var(--success);
 }
 
 .bad {
     margin: 5px;
-    color: #ff6a6a;
+    color: var(--danger);
 }
 
 .cross-profile-indicator {
@@ -6268,7 +6051,7 @@ input[type="checkbox"]:checked:hover {
     gap: 8px;
     padding: 6px 12px;
     background: rgb(162 162 162 / 20%);
-    border: 1px solid rgb(132 132 132 / 50%);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     font-size: 12px;
     color: #a8a8a8;
@@ -6288,10 +6071,10 @@ input[type="checkbox"]:checked:hover {
     color: #ffffffa9;
     text-decoration: none;
     font-weight: 600;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    background-color: #ffffff2b;
+    transition: all 0.3s ease-in-out;
+    background-color: var(--glass-bg);
     border-radius: var(--border-default);
-    border: #ffffff1f solid 1px;
+    border: 1px solid var(--glass-border);
 }
 
 .cross-profile-link:hover {
@@ -6300,7 +6083,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .cross-profile-avatar {
-    border: 1px solid #ffffff27;
+    border: 1px solid var(--glass-border);
     width: 20px;
     height: 20px;
     border-radius: var(--border-50);
@@ -6325,11 +6108,11 @@ input[type="checkbox"]:checked:hover {
 }
 
 .stat-block {
-    background: rgb(255 255 255 / 2%);
+    background: var(--glass-bg);
     backdrop-filter: blur(10px);
     border-radius: var(--border-default);
     padding: 15px;
-    border: 1px solid rgb(255 255 255 / 10%);
+    border: 1px solid var(--glass-border);
 }
 
 .pmc-block {
@@ -6353,13 +6136,13 @@ input[type="checkbox"]:checked:hover {
 }
 
 .raid-stat-block {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+    background: var(--glass-bg);
     padding: 8px;
     border-radius: var(--border-default);
     text-align: center;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease-in-out;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     position: relative;
     overflow: hidden;
@@ -6396,8 +6179,8 @@ input[type="checkbox"]:checked:hover {
     color: #ffffff;
     font-weight: 800;
     font-size: 1.2em;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
+    text-shadow: var(--glass-shadow);
+    transition: all 0.3s ease-in-out;
 }
 
 /* Survived */
@@ -6427,7 +6210,7 @@ input[type="checkbox"]:checked:hover {
 
 .run-through-bg {
     background: radial-gradient(800px 300px at top left, hsla(0, 0%, 100%, 0.2), hsl(210, 30%, 12%, 0.9));
-    border: 1px solid rgba(255, 250, 250, 0.2);
+    border: 1px solid var(--glass-border);
 }
 
 /* Transit */
@@ -6503,10 +6286,10 @@ input[type="checkbox"]:checked:hover {
 }
 
 .raid-info-fullwidth {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--glass-bg);
     border-radius: var(--border-default);
     padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     backdrop-filter: blur(10px);
     margin-top: 10px;
 }
@@ -6525,7 +6308,7 @@ input[type="checkbox"]:checked:hover {
     border-radius: var(--border-large);
     font-weight: 600;
     font-size: 0.9em;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     background: rgba(255, 255, 255, 0.05);
 }
 
@@ -6702,8 +6485,8 @@ input[type="checkbox"]:checked:hover {
 }
 
 .map-stat-card {
-    background: rgba(255, 255, 255, 0.025);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     padding: 8px;
     position: relative;
@@ -6748,7 +6531,7 @@ input[type="checkbox"]:checked:hover {
     font-weight: 800;
     color: #ffffff;
     margin: 0 0 3px;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+    text-shadow: var(--glass-shadow);
 }
 
 .map-name-overview {
@@ -6801,11 +6584,13 @@ input[type="checkbox"]:checked:hover {
 
 .stat-positive {
     color: var(--success) !important;
+    border-color: var(--success-dark);
     text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
 }
 
 .stat-negative {
     color: var(--danger) !important;
+    border-color: var(--danger-dark);
     text-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
 }
 
@@ -6829,7 +6614,7 @@ input[type="checkbox"]:checked:hover {
     text-align: center;
     padding: 60px 40px;
     border-radius: var(--border-default);
-    border: 1px dashed #ffffff30;
+    border: 1px dashed var(--glass-border);
 }
 
 .no-stats-message h3 {
@@ -6861,18 +6646,18 @@ input[type="checkbox"]:checked:hover {
 
 .progress-bar {
     height: 2px;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
     border-radius: var(--border-default);
     overflow: hidden;
     position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--glass-border);
 }
 
 .progress-fill {
     height: 100%;
     border-radius: var(--border-default);
     position: relative;
-    transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.3s ease-in-out;
     background: linear-gradient(90deg,
             var(--progress-color-start),
             var(--progress-color-end));
@@ -6960,12 +6745,12 @@ input[type="checkbox"]:checked:hover {
 }
 
 .quest-card {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    background: var(--glass-bg);
     border-radius: 16px;
     padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
     position: relative;
     overflow: hidden;
 }
@@ -6999,10 +6784,10 @@ input[type="checkbox"]:checked:hover {
     height: 60px;
     border-radius: var(--border-default);
     object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--glass-border);
     background: rgba(0, 0, 0, 0.3);
     flex-shrink: 0;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 .quest-card:hover .quest-image {
@@ -7046,7 +6831,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .quest-card.not-accepted {
-    border-color: rgba(148, 163, 184, 0.3);
+    border-color: var(--glass-border);
     background: linear-gradient(145deg, rgba(148, 163, 184, 0.1), rgba(255, 255, 255, 0.05));
     opacity: 0.8;
 }
@@ -7054,7 +6839,7 @@ input[type="checkbox"]:checked:hover {
 .status-not-accepted {
     background: rgba(148, 163, 184, 0.2);
     color: #94a3b8;
-    border: 1px solid rgba(148, 163, 184, 0.3);
+    border: 1px solid var(--glass-border);
 }
 
 .quest-timeline {
@@ -7091,9 +6876,9 @@ input[type="checkbox"]:checked:hover {
     position: relative;
     margin-bottom: 20px;
     padding: 15px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     z-index: 1;
 }
 
@@ -7107,14 +6892,14 @@ input[type="checkbox"]:checked:hover {
 
 .sort-btn {
     padding: 10px 20px;
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    background: var(--glass-bg);;
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: var(--border-default);
     color: var(--text-light);
     font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
     backdrop-filter: blur(10px);
     position: relative;
     overflow: hidden;
@@ -7123,7 +6908,7 @@ input[type="checkbox"]:checked:hover {
 .sort-btn:hover {
     background: linear-gradient(145deg, rgba(100, 255, 218, 0.1), rgba(255, 255, 255, 0.05));
     border-color: rgba(100, 255, 218, 0.3);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--glass-shadow);
 }
 
 .sort-btn.active {
@@ -7141,13 +6926,13 @@ input[type="checkbox"]:checked:hover {
 .search-input {
     width: -webkit-fill-available;
     padding: 10px 16px;
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     color: var(--text-light);
     font-size: 0.9rem;
     backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 .search-input:focus {
@@ -7189,8 +6974,8 @@ input[type="checkbox"]:checked:hover {
     padding: 60px 20px;
     color: rgba(255, 255, 255, 0.7);
     border-radius: var(--border-default);
-    border: 1px dashed rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed var(--glass-border);
+    background: var(--glass-bg);
     backdrop-filter: blur(10px);
 }
 
@@ -7217,19 +7002,19 @@ input[type="checkbox"]:checked:hover {
 }
 
 .hideout-module {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+    background: var(--glass-bg);
     border-radius: var(--border-default);
     padding: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--glass-border);
     backdrop-filter: blur(12px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease-in-out;
     position: relative;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: space-between;
     min-height: 70px;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--glass-shadow);
 }
 
 .hideout-module.built {
@@ -7288,7 +7073,7 @@ input[type="checkbox"]:checked:hover {
 .module-status.not-built {
     background: rgba(148, 163, 184, 0.15);
     color: var(--text-muted);
-    border: 1px solid rgba(148, 163, 184, 0.2);
+    border: 1px solid var(--glass-border);
 }
 
 .module-image {
@@ -7297,10 +7082,10 @@ input[type="checkbox"]:checked:hover {
     height: 50px;
     border-radius: var(--border-default);
     overflow: hidden;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--glass-border);
     background: rgba(0, 0, 0, 0.4);
     flex-shrink: 0;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
     min-width: 50px;
     max-width: 50px;
     min-height: 50px;
@@ -7330,14 +7115,14 @@ input[type="checkbox"]:checked:hover {
     position: absolute;
     top: -6px;
     right: -6px;
-    background: linear-gradient(145deg, var(--accent-teal), var(--accent-blue));
+    background: var(--glass-bg);
     color: var(--darker);
     font-size: 0.7rem;
     font-weight: 700;
     padding: 3px 6px;
     border-radius: var(--border-default);
-    border: 2px solid var(--darker);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
     min-width: 20px;
     text-align: center;
     z-index: 2;
@@ -7395,7 +7180,7 @@ input[type="checkbox"]:checked:hover {
     width: max-content;
     max-width: 300px;
     background: rgb(31 31 31);
-    border: 1px solid #ffffff1a;
+    border: 1px solid var(--glass-border);
     color: #fff;
     text-align: center;
     padding: 6px 8px;
@@ -7522,7 +7307,7 @@ input[type="checkbox"]:checked:hover {
     padding: 15px;
     overflow-y: auto;
     flex-grow: 1;
-    transition: all 300ms ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
 .raids-modal-content {
@@ -7539,7 +7324,7 @@ input[type="checkbox"]:checked:hover {
     overflow: hidden;
     flex-direction: column;
     overflow-y: scroll;
-    transition: all 300ms ease-in-out;
+    transition: all 0.3s ease-in-out;
     border: 1px solid #ffffff1a;
 }
 
@@ -7572,7 +7357,7 @@ input[type="checkbox"]:checked:hover {
     height: 60px;
     object-fit: contain;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease-in-out;
 }
 
 .circular-progress {
@@ -7609,15 +7394,13 @@ input[type="checkbox"]:checked:hover {
             rgba(255, 255, 255, 0.2),
             rgba(130, 174, 255, 0.3));
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.3),
-        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
     backdrop-filter: blur(8px);
     white-space: nowrap;
     min-width: 120px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-    transition: all 0.3s ease;
+    text-shadow: var(--glass-shadow);
+    transition: all 0.3s ease-in-out;
 }
 
 /* BattlePass Level */
@@ -7655,7 +7438,7 @@ input[type="checkbox"]:checked:hover {
     height: 72px;
     object-fit: contain;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease-in-out;
     position: relative;
     z-index: 2;
 }
@@ -7672,7 +7455,7 @@ input[type="checkbox"]:checked:hover {
     background: conic-gradient(var(--progress-color, #4285f4) calc(var(--progress, 0) * 3.6deg),
             rgba(255, 255, 255, 0.05) 0deg);
     padding: 4px;
-    transition: all 0.5s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 .circular-progress-new::before {
@@ -7683,7 +7466,7 @@ input[type="checkbox"]:checked:hover {
     background: rgba(0, 0, 0, 0.8);
     border-radius: var(--border-50);
     z-index: 1;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
 }
 
 /* Level Badge on Icon */
@@ -7704,7 +7487,7 @@ input[type="checkbox"]:checked:hover {
     font-size: 12px;
     font-weight: 900;
     color: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--glass-shadow);
     transition: all 0.3s ease;
 }
 
@@ -7722,9 +7505,9 @@ input[type="checkbox"]:checked:hover {
     font-weight: 700;
     padding: 6px 16px;
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--glass-border);
+    box-shadow:  var(--glass-shadow);
+    text-shadow: var(--glass-shadow);
     display: inline-block;
     width: fit-content;
     transition: all 0.3s ease;
@@ -7732,7 +7515,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .rank-name-new:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-md);
 }
 
 .rank-progress-text {
@@ -7742,9 +7525,9 @@ input[type="checkbox"]:checked:hover {
     font-size: 13px;
     color: rgba(255, 255, 255, 0.7);
     padding: 4px 8px;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--glass-bg);
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
 }
 
 .rank-progress-label {
@@ -7780,9 +7563,9 @@ input[type="checkbox"]:checked:hover {
     gap: 2px;
     flex: 1;
     padding: 6px 12px;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--glass-bg);
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--glass-border);
     transition: all 0.3s ease;
 }
 
@@ -7802,7 +7585,7 @@ input[type="checkbox"]:checked:hover {
     font-family: 'Bender Regular', sans-serif;
     font-size: 16px;
     font-weight: 800;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow:  var(--glass-shadow);
     transition: color 0.3s ease;
 }
 
@@ -7863,12 +7646,12 @@ input[type="checkbox"]:checked:hover {
 
 .exp-bar {
     height: 12px;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--glass-bg);
     border-radius: var(--border-default);
     overflow: hidden;
     margin-bottom: 8px;
     position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
 }
 
 .exp-numbers {
@@ -7887,7 +7670,7 @@ input[type="checkbox"]:checked:hover {
     padding: 8px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
 }
 
 
@@ -7925,7 +7708,7 @@ input[type="checkbox"]:checked:hover {
 
 .trader-card {
     background: var(--glass-bg);
-    border: 1px solid #ffffff1a;
+    border: 1px solid var(--glass-border);
     border-radius: 8px;
     padding: 10px;
     text-align: center;
@@ -7937,7 +7720,7 @@ input[type="checkbox"]:checked:hover {
     width: 80px;
     height: 80px;
     margin: 0 auto 8px;
-    border: 3px solid #7f7f7f44;
+    border: 3px solid var(--glass-border);
     border-radius: var(--border-default);
 }
 
@@ -8074,8 +7857,8 @@ input[type="checkbox"]:checked:hover {
     justify-content: center;
     border-radius: var(--border-default);
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.01);
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
 }
 
 .weapon-profile-icon {
@@ -8149,7 +7932,7 @@ input[type="checkbox"]:checked:hover {
     position: absolute;
     bottom: 8px;
     left: 8px;
-    border: 1px solid rgb(255 255 255 / 20%);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     padding: 3px 10px;
     color: #00ffe699;
@@ -8186,10 +7969,10 @@ input[type="checkbox"]:checked:hover {
 .mastery-wpn-profile-container {
     backdrop-filter: blur(5px);
     margin-top: 10px;
-    background: rgba(255, 255, 255, 0.01);
+    background: var(--glass-bg);
     border-radius: var(--border-default);
     padding: 10px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--glass-border);
 }
 
 .mastery-wpn-profile-header {
@@ -8258,7 +8041,7 @@ input[type="checkbox"]:checked:hover {
     width: 100%;
     backdrop-filter: blur(20px) saturate(120%);
     -webkit-backdrop-filter: blur(20px) saturate(120%);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     padding: 16px;
     color: #e4e4ec;
@@ -8786,9 +8569,9 @@ input[type="checkbox"]:checked:hover {
     align-items: center;
     justify-content: center;
     gap: 4px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     padding: 16px 12px;
     text-align: center;
@@ -9040,7 +8823,7 @@ input[type="checkbox"]:checked:hover {
 .loading-spinner {
     width: 50px;
     height: 50px;
-    border: 3px solid rgba(255, 255, 255, 0.1);
+    border: 3px solid var(--glass-border);
     border-top-color: var(--accent-teal, #00d4aa);
     border-radius: var(--border-50);
     animation: spin 1s linear infinite;
@@ -9065,7 +8848,7 @@ input[type="checkbox"]:checked:hover {
 
 .pmc-hero:hover .pmc-rank-badge {
     transform: scale(1.05);
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+    box-shadow: var(--glass-shadow);
 }
 
 .rank-number {
@@ -9302,7 +9085,7 @@ input[type="checkbox"]:checked:hover {
     bottom: -2px;
     width: 100%;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent-blue), #ff9ff3);
+    background: linear-gradient(90deg, transparent, var(--accent-primary), #ff9ff3);
     background-size: 100% 100%;
     border-radius: var(--border-small);
 }
@@ -9370,7 +9153,7 @@ input[type="checkbox"]:checked:hover {
     padding: 14px 18px;
     color: white;
     border-radius: var(--border-default);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--glass-shadow);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -9380,7 +9163,7 @@ input[type="checkbox"]:checked:hover {
     transform: translateX(-30px);
     position: relative;
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     overflow: hidden;
 }
 
@@ -9582,7 +9365,7 @@ input[type="checkbox"]:checked:hover {
     right: 0;
     bottom: 0;
     backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--glass-border);
     gap: 5px;
     display: flex;
     align-items: center;
@@ -9610,7 +9393,7 @@ input[type="checkbox"]:checked:hover {
 .loading-spinner {
     width: 24px;
     height: 24px;
-    border: 3px solid rgba(255, 255, 255, 0.1);
+    border: 3px solid var(--glass-border);
     border-top-color: #a78bfa;
     border-radius: var(--border-50);
     animation: spin 0.3s linear infinite;
@@ -9666,17 +9449,17 @@ input[type="checkbox"]:checked:hover {
     align-items: center;
     margin-top: 30px;
     padding: 20px 10px;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--glass-bg);
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
     flex-wrap: wrap;
     gap: 15px;
 }
 
 .pagination-btn {
     color: var(--text-light);
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(99, 102, 241, 0.1);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     padding: 10px 20px;
     font-size: 0.95rem;
@@ -9716,8 +9499,8 @@ input[type="checkbox"]:checked:hover {
     align-items: center;
     justify-content: center;
     border-radius: var(--border-default);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     color: var(--text-muted);
     font-weight: 600;
     cursor: pointer;
@@ -9757,16 +9540,16 @@ input[type="checkbox"]:checked:hover {
 .comment-form {
     border-radius: var(--border-default);
     padding: 14px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     backdrop-filter: blur(10px);
 }
 
 .comment-input {
     width: 100%;
     box-sizing: border-box;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     padding: 14px 16px;
     color: var(--text-light, #e2e8f0);
@@ -9787,7 +9570,7 @@ input[type="checkbox"]:checked:hover {
     outline: none;
     border-color: rgba(255, 255, 255, 0.28);
     background: rgba(255, 255, 255, 0.09);
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+    box-shadow: var(--glass-shadow);
 }
 
 .comment-input:disabled {
@@ -9800,7 +9583,7 @@ input[type="checkbox"]:checked:hover {
 .comment-submit {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.09));
     color: white;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     padding: 10px 22px;
     font-size: 0.95rem;
@@ -9818,7 +9601,7 @@ input[type="checkbox"]:checked:hover {
 .comment-submit:hover {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.15));
     border-color: rgba(255, 255, 255, 0.32);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--glass-shadow);
     transform: translateY(-1px);
 }
 
@@ -9852,7 +9635,7 @@ input[type="checkbox"]:checked:hover {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
     border-radius: var(--border-default);
     padding: 14px 16px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
     backdrop-filter: blur(10px);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -9878,9 +9661,9 @@ input[type="checkbox"]:checked:hover {
     align-items: center;
     gap: 6px;
     padding: 6px 11px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--glass-bg);
     color: rgba(255, 255, 255, 0.55);
     font-size: 0.78rem;
     font-weight: 600;
@@ -9955,11 +9738,11 @@ input[type="checkbox"]:checked:hover {
 }
 
 .reply-comment {
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--glass-bg);
     border-radius: var(--border-default);
     padding: 10px 12px;
     margin-bottom: 0;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--glass-border);
 }
 
 .reply-comment .comment-header {
@@ -10003,8 +9786,8 @@ input[type="checkbox"]:checked:hover {
 
 .reply-input {
     width: 100%;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     padding: 8px 12px;
     color: var(--text-light);
@@ -10049,7 +9832,7 @@ input[type="checkbox"]:checked:hover {
 .reply-cancel-btn {
     padding: 4px 16px;
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     color: rgba(255, 255, 255, 0.5);
     font-size: 0.8rem;
@@ -10093,8 +9876,8 @@ input[type="checkbox"]:checked:hover {
     height: 52px;
     border-radius: var(--border-default);
     object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
     transition: all 0.3s ease;
 }
 
@@ -10105,8 +9888,8 @@ input[type="checkbox"]:checked:hover {
     left: -5px;
     width: 28px;
     height: 28px;
-    background-color: #ffffff05;
-    border: 1px solid #ffffff21;
+    background-color: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     backdrop-filter: blur(5px);
     border-radius: var(--border-default);
     display: flex;
@@ -10276,7 +10059,7 @@ input[type="checkbox"]:checked:hover {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
     padding: 2px 8px;
     border-radius: var(--border-default);
     font-size: 9px;
@@ -10284,7 +10067,7 @@ input[type="checkbox"]:checked:hover {
     letter-spacing: 0.3px;
     text-transform: uppercase;
     color: var(--gray);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
 }
 
 /* Online stuff for comments */
@@ -10382,7 +10165,7 @@ input[type="checkbox"]:checked:hover {
     padding: 56px 20px;
     color: rgba(255, 255, 255, 0.7);
     border-radius: var(--border-default);
-    border: 1px dashed rgba(255, 255, 255, 0.12);
+    border: 1px dashed var(--glass-border);
     background: rgba(255, 255, 255, 0.02);
     backdrop-filter: blur(10px);
 }
@@ -10396,9 +10179,9 @@ input[type="checkbox"]:checked:hover {
     align-items: center;
     justify-content: center;
     border-radius: var(--border-50);
-    color: rgba(255, 255, 255, 0.55);
+    color: var(--glass-bg);
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
     opacity: 1;
 }
 
@@ -10463,10 +10246,10 @@ input[type="checkbox"]:checked:hover {
 .pagination-info {
     color: var(--text-light);
     font-size: 0.9rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
     padding: 6px 12px;
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
 }
 
 /* Pre loader */
@@ -10568,7 +10351,7 @@ input[type="checkbox"]:checked:hover {
     border-radius: var(--border-default);
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     animation: fadeIn 1.2s ease-in-out forwards;
 }
 
@@ -10653,7 +10436,7 @@ input[type="checkbox"]:checked:hover {
     max-width: 500px;
     padding: 1.5rem;
     background: linear-gradient(145deg, rgba(255, 107, 107, 0.1), rgba(255, 107, 107, 0.05));
-    border: 1px solid rgba(255, 107, 107, 0.2);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
     bottom: 4rem;
     backdrop-filter: blur(20px);
@@ -10694,7 +10477,7 @@ input[type="checkbox"]:checked:hover {
 
 .retry-button-pre {
     background-color: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     color: white;
     padding: 0.5rem 1rem;
     border-radius: var(--border-default);
@@ -10752,8 +10535,8 @@ input[type="checkbox"]:checked:hover {
     padding: 30px 30px 24px;
     border-radius: var(--border-default);
     background: linear-gradient(180deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.94));
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.45);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
     transform: scale(0.985) translateY(8px);
     transition: transform 0.25s ease, opacity 0.25s ease;
 }
@@ -10771,7 +10554,7 @@ input[type="checkbox"]:checked:hover {
     height: 38px;
     border-radius: var(--border-default);
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     color: rgba(255, 255, 255, 0.6);
     display: flex;
     align-items: center;
@@ -10815,7 +10598,7 @@ input[type="checkbox"]:checked:hover {
     display: inline-block;
     padding: 6px 16px;
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
 }
 
@@ -10843,7 +10626,7 @@ input[type="checkbox"]:checked:hover {
     padding: 16px 18px;
     background: rgba(255, 255, 255, 0.04);
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
     transition: all 0.25s ease;
     min-width: 0;
 }
@@ -10864,7 +10647,7 @@ input[type="checkbox"]:checked:hover {
     justify-content: center;
     color: var(--text-muted);
     flex-shrink: 0;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
 }
 
 .team-modal-stat-content {
@@ -10915,7 +10698,7 @@ input[type="checkbox"]:checked:hover {
 .team-modal-members-count {
     color: var(--text-muted);
     background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     padding: 2px 10px;
     border-radius: var(--border-default);
     font-size: 0.75rem;
@@ -10937,7 +10720,7 @@ input[type="checkbox"]:checked:hover {
     padding: 60px 20px;
     color: rgba(255, 255, 255, 0.7);
     border-radius: var(--border-default);
-    border: 1px dashed rgba(255, 255, 255, 0.12);
+    border: 1px dashed var(--glass-border);
     background: rgba(255, 255, 255, 0.02);
 }
 
@@ -10960,7 +10743,7 @@ input[type="checkbox"]:checked:hover {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
     border-radius: var(--border-default);
     padding: 0 0 14px 0;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
     transition: all 0.25s ease;
     position: relative;
     overflow: hidden;
@@ -11008,7 +10791,7 @@ input[type="checkbox"]:checked:hover {
     padding: 4px 10px;
     border-radius: var(--border-default);
     background: rgba(2, 6, 23, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--glass-border);
     color: var(--text-white);
     font-size: 0.75rem;
     font-weight: 700;
@@ -11052,7 +10835,7 @@ input[type="checkbox"]:checked:hover {
     padding: 8px 10px;
     background: rgba(255, 255, 255, 0.04);
     border-radius: var(--border-default);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--glass-border);
     min-width: 0;
 }
 
@@ -11177,8 +10960,8 @@ input[type="checkbox"]:checked:hover {
     background: linear-gradient(145deg, #ffffff08, #ffffff12);
     backdrop-filter: blur(12px) saturate(150%);
     -webkit-backdrop-filter: blur(12px) saturate(150%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
     border-radius: var(--border-default);
     padding: 15px;
     text-align: center;
