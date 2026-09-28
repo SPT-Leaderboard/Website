@@ -1279,7 +1279,7 @@ td {
     display: flex;
     width: 11px;
     height: 11px;
-    border-radius: var(--border-d50);
+    border-radius: var(--border-50);
     margin-left: 5px;
     animation: blink 2s infinite;
 }
