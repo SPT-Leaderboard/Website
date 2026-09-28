@@ -20,7 +20,6 @@ class SettingsManager {
             casualToggle: false,
             cacheBypassToggle: false
         };
-        this.playerWidget = null;
         this.bannedMods = [];
         this.init();
     }
@@ -85,24 +84,7 @@ class SettingsManager {
     }
 
     setupEventListeners() {
-        const toggles = [
-            'timerToggle', 'winnersToggle', 'lbToggle', 'casualToggle', 'cacheBypassToggle'
-        ];
-
-        toggles.forEach(toggleId => {
-            const toggle = document.getElementById(toggleId);
-            if (toggle) {
-                const settingKey = this.getSettingKey(toggleId);
-                const targetElement = this.getTargetElement(settingKey);
-
-                toggle.addEventListener('change', () => {
-                    this.updateVisibility(toggle, targetElement, settingKey);
-                    this.saveSettings(); // Auto-save
-                });
-            }
-        });
-
-        // Save button just in case lol
+        // Save button
         const saveBtn = document.getElementById('saveSettings');
         if (saveBtn) {
             saveBtn.addEventListener('click', () => {
@@ -231,9 +213,6 @@ class SettingsManager {
         if (elements.settingsButton && elements.settingsModal) {
             elements.settingsButton.addEventListener('click', () => {
                 toggleModal(elements.settingsModal, true);
-                if (this.playerWidget) {
-                    this.playerWidget.show();
-                }
             });
         }
 
@@ -246,9 +225,6 @@ class SettingsManager {
                 if (modal) {
                     toggleModal(modal, false);
                 }
-                if (this.playerWidget) {
-                    this.playerWidget.hideIfEmpty();
-                }
             });
         });
 
@@ -257,9 +233,6 @@ class SettingsManager {
             document.querySelectorAll('.modal').forEach(modal => {
                 if (event.target === modal) {
                     toggleModal(modal, false);
-                    if (modal === elements.settingsModal && this.playerWidget) {
-                        this.playerWidget.hideIfEmpty();
-                    }
                 }
             });
         });
@@ -269,9 +242,6 @@ class SettingsManager {
             if (e.key === 'Escape') {
                 document.querySelectorAll('.modal.active').forEach(modal => {
                     toggleModal(modal, false);
-                    if (modal === elements.settingsModal && this.playerWidget) {
-                        this.playerWidget.hideIfEmpty();
-                    }
                 });
             }
         });
@@ -392,242 +362,10 @@ class SettingsManager {
     }
 }
 
-// #region Player Widget
-class PlayerWidget {
-    constructor(data) {
-        this.data = data || [];
-        this.container = null;
-        this.isDragging = false;
-        this.offsetX = 0;
-        this.offsetY = 0;
-
-        // Bind methods
-        this.handleMouseMove = this.handleMouseMove.bind(this);
-        this.handleMouseUp = this.handleMouseUp.bind(this);
-
-        this.init();
-    }
-
-    init() {
-        if (document.getElementById('playerComparisonWidget')) {
-            this.container = document.getElementById('playerComparisonWidget');
-            return;
-        }
-
-        this.createWidget();
-        this.setupDrag();
-        this.setupEventListeners();
-
-        // Restore the widget state
-        this.restoreState();
-    }
-
-    createWidget() {
-        this.container = document.createElement('div');
-        this.container.id = 'playerComparisonWidget';
-        this.container.className = 'draggable-widget';
-        this.container.style.display = 'none';
-        this.container.innerHTML = this.getWidgetHTML();
-        document.body.appendChild(this.container);
-    }
-
-    getWidgetHTML() {
-        return `
-            <div class="widget-header">
-                <h3>Player Watchlist</h3>
-                <button class="close-widget">×</button>
-            </div>
-            <div class="widget-content">
-                <div class="player-inputs">
-                    <div class="player-input-group">
-                        <label for="widgetPlayerOneId">Player ID:</label>
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            <input type="text" id="widgetPlayerOneId" class="player-id-input" style="flex: 1;" placeholder="Enter player ID">
-                            <button id="copyIdBtn" title="Copy ID" class="icon-btn" style="display: none;">
-                                <i class="fa-solid fa-copy"></i>
-                            </button>
-                            <button id="openProfileBtn" title="Open Profile" class="icon-btn" style="display: none;">
-                                <i class="fa-solid fa-user"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="player-stats-container-watchlist">
-                    <div id="widgetPlayerOneStats"></div>
-                </div>
-            </div>
-        `;
-    }
-
-    setupDrag() {
-        const header = this.container.querySelector('.widget-header');
-
-        header.addEventListener('mousedown', (e) => {
-            if (e.target.classList.contains('close-widget')) return;
-
-            this.isDragging = true;
-            const rect = this.container.getBoundingClientRect();
-            this.offsetX = e.clientX - rect.left;
-            this.offsetY = e.clientY - rect.top;
-            this.container.style.cursor = 'grabbing';
-
-            document.addEventListener('mousemove', this.handleMouseMove);
-            document.addEventListener('mouseup', this.handleMouseUp);
-        });
-    }
-
-    handleMouseMove(e) {
-        if (!this.isDragging) return;
-
-        this.container.style.left = `${e.clientX - this.offsetX}px`;
-        this.container.style.top = `${e.clientY - this.offsetY}px`;
-    }
-
-    handleMouseUp() {
-        if (this.isDragging) {
-            this.isDragging = false;
-            this.container.style.cursor = 'grab';
-
-            // Save position
-            this.savePosition();
-
-            document.removeEventListener('mousemove', this.handleMouseMove);
-            document.removeEventListener('mouseup', this.handleMouseUp);
-        }
-    }
-
-    setupEventListeners() {
-        const playerOneInput = this.container.querySelector('#widgetPlayerOneId');
-        const playerOneStatsDiv = this.container.querySelector('#widgetPlayerOneStats');
-        const copyBtn = this.container.querySelector('#copyIdBtn');
-        const openBtn = this.container.querySelector('#openProfileBtn');
-        const closeBtn = this.container.querySelector('.close-widget');
-
-        const updateStats = () => {
-            const p1Id = playerOneInput.value.trim();
-            localStorage.setItem('playerOneId', p1Id);
-
-            const p1 = this.findPlayerById(p1Id);
-
-            if (p1) {
-                playerOneStatsDiv.innerHTML = this.getPlayerStatsHTML(p1);
-                copyBtn.style.display = 'inline-block';
-                openBtn.style.display = 'inline-block';
-            } else {
-                playerOneStatsDiv.innerHTML = '<p class="not-found">Player ID not found</p>';
-                copyBtn.style.display = 'none';
-                openBtn.style.display = 'none';
-            }
-        };
-
-        playerOneInput.addEventListener('input', updateStats);
-
-        // Copy the ID
-        copyBtn.addEventListener('click', () => {
-            const id = playerOneInput.value.trim();
-            if (id) {
-                navigator.clipboard.writeText(id).then(() => {
-                    copyBtn.innerHTML = "<i class='fa-solid fa-check'></i>";
-                    setTimeout(() => copyBtn.innerHTML = "<i class='fa-solid fa-copy'></i>", 1500);
-                });
-            }
-        });
-
-        // Opening profile
-        openBtn.addEventListener('click', () => {
-            const id = playerOneInput.value.trim();
-            if (id) {
-                openProfile(id);
-            }
-        });
-
-        // Close widget
-        closeBtn.addEventListener('click', () => {
-            this.hide();
-            playerOneInput.value = '';
-            localStorage.removeItem('playerOneId');
-            playerOneStatsDiv.innerHTML = '';
-        });
-    }
-
-    findPlayerById(id) {
-        return this.data.find(p => p.id === id);
-    }
-
-    getPlayerStatsHTML(player) {
-        return `
-            <div class="raid-stats-grid">
-                <div class="raid-stat-block">
-                    <span class="profile-stat-label">Name:</span>
-                    <span class="profile-stat-value">${player.name || 'N/A'}</span>
-                </div>
-                <div class="raid-stat-block">
-                    <span class="profile-stat-label">Rank:</span>
-                    <span class="profile-stat-value">${player.rank || 'N/A'}</span>
-                </div>
-                <div class="raid-stat-block">
-                    <span class="profile-stat-label">K/D:</span>
-                    <span class="profile-stat-value">${player.killToDeathRatio || 'N/A'}</span>
-                </div>
-                <div class="raid-stat-block">
-                    <span class="profile-stat-label">Skill:</span>
-                    <span class="profile-stat-value">${player.totalScore ? player.totalScore.toFixed(2) : 'N/A'} (${getRankLabel(player.totalScore)})</span>
-                </div>
-            </div>
-        `;
-    }
-
-    // Restore Widget State
-    restoreState() {
-        this.restorePosition();
-        const savedId = localStorage.getItem('playerOneId');
-        if (savedId) {
-            const input = this.container.querySelector('#widgetPlayerOneId');
-            input.value = savedId;
-
-            // Trigger the update
-            const event = new Event('input', { bubbles: true });
-            input.dispatchEvent(event);
-        }
-    }
-
-    restorePosition() {
-        const savedPosition = JSON.parse(localStorage.getItem('widgetPosition')) || { top: '20px', left: '20px' };
-        this.container.style.top = savedPosition.top;
-        this.container.style.left = savedPosition.left;
-    }
-
-    savePosition() {
-        localStorage.setItem('widgetPosition', JSON.stringify({
-            top: this.container.style.top,
-            left: this.container.style.left
-        }));
-    }
-
-    show() {
-        if (this.container) {
-            this.container.style.display = 'block';
-        }
-    }
-
-    hide() {
-        if (this.container) {
-            this.container.style.display = 'none';
-        }
-    }
-
-    hideIfEmpty() {
-        const input = this.container.querySelector('#widgetPlayerOneId');
-        if (input && !input.value.trim()) {
-            this.hide();
-        }
-    }
-}
-
 /**
  * @class SettingsHelper
  * @description Static utility class providing convenient access to the global SettingsManager
- * instance. Allows reading and writing individual settings without direct SettingsManager references.
+ * instance. Allows reading individual settings without direct SettingsManager references.
  */
 class SettingsHelper {
     /**
@@ -640,16 +378,6 @@ class SettingsHelper {
             return window.settingsManager.getSetting(key);
         }
         return null;
-    }
-
-    // Unused for now
-    static set(key, value) {
-        if (window.settingsManager) {
-            window.settingsManager.settings[key] = value;
-            window.settingsManager.saveSettings();
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -666,19 +394,9 @@ class SettingsHelper {
 
 // #region Init
 window.settingsManager = null;
-window.playerWidget = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     window.settingsManager = new SettingsManager();
 });
 
 window.SettingsHelper = SettingsHelper;
-
-// Backwards compability
-function initProfileWatchList(data) {
-    if (!window.playerWidget) {
-        window.playerWidget = new PlayerWidget(data);
-        window.settingsManager.playerWidget = window.playerWidget;
-    }
-    return window.playerWidget;
-}
