@@ -60,7 +60,7 @@
     --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
     --neon-gradient: linear-gradient(90deg, #8B5CF6, #3B82F6, #06B6D4);
 
-    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
     --glass-border: rgba(255, 255, 255, 0.1);
     --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 
@@ -1750,10 +1750,11 @@ td:nth-child(4) {
 .live-data-label {
     position: relative;
     overflow: hidden;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-light);
     background-color: var(--glass-bg);
     font-weight: 500;
     padding: 6px 20px;
+    border: solid 1px var(--glass-border);
     border-radius: var(--border-default);
     cursor: default;
     transition: color 0.2s ease;
@@ -1932,29 +1933,13 @@ td:nth-child(4) {
     display: none;
     position: fixed;
     z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     overflow: hidden;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: var(--glass-bg);
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease-in-out;
     backdrop-filter: blur(8px);
-}
-
-.modal li {
-    color: var(--text-light);
-    margin: 8px 0;
-    padding-left: 15px;
-    position: relative;
-}
-
-.modal p {
-    color: var(--text-light);
-    line-height: 1.6;
-    margin-bottom: 15px;
 }
 
 .modal.active {
@@ -1966,17 +1951,75 @@ td:nth-child(4) {
 
 .modal-content {
     background: linear-gradient(145deg, #1f2b3d, #0f172a);
-    margin: 5% auto;
-    padding: 35px;
+    margin: 10vh auto;
+    padding: 0;
     border: 2px solid var(--glass-border);
     border-radius: var(--border-default);
     width: 90%;
     max-width: 700px;
-    max-height: 75vh;
-    overflow-y: scroll;
+    max-height: 90vh;
     color: var(--text-light);
     position: relative;
     transition: all 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--glass-border);
+    background: linear-gradient(145deg, #1f2b3d, #162033);
+    flex-shrink: 0;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #96c0ff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    text-shadow: 0 2px 10px rgba(150, 192, 255, 0.3);
+    line-height: 1.3;
+}
+
+.modal-body {
+    overflow-y: auto;
+    padding: 20px 24px;
+    flex: 1 1 auto;
+    min-height: 0;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 255, 218, 0.3) transparent;
+}
+
+.modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: rgba(100, 255, 218, 0.25);
+    border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 255, 218, 0.45);
+}
+
+.modal-footer {
+    padding: 14px 24px;
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    background: var(--glass-bg);
+    flex-shrink: 0;
 }
 
 .modal-content h2 {
@@ -1988,39 +2031,59 @@ td:nth-child(4) {
     margin: 0.5rem;
 }
 
-.close {
-    color: var(--accent-teal);
-    float: right;
-    font-size: 32px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    line-height: 1;
-    width: 40px;
-    height: 40px;
+.modal-header .close {
+    all: unset;
+    box-sizing: border-box;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--border-50);
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    z-index: 10;
+    font-size: 22px;
+    line-height: 1;
+    font-weight: bold;
+    color: var(--accent-teal);
+    cursor: pointer;
+    border-radius: var(--border-default);
+    transition: color 0.2s ease, background 0.2s ease;
+    flex-shrink: 0;
 }
 
-.close:hover {
+.modal-header .close:hover {
     color: var(--accent-blue);
-    background: rgba(100, 255, 218, 0.1);
-    transform: rotate(90deg);
+    background: rgba(100, 255, 218, 0.08);
 }
 
-.modal img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 15px auto;
-    border-radius: var(--border-small);
-    border: 1px solid rgb(119, 255, 223);
+/* Topography */
+.modal-body h3 {
+    color: #96c0ff;
+    font-size: 1.02rem;
+    margin: 20px 0 8px;
+}
+
+.modal-body h3:first-child {
+    margin-top: 0;
+}
+
+.modal-body p {
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.modal-body ul {
+    margin: 0 0 14px;
+    padding-left: 20px;
+}
+
+.modal-body li {
+    color: var(--text-light);
+    margin: 6px 0;
+    line-height: 1.55;
+}
+
+.modal-body li ul {
+    margin: 6px 0 6px;
 }
 
 /* Mods Modal */
@@ -2056,27 +2119,6 @@ td:nth-child(4) {
     border: 1px solid rgba(106, 255, 163, 0.2);
 }
 
-.section-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 15px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.section-header h3 {
-    color: var(--text-light);
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 0;
-    flex-grow: 1;
-}
-
-.section-icon {
-    font-size: 1.3rem;
-}
-
 .mods-count {
     background: rgba(255, 255, 255, 0.1);
     color: var(--text-light);
@@ -2109,7 +2151,7 @@ td:nth-child(4) {
 
 .mod-item:hover {
     border-color: rgba(255, 255, 255, 0.2);
-    box-shadow:  var(--glass-shadow);
+    box-shadow: var(--glass-shadow);
 }
 
 .banned-mods .mod-item {
@@ -2133,22 +2175,6 @@ td:nth-child(4) {
     font-size: 0.95rem;
     margin: 0;
     word-break: break-word;
-}
-
-@keyframes modItemAppear {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.mod-item {
-    animation: modItemAppear 0.4s ease forwards;
 }
 
 .mods-list:empty::after {
@@ -2190,67 +2216,75 @@ td:nth-child(4) {
 .settings-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    padding-top: 20px;
+    gap: 8px;
 }
 
 .setting-item {
     background: linear-gradient(145deg,
             rgba(255, 255, 255, 0.05),
             rgba(255, 255, 255, 0.02));
-    padding: 20px;
+    padding: 12px 14px;
     border-radius: var(--border-default);
     border: 1px solid var(--glass-border);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    transition: border-color 0.2s ease;
+}
+
+.setting-item:hover {
+    border-color: rgba(100, 255, 218, 0.25);
 }
 
 .setting-label {
     font-weight: 600;
     color: #fff;
-    font-size: 1rem;
+    font-size: 0.92rem;
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 8px;
+    gap: 10px;
+    margin-bottom: 4px;
     cursor: pointer;
-    transition: color 0.3s ease;
-    position: relative;
-    z-index: 2;
+    user-select: none;
 }
 
-.setting-label:hover {
-    color: var(--accent-teal);
+.setting-label span {
+    line-height: 1.3;
 }
 
 .setting-description {
     color: var(--text-muted);
-    font-size: 0.85rem;
-    line-height: 1.5;
+    font-size: 0.78rem;
+    line-height: 1.4;
     margin: 0;
-    padding-left: 34px;
-    transition: color 0.3s ease;
-    position: relative;
-    z-index: 2;
+    padding-left: 30px;
 }
 
-.setting-item:hover .setting-description {
-    color: var(--text-light);
+.save-btn {
+    background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+    color: var(--darker);
+    border: none;
+    padding: 9px 18px;
+    border-radius: var(--border-default);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-size: 13px;
+}
+
+.save-btn:hover {
+    box-shadow: 0 5px 15px rgba(100, 255, 219, 0.15);
 }
 
 /* Setting checkboxes (and other checkboxes) */
 input[type="checkbox"] {
     appearance: none;
     -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border: 2px solid var(--accent-teal);
     border-radius: var(--border-small);
     background: rgba(255, 255, 255, 0.05);
     cursor: pointer;
     position: relative;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
     flex-shrink: 0;
 }
@@ -2268,7 +2302,7 @@ input[type="checkbox"]:checked::before {
     transform: translate(-50%, -50%);
     color: var(--darker);
     font-weight: bold;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 input[type="checkbox"]:hover {
@@ -2294,31 +2328,6 @@ input[type="checkbox"]:checked:hover {
 
 .modal.active .modal-content {
     animation: modalSlideIn 0.3s ease-in-out;
-}
-
-/* Main content */
-.modal-footer {
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    justify-content: flex-end;
-}
-
-.save-btn {
-    background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
-    color: var(--darker);
-    border: none;
-    padding: 12px 24px;
-    border-radius: var(--border-default);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 14px;
-}
-
-.save-btn:hover {
-    box-shadow: 0 5px 15px rgba(100, 255, 219, 0.1);
 }
 
 /* Announcement */
@@ -2832,15 +2841,15 @@ input[type="checkbox"]:checked:hover {
 }
 
 .profile-section {
-    background: linear-gradient(145deg, #00000008, #00000012);
+    background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
     border-radius: var(--border-default);
     padding: 20px;
     margin-bottom: 18px;
-    transition: all 0.4s ease-in-out;
+    transition: all 0.3s ease-in-out;
     position: relative;
-    animation: fadeIn 0.4s ease-in-out;
+    animation: fadeIn 0.3s ease-in-out;
 }
 
 .profile-section:hover {
@@ -2856,7 +2865,7 @@ input[type="checkbox"]:checked:hover {
     position: relative;
     font-size: 14px;
     font-weight: 600;
-    color: var(--text-light);
+    color: var(--text-white);
     text-transform: uppercase;
     letter-spacing: 1px;
     margin: 0 0 15px 0;
@@ -6892,7 +6901,8 @@ input[type="checkbox"]:checked:hover {
 
 .sort-btn {
     padding: 10px 20px;
-    background: var(--glass-bg);;
+    background: var(--glass-bg);
+    ;
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: var(--border-default);
     color: var(--text-light);
@@ -7506,7 +7516,7 @@ input[type="checkbox"]:checked:hover {
     padding: 6px 16px;
     border-radius: var(--border-default);
     border: 1px solid var(--glass-border);
-    box-shadow:  var(--glass-shadow);
+    box-shadow: var(--glass-shadow);
     text-shadow: var(--glass-shadow);
     display: inline-block;
     width: fit-content;
@@ -7585,7 +7595,7 @@ input[type="checkbox"]:checked:hover {
     font-family: 'Bender Regular', sans-serif;
     font-size: 16px;
     font-weight: 800;
-    text-shadow:  var(--glass-shadow);
+    text-shadow: var(--glass-shadow);
     transition: color 0.3s ease;
 }
 
@@ -10957,9 +10967,9 @@ input[type="checkbox"]:checked:hover {
 }
 
 .stat-card {
-    background: linear-gradient(145deg, #ffffff08, #ffffff12);
-    backdrop-filter: blur(12px) saturate(150%);
-    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
     border-radius: var(--border-default);

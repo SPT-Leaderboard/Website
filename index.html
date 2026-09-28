@@ -211,168 +211,198 @@
                 </div>
             </div>
         </div>
-        <div id="infoModal" class="modal">
+        <div id="infoModal" class="modal" role="dialog" aria-labelledby="infoTitle">
             <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Ranking System</h2>
-                <p>The leaderboard uses a weighted scoring system to calculate player performance (later on as Skill Score) across multiple metrics.</p>
-                <h3>1. Leaderboard Terminology</h3>
-                <ul>
-                    <li><strong>KDR:</strong> Kill-to-Death Ratio (PMC Kills ÷ Deaths)</li>
-                    <li><strong>SR:</strong> Survival Rate</li>
-                    <li><strong>Standing:</strong> Profile standing. Depends on various suspicious detection from the server, low trust factor or any other suspicious detections.</li>
-                </ul>
-                <h3>2. Season System</h3>
-                <p>Ranked and Casual profiles, during a season cycles with unique leaderboard:</p>
-                <ul>
-                    <li><strong>Duration:</strong> 1-3 months per season</li>
-                    <li><strong>Reset:</strong> New season automatically starts when SPT major version releases or SPT Leaderboard mod. Moderation of SPTLB Team reserves a right to change its duration at any time.</li>
-                    <li><strong>Hall of Fame:</strong> Top 3 players from previous season are shown on the page</li>
-                    <li><strong>Data:</strong> Full season archives in the dropdown menu</li>
-                </ul>
-                <h3>3. Skill Formula</h3>
-                <p>Final skill score is calculated using these weighted factors (0.00-100.00 scale):</p>
-                <ul>
-                    <li><strong>Kill/Death Ratio (25%)</strong></li>
-                    <li><strong>Survival Rate (20%)</strong></li>
-                    <li><strong>Average Life Time (20%)</strong></li>
-                    <li><strong>PMC Raids (30%)</strong></li>
-                    <li><strong>Best of the Best Bonus (10%):</strong>
-                        <ul>
-                            <li>Best average kills/damage/loot per raid</li>
-                            <li>Single-raid best performances</li>
-                            <li>Best KDR and survival rates</li>
-                        </ul>
-                    </li>
-                </ul>
-                <p><strong>Leaderboard Calibration:</strong></p>
-                <ul>
-                    <li><strong>Raid Requirements:</strong>
-                        <ul>
-                            <li>70% penalty with linear reduction until 30 PMC raids</li>
-                            <li>Full skill score multiplier is unlocked at 80+ PMC raids</li>
-                            <li>Small bonus for players who achieved 150+ PMC raids if Season takes longer than expected</li>
-                        </ul>
-                    </li>
-                    <li><strong>Life Time Penalty:</strong> 30% penalty if average life time below 10 minutes</li>
-                    <li><strong>Performance Tracking:</strong> Your best historical stats are permanently recorded and contribute to score</li>
-                    <li><strong>Boost System:</strong> -+5% skill adjustments based on mod factors</li>
-                    <li><strong>Casual Players:</strong> Capped at 15.00 skill score maximum</li>
-                </ul>
-                <h3>4. Skill Tiers</h3>
-                <p>Players are classified into tiers based on final skill score:</p>
-                <ul>
-                    <li><strong>L- to L+:</strong> Low (0.00-34.99)</li>
-                    <li><strong>M- to M+:</strong> Medium (35.00-64.99)</li>
-                    <li><strong>H- to H+:</strong> High (65.00-83.99)</li>
-                    <li><strong>P- to P+:</strong> Pro (84.00-96.99)</li>
-                    <li><strong>G:</strong> Godlike (97.00-100)</li>
-                </ul>
-                <h3>5. Visual Indicators</h3>
-                <p>Statistics, including SPT versions are color-coded based on thresholds:</p>
-                <ul>
-                    <li><strong>KDR:</strong>
-                        <span class="bad">Poor</span> (<5), <span class="average">Standard</span> (5-12), <span class="good">Skilled</span> (12-14.99), <span class="impressive">Impressive</span> (15+)
-                    </li>
-                    <li><strong>SR:</strong>
-                        <span class="bad">Low</span> (<30%), <span class="average">Average</span> (30-55%), <span class="good">Good</span> (55%-70%), <span class="impressive">Impressive</span> (70%+)
-                    </li>
-                    <li><strong>Raid Duration:</strong>
-                        <span class="bad">Short</span> (<5m), <span class="average">Average</span> (5-15m), <span class="good">Long</span> (15-20m), <span class="impressive">Impressive</span> (20m+)
-                    </li>
-                    <li><strong>SPT Version:</strong>
-                        <span class="bad">Outdated</span>, <span class="average">Older than latest release</span>, <span class="good">Latest Release</span>
-                    </li>
-                </ul>
+                <div class="modal-header">
+                    <h2 id="infoTitle">Ranking System</h2>
+                    <button class="close" aria-label="Close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>The leaderboard uses a weighted scoring system to calculate player performance (later on as Skill Score) across multiple metrics.</p>
+                    <h3>1. Leaderboard Terminology</h3>
+                    <ul>
+                        <li><strong>KDR:</strong> Kill-to-Death Ratio (PMC Kills ÷ Deaths)</li>
+                        <li><strong>SR:</strong> Survival Rate</li>
+                        <li><strong>Standing:</strong> Profile standing. Depends on various suspicious detection from the server, low trust factor or any other suspicious detections.</li>
+                    </ul>
+                    <h3>2. Season System</h3>
+                    <p>Ranked and Casual profiles, during a season cycles with unique leaderboard:</p>
+                    <ul>
+                        <li><strong>Duration:</strong> 1-3 months per season</li>
+                        <li><strong>Reset:</strong> New season automatically starts when SPT major version releases or SPT Leaderboard mod. Moderation of SPTLB Team reserves a right to change its duration at any time.</li>
+                        <li><strong>Hall of Fame:</strong> Top 3 players from previous season are shown on the page</li>
+                        <li><strong>Data:</strong> Full season archives in the dropdown menu</li>
+                    </ul>
+                    <h3>3. Skill Formula</h3>
+                    <p>Final skill score is calculated using these weighted factors (0.00-100.00 scale):</p>
+                    <ul>
+                        <li><strong>Kill/Death Ratio (25%)</strong></li>
+                        <li><strong>Survival Rate (20%)</strong></li>
+                        <li><strong>Average Life Time (20%)</strong></li>
+                        <li><strong>PMC Raids (30%)</strong></li>
+                        <li><strong>Best of the Best Bonus (10%):</strong>
+                            <ul>
+                                <li>Best average kills/damage/loot per raid</li>
+                                <li>Single-raid best performances</li>
+                                <li>Best KDR and survival rates</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>Leaderboard Calibration:</strong></p>
+                    <ul>
+                        <li><strong>Raid Requirements:</strong>
+                            <ul>
+                                <li>70% penalty with linear reduction until 30 PMC raids</li>
+                                <li>Full skill score multiplier is unlocked at 80+ PMC raids</li>
+                                <li>Small bonus for players who achieved 150+ PMC raids if Season takes longer than expected</li>
+                            </ul>
+                        </li>
+                        <li><strong>Life Time Penalty:</strong> 30% penalty if average life time below 10 minutes</li>
+                        <li><strong>Performance Tracking:</strong> Your best historical stats are permanently recorded and contribute to score</li>
+                        <li><strong>Boost System:</strong> -+5% skill adjustments based on mod factors</li>
+                        <li><strong>Casual Players:</strong> Capped at 15.00 skill score maximum</li>
+                    </ul>
+                    <h3>4. Skill Tiers</h3>
+                    <p>Players are classified into tiers based on final skill score:</p>
+                    <ul>
+                        <li><strong>L- to L+:</strong> Low (0.00-34.99)</li>
+                        <li><strong>M- to M+:</strong> Medium (35.00-64.99)</li>
+                        <li><strong>H- to H+:</strong> High (65.00-83.99)</li>
+                        <li><strong>P- to P+:</strong> Pro (84.00-96.99)</li>
+                        <li><strong>G:</strong> Godlike (97.00-100)</li>
+                    </ul>
+                    <h3>5. Visual Indicators</h3>
+                    <p>Statistics, including SPT versions are color-coded based on thresholds:</p>
+                    <ul>
+                        <li><strong>KDR:</strong>
+                            <span class="bad">Poor</span> (<5), <span class="average">Standard</span> (5-12), <span class="good">Skilled</span> (12-14.99), <span class="impressive">Impressive</span> (15+)
+                        </li>
+                        <li><strong>SR:</strong>
+                            <span class="bad">Low</span> (<30%), <span class="average">Average</span> (30-55%), <span class="good">Good</span> (55%-70%), <span class="impressive">Impressive</span> (70%+)
+                        </li>
+                        <li><strong>Raid Duration:</strong>
+                            <span class="bad">Short</span> (<5m), <span class="average">Average</span> (5-15m), <span class="good">Long</span> (15-20m), <span class="impressive">Impressive</span> (20m+)
+                        </li>
+                        <li><strong>SPT Version:</strong>
+                            <span class="bad">Outdated</span>, <span class="average">Older than latest release</span>, <span class="good">Latest Release</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-        <div id="bannedModal" class="modal">
+        <div id="bannedModal" class="modal" role="dialog" aria-labelledby="bannedTitle">
             <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Globally Banned Mods (Ranked only)</h2>
-                <div id="bannedModsContainer"></div>
+                <div class="modal-header">
+                    <h2 id="bannedTitle">Globally Banned Mods (Ranked only)</h2>
+                    <button class="close" aria-label="Close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="bannedModsContainer"></div>
+                </div>
             </div>
         </div>
-        <div id="whiteListModsModal" class="modal">
+        <div id="whiteListModsModal" class="modal" role="dialog" aria-labelledby="whitelistTitle">
             <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Whitelisted Mods (Hardcore Only)</h2>
-                <div id="whitelistModsContainer"></div>
+                <div class="modal-header">
+                    <h2 id="whitelistTitle">Whitelisted Mods (Hardcore Only)</h2>
+                    <button class="close" aria-label="Close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="whitelistModsContainer"></div>
+                </div>
             </div>
         </div>
-        <div id="tosModal" class="modal">
+        <div id="tosModal" class="modal" role="dialog" aria-labelledby="tosTitle">
             <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Legal Agreement / Terms of Service (LA/TOS)</h2>
-                <p>By submitting your statistics to the SPT Leaderboard, you agree to comply with the following Terms of Service. Violations may lead to removal from the leaderboard, profile bans, or permanent bans across all linked accounts.</p>
-                <h3>1. Code of Conduct & Fair Play</h3>
-                <ul>
-                    <li><strong>1.1. Cheating and Exploitation:</strong> Any form of cheating, exploiting, or deception is strictly forbidden. This includes manipulating crucial game data (e.g., PMC/SCAV level, quests, health, hydration, energy) and specific modifications, allowing "double armoring" (wearing armor on top of other armor). The mere presence of disallowed modifications for Ranked players may be deemed a violation at the SPT Leaderboard Team's discretion.</li>
-                    <li><strong>1.2. Allowed Mods:</strong> Only cosmetic, weapon, AI, and quality-of-life (QoL) mods are permitted. Gameplay-altering mods that provide an unfair advantage are strictly forbidden. Examples of prohibited mods include, but are not limited to: god mode, unlimited ammo, faster reloads, extra loot, radars, post-death revival, debug mods, environment mods, and less restrictive armor/headwear options. This applies only to Ranked players.</li>
-                    <li><strong>1.3. Data Integrity:</strong> All submitted statistics must come from genuine gameplay. Submitting falsified or edited data is a direct violation and will result in a permanent ban.</li>
-                    <li><strong>1.4. Content Guidelines (Usernames, PFPs, and "About Me"):</strong> All user-generated content must be appropriate for a general audience. Content that is offensive, discriminatory, hateful, sexually explicit (NSFW), or politically charged is strictly prohibited. This includes material related to racism, sexual racism, religious intolerance, political extremism, hate speech, harassment, and any form of political discourse or propaganda. Violations will result in removal from the leaderboard, a permanent restriction from profile changes, or a permanent ban.</li>
-                </ul>
-                <h3>2. Accounts & Participation</h3>
-                <ul>
-                    <li><strong>2.1. Account Responsibility:</strong> You are solely responsible for all activity under your profile and secret token. Any submission or action made with your token is treated as an action taken by you. Do not share your token or account details.</li>
-                    <li><strong>2.2. Multi-Account Policy:</strong> Players may link multiple accounts under the same token/identifier. However, if any of them violate the rules, all linked accounts will be held responsible. Penalties (including restrictions, or bans) will be applied to the entire group of accounts.</li>
-                    <li><strong>2.3. Account Purpose:</strong> Accounts are for genuine player use only. Test accounts, developer accounts, and any accounts not used for legitimate gameplay are prohibited. Violations will result in a profile ban and removal from the leaderboard for the offending account and potentially all linked accounts.</li>
-                    <li><strong>2.4. Casual Mode Exception:</strong> While you may use gameplay-altering mods in Casual Mode, exploiting or harming the leaderboard remains prohibited. Casual Mode statistics are not eligible for the main leaderboard rankings.</li>
-                </ul>
-                <h3>3. Data Collection, Usage & Privacy</h3>
-                <ul>
-                    <li><strong>3.1. Client-Side Data Collection (Mod):</strong> By installing the client-side mod, you agree that it will collect and transmit gameplay data exclusively during active game sessions. This data includes, but is not limited to: raid statistics (location, coordinates, player states), inventory, gear, profile progression (skills, level, quests, achievements), Stattrack weapon statistics, and Fika Project configurations. The mod will also read and modify files within its installation folder to function. You can disable transmission at any time by uninstalling the mod or disconnecting the service via the F12 BepInEx menu.</li>
-                    <li><strong>3.2. Public Display & Licensing:</strong> By submitting data, you grant SPT Leaderboard a non-exclusive, royalty-free, perpetual license to use, display, and store your statistics publicly on the leaderboard and associated platforms. This applies to all profile data sent to the server and become a non-removable part of the public leaderboard history, with no technical process for deletion.</li>
-                    <li><strong>3.3. Data Privacy & Immutability:</strong> The submitted dataset is a non-personal, anonymous snapshot of a gameplay session in a modified environment and does not constitute Personally Identifiable Information (PII). It is not (and must not be) linked to real accounts, passwords, or emails. To maintain integrity, a hashed/obfuscated version of your IP address may be temporarily collected alongside your token for anti-cheat analysis. This hashed IP is stored for no longer than one hour and then automatically erased. Only IPs flagged for malicious activity (e.g., brute-force attacks) are retained for developer review. Raw, unhashed IPs are never logged.</li>
-                </ul>
-                <h3>4. Moderation, Enforcement & Penalties</h3>
-                <ul>
-                    <li><strong>4.1. Profile Standing & Automated Flagging:</strong> Profiles flagged by automated systems for suspicious activity or abnormal statistics may be banned without the right to appeal. You are responsible for ensuring your profile remains compliant. Upon identification of such activity, the SPTLB Team may issue a temporary ban pending investigation. The affected user will have the opportunity to appeal and must provide comprehensive evidence of their profile's legitimacy. Failure to do so will result in a permanent ban.</li>
-                    <li><strong>4.2. Moderation Authority:</strong> The Administration and Moderation teams reserve the sole right to review, modify, or remove any entries without prior notice. All moderation decisions are based on the principle of fair play. Decisions are final unless an explicit appeal option is stated.</li>
-                    <li><strong>4.3. Service Management:</strong> Developers reserve the right to modify season durations, reset times, or scoring rules as needed. Developers may also modify, suspend, or discontinue the leaderboard service, in whole or in part, temporarily or permanently, without notice and without liability.</li>
-                </ul>
-                <h3>5. General Provisions</h3>
-                <ul>
-                    <li><strong>5.1. Acknowledgment of Rules:</strong> By participating, you are deemed to have read, understood, and agreed to all Terms of Service. Failure to review the rules upon joining or after a recent update does not exempt you from your obligations or the consequences of a violation.</li>
-                    <li><strong>5.2. Policy Updates:</strong> These Terms may be updated at any time. Continued use of the leaderboard following an update implies acceptance of the new terms.</li>
-                </ul>
-                <h3>6. Limitation of Liability & Disclaimer</h3>
-                <ul>
-                    <li><strong>6.1. Service "As Is":</strong> The SPT Leaderboard and its services are provided on an "as is" and "as available" basis without any warranties. We do not guarantee uninterrupted, timely, secure, or error-free service.</li>
-                    <li><strong>6.2. No Liability:</strong> To the fullest extent permitted by law, the SPT Leaderboard Team, its developers, and moderators shall not be liable for any indirect, incidental, special, consequential, or punitive damages (including data loss or server interruptions) arising from your use of the service.</li>
-                </ul>
-                <p><em>Last updated: April 25, 2026</em></p>
+                <div class="modal-header">
+                    <h2 id="tosTitle">Legal Agreement / Terms of Service (LA/TOS)</h2>
+                    <button class="close" aria-label="Close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>By submitting your statistics to the SPT Leaderboard, you agree to comply with the following Terms of Service. Violations may lead to removal from the leaderboard, profile bans, or permanent bans across all linked accounts.</p>
+                    <h3>1. Code of Conduct & Fair Play</h3>
+                    <ul>
+                        <li><strong>1.1. Cheating and Exploitation:</strong> Any form of cheating, exploiting, or deception is strictly forbidden. This includes manipulating crucial game data (e.g., PMC/SCAV level, quests, health, hydration, energy) and specific modifications, allowing "double armoring" (wearing armor on top of other armor). The mere presence of disallowed modifications for Ranked players may be deemed a violation at the SPT Leaderboard Team's discretion.</li>
+                        <li><strong>1.2. Allowed Mods:</strong> Only cosmetic, weapon, AI, and quality-of-life (QoL) mods are permitted. Gameplay-altering mods that provide an unfair advantage are strictly forbidden. Examples of prohibited mods include, but are not limited to: god mode, unlimited ammo, faster reloads, extra loot, radars, post-death revival, debug mods, environment mods, and less restrictive armor/headwear options. This applies only to Ranked players.</li>
+                        <li><strong>1.3. Data Integrity:</strong> All submitted statistics must come from genuine gameplay. Submitting falsified or edited data is a direct violation and will result in a permanent ban.</li>
+                        <li><strong>1.4. Content Guidelines (Usernames, PFPs, and "About Me"):</strong> All user-generated content must be appropriate for a general audience. Content that is offensive, discriminatory, hateful, sexually explicit (NSFW), or politically charged is strictly prohibited. This includes material related to racism, sexual racism, religious intolerance, political extremism, hate speech, harassment, and any form of political discourse or propaganda. Violations will result in removal from the leaderboard, a permanent restriction from profile changes, or a permanent ban.</li>
+                    </ul>
+                    <h3>2. Accounts & Participation</h3>
+                    <ul>
+                        <li><strong>2.1. Account Responsibility:</strong> You are solely responsible for all activity under your profile and secret token. Any submission or action made with your token is treated as an action taken by you. Do not share your token or account details.</li>
+                        <li><strong>2.2. Multi-Account Policy:</strong> Players may link multiple accounts under the same token/identifier. However, if any of them violate the rules, all linked accounts will be held responsible. Penalties (including restrictions, or bans) will be applied to the entire group of accounts.</li>
+                        <li><strong>2.3. Account Purpose:</strong> Accounts are for genuine player use only. Test accounts, developer accounts, and any accounts not used for legitimate gameplay are prohibited. Violations will result in a profile ban and removal from the leaderboard for the offending account and potentially all linked accounts.</li>
+                        <li><strong>2.4. Casual Mode Exception:</strong> While you may use gameplay-altering mods in Casual Mode, exploiting or harming the leaderboard remains prohibited. Casual Mode statistics are not eligible for the main leaderboard rankings.</li>
+                    </ul>
+                    <h3>3. Data Collection, Usage & Privacy</h3>
+                    <ul>
+                        <li><strong>3.1. Client-Side Data Collection (Mod):</strong> By installing the client-side mod, you agree that it will collect and transmit gameplay data exclusively during active game sessions. This data includes, but is not limited to: raid statistics (location, coordinates, player states), inventory, gear, profile progression (skills, level, quests, achievements), Stattrack weapon statistics, and Fika Project configurations. The mod will also read and modify files within its installation folder to function. You can disable transmission at any time by uninstalling the mod or disconnecting the service via the F12 BepInEx menu.</li>
+                        <li><strong>3.2. Public Display & Licensing:</strong> By submitting data, you grant SPT Leaderboard a non-exclusive, royalty-free, perpetual license to use, display, and store your statistics publicly on the leaderboard and associated platforms. This applies to all profile data sent to the server and become a non-removable part of the public leaderboard history, with no technical process for deletion.</li>
+                        <li><strong>3.3. Data Privacy & Immutability:</strong> The submitted dataset is a non-personal, anonymous snapshot of a gameplay session in a modified environment and does not constitute Personally Identifiable Information (PII). It is not (and must not be) linked to real accounts, passwords, or emails. To maintain integrity, a hashed/obfuscated version of your IP address may be temporarily collected alongside your token for anti-cheat analysis. This hashed IP is stored for no longer than one hour and then automatically erased. Only IPs flagged for malicious activity (e.g., brute-force attacks) are retained for developer review. Raw, unhashed IPs are never logged.</li>
+                    </ul>
+                    <h3>4. Moderation, Enforcement & Penalties</h3>
+                    <ul>
+                        <li><strong>4.1. Profile Standing & Automated Flagging:</strong> Profiles flagged by automated systems for suspicious activity or abnormal statistics may be banned without the right to appeal. You are responsible for ensuring your profile remains compliant. Upon identification of such activity, the SPTLB Team may issue a temporary ban pending investigation. The affected user will have the opportunity to appeal and must provide comprehensive evidence of their profile's legitimacy. Failure to do so will result in a permanent ban.</li>
+                        <li><strong>4.2. Moderation Authority:</strong> The Administration and Moderation teams reserve the sole right to review, modify, or remove any entries without prior notice. All moderation decisions are based on the principle of fair play. Decisions are final unless an explicit appeal option is stated.</li>
+                        <li><strong>4.3. Service Management:</strong> Developers reserve the right to modify season durations, reset times, or scoring rules as needed. Developers may also modify, suspend, or discontinue the leaderboard service, in whole or in part, temporarily or permanently, without notice and without liability.</li>
+                    </ul>
+                    <h3>5. General Provisions</h3>
+                    <ul>
+                        <li><strong>5.1. Acknowledgment of Rules:</strong> By participating, you are deemed to have read, understood, and agreed to all Terms of Service. Failure to review the rules upon joining or after a recent update does not exempt you from your obligations or the consequences of a violation.</li>
+                        <li><strong>5.2. Policy Updates:</strong> These Terms may be updated at any time. Continued use of the leaderboard following an update implies acceptance of the new terms.</li>
+                    </ul>
+                    <h3>6. Limitation of Liability & Disclaimer</h3>
+                    <ul>
+                        <li><strong>6.1. Service "As Is":</strong> The SPT Leaderboard and its services are provided on an "as is" and "as available" basis without any warranties. We do not guarantee uninterrupted, timely, secure, or error-free service.</li>
+                        <li><strong>6.2. No Liability:</strong> To the fullest extent permitted by law, the SPT Leaderboard Team, its developers, and moderators shall not be liable for any indirect, incidental, special, consequential, or punitive damages (including data loss or server interruptions) arising from your use of the service.</li>
+                    </ul>
+                    <p><em>Last updated: April 25, 2026</em></p>
+                </div>
             </div>
         </div>
         <div id="settingsModal" class="modal" role="dialog" aria-labelledby="settingsTitle">
             <div class="modal-content">
-                <span class="close" aria-label="Close">&times;</span>
-                <h2 id="settingsTitle">Settings</h2>
-                <div class="settings-list">
-                    <div class="setting-item">
-                        <label class="setting-label">
-                            <input type="checkbox" id="lbToggle"> Compact Leaderboard Display </label>
-                        <p class="setting-description">Will display leaderboard without PFPs, styles, and other elements. Might increase performance.</p>
-                    </div>
-                    <div class="setting-item">
-                        <label class="setting-label">
-                            <input type="checkbox" id="cacheBypassToggle"> Image Cache Bypass </label>
-                        <p class="setting-description">Always try to load fresh PMC profile images upon profile opening.</p>
-                    </div>
-                    <div class="setting-item">
-                        <label class="setting-label">
-                            <input type="checkbox" id="timerToggle"> Show Season Countdown Timer </label>
-                        <p class="setting-description">Display or hide the time left until new season on the page.</p>
-                    </div>
-                    <div class="setting-item">
-                        <label class="setting-label">
-                            <input type="checkbox" id="winnersToggle" checked="checked"> Show Winners on the page </label>
-                        <p class="setting-description">Display or hide winners of the previous season on the page.</p>
-                    </div>
-                    <div class="setting-item">
-                        <label class="setting-label">
-                            <input type="checkbox" id="casualToggle"> Hide Casual Players </label>
-                        <p class="setting-description">Display or hide casual players on the leaderboard.</p>
+                <div class="modal-header">
+                    <h2 id="settingsTitle">Settings</h2>
+                    <button class="close" aria-label="Close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <input type="checkbox" id="lbToggle">
+                                <span>Compact Leaderboard Display</span>
+                            </label>
+                            <p class="setting-description">Will display leaderboard without PFPs, styles, and other elements. Might increase performance.</p>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <input type="checkbox" id="cacheBypassToggle">
+                                <span>Image Cache Bypass</span>
+                            </label>
+                            <p class="setting-description">Always try to load fresh PMC profile images upon profile opening.</p>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <input type="checkbox" id="timerToggle">
+                                <span>Show Season Countdown Timer</span>
+                            </label>
+                            <p class="setting-description">Display or hide the time left until new season on the page.</p>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <input type="checkbox" id="winnersToggle" checked="checked">
+                                <span>Show Winners on the page</span>
+                            </label>
+                            <p class="setting-description">Display or hide winners of the previous season on the page.</p>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <input type="checkbox" id="casualToggle">
+                                <span>Hide Casual Players</span>
+                            </label>
+                            <p class="setting-description">Display or hide casual players on the leaderboard.</p>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
