@@ -221,9 +221,6 @@ async function loadSeasonData(season) {
 
             // raid-notifications.js
             checkRecentPlayers(leaderboardData);
-
-            // ui-navigation.js
-            initProfileWatchList(leaderboardData);
         }
     } catch (error) {
         console.error('Error loading season data:', error);
