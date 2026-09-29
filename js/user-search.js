@@ -134,10 +134,6 @@ function initSearch() {
     const searchInput = document.getElementById('playerSearch');
     const clearButton = document.getElementById('clearSearch');
     const searchTypeButtons = document.querySelectorAll('.search-type-btn');
-    const searchIndicator = document.createElement('div');
-
-    searchIndicator.className = 'search-indicator';
-    searchInput.parentNode.appendChild(searchIndicator);
 
     searchTypeButtons.forEach(btn => {
         btn.addEventListener('click', function () {
