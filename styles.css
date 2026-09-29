@@ -3233,7 +3233,6 @@ input[type="checkbox"]:checked:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    border-radius: var(--border-default);
     opacity: 0.3;
     transition: opacity 0.3s ease;
 }
