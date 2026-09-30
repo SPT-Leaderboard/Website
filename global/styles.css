@@ -1,0 +1,127 @@
+.leaderboard-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#playerSearch {
+    flex: 1;
+    min-width: 0;
+    padding: 0.6rem 0.9rem;
+}
+
+.sort-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.sort-container label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+#sortSelect,
+#limitSelect {
+    padding: 0.55rem 0.9rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-default);
+    color: var(--text-light);
+    font-size: 0.85rem;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+#sortSelect:hover,
+#limitSelect:hover {
+    border-color: var(--accent-blue);
+}
+
+#sortSelect:focus,
+#limitSelect:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.15);
+}
+
+#sortSelect option,
+#limitSelect option {
+    background: var(--bg-card);
+    color: var(--text-light);
+}
+
+#leaderboardTable tbody tr:nth-child(1) .rank {
+    color: #ffd700;
+}
+
+#leaderboardTable tbody tr:nth-child(2) .rank {
+    color: #c0c0c0;
+}
+
+#leaderboardTable tbody tr:nth-child(3) .rank {
+    color: #cd7f32;
+}
+
+#leaderboardTable .net-worth {
+    color: var(--accent-teal);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+#leaderboardTable .pfp.placeholder {
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-card-light));
+}
+
+#leaderboardTable .loading,
+#leaderboardTable .error {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+}
+
+#leaderboardTable .error {
+    color: var(--danger);
+}
+
+@media (max-width: 768px) {
+    .leaderboard-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-container {
+        width: 100%;
+    }
+
+    #leaderboardTable {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    #leaderboardTable thead th,
+    #leaderboardTable tbody td {
+        padding: 0.6rem 0.75rem;
+    }
+
+    #leaderboardTable .pfp {
+        width: 28px;
+        height: 28px;
+    }
+}

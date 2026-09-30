@@ -768,13 +768,8 @@ h1 {
     display: none !important;
 }
 
-.compact-login-btn .login-icon,
 .compact-login-btn .user-profile-pfp {
     transition: all 0.3s ease;
-}
-
-.login-icon {
-    font-size: 1rem;
 }
 
 .compact-menu.show .compact-item {
@@ -1009,17 +1004,20 @@ h1 {
 }
 
 table {
-    background-color: #2a396969;
     width: 100%;
     max-width: 95%;
     margin: auto auto 60px;
     border-collapse: separate;
     border-spacing: 0;
-    border-radius: var(--border-default);
-    overflow: hidden;
+    background: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    transform: translateY(0);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: var(--border-large);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    overflow: hidden;
+    font-size: 0.9rem;
+    color: var(--text-light);
 }
 
 th,
@@ -4581,7 +4579,7 @@ input[type="checkbox"]:checked:hover {
     font-size: 0.85em;
     margin-top: 5px;
     padding: 6px 12px;
-    color: #f3f3f3;
+    color: var(--text-white);
     width: fit-content;
     border: 2px solid var(--glass-border);
     font-family: 'Bender Bold';
@@ -9545,7 +9543,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .comment-submit {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.09));
+    background: var(--glass-bg);
     color: white;
     border: 1px solid var(--glass-border);
     border-radius: var(--border-default);
@@ -9566,11 +9564,6 @@ input[type="checkbox"]:checked:hover {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.15));
     border-color: rgba(255, 255, 255, 0.32);
     box-shadow: var(--glass-shadow);
-    transform: translateY(-1px);
-}
-
-.comment-submit:active {
-    transform: translateY(0);
 }
 
 .comment-submit:disabled {
