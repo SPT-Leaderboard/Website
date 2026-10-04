@@ -415,7 +415,6 @@ async function showPublicProfile(container, player) {
                             <!-- Info -->
                             <div class="registration-dropdown glass-dropdown" id="registrationDropdown">
                                 <div class="dropdown-header">
-                                    <i class="fa-regular fa-id-card"></i>
                                     <span>Account Information</span>
                                 </div>
                                 <div class="dropdown-content">

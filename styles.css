@@ -24,7 +24,7 @@
     --light: #f8fafc;
     --lighter: #ffffff;
 
-    --text-light: #ccd6f6;
+    --text-light: #c9c9c9;
     --text-muted: #8892b0;
     --text-white: #f8fafc;
 
@@ -61,7 +61,9 @@
     --neon-gradient: linear-gradient(90deg, #8B5CF6, #3B82F6, #06B6D4);
 
     --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+    --glass-bg-hover: linear-gradient(135deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.08));
     --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-border-hover: rgba(255, 255, 255, 0.15);
     --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 
     --glow-primary: 0 0 30px rgba(139, 92, 246, 0.5);
@@ -405,9 +407,7 @@ h1 {
 }
 
 .navbar:hover {
-    box-shadow:
-        0 12px 40px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
 }
 
 .navbar-logo {
@@ -534,7 +534,7 @@ h1 {
     background: linear-gradient(145deg,
             rgba(57, 89, 131, 0.35),
             rgba(57, 89, 131, 0.25));
-    border-color: rgba(255, 255, 255, 0.3);
+    border-color: var(--glass-border-hover);
 }
 
 .compact-toggle[aria-expanded="true"] {
@@ -2806,11 +2806,7 @@ input[type="checkbox"]:checked:hover {
 }
 
 .profile-section:hover {
-    border: 1px solid #ffffff49;
-}
-
-.profile-section:hover {
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--glass-border-hover);
 }
 
 .profile-section h3 {
@@ -2858,7 +2854,7 @@ input[type="checkbox"]:checked:hover {
     align-items: center;
     text-align: center;
     padding: 10px;
-    background: linear-gradient(145deg, #ffffff0a, #ffffff12);
+    background: var(--glass-bg);
     border-radius: var(--border-default);
     backdrop-filter: blur(10px) saturate(180%);
     border: 1px solid var(--glass-border);
@@ -3083,7 +3079,7 @@ input[type="checkbox"]:checked:hover {
     flex-direction: column;
     padding: 12px;
     gap: 12px;
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    background: var(--glass-bg);
 }
 
 .showcase-mini {
@@ -3646,7 +3642,7 @@ input[type="checkbox"]:checked:hover {
     flex-wrap: wrap;
     justify-content: space-evenly;
     gap: 8px;
-    background-color: var(--glass-bg);
+    background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(5px);
     border-radius: var(--border-default);
@@ -3660,7 +3656,7 @@ input[type="checkbox"]:checked:hover {
     right: -15px;
     width: 50px;
     height: 50px;
-    background-color: var(--glass-bg);
+    background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(5px);
     border-radius: var(--border-50);
@@ -3705,10 +3701,10 @@ input[type="checkbox"]:checked:hover {
 }
 
 .register-date-trigger:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: var(--glass-bg-hover);
+    border: 1px solid var(--glass-border-hover);
     color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--glass-shadow);
 }
 
 .register-date-trigger.active {
@@ -6266,11 +6262,11 @@ input[type="checkbox"]:checked:hover {
     align-items: center;
     gap: 6px;
     padding: 4px 10px;
-    border-radius: var(--border-large);
+    border-radius: var(--border-default);
     font-weight: 600;
     font-size: 0.9em;
     border: 1px solid var(--glass-border);
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
 }
 
 .meta-item i {
@@ -6328,6 +6324,7 @@ input[type="checkbox"]:checked:hover {
     border-radius: var(--border-default);
     font-weight: 600;
     font-size: 0.9em;
+    border: 1px solid var(--glass-border);
 }
 
 .raid-score-section {
@@ -6510,7 +6507,7 @@ input[type="checkbox"]:checked:hover {
 .map-stats-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 10px;
+    column-gap: 14px;
     position: relative;
     z-index: 1;
 }
@@ -6522,16 +6519,15 @@ input[type="checkbox"]:checked:hover {
     min-width: 0;
     min-height: 28px;
     padding: 4px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .map-stat-item--profit .map-stat-value {
-    font-size: 0.78rem;
+    font-size: 1rem;
 }
 
 .map-stat-label {
-    font-size: 0.68rem;
-    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.75rem;
+    color: var(--text-light);
     font-weight: 500;
     white-space: nowrap;
 }

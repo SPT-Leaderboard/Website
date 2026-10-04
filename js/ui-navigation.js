@@ -7,9 +7,7 @@
 // #region Settings Modal
 /**
  * @class SettingsManager
- * @description Manages application settings (toggle visibility of timer, winners, leaderboard
- * modes, cache bypass), persists them to localStorage, and controls all modal dialogs
- * (info, TOS, settings, banned mods). Auto-saves on toggle change.
+ * @description Manages application settings.
  */
 class SettingsManager {
     constructor() {
@@ -88,12 +86,43 @@ class SettingsManager {
         const saveBtn = document.getElementById('saveSettings');
         if (saveBtn) {
             saveBtn.addEventListener('click', () => {
+                this.syncSettingsFromUI();
+                this.applySettings();
                 this.saveSettings();
                 this.showSaveConfirmation();
             });
         }
 
+        this.setupToggleHandlers();
         this.setupModalHandlers();
+    }
+
+    /**
+     * Wire a change listener to every settings checkbox so we insta save those
+     */
+    setupToggleHandlers() {
+        Object.keys(this.settings).forEach(key => {
+            const toggle = document.getElementById(this.getToggleId(key));
+            if (!toggle) {
+                console.warn(`Settings toggle not found for: ${key}`);
+                return;
+            }
+
+            toggle.addEventListener('change', () => {
+                this.settings[key] = toggle.checked;
+                this.updateVisibility(toggle, this.getTargetElement(key), key);
+                this.saveSettings();
+            });
+        });
+    }
+
+    syncSettingsFromUI() {
+        Object.keys(this.settings).forEach(key => {
+            const toggle = document.getElementById(this.getToggleId(key));
+            if (toggle) {
+                this.settings[key] = toggle.checked;
+            }
+        });
     }
 
     getSettingKey(toggleId) {
@@ -364,14 +393,13 @@ class SettingsManager {
 
 /**
  * @class SettingsHelper
- * @description Static utility class providing convenient access to the global SettingsManager
- * instance. Allows reading individual settings without direct SettingsManager references.
+ * @description Class providing access to the global SettingsManager instance
  */
 class SettingsHelper {
     /**
-     * Retrieves a setting value from the global SettingsManager instance.
-     * @param {string} key - The setting key name
-     * @returns {*|null} The setting value, or null if SettingsManager is not initialized
+     * Get setting value
+     * @param {string} key - The setting key
+     * @returns {*|null} The setting value, or null
      */
     static get(key) {
         if (window.settingsManager) {
@@ -381,8 +409,8 @@ class SettingsHelper {
     }
 
     /**
-     * Retrieves all settings as a shallow copy from the global SettingsManager instance.
-     * @returns {Object|null} Copy of all settings, or null if SettingsManager is not initialized
+     * Retrieves all settings from SettingsManager
+     * @returns {Object|null} Copy of all settings, or null
      */
     static getAll() {
         if (window.settingsManager) {

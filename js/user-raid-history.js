@@ -741,14 +741,14 @@ function createKillerInfo(raid) {
         return '';
     }
 
-    const editionHTML = decodeAgressorEdition(raid.killedByEdition);
+    const editionHTML = decodeAgressorEdition(raid.agressorEdition)
     const bodyPartHTML = decodeAgressorBodyPart(raid.agressorKilledToBodyPart);
 
     return `
         <span class="meta-item">
             <i class="fa-solid fa-skull-crossbones"></i> Killed by 
-            <span class="raid-killer" style="color: ${editionHTML} !important">
-                ${escapeHtml(raid.agressorName)} ${bodyPartHTML}
+            <span class="raid-killer">
+                <span style="color: ${editionHTML} !important"> ${escapeHtml(raid.agressorName)} </span> ${bodyPartHTML}
             </span>
         </span>
     `;
@@ -831,10 +831,9 @@ function decodeAgressorEdition(killerEdition) {
 
     // Edition configurations
     const editions = {
-        'Default': { name: 'Standard', color: '#94a3b8' },
+        'Default': { name: 'Standard', color: '#ffffff' },
         'Developer': { name: 'Developer', color: '#3b82f6' },
         'UniqueId': { name: 'Edge of Darkness', color: '#d18f00' },
-        'UniqueID': { name: 'Edge of Darkness', color: '#d18f00' },
         'Sherpa': { name: 'Sherpa', color: '#86aa7c' },
         'Emissary': { name: 'Emissary', color: '#a78bfa' },
         'Unheard': { name: 'Unheard Edition', color: '#54d0e7' }
