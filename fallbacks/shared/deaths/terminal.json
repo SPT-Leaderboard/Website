@@ -1,0 +1,34 @@
+{
+    "map": "terminal",
+    "lastUpdated": 1787215720,
+    "players": {
+        "5ab7f409f29022256c191ac46903fd1dda9b7eb91783a8ae9989dc1869e70a1b": {
+            "name": "Jegesmaci583",
+            "profileId": "691cee3ba810580b2420f548",
+            "deaths": [
+                {
+                    "x": 195.9509,
+                    "y": -243.913254,
+                    "z": -60.2516174,
+                    "timestamp": 1787215720
+                }
+            ],
+            "lastDeath": {
+                "x": 195.9509,
+                "y": -243.913254,
+                "z": -60.2516174,
+                "timestamp": 1787215720
+            }
+        }
+    },
+    "allDeaths": [
+        {
+            "playerName": "Jegesmaci583",
+            "permaLink": "5ab7f409f29022256c191ac46903fd1dda9b7eb91783a8ae9989dc1869e70a1b",
+            "x": 195.9509,
+            "y": -243.913254,
+            "z": -60.2516174,
+            "timestamp": 1787215720
+        }
+    ]
+}

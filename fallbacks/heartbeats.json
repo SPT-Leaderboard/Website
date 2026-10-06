@@ -7,24 +7,53 @@
         "side": null,
         "gameTime": null
     },
-    "695a80bf437803173ce1d613": {
-        "id": "695a80bf437803173ce1d613",
-        "timestamp": 1977710338,
+    "6ab706d69fd317702878b2ce": {
+        "id": "6ab706d69fd317702878b2ce",
+        "timestamp": 1791293144,
+        "type": "online"
+    },
+    "6ac23706391a1069a43f911d": {
+        "id": "6ac23706391a1069a43f911d",
+        "timestamp": 1791293137,
+        "type": "online"
+    },
+    "6ac1e5c3ca9cf44520997375": {
+        "id": "6ac1e5c3ca9cf44520997375",
+        "timestamp": 1791293128,
         "type": "in_raid",
-        "map": "RezervBase",
-        "side": "Bear",
-        "state": "empty",
-        "gameTime": "13:59:23",
+        "map": "Interchange",
+        "side": "Usec",
+        "state": "fired",
+        "gameTime": "12:57:24",
         "position": {
-            "x": 16.71394,
-            "y": -6.94648266,
-            "z": 42.87096
+            "x": -24.1991177,
+            "y": 27.1416931,
+            "z": -108.819092
         }
     },
-    "69f4faa3256c1d567cb91c77": {
-        "id": "69f4faa3256c1d567cb91c77",
-        "timestamp": 1777710375,
-        "type": "in_stash",
+    "6ab0d957d91767a6ecdad4f1": {
+        "id": "6ab0d957d91767a6ecdad4f1",
+        "timestamp": 1791293143,
+        "type": "online"
+    },
+    "6ab137d7510c7d72fcdec389": {
+        "id": "6ab137d7510c7d72fcdec389",
+        "timestamp": 1791293141,
+        "type": "in_raid",
+        "map": "Woods",
+        "side": "Usec",
+        "state": "empty",
+        "gameTime": "00:59:50",
+        "position": {
+            "x": -0.139314935,
+            "y": -1.41072762,
+            "z": -69.2824
+        }
+    },
+    "6ab3d44bb4fe6a2174502840": {
+        "id": "6ab3d44bb4fe6a2174502840",
+        "timestamp": 1791293138,
+        "type": "in_hideout",
         "map": "Loading...",
         "side": "Loading...",
         "state": "EMPTY",
@@ -35,28 +64,65 @@
             "z": null
         }
     },
-    "69f07bb58cb3fc4bac524556": {
-        "id": "69f07bb58cb3fc4bac524556",
-        "timestamp": 1777710371,
+    "6a8c969a11b17e4f8c3618c1": {
+        "id": "6a8c969a11b17e4f8c3618c1",
+        "timestamp": 1791293123,
         "type": "online"
     },
-    "67ecbb25c4810e43b892a528": {
-        "id": "67ecbb25c4810e43b892a528",
-        "timestamp": 1977710349,
+    "6ab468a198be49bc4454497a": {
+        "id": "6ab468a198be49bc4454497a",
+        "timestamp": 1791293136,
         "type": "in_raid",
-        "map": "bigmap",
-        "side": "Bear",
-        "state": "fired",
-        "gameTime": "14:00:26",
+        "map": "Loading...",
+        "side": "Loading...",
+        "state": "EMPTY",
+        "gameTime": "Loading...",
         "position": {
-            "x": 268.321442,
-            "y": 8.869004,
-            "z": -10.5996466
+            "x": null,
+            "y": null,
+            "z": null
         }
     },
-    "58b22bc05202d4329e1cbe4922e82658793554c76cf6dccde535fa413fcb6e02": {
-        "id": "58b22bc05202d4329e1cbe4922e82658793554c76cf6dccde535fa413fcb6e02",
-        "timestamp": 1777710362,
-        "type": "online"
+    "6abab30ffefd292a9428166b": {
+        "id": "6abab30ffefd292a9428166b",
+        "timestamp": 1791293140,
+        "type": "in_raid",
+        "map": "Interchange",
+        "side": "Usec",
+        "state": "empty",
+        "gameTime": "00:58:37",
+        "position": {
+            "x": 266.29953,
+            "y": 21.2340374,
+            "z": -363.223633
+        }
+    },
+    "6ab46198bbed9d0dd8babdb3": {
+        "id": "6ab46198bbed9d0dd8babdb3",
+        "timestamp": 1791293125,
+        "type": "in_raid",
+        "map": "bigmap",
+        "side": "Usec",
+        "state": "empty",
+        "gameTime": "12:57:42",
+        "position": {
+            "x": 412.657257,
+            "y": 1.12375951,
+            "z": 56.5566139
+        }
+    },
+    "6abbb2c14b4b7b0bc87c7078": {
+        "id": "6abbb2c14b4b7b0bc87c7078",
+        "timestamp": 1791293111,
+        "type": "in_stash",
+        "map": "Loading...",
+        "side": "Loading...",
+        "state": "EMPTY",
+        "gameTime": "Loading...",
+        "position": {
+            "x": null,
+            "y": null,
+            "z": null
+        }
     }
 }

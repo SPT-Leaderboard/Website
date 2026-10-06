@@ -1,6 +1,6 @@
 {
     "map": "labyrinth",
-    "lastUpdated": 1781805497,
+    "lastUpdated": 1787162110,
     "players": {
         "8476044fbae323c6c14125bd48f4c0d89fcd76a047a52f07ac91f45801e56072": {
             "name": "Haywire Hayley",
@@ -399,9 +399,331 @@
                 "z": 0.527635038,
                 "timestamp": 1781642675
             }
+        },
+        "d9d497831e0fe988e4a3e64c85d59ef9582c5cf87d03bbb31261e081c0e5f4e3": {
+            "name": "JUSTENERO",
+            "profileId": "69112d84abcab2154cad6ed2",
+            "deaths": [
+                {
+                    "x": -40.77893,
+                    "y": -13.391037,
+                    "z": 0.50260824,
+                    "timestamp": 1782354633
+                }
+            ],
+            "lastDeath": {
+                "x": -40.77893,
+                "y": -13.391037,
+                "z": 0.50260824,
+                "timestamp": 1782354633
+            }
+        },
+        "66d09e4609e9c18e16ea81fff8bab3aec801af87ddfd697cd85fe6b56e88d571": {
+            "name": "Felliai",
+            "profileId": "6a1332f09ca8ee2728a5d219",
+            "deaths": [
+                {
+                    "x": -1.88113236,
+                    "y": 61.7680321,
+                    "z": 0.0424461737,
+                    "timestamp": 1783239014
+                }
+            ],
+            "lastDeath": {
+                "x": -1.88113236,
+                "y": 61.7680321,
+                "z": 0.0424461737,
+                "timestamp": 1783239014
+            }
+        },
+        "00f69abef25de5f0af4b3ca136550b6555da08e90ed283053a4c2bd169f83c66": {
+            "name": "Kit",
+            "profileId": "692155a9287f2ba2d4a4d5dc",
+            "deaths": [
+                {
+                    "x": 6.34908533,
+                    "y": 20.0490265,
+                    "z": 0.0559950471,
+                    "timestamp": 1784620103
+                },
+                {
+                    "x": -39.23767,
+                    "y": -12.3290806,
+                    "z": 0.6131252,
+                    "timestamp": 1784619917
+                },
+                {
+                    "x": 18.8771725,
+                    "y": 25.8805962,
+                    "z": 0.396902263,
+                    "timestamp": 1784513829
+                },
+                {
+                    "x": 30.0013485,
+                    "y": 40.48807,
+                    "z": -0.293967545,
+                    "timestamp": 1784083467
+                },
+                {
+                    "x": -19.9677029,
+                    "y": 9.30953,
+                    "z": 0.119063072,
+                    "timestamp": 1784081209
+                }
+            ],
+            "lastDeath": {
+                "x": 6.34908533,
+                "y": 20.0490265,
+                "z": 0.0559950471,
+                "timestamp": 1784620103
+            }
+        },
+        "674c110f7b62d52eb62d7c5e7cc9bff2121d2a9cc4cd72c9b237e1b695819086": {
+            "name": "imp",
+            "profileId": "6a6387d7514d2e31c4a16de6",
+            "deaths": [
+                {
+                    "x": -3.13076615,
+                    "y": -31.33313,
+                    "z": 0.546876252,
+                    "timestamp": 1785619099
+                },
+                {
+                    "x": -0.9891926,
+                    "y": -33.49047,
+                    "z": 0.529863238,
+                    "timestamp": 1785089964
+                },
+                {
+                    "x": 0.4051675,
+                    "y": -33.49139,
+                    "z": 0.521729469,
+                    "timestamp": 1785089718
+                },
+                {
+                    "x": 20.7440453,
+                    "y": 60.6019974,
+                    "z": 0.0661511645,
+                    "timestamp": 1784991472
+                },
+                {
+                    "x": -38.49558,
+                    "y": 52.88996,
+                    "z": -0.2959935,
+                    "timestamp": 1784991219
+                }
+            ],
+            "lastDeath": {
+                "x": -3.13076615,
+                "y": -31.33313,
+                "z": 0.546876252,
+                "timestamp": 1785619099
+            }
+        },
+        "9b01df031b0f6f016c2322a56aad0452dc7acf988b367f70c65952aa084f2618": {
+            "name": "Chebong",
+            "profileId": "6a634e25d7da1d64c819c5df",
+            "deaths": [
+                {
+                    "x": 27.79468,
+                    "y": 40.4582176,
+                    "z": -0.178615257,
+                    "timestamp": 1785149312
+                }
+            ],
+            "lastDeath": {
+                "x": 27.79468,
+                "y": 40.4582176,
+                "z": -0.178615257,
+                "timestamp": 1785149312
+            }
+        },
+        "4dabac7e711b532842f77c4e3d93ea236fd5defa9b33e9e4aed8e25867e141d4": {
+            "name": "buy_ce_coin",
+            "profileId": "697cc3d21d6e84c328f9cd72",
+            "deaths": [
+                {
+                    "x": -37.17915,
+                    "y": 54.9895935,
+                    "z": -0.7913931,
+                    "timestamp": 1787082877
+                },
+                {
+                    "x": 8.87107849,
+                    "y": 61.21333,
+                    "z": 0.9340375,
+                    "timestamp": 1786808564
+                }
+            ],
+            "lastDeath": {
+                "x": -37.17915,
+                "y": 54.9895935,
+                "z": -0.7913931,
+                "timestamp": 1787082877
+            }
+        },
+        "e9307ab2943f8b7473aba6377adcccf15eec66e88c81152058ccdf515b49bcb9": {
+            "name": "makemake",
+            "profileId": "6a492f9592617901403c60f4",
+            "deaths": [
+                {
+                    "x": 38.1465263,
+                    "y": 35.28081,
+                    "z": -0.1577009,
+                    "timestamp": 1787162110
+                },
+                {
+                    "x": -31.578701,
+                    "y": -16.3329754,
+                    "z": 1.2215327,
+                    "timestamp": 1787158913
+                }
+            ],
+            "lastDeath": {
+                "x": 38.1465263,
+                "y": 35.28081,
+                "z": -0.1577009,
+                "timestamp": 1787162110
+            }
         }
     },
     "allDeaths": [
+        {
+            "playerName": "makemake",
+            "permaLink": "e9307ab2943f8b7473aba6377adcccf15eec66e88c81152058ccdf515b49bcb9",
+            "x": 38.1465263,
+            "y": 35.28081,
+            "z": -0.1577009,
+            "timestamp": 1787162110
+        },
+        {
+            "playerName": "makemake",
+            "permaLink": "e9307ab2943f8b7473aba6377adcccf15eec66e88c81152058ccdf515b49bcb9",
+            "x": -31.578701,
+            "y": -16.3329754,
+            "z": 1.2215327,
+            "timestamp": 1787158913
+        },
+        {
+            "playerName": "buy_ce_coin",
+            "permaLink": "4dabac7e711b532842f77c4e3d93ea236fd5defa9b33e9e4aed8e25867e141d4",
+            "x": -37.17915,
+            "y": 54.9895935,
+            "z": -0.7913931,
+            "timestamp": 1787082877
+        },
+        {
+            "playerName": "buy_ce_coin",
+            "permaLink": "4dabac7e711b532842f77c4e3d93ea236fd5defa9b33e9e4aed8e25867e141d4",
+            "x": 8.87107849,
+            "y": 61.21333,
+            "z": 0.9340375,
+            "timestamp": 1786808564
+        },
+        {
+            "playerName": "imp",
+            "permaLink": "674c110f7b62d52eb62d7c5e7cc9bff2121d2a9cc4cd72c9b237e1b695819086",
+            "x": -3.13076615,
+            "y": -31.33313,
+            "z": 0.546876252,
+            "timestamp": 1785619099
+        },
+        {
+            "playerName": "Chebong",
+            "permaLink": "9b01df031b0f6f016c2322a56aad0452dc7acf988b367f70c65952aa084f2618",
+            "x": 27.79468,
+            "y": 40.4582176,
+            "z": -0.178615257,
+            "timestamp": 1785149312
+        },
+        {
+            "playerName": "imp",
+            "permaLink": "674c110f7b62d52eb62d7c5e7cc9bff2121d2a9cc4cd72c9b237e1b695819086",
+            "x": -0.9891926,
+            "y": -33.49047,
+            "z": 0.529863238,
+            "timestamp": 1785089964
+        },
+        {
+            "playerName": "imp",
+            "permaLink": "674c110f7b62d52eb62d7c5e7cc9bff2121d2a9cc4cd72c9b237e1b695819086",
+            "x": 0.4051675,
+            "y": -33.49139,
+            "z": 0.521729469,
+            "timestamp": 1785089718
+        },
+        {
+            "playerName": "imp",
+            "permaLink": "674c110f7b62d52eb62d7c5e7cc9bff2121d2a9cc4cd72c9b237e1b695819086",
+            "x": 20.7440453,
+            "y": 60.6019974,
+            "z": 0.0661511645,
+            "timestamp": 1784991472
+        },
+        {
+            "playerName": "imp",
+            "permaLink": "674c110f7b62d52eb62d7c5e7cc9bff2121d2a9cc4cd72c9b237e1b695819086",
+            "x": -38.49558,
+            "y": 52.88996,
+            "z": -0.2959935,
+            "timestamp": 1784991219
+        },
+        {
+            "playerName": "Kit",
+            "permaLink": "00f69abef25de5f0af4b3ca136550b6555da08e90ed283053a4c2bd169f83c66",
+            "x": 6.34908533,
+            "y": 20.0490265,
+            "z": 0.0559950471,
+            "timestamp": 1784620103
+        },
+        {
+            "playerName": "Kit",
+            "permaLink": "00f69abef25de5f0af4b3ca136550b6555da08e90ed283053a4c2bd169f83c66",
+            "x": -39.23767,
+            "y": -12.3290806,
+            "z": 0.6131252,
+            "timestamp": 1784619917
+        },
+        {
+            "playerName": "Kit",
+            "permaLink": "00f69abef25de5f0af4b3ca136550b6555da08e90ed283053a4c2bd169f83c66",
+            "x": 18.8771725,
+            "y": 25.8805962,
+            "z": 0.396902263,
+            "timestamp": 1784513829
+        },
+        {
+            "playerName": "Kit",
+            "permaLink": "00f69abef25de5f0af4b3ca136550b6555da08e90ed283053a4c2bd169f83c66",
+            "x": 30.0013485,
+            "y": 40.48807,
+            "z": -0.293967545,
+            "timestamp": 1784083467
+        },
+        {
+            "playerName": "Kit",
+            "permaLink": "00f69abef25de5f0af4b3ca136550b6555da08e90ed283053a4c2bd169f83c66",
+            "x": -19.9677029,
+            "y": 9.30953,
+            "z": 0.119063072,
+            "timestamp": 1784081209
+        },
+        {
+            "playerName": "Felliai",
+            "permaLink": "66d09e4609e9c18e16ea81fff8bab3aec801af87ddfd697cd85fe6b56e88d571",
+            "x": -1.88113236,
+            "y": 61.7680321,
+            "z": 0.0424461737,
+            "timestamp": 1783239014
+        },
+        {
+            "playerName": "JUSTENERO",
+            "permaLink": "d9d497831e0fe988e4a3e64c85d59ef9582c5cf87d03bbb31261e081c0e5f4e3",
+            "x": -40.77893,
+            "y": -13.391037,
+            "z": 0.50260824,
+            "timestamp": 1782354633
+        },
         {
             "playerName": "Jegesmaci583",
             "permaLink": "5ab7f409f29022256c191ac46903fd1dda9b7eb91783a8ae9989dc1869e70a1b",

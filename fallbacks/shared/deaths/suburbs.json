@@ -1,0 +1,180 @@
+{
+    "map": "suburbs",
+    "lastUpdated": 1787247924,
+    "players": {
+        "faa5a212a899645eb1b5d9fc2b16ad4ba8ac24581ff059fdc10bd1861d429975": {
+            "name": "hagen",
+            "profileId": "6a26578c7769156920b5697c",
+            "deaths": [
+                {
+                    "x": -6.62370062,
+                    "y": -53.87487,
+                    "z": 21.1198387,
+                    "timestamp": 1785842766
+                }
+            ],
+            "lastDeath": {
+                "x": -6.62370062,
+                "y": -53.87487,
+                "z": 21.1198387,
+                "timestamp": 1785842766
+            }
+        },
+        "66d09e4609e9c18e16ea81fff8bab3aec801af87ddfd697cd85fe6b56e88d571": {
+            "name": "Felliai",
+            "profileId": "6a1332f09ca8ee2728a5d219",
+            "deaths": [
+                {
+                    "x": 0.5381763,
+                    "y": 6.52610826,
+                    "z": 18.4804363,
+                    "timestamp": 1786420410
+                },
+                {
+                    "x": 10.1296339,
+                    "y": 27.3351536,
+                    "z": 18.4268322,
+                    "timestamp": 1786255228
+                },
+                {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0,
+                    "timestamp": 1786024334
+                }
+            ],
+            "lastDeath": {
+                "x": 0.5381763,
+                "y": 6.52610826,
+                "z": 18.4804363,
+                "timestamp": 1786420410
+            }
+        },
+        "e9307ab2943f8b7473aba6377adcccf15eec66e88c81152058ccdf515b49bcb9": {
+            "name": "makemake",
+            "profileId": "6a492f9592617901403c60f4",
+            "deaths": [
+                {
+                    "x": 12.3465767,
+                    "y": 36.6821632,
+                    "z": 18.506773,
+                    "timestamp": 1786919435
+                },
+                {
+                    "x": -6.50872564,
+                    "y": 2.93187785,
+                    "z": 18.4088974,
+                    "timestamp": 1786917656
+                }
+            ],
+            "lastDeath": {
+                "x": 12.3465767,
+                "y": 36.6821632,
+                "z": 18.506773,
+                "timestamp": 1786919435
+            }
+        },
+        "eca7eabe02488ae6762a815920c00ca3cd47c1cc8af35b916f898e581811ee08": {
+            "name": "Difi",
+            "profileId": "69f0e7b3a59e014e5c8b8e52",
+            "deaths": [
+                {
+                    "x": 1.315861,
+                    "y": 3.69255567,
+                    "z": 16.054863,
+                    "timestamp": 1786920612
+                }
+            ],
+            "lastDeath": {
+                "x": 1.315861,
+                "y": 3.69255567,
+                "z": 16.054863,
+                "timestamp": 1786920612
+            }
+        },
+        "cd336458967b31ec1ea807950aeb81cc5e6c1ceca7510cd4e44900d5e5f885ce": {
+            "name": "slxxth",
+            "profileId": "6a85fb42ddc0be0f98fefbed",
+            "deaths": [
+                {
+                    "x": 0.4412489,
+                    "y": 54.1042671,
+                    "z": 15.7025623,
+                    "timestamp": 1787247924
+                }
+            ],
+            "lastDeath": {
+                "x": 0.4412489,
+                "y": 54.1042671,
+                "z": 15.7025623,
+                "timestamp": 1787247924
+            }
+        }
+    },
+    "allDeaths": [
+        {
+            "playerName": "slxxth",
+            "permaLink": "cd336458967b31ec1ea807950aeb81cc5e6c1ceca7510cd4e44900d5e5f885ce",
+            "x": 0.4412489,
+            "y": 54.1042671,
+            "z": 15.7025623,
+            "timestamp": 1787247924
+        },
+        {
+            "playerName": "Difi",
+            "permaLink": "eca7eabe02488ae6762a815920c00ca3cd47c1cc8af35b916f898e581811ee08",
+            "x": 1.315861,
+            "y": 3.69255567,
+            "z": 16.054863,
+            "timestamp": 1786920612
+        },
+        {
+            "playerName": "makemake",
+            "permaLink": "e9307ab2943f8b7473aba6377adcccf15eec66e88c81152058ccdf515b49bcb9",
+            "x": 12.3465767,
+            "y": 36.6821632,
+            "z": 18.506773,
+            "timestamp": 1786919435
+        },
+        {
+            "playerName": "makemake",
+            "permaLink": "e9307ab2943f8b7473aba6377adcccf15eec66e88c81152058ccdf515b49bcb9",
+            "x": -6.50872564,
+            "y": 2.93187785,
+            "z": 18.4088974,
+            "timestamp": 1786917656
+        },
+        {
+            "playerName": "Felliai",
+            "permaLink": "66d09e4609e9c18e16ea81fff8bab3aec801af87ddfd697cd85fe6b56e88d571",
+            "x": 0.5381763,
+            "y": 6.52610826,
+            "z": 18.4804363,
+            "timestamp": 1786420410
+        },
+        {
+            "playerName": "Felliai",
+            "permaLink": "66d09e4609e9c18e16ea81fff8bab3aec801af87ddfd697cd85fe6b56e88d571",
+            "x": 10.1296339,
+            "y": 27.3351536,
+            "z": 18.4268322,
+            "timestamp": 1786255228
+        },
+        {
+            "playerName": "Kalea",
+            "permaLink": "66d09e4609e9c18e16ea81fff8bab3aec801af87ddfd697cd85fe6b56e88d571",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "timestamp": 1786024334
+        },
+        {
+            "playerName": "hagen",
+            "permaLink": "faa5a212a899645eb1b5d9fc2b16ad4ba8ac24581ff059fdc10bd1861d429975",
+            "x": -6.62370062,
+            "y": -53.87487,
+            "z": 21.1198387,
+            "timestamp": 1785842766
+        }
+    ]
+}

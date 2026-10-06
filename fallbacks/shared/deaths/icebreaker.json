@@ -1,0 +1,34 @@
+{
+    "map": "icebreaker",
+    "lastUpdated": 1790286177,
+    "players": {
+        "15f40de4a8f76a9260b0cf62d04b5efb4c08f2fd02b3ac0205eda4fc878d23f9": {
+            "name": "Lemonboozle",
+            "profileId": "6ab16a5181ccdd143cda7a84",
+            "deaths": [
+                {
+                    "x": 10.2191048,
+                    "y": 2.60830951,
+                    "z": 18.4078045,
+                    "timestamp": 1790286177
+                }
+            ],
+            "lastDeath": {
+                "x": 10.2191048,
+                "y": 2.60830951,
+                "z": 18.4078045,
+                "timestamp": 1790286177
+            }
+        }
+    },
+    "allDeaths": [
+        {
+            "playerName": "Lemonboozle",
+            "permaLink": "15f40de4a8f76a9260b0cf62d04b5efb4c08f2fd02b3ac0205eda4fc878d23f9",
+            "x": 10.2191048,
+            "y": 2.60830951,
+            "z": 18.4078045,
+            "timestamp": 1790286177
+        }
+    ]
+}
