@@ -1,27 +1,32 @@
 /**
- * Hand-written types for the v2 website API, derived strictly from the
- * backend OpenAPI draft 0.1.0 (backend repo, docs/api/openapi.yaml — read-only
- * authority; rules in docs/api/api-design.md).
+ * Page-facing types for the v2 website API (Task FRT-21b).
  *
- * Where a yaml schema matches an existing domain type in src/api/types.ts,
- * that type is re-exported instead of duplicated (the mapping is commented at
- * each re-export). Everything else is written here from the yaml, with yaml
- * optionality: a field is optional exactly when the yaml leaves it out of
- * `required`. Fields the yaml marks `deprecated: true` carry a deprecation
- * note; they stay in the responses for now (api-design.md rule 9).
+ * The generated types live in schema.d.ts (openapi-typescript codegen from the
+ * backend's OpenAPI draft — command in openapi/README.md; the yaml is the
+ * read-only authority). This module keeps only what the client's
+ * stub-compatible signatures export:
+ *
+ * - re-exports of the matching domain types in src/api/types.ts, where the
+ *   client keeps the stub return types (the generated schema types are
+ *   strictly wider than the domain types; the client casts at the parse
+ *   boundary — openapi/README.md);
+ * - aliases derived from schema.d.ts where the yaml matches the page contract;
+ * - the two page-facing shapes the generated schema does not cover: the
+ *   normalized `PlayerSettings` view and the bare `FriendStatus` union.
  */
 
+import type { components, operations } from "./schema";
+
+type Schemas = components["schemas"];
+
 // ---------------------------------------------------------------------------
-// yaml schemas matched 1:1 by existing src/api/types.ts types — re-exported.
-// The per-type caveat (where the yaml is looser than the domain type) is in
-// src/api/openapi/README.md.
+// yaml schemas kept as the stub return types — re-exported from ../types.
+// The per-type caveat (where the yaml schema is wider than the domain type)
+// is in openapi/README.md.
 // ---------------------------------------------------------------------------
 
 /** yaml `Leaderboard` (GET /api/v2/seasons/current, GET /api/v2/seasons/{season}). */
 export type { SeasonData } from "../types";
-
-/** yaml `Player` — one leaderboard entry. */
-export type { PlayerEntry } from "../types";
 
 /** yaml `RaidIndex` (GET /api/v2/players/{permaLink}/raids; yaml deprecates `player_id`). */
 export type { RaidIndex } from "../types";
@@ -33,10 +38,10 @@ export type { RaidBlob } from "../types";
 export type { Equipment } from "../types";
 
 /**
- * yaml `CommentList` (GET /api/v2/players/{permaLink}/comments). The yaml
- * `Comment` payload is a superset of the legacy trimmed `PlayerComment` this
- * alias builds on (see `Comment` below); the client keeps this stub-contract
- * return type until the pages rewire (openapi/README.md, deviation 3).
+ * yaml `CommentList` (GET /api/v2/players/{permaLink}/comments). The stub
+ * contract's trimmed `PlayerComment[]` stays the getPlayerComments() return
+ * type; the yaml `Comment` (see below) is a superset of it (openapi/README.md,
+ * deviation 3).
  */
 export type { CommentsFile } from "../types";
 
@@ -56,153 +61,104 @@ export type { OnlineStatus } from "../types";
 export type { HeartbeatsMap } from "../types";
 
 // ---------------------------------------------------------------------------
-// yaml-only schemas (no matching domain type in src/api/types.ts).
+// aliases derived from schema.d.ts.
 // ---------------------------------------------------------------------------
 
 /** yaml schema `Error`: body of every non-2xx answer (api-design.md rule 6). */
-export interface ErrorBody {
-  /** Stable lower_snake_case machine code (not_found, unauthenticated, ...). */
-  code: string;
-  /** Short text for people. */
-  message: string;
-}
+export type ErrorBody = Schemas["Error"];
 
 /** yaml schema `SeasonList`: GET /api/v2/seasons (replaces the CURRENT_SEASON constant). */
-export interface SeasonList {
-  /** The current season number (minimum 2). */
-  current: number;
-  /** Every season number that has a published leaderboard, ascending. */
-  available: number[];
-}
-
-/** yaml inline 201 response of POST /api/v2/comments/{commentId}/like. */
-export interface LikeCommentResult {
-  success: boolean;
-  /** Like count after the toggle. */
-  likes: number;
-  /** Whether the session player likes the comment after the toggle. */
-  liked: boolean;
-}
-
-/** yaml inline 201 response of POST /api/v2/friend-requests. */
-export interface SendFriendRequestResult {
-  success: boolean;
-  message: string;
-}
+export type SeasonList = Schemas["SeasonList"];
 
 /**
  * yaml schema `Comment`: one comment as stored in the player's comment list.
- * Stored replies are the same shape minus `sent_to_id`, `replies` and
- * `parent_id` (the parent is only implied by position). This is a superset of
- * the legacy trimmed `PlayerComment` in src/api/types.ts (which lacks
- * `permaLink`, `author_id`, `likes`, `is_deleted`).
+ * 0.2.0: the frontend-visible keys `{id, text, author, avatar, sent_to_id,
+ * date, timestamp}` are required; `likes` is an optional like COUNT (number),
+ * not the legacy liker array.
  */
-export interface Comment {
-  /** Id of the comment (the `{commentId}` path parameter). */
-  id: string;
-  /** permaLink of the receiver (the profile the comment was written on). */
-  permaLink: string;
-  /** Comment text (legacy rule: 3 to 500 characters). */
-  text: string;
-  /** Display name of the author (from the session on writes). */
-  author: string;
-  /** Author key used by the legacy author check. */
-  author_id: string;
-  /** Receiver key. Top-level comments only; stored replies omit it. */
-  sent_to_id?: string;
-  /** Avatar of the author. */
-  avatar: string;
-  /** Legacy display date (format not stated in the yaml). */
-  date: string;
-  /** Unix seconds. */
-  timestamp: number;
-  /** The likers (the count is the array length). */
-  likes: string[];
-  /** Replies to this comment (top-level comments only). */
-  replies?: Comment[];
-  /** Id of the parent comment. Present on top-level comments; stored replies omit it. */
-  parent_id?: string;
-  /** Soft-delete marker set by DELETE /api/v2/comments/{commentId}. */
-  is_deleted: boolean;
-  /** Unix seconds. Added when the comment is deleted. */
-  deleted_at?: number;
-}
+export type Comment = Schemas["Comment"];
 
 /** yaml schema `CommentList`: the comments on one player's profile (last 100). */
-export type CommentList = Comment[];
+export type CommentList = Schemas["CommentList"];
+
+/** yaml schema `Session`: GET /api/v2/session (200 also with no session). */
+export type Session = Schemas["Session"];
+
+/** yaml schema `FriendList`: GET /api/v2/players/{permaLink}/friends. */
+export type FriendList = Schemas["FriendList"];
+
+/** One entry of yaml schema `FriendList`. */
+export type FriendEntry = Schemas["FriendList"]["friends"][number];
+
+/** One showcase slot of yaml schema `Showcase`. Slots without an inventory item are dropped. */
+export type ShowcaseItem = Schemas["Showcase"]["additionalProperties"];
+
+/** yaml inline 200 response of POST /api/v2/comments/{commentId}/like. */
+export type LikeCommentResult =
+  operations["likeComment"]["responses"][200]["content"]["application/json"];
+
+/** yaml inline 201 response of POST /api/v2/friend-requests. */
+export type SendFriendRequestResult =
+  operations["sendFriendRequest"]["responses"][201]["content"]["application/json"];
 
 /**
- * yaml schema `PlayerSettings`: GET /api/v2/players/{permaLink}/settings
- * (replaces POST network/functions/get_player_customization.php — settings is
- * GET now; the legacy success:false answers are 404 here).
+ * GET /api/v2/equipment-history: the whole blob, served as-is (yaml loose
+ * object). The yaml documents the `?weapon=` query parameter (planned for
+ * 0.3.0, not built); the client does not expose it — without it the whole
+ * file is served, which stays the current behavior.
+ */
+export type EquipmentHistory =
+  operations["getEquipmentHistory"]["responses"][200]["content"]["application/json"];
+
+/** yaml schema `PlayerSettings`, before the client's normalization (see PlayerSettings). */
+export type RawPlayerSettings = Schemas["PlayerSettings"];
+
+/**
+ * yaml schema `PlayerSettings` (GET /api/v2/players/{permaLink}/settings)
+ * after the client's 0.2.0 normalization (rules in openapi/README.md):
+ *
+ * - `usePrestigeStyling` arrives `integer | string` (0/1 on most profiles, a
+ *   string on a few) and is normalized to a boolean (0, "0" and "false" are
+ *   false; any other present value true);
+ * - `catReward` arrives `integer | string` and is normalized to a string;
+ * - `discord` collapses the new `discordUser` spelling and the deprecated
+ *   `discord_user` (present on ~2/3 of real profiles): discordUser first,
+ *   then discord_user; the two raw keys are dropped from the answer.
+ *
+ * The normalized object spreads the raw settings, so undocumented
+ * additionalProperties keys survive at runtime (they are just untyped here).
+ * team_user is present on every profile and not read by the frontend.
  */
 export interface PlayerSettings {
   /** Always true on a match; the legacy success:false answers are 404 here. */
   success: boolean;
-  /**
-   * The profile's profileSettings. Exact key casing is an open question in the
-   * yaml (the inventory says "name, about, discord, profile picture").
-   */
   settings: {
-    name?: string;
-    about?: string;
+    profileTheme?: string;
+    usePrestigeStyling?: boolean;
+    prestigeBackground?: string;
+    backgroundReward?: string;
+    mainBackgroundReward?: string;
+    catReward?: string;
+    pfpStyle?: unknown;
+    pfpBorder?: string;
+    decal?: string;
+    about_me?: string;
+    /** Normalized: yaml `discordUser`, falling back to the deprecated `discord_user`. */
     discord?: string;
+    /** Present on every profile; not read by the frontend. */
+    team_user?: string;
     profilePicture?: string;
+    name?: string;
+    forbidNameChange?: boolean;
   };
   /** Map of showcase slot to the item shown in it. */
   showcase: Record<string, ShowcaseItem>;
 }
 
-/** One showcase slot of yaml schema `Showcase`. Slots without an inventory item are dropped. */
-export interface ShowcaseItem {
-  item_id: string;
-  name: string;
-  icon_path: string;
-  rarity: string;
-  base_price: number;
-  slot: string;
-}
-
 /**
- * yaml schema `Session`: GET /api/v2/session. With a session the other four
- * fields are present; without one the answer is 200 with
- * `{"authenticated": false}` only. (The mock in src/api/auth.ts types the
- * fields as nullable instead of optional.)
+ * The four values of yaml schema `FriendStatus`, as the page-facing bare union
+ * (the same values the community mock's union has). The yaml 0.2.0 wires them
+ * wrapped as `{status}`; getFriendStatus() unwraps that one key
+ * (openapi/README.md, deviation 6).
  */
-export interface Session {
-  authenticated: boolean;
-  username?: string;
-  profilePicture?: string;
-  /** Unread notification count of the session account. */
-  unreadCount?: number;
-  maintenance?: boolean;
-}
-
-/** yaml schema `FriendStatus` (same four values as the community mock's union). */
 export type FriendStatus = "canAdd" | "isFriend" | "requestPending" | "cannotAdd";
-
-/** One entry of yaml schema `FriendList`. */
-export interface FriendEntry {
-  /** Public player key of the friend. */
-  permaLink: string;
-  /** Profile id of the friend. */
-  id: string;
-  name: string;
-  profilePicture: string;
-  /** Unix seconds. */
-  added_at: number;
-  /** Friendship status of the entry, as stored by the legacy writer. */
-  status: string;
-}
-
-/** yaml schema `FriendList`: GET /api/v2/players/{permaLink}/friends. */
-export interface FriendList {
-  friends: FriendEntry[];
-}
-
-/**
- * GET /api/v2/equipment-history (yaml inline response schema): the same JSON
- * as data/pmc_equipment_blob/equipment_history_blob.json. Loose object — the
- * yaml does not model the inner shape in this draft.
- */
-export type EquipmentHistory = Record<string, unknown>;

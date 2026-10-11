@@ -1,5 +1,6 @@
 /**
- * Base URL of the v2 website API (openapi.yaml draft 0.1.0).
+ * Base URL of the v2 website API (backend OpenAPI draft, docs/api/openapi.yaml
+ * — read-only authority; versioned by the yaml's info.version).
  *
  * The value is injected at build time via the PUBLIC_API_BASE environment
  * variable (Astro exposes PUBLIC_* vars on import.meta.env during
