@@ -1,0 +1,1487 @@
+{
+  "020020725725725000000000": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "020020bef1bef10000000000": {
+    "caliber": ".45 ACP",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "020020df056df05600000000": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "020020f153f1530000000000": {
+    "caliber": ".45 ACP",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "020020f15df15d0000000000": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "023023a12a12a12000000000": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "0af5f6a5aa9712e11c733fb9": {
+    "caliber": ".277",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "0cb4a36dd2e587b46e813dbe": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "0ede740e6e16c60f8c610c58": {
+    "caliber": ".300 Blackout",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "1bf618e47cce6d69bec01e9f": {
+    "caliber": ".338 Norma Magnum",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "3dc691f607ffed3228bf6ca2": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "4b81488c78c8a8ac7d37f9b9": {
+    "caliber": ".300 Blackout",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "52500592c7109667abb6cbeb": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5447a9cd4bdc2dbd208b4567": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5448bd6b4bdc2dfc2f8b4569": {
+    "caliber": "9x18mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "5448be9a4bdc2dfd2f8b456a": {
+    "caliber": "",
+    "main": "Throwable weapons",
+    "sub": "Fragmentation grenades"
+  },
+  "54491c4f4bdc2db1078b4568": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "544fb45d4bdc2dee738b4568": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "55801eed4bdc2d89578b4588": {
+    "caliber": "7.62x54mmR",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "5580223e4bdc2d1c128b457f": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "5644bd2b4bdc2d3b4c8b4572": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "56d59856d2720bd8418b456a": {
+    "caliber": "9x19mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "56dee2bdd2720bc8328b4567": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "56e0598dd2720bb5668b45a6": {
+    "caliber": "9x18mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "571a12c42459771f627b58a0": {
+    "caliber": "7.62x25mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "574d967124597745970e7c94": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "576165642459773c7a400233": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "576a581d2459771e7b1bc4f1": {
+    "caliber": "9x19mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "57838ad32459774a17445cd2": {
+    "caliber": "9x39mm",
+    "main": "Primary Weapons",
+    "sub": "Designated marksman rifles"
+  },
+  "579204f224597773d619e051": {
+    "caliber": "9x18mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "57c44b372459772d2b39b8ce": {
+    "caliber": "9x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "57d14d2524597714373db789": {
+    "caliber": "9x18mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "57dc2fa62459775949412633": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "57f28a7ffb22e277b0234219": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "57f3c6bd24597738e730fa2f": {
+    "caliber": "9x18mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "57f4c844245977379d5c14d1": {
+    "caliber": "9x18mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "583990e32459771419544dd2": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5839a40f24597726f856b511": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "587e02ff24597743df3deaeb": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "588892092459774ac91d4b11": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "58948c8e86f77409493f7266": {
+    "caliber": "9x19mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "5926bb2186f7744b1c6c6e60": {
+    "caliber": "9x19mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "59984ab886f7743e98271174": {
+    "caliber": "9x19mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "59d6088586f774275f37482f": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "59e6152586f77473dc057aa1": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "59e6687d86f77411d949b251": {
+    "caliber": ".366 TKM",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "59f98b4986f7746f546d2cef": {
+    "caliber": "9x21mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "59f9cabd86f7743a10721f46": {
+    "caliber": "9x19mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "59ff346386f77477562ff5e2": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5a0ec13bfcdbcb00165aa685": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5a17f98cfcdbcb0980087290": {
+    "caliber": "9x18mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "5a367e5dc4a282000e49738f": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Designated marksman rifles"
+  },
+  "5a38e6bac4a2826c6e06d79b": {
+    "caliber": "20/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "5a7828548dc32e5a9c28b516": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "5a7ae0c351dfba0017554310": {
+    "caliber": "9x19mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "5aafa857e5b5b00018480968": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Designated marksman rifles"
+  },
+  "5ab8e9fcd8ce870019439434": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5abcbc27d8ce8700182eceeb": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5abccb7dd8ce87001773e277": {
+    "caliber": "9x18mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "5ac4cd105acfc40016339859": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5ac66cb05acfc40198510a10": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5ac66d015acfc400180ae6e4": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5ac66d2e5acfc43b321d4b53": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5ac66d725acfc43b321d4b60": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5ac66d9b5acfc4001633997a": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5ae08f0a5acfc408fb1398a1": {
+    "caliber": "7.62x54mmR",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "5b0bbe4e5acfc40dc528a72d": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5b1fa9b25acfc40018633c01": {
+    "caliber": "9x19mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "5b3b713c5acfc4330140bd8d": {
+    "caliber": "7.62x25mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "5ba26383d4351e00334c93d9": {
+    "caliber": "4.6x30mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "5bb2475ed4351e00853264e3": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5bd70322209c4d00d7167b8f": {
+    "caliber": "4.6x30mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "5beed0f50db834001c062b12": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Light machine guns"
+  },
+  "5bf3e03b0db834001d2c4a9c": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5bf3e0490db83400196199af": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5bfd297f0db834001a669119": {
+    "caliber": "7.62x54mmR",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "5bfea6e90db834001b7347f3": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "5c07c60e0db834002330051f": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "5c46fbd72e2216398b5a8c9c": {
+    "caliber": "7.62x54mmR",
+    "main": "Primary Weapons",
+    "sub": "Designated marksman rifles"
+  },
+  "5c488a752e221602b412af63": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5c501a4d2e221602b412b540": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "5cadc190ae921500103bb3b6": {
+    "caliber": "9x19mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "5cadfbf7ae92152ac412eeef": {
+    "caliber": "12.7x55mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5cc82d76e24e8d00134b4b83": {
+    "caliber": "5.7x28mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "5cdeb229d7f00c000e7ce174": {
+    "caliber": "12.7x108mm",
+    "main": "Stationary weapons",
+    "sub": "Heavy machine guns"
+  },
+  "5d2f0d8048f0356c925bc3b0": {
+    "caliber": "9x19mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "5d3eb3b0a4b93615055e84d2": {
+    "caliber": "5.7x28mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "5d43021ca4b9362eab4b5e25": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "5d67abc1a4b93614ec50137f": {
+    "caliber": "5.7x28mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "5dcbd56fdbd3d91b3e5468d5": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5de652c31b7e3716273428be": {
+    "caliber": ".366 TKM",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "5de7bd7bfd6b4e6e2276dc25": {
+    "caliber": "9x19mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "5df24cf80dee1b22f862e9bc": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "5df8ce05b11454561e39243b": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Designated marksman rifles"
+  },
+  "5e00903ae9dc277128008b87": {
+    "caliber": "9x19mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "5e340dcdcb6d5863cc5e5efb": {
+    "caliber": "40mm",
+    "main": "Secondary weapons",
+    "sub": "Underbarrels"
+  },
+  "5e81c3cbac2bb513793cdc75": {
+    "caliber": ".45 ACP",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "5e81ebcd8e146c7080625e15": {
+    "caliber": "40mm",
+    "main": "Primary Weapons",
+    "sub": "Grenade launchers"
+  },
+  "5e848cc2988a8701445df1e8": {
+    "caliber": "23x75mmR",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "5e870397991fd70db46995c8": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "5ea03f7400685063ec28bfa8": {
+    "caliber": "7.62x25mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "5f2a9575926fd9352339381f": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "5f36a0e5fbf956000b716b65": {
+    "caliber": ".45 ACP",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "5fb64bc92b1b027b1f50bcf2": {
+    "caliber": ".45 ACP",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "5fbcc1d9016cce60e8341ab3": {
+    "caliber": ".300 Blackout",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "5fc22d7c187fea44d52eda44": {
+    "caliber": "8.6x70mm",
+    "main": "Primary Weapons",
+    "sub": "Designated marksman rifles"
+  },
+  "5fc3e272f8b6a877a729eac5": {
+    "caliber": ".45 ACP",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "5fc3f2d5900b1d5091531e57": {
+    "caliber": "9x19mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "602a9740da11d6478d5a06dc": {
+    "caliber": "9x19mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "60339954d62c9b14ed777c06": {
+    "caliber": "9x19mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "606587252535c57a13424cfd": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "606dae0ab0e443224b421bb7": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "60db29ce99594040e04c4a27": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "6165ac306ef05c2ce828ef74": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "6176aca650224f204c1da3fb": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Designated marksman rifles"
+  },
+  "617fd91e5539a84ec44ce155": {
+    "caliber": "",
+    "main": "Throwable weapons",
+    "sub": "Fragmentation grenades"
+  },
+  "6183afd850224f204c1da514": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "6184055050224f204c1da540": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "618428466ef05c2ce828f218": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "6193a720f8ee7e52e42109ed": {
+    "caliber": ".45 ACP",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "61a4c8884f95bc3b2c5dc96f": {
+    "caliber": ".357 Magnum",
+    "main": "Secondary weapons",
+    "sub": "Revolvers"
+  },
+  "61f7c9e189e6fb1a5e3ea78d": {
+    "caliber": "7.62x54mmR",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "623063e994fc3f7b302a9696": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "624c2e8614da335f1e034d8c": {
+    "caliber": "9x19mm",
+    "main": "Secondary weapons",
+    "sub": "Revolvers"
+  },
+  "6259b864ebedf17603599e88": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "6275303a9f372d6ea97f9ec7": {
+    "caliber": "40mm",
+    "main": "Primary Weapons",
+    "sub": "Grenade launchers"
+  },
+  "627c4fe34b0a558e8a3642a1": {
+    "caliber": ".300 Blackout",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "627e14b21713922ded6f2c15": {
+    "caliber": "8.6x70mm",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "628a60ae6b1d481ff772e9c8": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "628b5638ad252a16da6dd245": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "628b9c37a733087d0d7fe84b": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "62e14904c2699c0ec93adc47": {
+    "caliber": "9x21mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "62e7c4fba689e8c9c50dfc38": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "63088377b5cd696784087147": {
+    "caliber": "9x19mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "63171672192e68c5460cebc5": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "633ec7c2a6918cb895019c6c": {
+    "caliber": "12.7x55mm",
+    "main": "Secondary weapons",
+    "sub": "Revolvers"
+  },
+  "6410733d5dd49d77bd07847e": {
+    "caliber": "7.62x54mmR",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "643ea5b23db6f9f57107d9fd": {
+    "caliber": "7.62x54mmR",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "644674a13d52156624001fbc": {
+    "caliber": "9x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "645e0c6b3b381ede770e1cc9": {
+    "caliber": "9x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "64637076203536ad5600c990": {
+    "caliber": "7.62x54mmR",
+    "main": "Primary Weapons",
+    "sub": "Light machine guns"
+  },
+  "64748cb8de82c85eaf0a273a": {
+    "caliber": "12/70",
+    "main": "Secondary weapons",
+    "sub": "Shotguns"
+  },
+  "6499849fc93611967b034949": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "64ca3d3954fc657e230529cc": {
+    "caliber": "7.62x54mmR",
+    "main": "Primary Weapons",
+    "sub": "Light machine guns"
+  },
+  "6513ef33e06849f06c0957ca": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Light machine guns"
+  },
+  "651450ce0e00edc794068371": {
+    "caliber": "9x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "65268d8ecb944ff1e90ea385": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Light machine guns"
+  },
+  "65290f395ae2ae97b80fdf2d": {
+    "caliber": "6.8x51mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "65fb023261d5829b2d090755": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Light machine guns"
+  },
+  "66015072e9f84d5680039678": {
+    "caliber": "20x1",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "661ceb1b9311543c7104149b": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Light machine guns"
+  },
+  "661cec09b2c6356b4d0c7a36": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Light machine guns"
+  },
+  "664a5b945636ce820472f225": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles WTT"
+  },
+  "6657bc8faeddd6b0a9b40224": {
+    "caliber": "7.62x54mmR",
+    "main": "Primary Weapons",
+    "sub": "Designated marksman rifles"
+  },
+  "6657bd4d3a4d6e7c33fd2fdc": {
+    "caliber": "7.62x54mmR",
+    "main": "Primary Weapons",
+    "sub": "Designated marksman rifles"
+  },
+  "6661012d16fbd2fb75408f87": {
+    "caliber": "9x19mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "6671ebcdd32bd95eb398e920": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles WTT"
+  },
+  "6680304edadb7aa61d00cef0": {
+    "caliber": "9x19mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "66839591f4d0cba7b041b2af": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles WTT"
+  },
+  "668e71a8dadf42204c032ce1": {
+    "caliber": "9x19mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "668fe5a998b5ad715703ddd6": {
+    "caliber": ".50 Action Express",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "66992b349950f5f4cd06029f": {
+    "caliber": "9x19mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "669fa39b48fc9f8db6035a0c": {
+    "caliber": ".50 Action Express",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "669fa3d876116c89840b1217": {
+    "caliber": ".50 Action Express",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "669fa3f88abd2662d80eee77": {
+    "caliber": ".357 Magnum",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "669fa409933e898cce0c2166": {
+    "caliber": ".357 Magnum",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "669fca7f9ed4916116c76d5e": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns WTT"
+  },
+  "66a544c956621d3364f6085e": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles WTT"
+  },
+  "66a545898022784400d6c836": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles WTT"
+  },
+  "66ba249b102a9dd6040a6e7e": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles WTT"
+  },
+  "66dae7cbeb28f0f96809f325": {
+    "caliber": "",
+    "main": "Throwable weapons",
+    "sub": "Fragmentation grenades"
+  },
+  "66e718dc498d978477e0ba75": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Light machine guns WTT"
+  },
+  "66e88596febdcf9daade16a8": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "66ffa9b66e19cc902401c5e8": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "67124dcfa3541f2a1f0e788b": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "6718817435e3cfd9550d2c27": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "673cab3e03c6a20581028bc1": {
+    "caliber": "8.6x70mm",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "674d6121c09f69dfb201a888": {
+    "caliber": ".300 Blackout",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "674fe9a75e51f1c47c04ec23": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "675ceb83e25d80bc676e15a6": {
+    "caliber": "4.6x30mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols WTT"
+  },
+  "676176d362e0497044079f4c": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "6761b213607f9a6f79017c7e": {
+    "caliber": ".300 Blackout",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles WTT"
+  },
+  "6761b213607f9a6f79017cd8": {
+    "caliber": "9x19mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns WTT"
+  },
+  "6761b213607f9a6f79017d23": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "6761b213607f9a6f79017d40": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles WTT"
+  },
+  "676b4e2ff185a450a0b300b4": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles WTT"
+  },
+  "676bf44c5539167c3603e869": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "677c9a47baecf3c4b2453365": {
+    "caliber": "No caliber",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "678fe4a4906c7bd23722c71f": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "679a6a534f3d279c99b135b9": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "679f2453d1970258c1df3fce": {
+    "caliber": "9x19mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols WTT"
+  },
+  "67b05e25d83f07b7b587c0b5": {
+    "caliber": "9x19mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "67b49e7335dec48e3e05e057": {
+    "caliber": "",
+    "main": "Throwable weapons",
+    "sub": "Fragmentation grenades"
+  },
+  "67c6de3ce39861860909e8e5": {
+    "caliber": ".338 Lapua Magnum",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "67d0576f29f580ebc10efd08": {
+    "caliber": "12.7x99mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "67f1a2000000000000000100": {
+    "caliber": "9x18mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "67f425638b8cbfdc0cd1b5f2": {
+    "caliber": "9x19mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles WTT"
+  },
+  "682a543094114c092df7373e": {
+    "caliber": ".366 TKM",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "682d3dd16900cb35564c8825": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles WTT"
+  },
+  "682d4820e48f3c573ec332b5": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles WTT"
+  },
+  "683d23831960b7bac66f4f05": {
+    "caliber": "8.6x70mm",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "6840ebf5b8687ba34f8dfbca": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns WTT"
+  },
+  "68452c3da87156b67d9ec538": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "684e32eaec9f5eb3cacc7ca7": {
+    "caliber": ".300 Winchester Magnum",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles WTT"
+  },
+  "6859872fb5698809d7a4f446": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "686093d590c3dce07984c38a": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles WTT"
+  },
+  "6868377c7bb1c07772467ee7": {
+    "caliber": ".45 ACP",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "6868d249cdee524f8c0ba45f": {
+    "caliber": "9x19mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "6871284e9a353bb50606f3ed": {
+    "caliber": "9x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "687afda52dc9fd6c0e14c602": {
+    "caliber": "9x19mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns WTT"
+  },
+  "689166b6c2d6fa42e7044756": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "6895bb82c4519957df062f82": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "68a3836826dffa87b5767c04": {
+    "caliber": ".300 Winchester Magnum",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles WTT"
+  },
+  "68a639748e1fe612970728e9": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "68a6399922b1e0bd360afe56": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "68aee763130c00663d08aea8": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "68b7f4060a4536984f82cf4b": {
+    "caliber": ".45 ACP",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "68c16b9ab6b75a8a480520a6": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "68c23b960f579b9b5fe021e7": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "68c2940aecc41cc5490bd40e": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "68cf56067ff6ceab0c2fd49e": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "68d96442d7aac8a7a904db00": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "68e0002a0d6a4dab56810fbd": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "68e1040726e57f736103f027": {
+    "caliber": "9x21mm",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "68fc9d35a95c0e57110beeab": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "68fd7a61f2b8d96bb3119b19": {
+    "caliber": ".408 Chey Tac",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "68fd7d14ff5a09197b5ab82a": {
+    "caliber": ".408 Chey Tac",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "69066bef905ee9e06c462009": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "6906a1aeef59ca68d128e8b7": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "690ebacfc047a9a9f1a98782": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "691098356f593043295f6ddc": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "69161a1d649768162e8219ef": {
+    "caliber": ".300 Blackout",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "69187ee78568323f8204aaf3": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "692066c72a67c15014e8228e": {
+    "caliber": "6.8x51mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "692066c72a67c15014e8235b": {
+    "caliber": ".338 Lapua Magnum",
+    "main": "Primary Weapons",
+    "sub": "Designated marksman rifles"
+  },
+  "692066c72a67c15014e8241c": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Designated marksman rifles"
+  },
+  "692066c82a67c15014e828e7": {
+    "caliber": "6.8x51mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "692066c82a67c15014e82c6b": {
+    "caliber": "4.6x30mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "692066c82a67c15014e82cdb": {
+    "caliber": "12.7x55mm",
+    "main": "Secondary weapons",
+    "sub": "Revolvers"
+  },
+  "692066c82a67c15014e82d8f": {
+    "caliber": ".300 Blackout",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "692066c82a67c15014e82e8b": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "692066c82a67c15014e82eca": {
+    "caliber": "6.8x51mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "692066c92a67c15014e83068": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Light machine guns"
+  },
+  "692066c92a67c15014e83267": {
+    "caliber": "12.7x55mm",
+    "main": "Secondary weapons",
+    "sub": "Revolvers"
+  },
+  "692066c92a67c15014e8326c": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "692066c92a67c15014e83416": {
+    "caliber": "8.6x70mm",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "692066c92a67c15014e8370e": {
+    "caliber": "7.62x54mmR",
+    "main": "Primary Weapons",
+    "sub": "Designated marksman rifles"
+  },
+  "692066ca2a67c15014e83a49": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "692066ca2a67c15014e83a56": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "692066ca2a67c15014e83a87": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Designated marksman rifles"
+  },
+  "692066ca2a67c15014e83e27": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "6920b28eabc4f9d229cb7e49": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "69236a0b2d1260dbca41ef92": {
+    "caliber": "7.62x54mmR",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "6924c2f800ff4b8d9d689a5c": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "6928b6bf523e7af9a6ed2cec": {
+    "caliber": ".300 Blackout",
+    "main": "Primary Weapons",
+    "sub": "Designated marksman rifles"
+  },
+  "692f150b317e189d34953639": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "6930cde327aa0ba2c16d3d01": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "6934966eb788e3ac1fd8a28d": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "6934cac8923f68be4179c657": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "693742e7eab3af9d89349410": {
+    "caliber": "12.7x99mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Designated marksman rifles"
+  },
+  "69417a3f787395b8cc0ab13e": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "6945dc69fe52c2415de357f7": {
+    "caliber": "25x59mm",
+    "main": "Primary Weapons",
+    "sub": "Designated marksman rifles"
+  },
+  "694c80fa9b0201378540f8bd": {
+    "caliber": ".22 LR",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "6951d6f528342dc818053a6c": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "69555be939fb0a1a6f0ad12e": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "6958447bfc5cad58acf95c0f": {
+    "caliber": ".45 ACP",
+    "main": "Primary Weapons",
+    "sub": "Assault Carabines"
+  },
+  "6959ae1d8e4dae34b821a223": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Light machine guns"
+  },
+  "695c42816dd1786b89029345": {
+    "caliber": ".45 ACP",
+    "main": "Secondary weapons",
+    "sub": "Pistols"
+  },
+  "6969867592a994a633084f70": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "696ce75f73805e693401aba0": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "69777201f57d45a2ec02aafc": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "6978e7e796e988db77009efb": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "697f70958da76618a106499c": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "6981d72ed009ad83920da43a": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "6999a28e24f9ef4d100d2ed2": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "69c0247a79aa9660d88cfd71": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Miscellaneous"
+  },
+  "69c6c3ceb74c2d039e07b269": {
+    "caliber": "5.45x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "69d9435106dc0abe0209b658": {
+    "caliber": "12/70",
+    "main": "Primary Weapons",
+    "sub": "Shotguns"
+  },
+  "69eea8b5a9682e6879a537d8": {
+    "caliber": "7.62x54mmR",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "69f586053cad5a4bb4cd61ee": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "69f6500daa2b4c5492cadcd9": {
+    "caliber": "7.62x51mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "69f8ca293e7fb663aa6097ea": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "69f9ebbcaae020b0db02f65d": {
+    "caliber": "5.8x42mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "69fb5f225f919280cea5c17c": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "69fca77d3a0b02c8aec59eb4": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "6a0e3acb42723bcd0581cf85": {
+    "caliber": "7.62x54mmR",
+    "main": "Primary Weapons",
+    "sub": "Light machine guns"
+  },
+  "6a15ae2ae5267ba21c07f98f": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "6a1e999809ef9baf4bd31935": {
+    "caliber": "",
+    "main": "Throwable weapons",
+    "sub": "Fragmentation grenades"
+  },
+  "6a3bffbebc377285900b85cf": {
+    "caliber": "No caliber",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "6a4d24532666085a03d7b1e3": {
+    "caliber": "4.6x30mm",
+    "main": "Primary Weapons",
+    "sub": "Submachine guns"
+  },
+  "6a6cd61a8ca3e7453cc71847": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Light machine guns"
+  },
+  "72bbf927bf5b1d4a0837485b": {
+    "caliber": "5.56x45mm NATO",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "93bcdfda236122e67c098847": {
+    "caliber": "7.62x39mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "b6c589ec25350853408c15a0": {
+    "caliber": "5.8x42mm",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "d672109946fe88b803449054": {
+    "caliber": ".300 Blackout",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  },
+  "deee28079e76d537f532021c": {
+    "caliber": "8.6x70mm",
+    "main": "Primary Weapons",
+    "sub": "Bolt-action rifles"
+  },
+  "ed05294ed53c0400ae0e8a55": {
+    "caliber": ".300 Blackout",
+    "main": "Primary Weapons",
+    "sub": "Assault Rifles"
+  }
+}

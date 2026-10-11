@@ -1,0 +1,17 @@
+---
+// FRT-17: Weapon Meta route on the shared foundations (BaseLayout supplies
+// document shell, skip link, nav, footer). The island owns loading/empty/error
+// states, the search + cascading category filters, the weapon card grid, and
+// the per-weapon analytics modal (see MetaExplorer.tsx).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaExplorer from '../components/meta/MetaExplorer';
+---
+
+<BaseLayout
+  title="Weapon Meta"
+  description="Community weapon meta for SPT: kills, headshot rates, shots-to-kill, times-lost ratios, and average user levels per weapon, with category filters and per-weapon attachment pick rates."
+>
+  <h1>Weapon Meta</h1>
+  <p>What the community carries: weapon stats ranked by kills, with per-weapon analytics.</p>
+  <MetaExplorer client:load />
+</BaseLayout>

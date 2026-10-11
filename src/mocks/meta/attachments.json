@@ -1,0 +1,81 @@
+{
+  "5447a9cd4bdc2dbd208b4567": {
+    "attachments": {
+      "Scopes & Optics": [
+        { "name": "Trijicon REAP-IR thermal scope", "pickRate": 34.2 },
+        { "name": "Vudu 1-6x24 rifle scope", "pickRate": 27.8 },
+        { "name": "EOTECH XPS3-0 holographic sight", "pickRate": 21.5 }
+      ],
+      "Barrel & Muzzle": [
+        { "name": "SilencerCo Hybrid 46 suppressor", "pickRate": 41.6 },
+        { "name": "Daniel Defense Wave suppressor", "pickRate": 18.3 }
+      ],
+      "Magazines": [
+        { "name": "Magpul PMAG Gen M3 30 5.56x45", "pickRate": 63.9 },
+        { "name": "Troy 30 5.56x45 magazine", "pickRate": 19.4 },
+        { "name": "Magpul PMAG D-60 60 5.56x45", "pickRate": 8.7 }
+      ]
+    }
+  },
+  "68c16b9ab6b75a8a480520a6": {
+    "attachments": {
+      "Scopes & Optics": [
+        { "name": "Trijicon REAP-IR thermal scope", "pickRate": 44.1 },
+        { "name": "EOtech Vudu 1-6x24", "pickRate": 22.7 }
+      ],
+      "Barrel & Muzzle": [
+        { "name": "Rotatable VK-1 PB suppressor", "pickRate": 37.5 },
+        { "name": "SVG muzzle brake-compensator", "pickRate": 12.9 }
+      ],
+      "Grips": [
+        { "name": "RK-3 pistol grip", "pickRate": 55.2 },
+        { "name": "B-25U foregrip", "pickRate": 31.8 }
+      ]
+    }
+  },
+  "68c2940aecc41cc5490bd40e": {
+    "attachments": {
+      "Scopes & Optics": [
+        { "name": "Trijicon REAP-IR thermal scope", "pickRate": 39.6 },
+        { "name": "Elcan Specter DR 1x/4x", "pickRate": 25.1 }
+      ],
+      "Magazines": [
+        { "name": "6L23 5.45x39 magazine", "pickRate": 58.4 },
+        { "name": "RPK-16 95 5.45x39 drum", "pickRate": 14.2 }
+      ],
+      "Tactical": [
+        { "name": "Klesch flashlight + laser", "pickRate": 26.9 },
+        { "name": "Walther MGL battery pack", "pickRate": 9.5 }
+      ]
+    }
+  },
+  "5df8ce05b11454561e39243b": {
+    "attachments": {
+      "Scopes & Optics": [
+        { "name": "Nightforce ATACR 7-35x56", "pickRate": 46.8 },
+        { "name": "March Tactical 3-24x42 FFP", "pickRate": 23.3 }
+      ],
+      "Barrel & Muzzle": [
+        { "name": "SND suppressor", "pickRate": 33.7 },
+        { "name": "KAC QDC suppressor", "pickRate": 17.1 },
+        { "name": "SR-25 muzzle brake", "pickRate": 11.4 }
+      ]
+    }
+  },
+  "65290f395ae2ae97b80fdf2d": {
+    "attachments": {
+      "Scopes & Optics": [
+        { "name": "Trijicon REAP-IR thermal scope", "pickRate": 35.7 },
+        { "name": "SIG TANGO HP 1-8x24", "pickRate": 24.6 }
+      ],
+      "Magazines": [
+        { "name": "SIG MCX SPEAR 25 6.8x51", "pickRate": 52.3 },
+        { "name": "SIG MCX SPEAR 20 6.8x51", "pickRate": 21.0 }
+      ],
+      "Stocks": [
+        { "name": "SIG MCX SPEAR collapsible stock", "pickRate": 61.8 },
+        { "name": "M-LOK AR-15 buffer tube stock", "pickRate": 12.6 }
+      ]
+    }
+  }
+}
