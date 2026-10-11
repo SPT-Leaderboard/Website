@@ -1,15 +1,18 @@
 ---
-// FRT-10: home route on the shared foundations (BaseLayout supplies document shell,
-// skip link, nav, footer; global.css supplies tokens + base styles).
+// FRT-12: main season leaderboard route on the shared foundations.
+// BaseLayout supplies the document shell, skip link, nav, and footer;
+// DS6 keeps this home title unique against the subpages (which carry
+// suffixes). The island renders the season table with sorting, search,
+// aggregate stats, and the 8 s live data flow.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Counter from '../components/Counter';
+import Leaderboard from '../components/leaderboard/Leaderboard';
 ---
 
 <BaseLayout
   title="SPT Leaderboard"
-  description="Seasonal SPT (Single Player Tarkov) player rankings, skill scores, and profiles."
+  description="Current SPT (Single Player Tarkov) season rankings: scores, levels, K/D, survival rates, raids, and live online status, with sortable columns, search, and an 8-second live data flow."
 >
   <h1>SPT Leaderboard</h1>
-  <p>Scaffold proof page: the button below is a hydrated SolidJS island.</p>
-  <Counter client:load />
+  <p>Current season player rankings, updated live.</p>
+  <Leaderboard client:load />
 </BaseLayout>

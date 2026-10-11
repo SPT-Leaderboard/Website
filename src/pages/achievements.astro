@@ -1,0 +1,17 @@
+---
+// FRT-18: Achievement Rates route on the shared foundations (BaseLayout supplies
+// document shell, skip link, nav, footer). The island owns loading/empty/error
+// states, the summary header, the rarity + completion filters, and the card grid
+// (see AchievementRates.tsx).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AchievementRates from '../components/achievements/AchievementRates';
+---
+
+<BaseLayout
+  title="Achievement Rates"
+  description="How often every SPT achievement is earned across recorded players: completion percentages per achievement, rarity labels, and filters by rarity and minimum completion."
+>
+  <h1>Achievement Rates</h1>
+  <p>How often each achievement is earned across the recorded player base.</p>
+  <AchievementRates client:load />
+</BaseLayout>

@@ -1,0 +1,975 @@
+[
+  {
+    "id": "694e114418e06664c0682cb8",
+    "name": "Blood Money",
+    "description": "Eliminate 30 enemy PMCs using the Red Wages of Sin",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/wagesicon.png"
+  },
+  {
+    "id": "694e110ec53e29d1d4682cb4",
+    "name": "I'm a Burst Fire Believer",
+    "description": "Eliminate 25 enemy PMCs using the AN-94",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/an94icon.png"
+  },
+  {
+    "id": "694e10ca6b29ea7d14682cb0",
+    "name": "Poverty Doesn't Taste Great",
+    "description": "Eliminate 20 enemy scavs using the Hi-Point C9 pistol. The gun that shouldn't work but somehow does. Like you.",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/hipoint.png"
+  },
+  {
+    "id": "694e1063088b36b489682cac",
+    "name": "Tokyo Grift",
+    "description": "Eliminate 15 enemy scavs with leg-shots using the Minebea PM-9",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/pm9icon.png"
+  },
+  {
+    "id": "694e0fdb0984faf074682ca8",
+    "name": "Close Encounters of the Shotgun Kind",
+    "description": "Eliminate 5 enemy scavs on Factory within 5 meters using the Serbu Super Shorty Shotgun",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/superserbuicon.png"
+  },
+  {
+    "id": "694e0d8851fee79757682ca4",
+    "name": "Grandpa's Got a Gun",
+    "description": "Eliminate 15 enemy scavs using the Browning Auto-5 Shotgun",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/auto5icon.png"
+  },
+  {
+    "id": "6910b4469b3fa14d813de155",
+    "name": "You Actually Used This Thing?",
+    "description": "Eliminate 1 enemy using the Hi-Point C9 pistol",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/hipoint.png"
+  },
+  {
+    "id": "693c94e3b993b9416d6501a3",
+    "name": "Helmet Check!",
+    "description": "Shoot 20 PMC's in the head using the Barrett M107A1 .50 BMG anti-material rifle",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/m107.png"
+  },
+  {
+    "id": "6948990c05f4f91bdb9a56f3",
+    "name": "Congratulations! You're a Cheater!",
+    "description": "Use a commando code to receive locked content... Like a cheater.",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/cheatericon.png"
+  },
+  {
+    "id": "694d58833cff7ff7be31c5e8",
+    "name": "Twitch Guy! Twitch Guy!",
+    "description": "Use a commando code to Receive all post 1.0 Twitch drop content",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/twitchguyicon.png"
+  },
+  {
+    "id": "694c6575af08f6f1d59a5737",
+    "name": "Prestige 67",
+    "description": "Use a commando code to unlock Prestige 5 and 6 content. 67 67 67 67 67 67",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/67prestigeicon.png"
+  },
+  {
+    "id": "694c60b50cb1e6ad639a5723",
+    "name": "I 'Escaped'",
+    "description": "Use a commando code to Receive the four different endings content",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/endingsicon.png"
+  },
+  {
+    "id": "694c5cae0256a6bd999a5721",
+    "name": "When I said 'I want all the clothes...'",
+    "description": "Use a commando code to unlock access to Civilian, RUAF, and Black Division Clothes. Hey, wait, you aren't supposed to have these!",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/alltheclothes.png"
+  },
+  {
+    "id": "694c5527d1d40bd7db9a571a",
+    "name": "Backstabber",
+    "description": "Use a commando code to unlock access to the Arena clothing. Et tu, PMC?",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/backstabbericon.png"
+  },
+  {
+    "id": "6948996f192a4d4fc09a56f7",
+    "name": "Shut Up and Take My Roubles!",
+    "description": "Use a commando code to receive the preorder content. Early supporter's privilege, don't @ me!",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/preordericon.png"
+  },
+  {
+    "id": "694dbb05a4a61e9ad031c609",
+    "name": "Gettin' Drippy With It",
+    "description": "Eliminate 69 PMCs. Nice.",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/drippyicon.png"
+  },
+  {
+    "id": "6945add7f611786d999f67c9",
+    "name": "Headhunt: Mask Off",
+    "description": "Eliminate Tagilla with headshots 5 times",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/tagillatargeticon.png"
+  },
+  {
+    "id": "6948bed64eec012e689a56ff",
+    "name": "Explosive Liquidation",
+    "description": "Eliminate 8 PMCs using grenades in a single raid",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/meltedicon.png"
+  },
+  {
+    "id": "6948bdfa8c37d412919a56fa",
+    "name": "Square Off",
+    "description": "Eliminate 20 enemies on Factory in a single raid",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/squareicon.png"
+  },
+  {
+    "id": "69488f0bc7b96c28559a56b6",
+    "name": "Forgotten: Rat Exterminator",
+    "description": "Eliminate 150 Scavs with headshots",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/forgottenicon.png"
+  },
+  {
+    "id": "694890e956549526659a56bb",
+    "name": "Echo of Battle: Across All Fronts",
+    "description": "Eliminate 10 PMCs with headshots on every map",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/echoofbattleicon.png"
+  },
+  {
+    "id": "69488ddbe04d15d5539a56b1",
+    "name": "Headhunt: Ain't That A Kick In The Leg",
+    "description": "Eliminate Killa with leg-shots 5 times",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/killatargeticon.png"
+  },
+  {
+    "id": "69485d4228fbbf7227ff89c1",
+    "name": "Headhunt: Bishop Takes Knight",
+    "description": "Eliminate Knight with headshots on Customs, Shoreline, Lighthouse and Woods",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/knighttargeticon.png"
+  },
+  {
+    "id": "694735758b9b166676ff89b6",
+    "name": "Headhunt: The Long Game",
+    "description": "Eliminate Zryachiy with headshots 3 times from 350+ meters",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/zryachiytargeticon.png"
+  },
+  {
+    "id": "69485047a741eee797ff89bb",
+    "name": "Headhunt: Alarm Bell",
+    "description": "Eliminate 11 Scavs with headshots between the hours of 6am-11am in a single raid",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/cockereltargeticon.png"
+  },
+  {
+    "id": "6945fed89b863ef9ce9f67ce",
+    "name": "Field Tested: Tactical Tomahawk",
+    "description": "Eliminate 3 targets with the Kiba Arms Tactical Tomahawk in a single raid",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/axemantargeticon.png"
+  },
+  {
+    "id": "69460c424c23a6e66f9f67d3",
+    "name": "Eights and Aces: Dead Man's Hand",
+    "description": "Eliminate 8 PMCs with headshots using any Revolver",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/aceofspadestargeticon.png"
+  },
+  {
+    "id": "651413e9c31fcb0e163577c9",
+    "name": "Now That's a Good Shot",
+    "description": "Neutralize Zryachiy 15 times while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_13.png"
+  },
+  {
+    "id": "65141c30ec10ff011f17cc3b",
+    "name": "Welcome to Tarkov",
+    "description": "Die in Tarkov for the first time",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_35_1.png"
+  },
+  {
+    "id": "65141ab70dc723592b0f9482",
+    "name": "Drunken Master",
+    "description": "Eliminate a PMC operative with a headshot while under the alcohol effect while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "6634ca69ee506a5c3e61be56",
+    "name": "INVOLVED IN PEACE",
+    "description": "Pick Peacekeeper's side and complete The Tarkov Mystery event task line",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/S24Q2_ARRS2.png"
+  },
+  {
+    "id": "6513f28cb49e3253755f47f3",
+    "name": "The Blind Watcher",
+    "description": "Neutralize Zryachiy for the first time while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_13.png"
+  },
+  {
+    "id": "6512f16bde333c33d5127cbc",
+    "name": "Killer of Killers",
+    "description": "Eliminate one of the hooded men with their own knife at night time while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_4.png"
+  },
+  {
+    "id": "65141e37cf2f1c285e606361",
+    "name": "That's What She Said",
+    "description": "Search the office in Factory while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_30.png"
+  },
+  {
+    "id": "6514184ec31fcb0e163577d2",
+    "name": "Killer7",
+    "description": "Eliminate 7 PMC operatives in a single raid while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_20.png"
+  },
+  {
+    "id": "65141eb5c31fcb0e163577dd",
+    "name": "Lost",
+    "description": "Locate the crashed plane on Woods while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_31.png"
+  },
+  {
+    "id": "6514174fb1c08b0feb216d73",
+    "name": "Chris's Heir",
+    "description": "Eliminate a PMC operative with a headshot from over 500 meters away while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_16.png"
+  },
+  {
+    "id": "6527ee4a647c29201011defe",
+    "name": "You Are Not My Brother",
+    "description": "Eliminate a Scav while playing as a Scav",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_43.png"
+  },
+  {
+    "id": "6634cae870af846d2868dada",
+    "name": "Local Strong Man",
+    "description": "Pick Skier's side and complete The Tarkov Mystery event task line",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/S24Q2_ARRS3.png"
+  },
+  {
+    "id": "6842c27a38482d35ac0bd847",
+    "name": "Higher and Higher",
+    "description": "Earn the Prestige level 4",
+    "rarity": "Legendary",
+    "imageUrl": "/media/prestige4.png"
+  },
+  {
+    "id": "6842c25bd02bc07d70054019",
+    "name": "Keeping Up the Pace",
+    "description": "Earn the Prestige level 3",
+    "rarity": "Legendary",
+    "imageUrl": "/media/prestige3.png"
+  },
+  {
+    "id": "676094451fec2f7426093be6",
+    "name": "More Prestigious",
+    "description": "Earn the Prestige level 2",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/676093bf2a7be2d1f706f0ec.png"
+  },
+  {
+    "id": "676091c0f457869a94017a23",
+    "name": "Prestigious",
+    "description": "Earn the Prestige level 1",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/676093b76e682163da028a28.png"
+  },
+  {
+    "id": "6634c8886e083a141f4aa3f4",
+    "name": "Cardinal Richelieu",
+    "description": "Find out who actually controls Tarkov and complete The Tarkov Mystery event task line",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/S24Q2_ARRS1.png"
+  },
+  {
+    "id": "67fce0c2f18dc20eae02240b",
+    "name": "Star Called Sun",
+    "description": "Obliterate a cultist while using the RShG-2 rocket launcher",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/6821f5e71d89b4e49305a478.png"
+  },
+  {
+    "id": "65141dd6303df252af1c72c9",
+    "name": "PMC",
+    "description": "Survive 300 raids while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_29.png"
+  },
+  {
+    "id": "66e2a7e5919bad697104f4b3",
+    "name": "Highway to the Danger Zone",
+    "description": "Complete the Mortar Strike 2024 event task line",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/ArtShelling_Event.png"
+  },
+  {
+    "id": "6513ed89cf2f1c285e606068",
+    "name": "Silence of the Sawmill",
+    "description": "Neutralize Shturman for the first time while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_7.png"
+  },
+  {
+    "id": "6513f0a10dc723592b0f90cf",
+    "name": "Funny Graveyard Keeper",
+    "description": "Neutralize Kaban for the first time while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_11.png"
+  },
+  {
+    "id": "6512ea46f7a078264a4376e4",
+    "name": "PMC's Best Friend",
+    "description": "Survive and extract from Interchange through the Scav Co-Op extraction while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_2.png"
+  },
+  {
+    "id": "6512f1e3be73cc7f07358ed5",
+    "name": "Art of Style",
+    "description": "Neutralize Killa for the first time while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_5.png"
+  },
+  {
+    "id": "6513f1feec10ff011f17c7ea",
+    "name": "Now There Are Three of Them!",
+    "description": "Neutralize Knight, Birdeye, and Big Pipe in a single raid for the first time while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_12.png"
+  },
+  {
+    "id": "6512eb3ddfb0ae1ee75a0376",
+    "name": "Traveler",
+    "description": "Survive and extract from every location in Tarkov while playing as a PMC ",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_3.png"
+  },
+  {
+    "id": "6513efa1b49e3253755f47eb",
+    "name": "Sanatorium Orderly",
+    "description": "Neutralize Sanitar for the first time while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_10.png"
+  },
+  {
+    "id": "66c328aca91e7d66fa1b0b7b",
+    "name": "Vagabond",
+    "description": "Use the transit from any location",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard75.png"
+  },
+  {
+    "id": "664f1f8768508d74604bf556",
+    "name": "The Kappa Path",
+    "description": "Obtain Secure container Kappa",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/Legendary_52.png"
+  },
+  {
+    "id": "66b493bc2d8cd3b5e90a3648",
+    "name": "Marathon",
+    "description": "Visit all locations in one raid as a PMC",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/Legendary77.png"
+  },
+  {
+    "id": "6527d2e2c656a951ad1528c3",
+    "name": "Smoke the Peace Pipe",
+    "description": "Neutralize Big Pipe 15 times while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare23.png"
+  },
+  {
+    "id": "655b4a576689c676ce57acb6",
+    "name": "True Crime",
+    "description": "Neutralize Kollontay 15 times while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_44.png"
+  },
+  {
+    "id": "66c328de9dc78468f4040f35",
+    "name": "Time To Clean My Karma",
+    "description": "Neutralize Partisan for the first time while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard73.png"
+  },
+  {
+    "id": "66c32996b4c0c017a3319cc3",
+    "name": "Samsara Wheel Spins Again",
+    "description": "Neutralize Partisan 15 times while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare73.png"
+  },
+  {
+    "id": "6514134eec10ff011f17cc26",
+    "name": "I Hear the Voice of Darkness",
+    "description": "Neutralize Knight 15 times while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare21.png"
+  },
+  {
+    "id": "660fe21454670811e304c045",
+    "name": "Maslenitsa",
+    "description": "Сomplete the Maslenitsa 2024 event task line",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/Maslenitsa2024.png"
+  },
+  {
+    "id": "66742c003a67b164a300fcbf",
+    "name": "A Key to Salvation",
+    "description": "Help Therapist save lives and complete the Key to Salvation event task line",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/KeySalvation.png"
+  },
+  {
+    "id": "6514143d59647d2cb3213c93",
+    "name": "Master of ULTRA",
+    "description": "Neutralize Killa 100 times while playing as a PMC",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/Legendary_14.png"
+  },
+  {
+    "id": "651411f1cf2f1c285e606423",
+    "name": "Who Called the Doctor?",
+    "description": "Neutralize Sanitar 15 times while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_10.png"
+  },
+  {
+    "id": "668bf47c781d446fdc083711",
+    "name": "High Competition",
+    "description": "Choose your side and complete the Arms Race event task line",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/ArmsRaceEvent2024.png"
+  },
+  {
+    "id": "651419eea3dd9b6aa7159ee5",
+    "name": "Blind Fury",
+    "description": "Eliminate any enemy while suffering from the Flash effect while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "65141bdfcf2f1c285e606446",
+    "name": "BEAR With Me",
+    "description": "Eliminate 50 BEAR PMC operatives",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_25.png"
+  },
+  {
+    "id": "6513eb6e0dc723592b0f9095",
+    "name": "Call Your Brother",
+    "description": "Neutralize Tagilla for the first time while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_6.png"
+  },
+  {
+    "id": "6513eec00dc723592b0f90cc",
+    "name": "Grouse Hunting",
+    "description": "Neutralize Glukhar for the first time while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_9.png"
+  },
+  {
+    "id": "65140bbec31fcb0e163577b9",
+    "name": "King of the Sawmill",
+    "description": "Neutralize Shturman 15 times while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_7.png"
+  },
+  {
+    "id": "65141032a3dd9b6aa7159ed3",
+    "name": "Another Cold Case",
+    "description": "Neutralize Glukhar 15 times while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_9.png"
+  },
+  {
+    "id": "651415feb49e3253755f4b68",
+    "name": "Long Live the King!",
+    "description": "Neutralize every Boss once while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_15.png"
+  },
+  {
+    "id": "651412b8c31fcb0e163577c5",
+    "name": "Old Dog With Old tricks",
+    "description": "Neutralize Kaban 15 times while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_11.png"
+  },
+  {
+    "id": "6514321bec10ff011f17ccac",
+    "name": "Firefly",
+    "description": "Meet Lightkeeper for the first time while playing as a PMC",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/Legendary_42.png"
+  },
+  {
+    "id": "6527d3aac656a951ad1528ce",
+    "name": "The Red Book",
+    "description": "Neutralize Birdeye 15 times while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare22.png"
+  },
+  {
+    "id": "6513ee11a3dd9b6aa7159b4a",
+    "name": "Deal to Make",
+    "description": "Neutralize Reshala for the first time while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_8.png"
+  },
+  {
+    "id": "65140c00b1c08b0feb216d50",
+    "name": "This Is a Tarkov Showdown",
+    "description": "Neutralize Reshala 15 times while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_8.png"
+  },
+  {
+    "id": "65141b9859647d2cb3213ca2",
+    "name": "U-SUCC",
+    "description": "Eliminate 50 USEC PMC operatives",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_24.png"
+  },
+  {
+    "id": "655b49bc91aa9e07687ae47c",
+    "name": "Justice",
+    "description": "Neutralize Kollontay for the first time while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_44.png"
+  },
+  {
+    "id": "65140ab8ec10ff011f17cc10",
+    "name": "What Not To Wear",
+    "description": "Neutralize Killa 15 times while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_5.png"
+  },
+  {
+    "id": "65140b55cf2f1c285e606414",
+    "name": "Hammer and Scythe",
+    "description": "Neutralize Tagilla 15 times while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_6.png"
+  },
+  {
+    "id": "65141a3059647d2cb3213c9e",
+    "name": "Make a Notch",
+    "description": "Eliminate 30 PMC operatives with a melee weapon while playing as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_22.png"
+  },
+  {
+    "id": "65141cd2cf2f1c285e606449",
+    "name": "Ready for Anything",
+    "description": "Survive 10 consecutive raids while playing as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_28.png"
+  },
+  {
+    "id": "6529097eccf6aa5f8737b3d0",
+    "name": "Snowball",
+    "description": "Neutralize every Boss without dying while playing as a PMC",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/Legendary_19.png"
+  },
+  {
+    "id": "664f23e44702fd5db50ee732",
+    "name": "Jack of All Trades",
+    "description": "Complete all of Gunsmith series tasks",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_35.png"
+  },
+  {
+    "id": "670feb95a4e71050310cc14b",
+    "name": "Complete Remission",
+    "description": "Cure all the infected and complete the Halloween 2024 event task line",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/S24Q4_Halloween2.png"
+  },
+  {
+    "id": "670febed5ee0fc738a0965a4",
+    "name": "Fatal Outcome",
+    "description": "Destroy the virus along with all the infected and complete the Halloween 2024 event task line",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/S24Q4_Halloween1.png"
+  },
+  {
+    "id": "675709bef4e2a2ce0f058f56",
+    "name": "All-Wheel Drive",
+    "description": "Resolve the issue with the BTR driver one way or another",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_78.png"
+  },
+  {
+    "id": "675998a894008342eb04e47f",
+    "name": "Khorovod",
+    "description": "Celebrate Christmas and New Year and complete the Khorovod 2024 event task line",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/S24Q4_Roundelay.png"
+  },
+  {
+    "id": "67a0e57117e34930e50075f3",
+    "name": "In Search of an Exit",
+    "description": "Complete the Labyrinth 2025 event task line",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/67a0e5f3003a9986cb0f5b68.png"
+  },
+  {
+    "id": "67a0e57b972c11a3f50773b2",
+    "name": "Dungeon Master",
+    "description": "Complete the Labyrinth 2025 event task line and all side tasks",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/67a0e5f786681d1e210705f0.png"
+  },
+  {
+    "id": "67c838a4c566b0028f0f2d07",
+    "name": "All on Red",
+    "description": "Go all in on the BEAR squad beyond the cordon and complete Skier's Profitable Venture task line",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/67dad91e2af1a9900b0f06b1.png"
+  },
+  {
+    "id": "68936a7a672ffe94a509446b",
+    "name": "Targrad Tales",
+    "description": "He that steals honey, should beware of the sting.",
+    "rarity": "Legendary",
+    "imageUrl": "/media/player-achievements/6889e05eff9be6c27709785b.png"
+  },
+  {
+    "id": "66bda7020bc08a1ad71d5d4e",
+    "name": "Stop interupting my tik-tok",
+    "description": "Reach level 10 attention as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bda702d99170cdc445b3a7",
+    "name": "That signal wasn't even cool",
+    "description": "Reach level 25 attention as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bda7029b166061781b6998",
+    "name": "I don't know why all this stuff is invisible",
+    "description": "Reach level 40 attention as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bda70233d8a70cfc46d577",
+    "name": "Doesn't miss a thing",
+    "description": "Reach level elite attention as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bdcbe62baae5b99b72f762",
+    "name": "Shy",
+    "description": "Reach level 10 charisma as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bdcbe6ece2f03c51775ec4",
+    "name": "Learning to lie",
+    "description": "Reach level 25 charisma as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bdcbe6ad2df17387914c92",
+    "name": "I have a gun, why am I paying this driver?",
+    "description": "Reach level 40 charisma as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bdcbe6e9a57186a2a06192",
+    "name": "Master manipulator",
+    "description": "Reach level elite charisma as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bd9bc2a77d29a34fef67d9",
+    "name": "Couch Potato",
+    "description": "Reach level 10 endurance as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bd9bc238d023600e59bd93",
+    "name": "Jogger",
+    "description": "Reach level 25 endurance as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bd9bc2685601098fe96541",
+    "name": "Gotta keep running!",
+    "description": "Reach level 40 endurance as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bd9cdeef2bd357460a7ba2",
+    "name": "Forest Gump",
+    "description": "Reach level elite endurance as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bdbf7974230c57b5a27b0c",
+    "name": "500 Cigarettes",
+    "description": "Reach level 10 health as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bdbf79db179933d1647771",
+    "name": "Kickin' the habit",
+    "description": "Reach level 25 health as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bdbf796a3c1c7c2e1822ea",
+    "name": "An Apple a day",
+    "description": "Reach level 40 health as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bdbf79067afa12e8c9a132",
+    "name": "Keeps the doctor away",
+    "description": "Reach level elite health as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bdacb3c7acd8febbb72213",
+    "name": "Hypochondriac",
+    "description": "Reach level 10 immunity as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bdacb3d3224b75e70f77a4",
+    "name": "Dives in dumpsters",
+    "description": "Reach level 25 immunity as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bdacb35b310e7ab146e0b2",
+    "name": "Tetanus Shot",
+    "description": "Reach level 40 immunity as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bdacb37c40a06a6aec6329",
+    "name": "Cockroach",
+    "description": "Reach level elite immunity as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bdcf263ddb2d106c3f1dd5",
+    "name": "What is this thing?",
+    "description": "Reach level 10 intellect as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bdcf264978db0eeb3ff5b6",
+    "name": "Reading the manual",
+    "description": "Reach level 25 intellect as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bdcf269ff0ee86dfd42af4",
+    "name": "That one guy who manages wikipedia",
+    "description": "Reach level 40 intellect as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bdcf26118b41371886e412",
+    "name": "E = MC^2",
+    "description": "Reach level elite intellect as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bdbb9c6b99c785df9be334",
+    "name": "Iron Stomach",
+    "description": "Reach level 10 metabolism as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bdbb9c5fedfa03b61b992d",
+    "name": "3000 Calories",
+    "description": "Reach level 25 metabolism as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bdbb9c388a5d11e0440735",
+    "name": "Wish I had a Big Mac right now",
+    "description": "Reach level 40 metabolism as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bdbb9cb984af0e8c968f70",
+    "name": "Gin and Juice",
+    "description": "Reach level elite metabolism as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bdd2d893f7cd3b0faf6a8e",
+    "name": "This floor is weird",
+    "description": "Reach level 10 perception as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bdd2d825419d97d5aa0a02",
+    "name": "The floor is infact floor here",
+    "description": "Reach level 25 perception as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bdd2d87c0e175f3d51cf18",
+    "name": "20/20 vision",
+    "description": "Reach level 40 perception as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bdd2d8a8b753b48bf39535",
+    "name": "6th Sense",
+    "description": "Reach level elite perception as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bda1d0a1df4d0b4e3e7477",
+    "name": "Is that a fuckin' tank battery?..",
+    "description": "Reach level 10 strength as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bda1d08d94729af6795d2a",
+    "name": "Finally, a bigger back pack",
+    "description": "Reach level 25 strength as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bda1d0258e8b9c1776e50d",
+    "name": "Gym Bro",
+    "description": "Reach level 40 strength as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bda1d0a132d20dafe88be4",
+    "name": "Carries gear for fun",
+    "description": "Reach level elite strength as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bdc449c5d17fa322310fb6",
+    "name": "First time?",
+    "description": "Reach level 10 stress resistance as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bdc449794a5a1cb51d59a3",
+    "name": "Have the scars to prove it?",
+    "description": "Reach level 25 stress resistance as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bdc449329b4a1dcab6ea27",
+    "name": "Alot like dyin'",
+    "description": "Reach level 40 stress resistance as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bdc449e6d5a00ff7df08be",
+    "name": "Psychotic",
+    "description": "Reach level elite stress resistance as a PM",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bdc88a681d8563c5078144",
+    "name": "Wounded",
+    "description": "Reach level 10 vitality as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bdc88ac8a4e33118e774c3",
+    "name": "Tis' just a flesh wound",
+    "description": "Reach level 25 vitality as a PMC",
+    "rarity": "Common",
+    "imageUrl": "/media/player-achievements/Standard_23.png"
+  },
+  {
+    "id": "66bdc88a6a83c63707069713",
+    "name": "Quentin Tarantino movie survivor",
+    "description": "Reach level 40 vitality as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  },
+  {
+    "id": "66bdc88acf92f5fe60bb3ae1",
+    "name": "Can't kill what doesn't bleed",
+    "description": "Reach level elite vitality as a PMC",
+    "rarity": "Rare",
+    "imageUrl": "/media/player-achievements/Rare_21.png"
+  }
+]

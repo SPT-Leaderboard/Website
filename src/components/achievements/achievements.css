@@ -1,0 +1,293 @@
+/* FRT-18 achievements styles (companion to AchievementRates.tsx). Tokens from
+   styles/tokens.css only — no new colors. Rarity chips reuse the existing
+   AA-checked theme text tokens (muted/info/accent/warning per tokens.css,
+   web-standards-audit §5 CC1/CC2) instead of the legacy hex borders
+   (achievements/ach.css, incl. its transition:all, audit §9 XC2). */
+
+.achievements {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.achievements-heading {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-lg);
+  line-height: var(--leading-tight);
+}
+
+/* Summary header */
+.achievements-summary {
+  padding: var(--space-4);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.achievements-summary__grid {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr));
+}
+
+.achievements-summary__item dt {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.achievements-summary__item dd {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+}
+
+/* Filters: aria-pressed toggle buttons + native range slider, both keyboard
+   operable without extra script (audit §2). */
+.achievements-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.achievements-filters__rarity {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.achievements-filter {
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  touch-action: manipulation; /* audit §9 XC9 */
+}
+
+.achievements-filter:hover {
+  color: var(--color-text-primary);
+}
+
+.achievements-filter[aria-pressed='true'] {
+  color: var(--color-accent-contrast);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  font-weight: 600;
+}
+
+.achievements-filters__completion {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.achievements-filters__label {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.achievements-filters__slider {
+  accent-color: var(--color-accent);
+}
+
+.achievements-filters__value {
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Card grid */
+.achievements-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr));
+}
+
+.achievements-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-4);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.achievements-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.achievements-card__icon {
+  flex: none;
+  border-radius: var(--radius-md);
+}
+
+.achievements-card__title {
+  margin: 0;
+  font-size: var(--text-base);
+  line-height: var(--leading-tight);
+}
+
+.achievements-card__description {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.achievements-card__progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: auto;
+}
+
+.achievements-card__progress-label {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.achievements-card__percent {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.achievements-card__progress-track {
+  height: 0.5rem;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+.achievements-card__progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+}
+
+.achievements-card__holders {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.achievements-card__meta {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0;
+}
+
+.achievements-card__rarity {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-xs);
+  border: 1px solid currentColor;
+  border-radius: var(--radius-full);
+}
+
+.achievements-card__rarity[data-rarity='common'] {
+  color: var(--color-text-muted);
+}
+
+.achievements-card__rarity[data-rarity='rare'] {
+  color: var(--color-info);
+}
+
+.achievements-card__rarity[data-rarity='epic'] {
+  color: var(--color-accent);
+}
+
+.achievements-card__rarity[data-rarity='legendary'] {
+  color: var(--color-warning);
+}
+
+/* Loading skeleton (audit §7 LB3: status is announced). */
+.achievements-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.achievements-skeleton__row {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr));
+}
+
+.achievements-skeleton__block {
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  animation: achievements-pulse 1.6s ease-in-out infinite;
+}
+
+.achievements-skeleton__block--summary {
+  height: 6rem;
+}
+
+.achievements-skeleton__block--filters {
+  height: 2.75rem;
+}
+
+.achievements-skeleton__block--card {
+  height: 12rem;
+}
+
+@keyframes achievements-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .achievements-skeleton__block {
+    animation: none; /* audit §9 XC1 */
+  }
+}
+
+/* Empty/error notices (audit §8 ES1). */
+.achievements-notice {
+  padding: var(--space-5);
+  text-align: center;
+  background: var(--color-surface-raised);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.achievements-notice p {
+  margin: 0 0 var(--space-3);
+}
+
+.achievements-notice__retry {
+  padding: var(--space-2) var(--space-5);
+  color: var(--color-accent-contrast);
+  background: var(--color-accent);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* Visually hidden, still announced to assistive tech. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
