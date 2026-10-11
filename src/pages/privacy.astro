@@ -1,0 +1,324 @@
+---
+// FRT-30: Privacy Policy route on the shared foundations (BaseLayout supplies the
+// document shell, skip link, nav, and the footer link that points here). The page is
+// static prose; no island, no client script. Content follows the legal-tos-privacy
+// skill audit: public game data, optional account features, and technical data.
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Privacy Policy"
+  description="How SPT Leaderboard collects, uses, shares, and keeps data: public game statistics from the mod, optional account features, cookies, retention, and your choices."
+>
+  <h1>Privacy Policy</h1>
+  <p><strong>Last updated: October 11, 2026</strong></p>
+  <p>
+    This page explains what data the SPT Leaderboard website and service handle, why we handle
+    it, and what choices you have. Read it together with our Terms of Service.
+  </p>
+
+  <h2>Who we are</h2>
+  <p>
+    SPT Leaderboard is run by the SPT Leaderboard team. We run this website, the leaderboard
+    service behind it, and the SPT Leaderboard mod that sends game statistics to that service.
+    This policy covers all three.
+  </p>
+
+  <h2>What data we handle</h2>
+  <p>We handle four kinds of data:</p>
+  <ul>
+    <li>public game statistics that the mod sends to us</li>
+    <li>account details that you choose to add when you log in</li>
+    <li>technical data that the site needs to work and to stay secure</li>
+    <li>a few display choices that stay in your browser</li>
+  </ul>
+  <table class="privacy-table">
+    <thead>
+      <tr>
+        <th scope="col">Data</th>
+        <th scope="col">Examples</th>
+        <th scope="col">Where it comes from</th>
+        <th scope="col">Who can see it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Public game statistics</th>
+        <td>Rank, score, level, K/D, raids, kills, survival rate, play time, achievements, trader and hideout progress</td>
+        <td>The SPT Leaderboard mod, during game sessions</td>
+        <td>Everyone, on the leaderboard and your profile</td>
+      </tr>
+      <tr>
+        <th scope="row">Equipment and weapon data</th>
+        <td>Gear, weapon attachments, Stattrack weapon statistics</td>
+        <td>The SPT Leaderboard mod</td>
+        <td>Everyone, on your profile and in Weapon Meta</td>
+      </tr>
+      <tr>
+        <th scope="row">Online status</th>
+        <td>Whether you are online, your in-stash or in-raid state, the map and side during a raid, the in-raid game time</td>
+        <td>Heartbeats from the mod, while you play</td>
+        <td>Everyone, as an online marker</td>
+      </tr>
+      <tr>
+        <th scope="row">Profile details you add</th>
+        <td>Profile picture, About Me text, Discord name, profile style choices</td>
+        <td>You, through your profile settings</td>
+        <td>Everyone who views your profile</td>
+      </tr>
+      <tr>
+        <th scope="row">Comments, replies, and likes</th>
+        <td>The comments you write on a profile, your replies, your likes, and the time you posted</td>
+        <td>You</td>
+        <td>Everyone who views the profile where you posted</td>
+      </tr>
+      <tr>
+        <th scope="row">Friends</th>
+        <td>Friend requests you send or receive, and friend status between two accounts</td>
+        <td>You</td>
+        <td>You, and the other account in the friend relation</td>
+      </tr>
+      <tr>
+        <th scope="row">Login session</th>
+        <td>A session cookie, your login state, your username, your avatar, your unread notification count</td>
+        <td>The login service, when you log in</td>
+        <td>You, in your own browser</td>
+      </tr>
+      <tr>
+        <th scope="row">Technical data</th>
+        <td>IP address, browser type, the pages and requests your browser makes</td>
+        <td>Your browser, our servers, and our hosting provider</td>
+        <td>Our team and the providers that run the service</td>
+      </tr>
+      <tr>
+        <th scope="row">Display choices</th>
+        <td>Sort order of the leaderboard, whether auto-update is on</td>
+        <td>Your browser</td>
+        <td>Only your browser; we do not receive it</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>What is public by design</h2>
+  <p>
+    A leaderboard only works when its results are public. So most game data that the mod sends
+    is public. Anyone who visits the site can see:
+  </p>
+  <ul>
+    <li>your player name and team tag</li>
+    <li>your rank, score, level, K/D, raids, kills, survival rate, and play time</li>
+    <li>your achievements, trader progress, and other profile progress</li>
+    <li>your equipment and weapon statistics</li>
+    <li>your profile picture, and any About Me text or Discord name that you set</li>
+    <li>the comments and likes on your profile</li>
+    <li>whether you are online, and what you are doing in a raid, while you play with the mod</li>
+  </ul>
+  <p>
+    The mod sends more game data to our servers than the site shows today. Some of that data is
+    not shown on the site.
+  </p>
+
+  <h2>What only logged-in users can do</h2>
+  <p>
+    Some features need you to log in. You need to be logged in to write comments, reply, like,
+    add friends, see your friend requests and friend status, change your profile details, and
+    see your unread notification count. Logging in uses the account login service. This website
+    does not store your password.
+  </p>
+
+  <h2>Cookies and local storage</h2>
+  <p>We use as few cookies as we can.</p>
+  <ul>
+    <li>
+      <strong>Login session cookie.</strong> The login service sets this cookie when you log in.
+      It tells our servers that your browser is logged in. It is needed for the login features.
+      Log out to end your session in this browser.
+    </li>
+    <li>
+      <strong>Local storage.</strong> The site saves two display choices in your browser: your
+      leaderboard sort order and whether auto-update is on. This data stays on your device. We do
+      not send it to our servers.
+    </li>
+    <li>
+      <strong>No tracking.</strong> This site does not use analytics tools, advertising cookies,
+      or third-party trackers.
+    </li>
+  </ul>
+
+  <h2>How we use your data and why</h2>
+  <p>
+    We use each kind of data for a specific purpose. Under the GDPR, we name a legal basis for each
+    purpose. These are our bases:
+  </p>
+  <ul>
+    <li>
+      <strong>Public game statistics and the leaderboard:</strong> our legitimate interest in
+      running a public ranking of game results. You control this by deciding whether to run the mod.
+    </li>
+    <li>
+      <strong>Profile details, comments, and friends:</strong> the contract to provide the features
+      that you choose to use. You control this by choosing whether to use them.
+    </li>
+    <li>
+      <strong>Login session:</strong> the contract to provide login, and our legitimate interest in
+      keeping accounts secure.
+    </li>
+    <li>
+      <strong>Online status:</strong> our legitimate interest in showing who is playing live. You
+      control this by deciding whether to run the mod.
+    </li>
+    <li>
+      <strong>Security and reliability:</strong> our legitimate interest in keeping the service up
+      and protected from abuse.
+    </li>
+    <li>
+      <strong>Display choices:</strong> we do not process these. They stay in your browser.
+    </li>
+  </ul>
+  <p>
+    We do not sell your personal data. We do not use your data for advertising.
+  </p>
+
+  <h2>Who we share data with</h2>
+  <p>
+    We share data only with the service providers that run the site, and when the law requires it.
+    Public data is visible to everyone, as described above.
+  </p>
+  <ul>
+    <li>
+      <strong>Hosting:</strong> our hosting provider receives the web requests your browser makes,
+      including your IP address, so that it can deliver the site.
+    </li>
+    <li>
+      <strong>Item image CDN:</strong> weapon and item icons load from the tarkov.dev image server
+      (assets.tarkov.dev). Your browser asks that server for each icon, so the server receives your
+      IP address and the item it is asked for. We do not control how that service handles data.
+    </li>
+    <li>
+      <strong>Discord and GitHub:</strong> the footer and this page link to them. Nothing is sent to
+      them when this page loads. If you follow a link, that service's own privacy terms apply.
+    </li>
+  </ul>
+
+  <h2>How long we keep data</h2>
+  <p>
+    The operators of the leaderboard decide how long each kind of data is kept. Ask the moderators
+    for the current rule if you need it.
+  </p>
+  <ul>
+    <li>
+      <strong>Season results:</strong> each season is kept as a record. Past seasons stay visible in
+      places such as Global Insights and the past season winners.
+    </li>
+    <li>
+      <strong>Profile details, comments, and friend data:</strong> kept while your account is active.
+      After that, the operators decide.
+    </li>
+    <li>
+      <strong>Login session:</strong> until you log out or the session expires.
+    </li>
+    <li>
+      <strong>Online status:</strong> you count as online for 5 minutes after your last heartbeat.
+      How long heartbeat records are stored on the server is described in the backend documentation
+      (see <a href="#server-data">Server data</a>).
+    </li>
+    <li>
+      <strong>Display choices:</strong> until you clear your browser's site data.
+    </li>
+  </ul>
+
+  <h2>Security</h2>
+  <p>
+    We limit access to data to the people who need it to run the service. We take reasonable steps
+    to protect the data we hold. No online system is perfectly secure, so we cannot promise that
+    your data will never be exposed. If a breach affects your data, we will tell you as the law
+    requires.
+  </p>
+
+  <h2>Where data is processed</h2>
+  <p>
+    Our hosting providers and our backend service may run in countries other than yours. When data
+    moves to another country, this policy still applies to it. Where the law requires extra
+    safeguards for a transfer, we will put them in place.
+  </p>
+
+  <h2 id="server-data">Server data</h2>
+  <p>
+    The backend service documents how server logs, data storage, and retention work in detail.
+    A link to that documentation is pending and will be added to this page when it is published.
+  </p>
+
+  <h2>Your rights and choices</h2>
+  <p>Depending on where you live, you may have these rights over your data:</p>
+  <ul>
+    <li><strong>Access:</strong> ask for a copy of the data we hold about you.</li>
+    <li><strong>Correction:</strong> ask us to fix data that is wrong.</li>
+    <li>
+      <strong>Deletion:</strong> ask us to delete your data. Some season results may stay in the
+      leaderboard history. If we cannot remove something, we will tell you why.
+    </li>
+    <li>
+      <strong>Restriction and objection:</strong> ask us to limit how we use your data, or object to a
+      use that is based on our legitimate interests.
+    </li>
+    <li><strong>Portability:</strong> ask for your data in a common, machine-readable format.</li>
+    <li><strong>Withdrawing consent:</strong> withdraw any consent you gave, where we rely on consent.</li>
+    <li>
+      <strong>Complaint:</strong> complain to your local data protection authority.
+    </li>
+  </ul>
+  <p>
+    To use these rights, contact the moderators on Discord (see <a href="#contact">Contact</a>).
+    We may ask you to confirm who you are before we act on a request. We aim to answer within
+    30 days.
+  </p>
+  <h3>Your choices</h3>
+  <ul>
+    <li>
+      Do not use the mod if you do not want your game data to appear on the leaderboard. You can
+      uninstall the mod, or disconnect the service from the F12 BepInEx menu.
+    </li>
+    <li>Log out to end your login session in this browser.</li>
+    <li>Clear your browser's site data to remove the display choices stored there.</li>
+    <li>Contact the moderators about any of your data.</li>
+  </ul>
+
+  <h2>Children</h2>
+  <p>
+    This website and the leaderboard are not made for children under 16. We do not knowingly collect
+    data from children under 16. If you think a child has sent us data, contact the moderators on
+    Discord, and we will remove it as far as we can.
+  </p>
+
+  <h2>Changes to this policy</h2>
+  <p>
+    We may update this policy. When we do, we will change the date at the top of this page. For
+    major changes, we will post a notice on this site before the change takes effect. If you keep
+    using the service after a change, the updated policy applies to you.
+  </p>
+
+  <h2 id="contact">Contact</h2>
+  <p>
+    For questions or requests about your data, contact the moderators of the SPT Leaderboard on
+    Discord:
+    <a href="https://discord.gg/UrRkqwdgnd" target="_blank" rel="noopener noreferrer">SPT Leaderboard Discord</a>.
+  </p>
+</BaseLayout>
+
+<style>
+  /* Privacy table styles. Tokens from styles/tokens.css only. */
+  .privacy-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-block: var(--space-4);
+    font-size: var(--text-sm);
+  }
+
+  .privacy-table th,
+  .privacy-table td {
+    border: 1px solid var(--color-border);
+    padding: var(--space-2);
+    text-align: left;
+    vertical-align: top;
+  }
+</style>
