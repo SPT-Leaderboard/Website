@@ -7,9 +7,9 @@ import { SITE_URL } from '../lib/site';
 // lastmod = build date, W3C short date (YYYY-MM-DD) as the sitemap protocol requires.
 const LASTMOD: string = new Date().toISOString().slice(0, 10);
 
-// The five real page routes only. Profile modals, hash routes and anything behind
+// The real page routes only. Profile modals, hash routes and anything behind
 // auth are client-side state, not prerendered routes, so they are deliberately absent.
-const ROUTES: readonly string[] = ['/', '/global/', '/insights/', '/meta/', '/achievements/'];
+const ROUTES: readonly string[] = ['/', '/global/', '/insights/', '/meta/', '/achievements/', '/tos/', '/privacy/'];
 
 /** Escape a URL for safe embedding in an XML text node. */
 function escapeXml(value: string): string {
