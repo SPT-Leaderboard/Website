@@ -360,6 +360,154 @@
   cursor: default;
 }
 
+/* Friends (FRT-14): merged friend list + friend action button. */
+.profile-friend-actions {
+  display: grid;
+  gap: var(--space-1);
+  margin-bottom: var(--space-4);
+}
+
+.profile-friend-button {
+  justify-self: start;
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-accent-contrast);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  background: var(--color-accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.profile-friend-button:disabled {
+  color: var(--color-text-muted);
+  background: var(--color-surface-raised);
+  cursor: default;
+}
+
+.profile-friend-hint {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.profile-friend-list {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.profile-friend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+/* Heartbeat-derived presence dot; the text label next to it carries the
+   state for color-blind readers (legacy online-dot + status text). */
+.profile-online-dot {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--color-success);
+  border-radius: var(--radius-full);
+}
+
+.profile-online-dot--offline {
+  background: var(--color-text-muted);
+}
+
+.profile-online-label {
+  flex: none;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.profile-friend-name {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.profile-friend-tag {
+  margin-right: var(--space-1);
+  color: var(--color-text-muted);
+}
+
+.profile-friend-open {
+  margin-left: auto;
+  padding: var(--space-1) var(--space-2);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: var(--text-xs);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.profile-friend-open:hover {
+  border-color: var(--color-accent);
+}
+
+/* Comment actions (FRT-14): like/reply/delete row + inline reply form. */
+.profile-comment-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.profile-comment-action {
+  padding: var(--space-1) var(--space-2);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: var(--text-xs);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.profile-comment-action[aria-pressed='true'] {
+  color: var(--color-accent-contrast);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.profile-comment-action--danger {
+  color: var(--color-error);
+}
+
+.profile-comment-action:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.profile-reply-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.profile-reply-form input {
+  flex: 1 1 12rem;
+  padding: var(--space-1) var(--space-2);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: var(--text-sm);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
 @media (max-width: 40rem) {
   .profile-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -367,5 +515,9 @@
 
   .profile-slots {
     grid-template-columns: 1fr;
+  }
+
+  .profile-friend-open {
+    margin-left: 0;
   }
 }

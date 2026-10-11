@@ -1,9 +1,11 @@
 /**
- * FRT-13 player profile modal island — rebuild of the legacy
+ * Player profile modal island — rebuild of the legacy
  * `js/user-profiles.js` modal + `js/user-share.js` deep links
- * (docs/port/feature-inventory.md), scoped to the FRT-13 tab set:
- * Summary / Raids / Equipment / Comments. The body-hit SVG visualization
- * is out of scope (FRT-13 contract).
+ * (docs/port/feature-inventory.md), scoped to the tab set:
+ * Summary / Raids / Equipment / Comments / Friends. The body-hit SVG
+ * visualization is out of scope (FRT-13 contract); the Friends tab and the
+ * comment like/reply/delete actions are the FRT-14 addition, wired to
+ * src/api/community.ts in mock mode.
  *
  * Route-driven state (ux-audit §4): `#id=<permaLink>` opens the modal,
  * Back closes it and Forward reopens (the opener pushes the hash —
@@ -16,7 +18,22 @@
 import { For, Show, createResource, createSignal, onCleanup, onMount } from "solid-js";
 import { Modal } from "../Modal";
 import { showToast } from "../Toast";
-import { playerKills } from "../../api/leaderboard";
+import { deriveOnlineStatus, playerKills } from "../../api/leaderboard";
+import { getHeartbeats } from "../../api/client";
+import {
+  FRIEND_BUTTON_VIEWS,
+  canDeleteComment,
+  commentLikeCount,
+  deleteComment,
+  friendButtonState,
+  getFriendStatus,
+  getFriends,
+  likeComment,
+  replyComment,
+  sendFriendRequest,
+  type FriendRow,
+} from "../../api/community";
+import { getSession } from "../../api/auth";
 import {
   getComments,
   getCustomization,
@@ -48,14 +65,16 @@ const moneyFormat = new Intl.NumberFormat("en-US", {
 });
 const dateFormat = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
 
-/** Profile tabs in display order (legacy Summary/Records split into four steps). */
-const TAB_IDS = ["summary", "raids", "equipment", "comments"] as const;
+/** Profile tabs in display order (legacy Summary/Records split into four steps;
+    FRT-14 adds the community Friends tab as the fifth). */
+const TAB_IDS = ["summary", "raids", "equipment", "comments", "friends"] as const;
 type ProfileTab = (typeof TAB_IDS)[number];
 const TAB_LABELS: Record<ProfileTab, string> = {
   summary: "Summary",
   raids: "Raids",
   equipment: "Equipment",
   comments: "Comments",
+  friends: "Friends",
 };
 
 /**
@@ -307,7 +326,17 @@ function ProfileTabs(props: { player: PlayerEntry; data: ProfileData }) {
         class="profile-panel"
         hidden={activeTab() !== "comments"}
       >
-        <CommentsTab comments={props.data.comments} />
+        <CommentsTab comments={props.data.comments} permaLink={props.player.permaLink} />
+      </div>
+
+      <div
+        role="tabpanel"
+        id="profile-panel-friends"
+        aria-labelledby="profile-tab-friends"
+        class="profile-panel"
+        hidden={activeTab() !== "friends"}
+      >
+        <FriendsTab player={props.player} />
       </div>
     </div>
   );
@@ -420,10 +449,154 @@ function EquipmentTab(props: { equipment: Equipment }) {
   );
 }
 
-function CommentsTab(props: { comments: PlayerComment[] }) {
+/** Friends tab (FRT-14): the merged friend list with heartbeat-derived online
+    dots, plus the friend action button driven by getFriendStatus. Mock mode:
+    removal shows a toast only (legacy removeFriend was a client-side stub,
+    js/user-community.js), and the request button calls sendFriendRequest. */
+function FriendsTab(props: { player: PlayerEntry }) {
+  const [friends] = createResource(getFriends);
+  const [status] = createResource(() => getFriendStatus(props.player.permaLink));
+  const [heartbeats] = createResource(getHeartbeats);
+  const [sending, setSending] = createSignal(false);
+
+  /** Online = a heartbeat fresher than 300 s (legacy system-heartbeat.js),
+      same helper as the leaderboard status column. */
+  const onlineStatus = (friend: FriendRow) =>
+    deriveOnlineStatus(friend.id, heartbeats() ?? {}, Math.floor(Date.now() / 1000));
+
+  const request = async () => {
+    setSending(true);
+    try {
+      const result = await sendFriendRequest(props.player.permaLink);
+      showToast(result.message, "success");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  /** Legacy removeFriend(): a 1 s client-side stub with no API call. */
+  const removeFriend = () => {
+    showToast("Mock mode — friends are not removed yet.", "info");
+  };
+
+  return (
+    <div>
+      <Show
+        when={status()}
+        keyed
+        fallback={
+          <Show
+            when={!status.error}
+            fallback={
+              <p class="profile-state" role="alert">
+                Could not load the friend status for this player.
+              </p>
+            }
+          >
+            <p class="profile-state" role="status">
+              Checking friend status…
+            </p>
+          </Show>
+        }
+      >
+        {(current) => {
+          const view = FRIEND_BUTTON_VIEWS[friendButtonState(current)];
+          return (
+            <div class="profile-friend-actions">
+              <button
+                type="button"
+                class="profile-friend-button"
+                disabled={view.disabled || (friendButtonState(current) === "send" && sending())}
+                onClick={() => (friendButtonState(current) === "remove" ? removeFriend() : void request())}
+              >
+                {view.label}
+              </button>
+              <Show when={view.hint !== ""}>
+                <p class="profile-friend-hint">{view.hint}</p>
+              </Show>
+            </div>
+          );
+        }}
+      </Show>
+      <Show
+        when={friends()}
+        keyed
+        fallback={
+          <Show
+            when={!friends.error}
+            fallback={
+              <p class="profile-state" role="alert">
+                Could not load the friend list.
+              </p>
+            }
+          >
+            <p class="profile-state" role="status">
+              Loading friends…
+            </p>
+          </Show>
+        }
+      >
+        {(rows) => (
+          <Show
+            when={rows.length > 0}
+            fallback={<p class="profile-state">This player has no friends on the list yet.</p>}
+          >
+            <ul class="profile-friend-list">
+              <For each={rows}>
+                {(friend) => (
+                  <li class="profile-friend">
+                    <span
+                      class={`profile-online-dot${onlineStatus(friend) === "online" ? "" : " profile-online-dot--offline"}`}
+                      aria-hidden="true"
+                    />
+                    <span class="profile-online-label">{onlineStatus(friend) === "online" ? "Online" : "Offline"}</span>
+                    <div>
+                      <p class="profile-friend-name">
+                        <Show when={friend.teamTag !== ""}>
+                          <span class="profile-friend-tag">[{friend.teamTag}]</span>
+                        </Show>
+                        {friend.name}
+                      </p>
+                    </div>
+                    {/* Same opener as the leaderboard row (FRT-13): assigning
+                        location.hash pushes a history entry, so Back returns to
+                        the previously open profile (ux-audit §4). */}
+                    <button
+                      type="button"
+                      class="profile-friend-open"
+                      aria-label={`Open ${friend.name}'s profile`}
+                      onClick={() => {
+                        window.location.hash = `id=${friend.permaLink}`;
+                      }}
+                    >
+                      Open profile
+                    </button>
+                  </li>
+                )}
+              </For>
+            </ul>
+          </Show>
+        )}
+      </Show>
+    </div>
+  );
+}
+
+function CommentsTab(props: { comments: PlayerComment[]; permaLink: string }) {
   const [page, setPage] = createSignal(1);
   const [draft, setDraft] = createSignal("");
+  // Mock-mode action state: likes/deletes live only in these signals, so the
+  // fixture file is never written (FRT-14: no persistence).
+  const [likedIds, setLikedIds] = createSignal(new Set<string>());
+  const [deletedIds, setDeletedIds] = createSignal(new Set<string>());
+  const [replyToId, setReplyToId] = createSignal<string | null>(null);
+  const [replyDraft, setReplyDraft] = createSignal("");
+  // Delete visibility follows the mock session (legacy: author or role > 5;
+  // mock simplification: author-name match, see canDeleteComment).
+  const [session] = createResource(getSession);
   const current = () => paginateComments(props.comments, page());
+  const visible = () => current().items.filter((comment) => !deletedIds().has(comment.id));
+  const isLiked = (comment: PlayerComment) => likedIds().has(comment.id);
 
   // Mock mode: the legacy send_comment.php endpoint has no new-API
   // counterpart yet, so the form deliberately calls nothing (FRT-13 contract).
@@ -434,6 +607,50 @@ function CommentsTab(props: { comments: PlayerComment[] }) {
     setDraft("");
   };
 
+  const toggleLike = async (comment: PlayerComment) => {
+    const liked = !isLiked(comment);
+    setLikedIds((previous) => {
+      const next = new Set(previous);
+      if (liked) next.add(comment.id);
+      else next.delete(comment.id);
+      return next;
+    });
+    await likeComment(comment.id, props.permaLink);
+    showToast(
+      liked
+        ? "Mock mode — comment likes are not stored."
+        : "Mock mode — likes are not removed from the fixture.",
+      "info",
+    );
+  };
+
+  const openReply = (comment: PlayerComment) => {
+    setReplyDraft("");
+    setReplyToId(comment.id);
+  };
+
+  const closeReply = () => {
+    setReplyToId(null);
+    setReplyDraft("");
+  };
+
+  const submitReply = (event: SubmitEvent) => {
+    event.preventDefault();
+    const text = replyDraft().trim();
+    const parent = replyToId();
+    if (text === "" || parent === null) return;
+    closeReply();
+    void replyComment(parent, props.permaLink, text).then(() =>
+      showToast("Mock mode — replies are not stored.", "info"),
+    );
+  };
+
+  const removeComment = async (comment: PlayerComment) => {
+    await deleteComment(comment.id, props.permaLink);
+    setDeletedIds((previous) => new Set(previous).add(comment.id));
+    showToast("Mock mode — comment deletion is not stored.", "info");
+  };
+
   return (
     <div class="profile-comments">
       <Show
@@ -441,7 +658,7 @@ function CommentsTab(props: { comments: PlayerComment[] }) {
         fallback={<p class="profile-state">No comments on this profile yet.</p>}
       >
         <ul class="profile-comment-list">
-          <For each={current().items}>
+          <For each={visible()}>
             {(comment) => (
               <li class="profile-comment">
                 <span class="profile-comment-avatar" aria-hidden="true">
@@ -455,6 +672,59 @@ function CommentsTab(props: { comments: PlayerComment[] }) {
                     </time>
                   </p>
                   <p class="profile-comment-text">{comment.text}</p>
+                  <div class="profile-comment-actions">
+                    <button
+                      type="button"
+                      class="profile-comment-action"
+                      aria-pressed={isLiked(comment)}
+                      aria-label={`Like this comment (currently ${commentLikeCount(comment, likedIds())} likes)`}
+                      onClick={() => void toggleLike(comment)}
+                    >
+                      Like · {commentLikeCount(comment, likedIds())}
+                    </button>
+                    <Show when={replyToId() !== comment.id}>
+                      <button
+                        type="button"
+                        class="profile-comment-action"
+                        onClick={() => openReply(comment)}
+                      >
+                        Reply
+                      </button>
+                    </Show>
+                    <Show when={canDeleteComment(comment, session()?.username ?? null)}>
+                      <button
+                        type="button"
+                        class="profile-comment-action profile-comment-action--danger"
+                        onClick={() => void removeComment(comment)}
+                      >
+                        Delete
+                      </button>
+                    </Show>
+                  </div>
+                  <Show when={replyToId() === comment.id}>
+                    <form class="profile-reply-form" onSubmit={submitReply}>
+                      <input
+                        type="text"
+                        aria-label={`Reply to ${comment.author}`}
+                        value={replyDraft()}
+                        onInput={(event) => setReplyDraft(event.currentTarget.value)}
+                      />
+                      <button
+                        type="submit"
+                        class="profile-comment-action"
+                        disabled={replyDraft().trim() === ""}
+                      >
+                        Send
+                      </button>
+                      <button
+                        type="button"
+                        class="profile-comment-action"
+                        onClick={closeReply}
+                      >
+                        Cancel
+                      </button>
+                    </form>
+                  </Show>
                 </div>
               </li>
             )}
