@@ -1,0 +1,191 @@
+/* FRT-16 insights styles (companion to InsightsCharts.tsx). Tokens from styles/tokens.css;
+   the chart palette below adds the only page-specific color tokens, with WCAG-checked
+   values per theme (web-standards-audit §5 CC3: fixed palette, no random colors). */
+
+:root {
+  --chart-1: #0f766e;
+  --chart-2: #b45309;
+  --chart-3: #6d28d9;
+  --chart-4: #b91c1c;
+  --chart-5: #0369a1;
+  --chart-6: #15803d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark values reuse the audited passing accents (tokens.css + audit §5). */
+    --chart-1: #64ffda;
+    --chart-2: #f6d25d;
+    --chart-3: #a78bfa;
+    --chart-4: #de7c8d;
+    --chart-5: #3da3cc;
+    --chart-6: #6fdf60;
+  }
+}
+
+.insights {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.insights-heading {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-lg);
+  line-height: var(--leading-tight);
+}
+
+/* Summary card */
+.insights-summary {
+  padding: var(--space-4);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.insights-summary__grid {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr));
+}
+
+.insights-summary__item dt {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.insights-summary__item dd {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  overflow-wrap: anywhere;
+}
+
+/* Real tabs (DS7). Selected state keys off aria-selected, not a class. */
+.insights-tablist {
+  display: flex;
+  gap: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.insights-tab {
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--text-base);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  touch-action: manipulation; /* web-standards-audit §9 XC9 */
+}
+
+.insights-tab:hover {
+  color: var(--color-text-primary);
+}
+
+.insights-tab[aria-selected='true'] {
+  color: var(--color-text-primary);
+  border-bottom-color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* Chart grid */
+.insights-charts {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(22rem, 100%), 1fr));
+}
+
+.chart-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-4);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.chart-card__plot {
+  position: relative;
+  height: 18rem;
+}
+
+.chart-card__summary {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+/* Loading skeleton (audit §7 LB3: status is announced). */
+.insights-skeleton__row {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(22rem, 100%), 1fr));
+}
+
+.insights-skeleton__block {
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  animation: insights-pulse 1.6s ease-in-out infinite;
+}
+
+.insights-skeleton__block--summary {
+  height: 8rem;
+}
+
+.insights-skeleton__block--chart {
+  height: 18rem;
+}
+
+@keyframes insights-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .insights-skeleton__block {
+    animation: none;
+  }
+}
+
+/* Empty/error notices. */
+.insights-notice {
+  padding: var(--space-5);
+  text-align: center;
+  background: var(--color-surface-raised);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.insights-notice p {
+  margin: 0 0 var(--space-3);
+}
+
+.insights-notice__retry {
+  padding: var(--space-2) var(--space-5);
+  color: var(--color-accent-contrast);
+  background: var(--color-accent);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* Visually hidden, still announced to assistive tech. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

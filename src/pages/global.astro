@@ -1,0 +1,16 @@
+---
+// FRT-15: Global Leaderboard (all-time) route on the shared foundations.
+// BaseLayout supplies the document shell, skip link, nav, and footer;
+// DS6 requires a unique, descriptive title per page.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GlobalTable from '../components/global/GlobalTable';
+---
+
+<BaseLayout
+  title="Global Leaderboard - All Time"
+  description="All-time SPT Leaderboard rankings: kills, raids, survival, play time, and profit across every season, with sortable columns, search, and page-size controls."
+>
+  <h1>Global Leaderboard</h1>
+  <p>All-time player rankings across every season.</p>
+  <GlobalTable client:load />
+</BaseLayout>

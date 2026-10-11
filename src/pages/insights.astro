@@ -1,0 +1,16 @@
+---
+// FRT-16: Global Insights route on the shared foundations (BaseLayout supplies document
+// shell, skip link, nav, footer). The island owns loading/empty/error states, the summary
+// card, the real General/Maps tabs, and the Chart.js charts (see InsightsCharts.tsx).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import InsightsCharts from '../components/insights/InsightsCharts';
+---
+
+<BaseLayout
+  title="Global Insights"
+  description="All-time SPT Leaderboard statistics across archived seasons: PMC and SCAV raids, survival rates, K/D, PMC levels, prestige, and map popularity."
+>
+  <h1>Global Insights</h1>
+  <p>Aggregated statistics across every archived season of the leaderboard.</p>
+  <InsightsCharts client:load />
+</BaseLayout>

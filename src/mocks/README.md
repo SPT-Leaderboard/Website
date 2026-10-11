@@ -3,8 +3,11 @@
 Trimmed snapshots of real production data captured 2026-10-09 (snapshot
 root: the `backup/api` data volume). Every fixture keeps the exact
 original shape — rows or keys were dropped, fields never were. These
-files are imported only by `src/api/client.ts` and `tests/api.test.ts`;
-page code never reads them directly.
+files are imported only by `src/api/client.ts`, `src/api/global.ts`, and
+`tests/`; page code never reads them directly.
+
+The one exception is `global-players.json`, which is not a snapshot but a
+derivative fixture (details in the table below).
 
 | Fixture | Source (snapshot) | Trim |
 |---|---|---|
@@ -18,3 +21,5 @@ page code never reads them directly.
 | `weapon-counters.json` | `data/shared/weapon_counters.json` | `weapons` map kept for the first 20 keys in file order (source had 266); shape `{"weapons": {…}}` unchanged. |
 | `online.json` | `main/online.json` | None (byte copy). |
 | `heartbeats.json` | `main/heartbeat/heartbeats.json` | None (byte copy). |
+| `global-players.json` | derived — `data/seasons/season12.json` (FRT-15) | Not a snapshot: 25 rows synthesized from the `season12.json` entries, one row per entry in file order. Per row: `id`, `name`, `permaLink` copied; `teamTag` copied (empty string where the season entry has none — 13 of 25 have a tag); `avatar` = `profilePicture`; `lastSeen` = `absoluteLastTime`; stats copied unchanged: `pmcKills`, `scavKills`, `bossesKilled`, `totalRaids`, `survived`, `totalPlayTime` (seconds), `totalProfit`. Consumed by `src/api/global.ts` (stand-in for the not-yet-existing global-lb API). |
+| `insights/archives.json` | `data/seasons/season12.json` | Array of season archives served by `getSeasonArchives()` (`src/api/insights.ts`); currently one entry — the season12 fixture (25 highest-`totalScore` entries) re-used under the label "Season 12". The loader accepts any number of entries: earlier seasons (the legacy insights page read seasons 2–10) are appended here as their snapshots arrive, without page changes. |
