@@ -1,0 +1,208 @@
+{
+    "FirstPrimaryWeapon": [
+        {
+            "id": "6ab14d9de4521874e8c7f078",
+            "template_id": "5c488a752e221602b412af63",
+            "amount": 1,
+            "shortName": "MDR",
+            "name": "Desert Tech MDR 5.56x45 assault rifle"
+        },
+        {
+            "id": "6ab14d9de4521874e8c7f079",
+            "template_id": "5c48a2c22e221602b313fb6c",
+            "amount": 1,
+            "shortName": "MDR",
+            "name": "MDR pistol grip (FDE)"
+        },
+        {
+            "id": "6ab14d9de4521874e8c7ef6c",
+            "template_id": "55d4887d4bdc2d962f8b4570",
+            "amount": 1,
+            "shortName": "STANAG",
+            "name": "AR-15 5.56x45 Colt STANAG 30-round magazine"
+        },
+        {
+            "id": "6ab14d9de4521874e8c7ef6d",
+            "template_id": "54527a984bdc2d4e668b4567",
+            "amount": 30,
+            "shortName": "M855",
+            "name": "(31\/54) 5.56x45mm M855"
+        },
+        {
+            "id": "6ab14d9de4521874e8c7f07c",
+            "template_id": "5c48a14f2e2216152006edd7",
+            "amount": 1,
+            "shortName": "MDR",
+            "name": "MDR handguard (FDE)"
+        },
+        {
+            "id": "6ab265c5de8d2a27b456633e",
+            "template_id": "5c06595c0db834001a66af6c",
+            "amount": 1,
+            "shortName": "LA-5B\/PEQ",
+            "name": "L3Harris LA-5B\/PEQ tactical device"
+        },
+        {
+            "id": "6ab14d9de4521874e8c7f07d",
+            "template_id": "5c18b90d2e2216152142466b",
+            "amount": 1,
+            "shortName": "MBUS FS",
+            "name": "Magpul MBUS Gen2 flip-up front sight (FDE)"
+        },
+        {
+            "id": "6ab14d9de4521874e8c7f07e",
+            "template_id": "5c48a2852e221602b21d5923",
+            "amount": 1,
+            "shortName": "MDR 556 16\"",
+            "name": "MDR 5.56x45 16 inch barrel"
+        },
+        {
+            "id": "6ab14d9de4521874e8c7f07f",
+            "template_id": "5c48a2a42e221602b66d1e07",
+            "amount": 1,
+            "shortName": "MDR 556",
+            "name": "AR-15 Desert Tech 5.56x45 flash hider"
+        },
+        {
+            "id": "6ab14d9de4521874e8c7f0ed",
+            "template_id": "618b9643526131765025ab35",
+            "amount": 1,
+            "shortName": "Geis 30mm",
+            "name": "Geissele Super Precision 30mm ring scope mount"
+        },
+        {
+            "id": "6ab14d9de4521874e8c7f0ee",
+            "template_id": "6567e7681265c8a131069b0f",
+            "amount": 1,
+            "shortName": "TANGO6T",
+            "name": "SIG Sauer TANGO6T 1-6x24 30mm riflescope"
+        },
+        {
+            "id": "6ab14d9de4521874e8c7f0ef",
+            "template_id": "618b9682a3884f56c957ca78",
+            "amount": 1,
+            "shortName": "ROF-90 RMR",
+            "name": "Reptilia ROF-90 RMR mount for Geissele scope mounts"
+        },
+        {
+            "id": "6ab14d9de4521874e8c7f0f0",
+            "template_id": "5a32aa8bc4a2826c6e06d737",
+            "amount": 1,
+            "shortName": "RMR",
+            "name": "Trijicon RMR reflex sight"
+        },
+        {
+            "id": "6ab14d9de4521874e8c7f080",
+            "template_id": "5c18b9192e2216398b5a8104",
+            "amount": 1,
+            "shortName": "MBUS RS",
+            "name": "Magpul MBUS Gen2 flip-up rear sight (FDE)"
+        }
+    ],
+    "SecondPrimaryWeapon": [],
+    "Holster": [],
+    "Backpack": [
+        {
+            "id": "6ab14d9de4521874e8c7ef73",
+            "template_id": "5e9dcf5986f7746c417435b3",
+            "amount": 1,
+            "shortName": "Day Pack",
+            "name": "LBT-8005A Day Pack backpack (MultiCam Black)"
+        }
+    ],
+    "TacticalVest": [
+        {
+            "id": "6ab14d9de4521874e8c7ef6b",
+            "template_id": "5c0e9f2c86f77432297fe0a3",
+            "amount": 1,
+            "shortName": "Commando",
+            "name": "BlackHawk! Commando chest harness (Black)"
+        },
+        {
+            "id": "6ab14d9de4521874e8c7ef6e",
+            "template_id": "55d4887d4bdc2d962f8b4570",
+            "amount": 1,
+            "shortName": "STANAG",
+            "name": "AR-15 5.56x45 Colt STANAG 30-round magazine"
+        },
+        {
+            "id": "6ab14d9de4521874e8c7ef6f",
+            "template_id": "54527a984bdc2d4e668b4567",
+            "amount": 30,
+            "shortName": "M855",
+            "name": "(31\/54) 5.56x45mm M855"
+        }
+    ],
+    "ArmorVest": [
+        {
+            "id": "6ab265c5de8d2a27b4566cb3",
+            "template_id": "5c0e655586f774045612eeb2",
+            "amount": 1,
+            "shortName": "Trooper",
+            "name": "HighCom Trooper TFO body armor (MultiCam)"
+        },
+        {
+            "id": "6ab265c5de8d2a27b4566cb1",
+            "template_id": "656fad8c498d1b7e3e071da0",
+            "amount": 1,
+            "shortName": "Monoclete PE",
+            "name": "Monoclete level III PE ballistic plate"
+        },
+        {
+            "id": "6ab265c5de8d2a27b4566caf",
+            "template_id": "6570e025615f54368b04fcb0",
+            "amount": 1,
+            "shortName": "",
+            "name": "Aramid insert"
+        },
+        {
+            "id": "6ab265c5de8d2a27b4566cb0",
+            "template_id": "6570e0610b57c03ec90b96ef",
+            "amount": 1,
+            "shortName": "",
+            "name": "Aramid insert"
+        }
+    ],
+    "Eyewear": [
+        {
+            "id": "6ab14fffe4521874e8cc7b4d",
+            "template_id": "5b432be65acfc433000ed01f",
+            "amount": 1,
+            "shortName": "6B34",
+            "name": "6B34 anti-fragmentation glasses"
+        }
+    ],
+    "FaceCover": [],
+    "Headwear": [
+        {
+            "id": "6ab14fffe4521874e8cc7b72",
+            "template_id": "5b432d215acfc4771e1c6624",
+            "amount": 1,
+            "shortName": "LShZ",
+            "name": "LShZ lightweight helmet (Olive Drab)"
+        },
+        {
+            "id": "6ab14fffe4521874e8cc7b70",
+            "template_id": "657bb92fa1c61ee0c303631f",
+            "amount": 1,
+            "shortName": "",
+            "name": "Layers of aramid fiber"
+        },
+        {
+            "id": "6ab14fffe4521874e8cc7b71",
+            "template_id": "657bb99db30eca976305117f",
+            "amount": 1,
+            "shortName": "",
+            "name": "Layers of aramid fiber"
+        }
+    ],
+    "Earpiece": [
+        {
+            "id": "6ab14d9de4521874e8c7ef80",
+            "template_id": "5645bcc04bdc2d363b8b4572",
+            "amount": 1,
+            "shortName": "ComTac II",
+            "name": "Peltor ComTac II headset (OD Green)"
+        }
+    ]
+}

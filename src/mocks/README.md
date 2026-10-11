@@ -1,0 +1,20 @@
+# Mock data fixtures
+
+Trimmed snapshots of real production data captured 2026-10-09 (snapshot
+root: the `backup/api` data volume). Every fixture keeps the exact
+original shape — rows or keys were dropped, fields never were. These
+files are imported only by `src/api/client.ts` and `tests/api.test.ts`;
+page code never reads them directly.
+
+| Fixture | Source (snapshot) | Trim |
+|---|---|---|
+| `season12.json` | `data/seasons/season12.json` | Kept the 25 highest-`totalScore` entries in original file order (source had 100, unsorted by score). No fields dropped; entry[0] keeps all 96 of its fields. |
+| `raids/04c08924…_index.json` | `data/player_raids/04c08924…_index.json` | None (byte copy). Picked permaLink `04c08924…`: the smallest `total_raids` (1) among players with at least one blob file, 15 players tied, alphabetically first kept. |
+| `raids/04c08924…_blob_0.json` | `data/player_raids/04c08924…_blob_0.json` | None (byte copy). Only one blob file exists for this player, so "first two blobs" yields one. |
+| `equipment.json` | `data/pmc_equipment/57c461aca58cace7a9359998.json` | None (byte copy; first file alphabetically of 886). |
+| `comments.json` | `data/user-comments/player_0ad44002….json` | None (byte copy). No comments file exists for the raids pick's permaLink, so the first file alphabetically was used instead. |
+| `counters.json` | `data/shared/global_counters.json` | None (byte copy). |
+| `achievement-counters.json` | `data/shared/achievement_counters.json` | None (byte copy). |
+| `weapon-counters.json` | `data/shared/weapon_counters.json` | `weapons` map kept for the first 20 keys in file order (source had 266); shape `{"weapons": {…}}` unchanged. |
+| `online.json` | `main/online.json` | None (byte copy). |
+| `heartbeats.json` | `main/heartbeat/heartbeats.json` | None (byte copy). |
