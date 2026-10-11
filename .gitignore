@@ -1,3 +1,4 @@
+# local agent workspace
 *.txt
 *.idea*
 node_modules
@@ -7,8 +8,6 @@ package.json
 api/*
 .php
 1/*
-# local agent workspace (vendored skills, 3.8MB) — kept out of the public repo
-.agents/
 
 # pi-subagents schedules/workflows (local orchestration state)
 .pi/
