@@ -3,11 +3,12 @@
 *.idea*
 node_modules
 *.mjs
-package-lock.json
-package.json
+!astro.config.mjs
 api/*
 .php
 1/*
+dist/
+.astro/
 
 # pi-subagents schedules/workflows (local orchestration state)
 .pi/

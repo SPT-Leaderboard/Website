@@ -1,0 +1,9 @@
+// Cloudflare Workers Static Assets — assets-only deploy (no worker script).
+// `wrangler deploy` serves the Astro build output from ./dist as-is.
+{
+  "name": "spt-leaderboard",
+  "compatibility_date": "2026-01-01",
+  "assets": {
+    "directory": "./dist"
+  }
+}
