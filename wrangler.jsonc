@@ -5,5 +5,11 @@
   "compatibility_date": "2026-01-01",
   "assets": {
     "directory": "./dist"
-  }
+  },
+  "routes": [
+    {
+      "pattern": "rank-dev.tushonka.net",
+      "custom_domain": true
+    }
+  ]
 }
