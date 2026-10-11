@@ -1,0 +1,82 @@
+/* FRT-10 design tokens. Plain CSS custom properties only — no framework, no Tailwind.
+   Light values live in :root; dark values override under prefers-color-scheme (ux-audit §2.5).
+   Tokens are named semantically (surface, text-primary, accent), never by hex value.
+   Pairings are WCAG-computed (see reports/frt10-foundations-report.md): every text pairing
+   ≥ 4.5:1 on both surfaces, focus/accent ≥ 3:1. Dark text tokens reuse the legacy values
+   that already pass (#c9c9c9 on #0f172a = 10.78:1; #8892b0 = 5.77:1) per web-standards-audit §5. */
+
+:root {
+  /* Color — light theme */
+  --color-surface: #ffffff;
+  --color-surface-raised: #f1f5f9;
+  --color-surface-overlay: rgb(15 23 42 / 0.55); /* modal backdrop */
+  --color-border: #cbd5e1;
+  --color-text-primary: #0f172a;
+  --color-text-muted: #475569;
+  --color-accent: #0f766e;
+  --color-accent-contrast: #ffffff;
+  --color-focus: #0f766e;
+  --color-success: #15803d;
+  --color-error: #b91c1c;
+  --color-warning: #854d0e;
+  --color-info: #0369a1;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  /* Type scale */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+
+  /* Border radii */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-full: 999px;
+
+  /* Shadow levels */
+  --shadow-1: 0 1px 2px rgb(15 23 42 / 0.08);
+  --shadow-2: 0 4px 12px rgb(15 23 42 / 0.12);
+  --shadow-3: 0 16px 40px rgb(15 23 42 / 0.2);
+
+  /* Motion durations */
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-surface: #0f172a;
+    --color-surface-raised: #1e293b;
+    --color-surface-overlay: rgb(0 0 0 / 0.6);
+    --color-border: #334155;
+    --color-text-primary: #c9c9c9;
+    --color-text-muted: #8892b0;
+    --color-accent: #64ffda;
+    --color-accent-contrast: #0f172a;
+    --color-focus: #64ffda;
+    --color-success: #6fdf60;
+    --color-error: #de7c8d;
+    --color-warning: #f6d25d;
+    --color-info: #3da3cc;
+
+    --shadow-1: 0 1px 2px rgb(0 0 0 / 0.5);
+    --shadow-2: 0 4px 12px rgb(0 0 0 / 0.55);
+    --shadow-3: 0 16px 40px rgb(0 0 0 / 0.6);
+  }
+}

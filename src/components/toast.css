@@ -1,0 +1,81 @@
+/* FRT-10 toast styles (companion to Toast.tsx). Tokens from styles/tokens.css. */
+
+.toast-host {
+  position: fixed;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: min(24rem, calc(100vw - 2 * var(--space-4)));
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--toast-accent, var(--color-info));
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+  animation: toast-slide-in var(--duration-base) ease-out;
+}
+
+.toast--success {
+  --toast-accent: var(--color-success);
+}
+
+.toast--error {
+  --toast-accent: var(--color-error);
+}
+
+.toast--warning {
+  --toast-accent: var(--color-warning);
+}
+
+.toast--info {
+  --toast-accent: var(--color-info);
+}
+
+.toast__message {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.toast__dismiss {
+  flex: none;
+  padding: 0 var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--text-base);
+  line-height: var(--leading-tight);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.toast__dismiss:hover {
+  color: var(--color-text-primary);
+}
+
+@keyframes toast-slide-in {
+  from {
+    transform: translateY(0.5rem);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* web-standards-audit §9 XC1 / ux-audit §2.5: honor prefers-reduced-motion — no slide. */
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
+}

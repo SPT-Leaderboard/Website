@@ -1,0 +1,60 @@
+/* FRT-10 modal styles (companion to Modal.tsx). Tokens from styles/tokens.css. */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: var(--color-surface-overlay);
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  width: min(36rem, 100%);
+  max-height: min(80vh, 100%);
+  overflow: auto;
+  overscroll-behavior: contain; /* web-standards-audit §9 XC9 scroll containment */
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-3);
+}
+
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal__title {
+  margin: 0;
+  font-size: var(--text-lg);
+  line-height: var(--leading-tight);
+}
+
+.modal__close {
+  flex: none;
+  padding: 0 var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--text-xl);
+  line-height: var(--leading-tight);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.modal__close:hover {
+  color: var(--color-text-primary);
+}
+
+.modal__body {
+  padding: var(--space-4);
+  font-size: var(--text-base);
+}

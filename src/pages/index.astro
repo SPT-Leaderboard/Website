@@ -1,28 +1,15 @@
 ---
-// FRT-8 proof route: Astro static page mounting one Solid island.
-// Document structure follows docs/port/web-standards-audit.md §1:
-// DS1 (main landmark + skip link), DS6 (unique title), DS8 (no dead markup), DS12 (meta description).
+// FRT-10: home route on the shared foundations (BaseLayout supplies document shell,
+// skip link, nav, footer; global.css supplies tokens + base styles).
+import BaseLayout from '../layouts/BaseLayout.astro';
 import Counter from '../components/Counter';
-import '../styles/global.css';
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="SPT Leaderboard — proof page for the Astro + SolidJS rewrite scaffold (FRT-8)."
-    />
-    <title>SPT Leaderboard</title>
-  </head>
-  <body>
-    <a class="skip-link" href="#main">Skip to main content</a>
-    <main id="main">
-      <h1>SPT Leaderboard</h1>
-      <p>Scaffold proof page: the button below is a hydrated SolidJS island.</p>
-      <Counter client:load />
-    </main>
-  </body>
-</html>
+<BaseLayout
+  title="SPT Leaderboard"
+  description="Seasonal SPT (Single Player Tarkov) player rankings, skill scores, and profiles."
+>
+  <h1>SPT Leaderboard</h1>
+  <p>Scaffold proof page: the button below is a hydrated SolidJS island.</p>
+  <Counter client:load />
+</BaseLayout>

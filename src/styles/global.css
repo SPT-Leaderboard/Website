@@ -1,43 +1,26 @@
-/* FRT-8 scaffold styles. Plain CSS only — no framework, no Tailwind.
-   Colors reuse the legacy palette tokens that pass AA (see docs/port/web-standards-audit.md §5):
-   body text #c9c9c9 on page bg #0f172a = 10.78:1. */
-
-:root {
-  color-scheme: dark;
-}
+/* FRT-10 global base styles. Plain CSS only — no framework, no Tailwind.
+   Scope is deliberately narrow (FRT-10 contract): token import, base body styles,
+   one :focus-visible ring for every interactive element, selection color. Nothing else. */
+@import './tokens.css';
 
 body {
   margin: 0;
-  background: #0f172a;
-  color: #c9c9c9;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  color-scheme: light dark; /* web-standards-audit §7 LB4: UA controls match the theme */
   font-family: system-ui, sans-serif;
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
 }
 
-main {
-  max-width: 48rem;
-  margin-inline: auto;
-  padding: 2rem 1rem;
-}
-
-/* DS1 (web-standards-audit §1): visually hidden skip link, first focusable element. */
-.skip-link {
-  position: fixed;
-  top: -100%;
-  left: 1rem;
-  z-index: 10;
-  padding: 0.5rem 1rem;
-  background: #0f172a;
-  color: #c9c9c9;
-}
-
-.skip-link:focus-visible {
-  top: 1rem;
-  outline: 2px solid #64ffda;
+/* web-standards-audit §3 FC1/FC2: one tokenized :focus-visible ring (≥3:1) applied to every
+   interactive element; outline is never removed without this replacement. */
+:where(a, button, input, select, textarea, summary, [tabindex]:not([tabindex='-1'])):focus-visible {
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 
-/* FC1 pattern: never remove outline without an equally visible replacement. */
-.counter:focus-visible {
-  outline: 2px solid #64ffda;
-  outline-offset: 2px;
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
 }

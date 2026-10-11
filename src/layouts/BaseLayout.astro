@@ -1,0 +1,347 @@
+---
+// FRT-10: the single shared layout (web-standards-audit §1 DS1/DS4/DS5/DS6/DS12).
+// Renders: html lang="en"; unique title + meta description from props; a visually hidden
+// skip link as the first focusable element; <header> with the §4 navigation; <main id="main">;
+// §5 footer legal row. Nav dropdowns are dependency-free disclosure buttons (see <script>).
+import '../styles/global.css';
+import { ToastHost } from '../components/Toast';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+
+// ux-audit §4: "Highlighted as current page when active."
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const ariaCurrent = (href: string) =>
+  (href.replace(/\/+$/, '') || '/') === currentPath ? 'page' : undefined;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <!-- DS1: visually hidden skip link, first focusable element on the page. -->
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <!-- DS5: consistent <header> landmark wrapping the nav on every page. -->
+    <header class="site-header">
+      <nav class="site-nav" aria-label="Main">
+        <!-- DS4 + ux-audit §2.2: logo is a real home link with an accurate accessible name. -->
+        <a class="site-nav__logo" href="/">SPT Leaderboard</a>
+        <ul class="site-nav__list">
+          <li>
+            <a class="site-nav__link" href="/" aria-current={ariaCurrent('/')}>Leaderboard</a>
+          </li>
+          <li>
+            <a class="site-nav__link" href="/global" aria-current={ariaCurrent('/global')}>Global</a>
+          </li>
+          <li class="site-nav__item" data-dropdown>
+            <button
+              type="button"
+              class="site-nav__link site-nav__toggle"
+              data-dropdown-toggle
+              aria-expanded="false"
+              aria-controls="nav-menu-stats">Stats</button
+            >
+            <ul class="site-nav__menu" id="nav-menu-stats" data-dropdown-menu hidden>
+              <li><a href="/meta">Weapon Meta</a></li>
+              <li><a href="/insights">Global Insights</a></li>
+              <li><a href="/achievements">Achievements</a></li>
+            </ul>
+          </li>
+          <li class="site-nav__item" data-dropdown>
+            <button
+              type="button"
+              class="site-nav__link site-nav__toggle"
+              data-dropdown-toggle
+              aria-expanded="false"
+              aria-controls="nav-menu-more">More</button
+            >
+            <ul class="site-nav__menu" id="nav-menu-more" data-dropdown-menu hidden>
+              <li><a href="/rules">Ranking Rules</a></li>
+              <li><a href="/tos">Terms of Service</a></li>
+              <li><a href="/settings">Settings</a></li>
+            </ul>
+          </li>
+        </ul>
+        <a class="site-nav__login" href="/login">Log in</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <!-- ux-audit §5: legal row present on every page. External links carry rel="noopener noreferrer" (XC6). -->
+    <footer class="site-footer">
+      <p class="site-footer__brand">© 2026 SPT Leaderboard</p>
+      <ul class="site-footer__legal">
+        <li><a href="/tos">Terms of Service</a></li>
+        <li><a href="/privacy">Privacy Policy</a></li>
+        <li><a href="/sitemap.xml">Sitemap</a></li>
+        <li>
+          <a href="https://github.com/SPT-Leaderboard/Website" target="_blank" rel="noopener noreferrer"
+            >GitHub</a
+          >
+        </li>
+        <li>
+          <a href="https://discord.gg/UrRkqwdgnd" target="_blank" rel="noopener noreferrer">Discord</a>
+        </li>
+      </ul>
+    </footer>
+
+    <ToastHost client:load />
+
+    <script>
+      // FRT-10 nav dropdowns — dependency-free disclosure pattern (ux-audit §2.2, §4).
+      // Click toggles; Escape closes and returns focus to the button; click outside closes;
+      // Tab focus leaving the dropdown closes it. No hover-only behavior.
+      const DROPDOWN = '[data-dropdown]';
+      const TOGGLE = '[data-dropdown-toggle]';
+      const MENU = '[data-dropdown-menu]';
+
+      function closeDropdown(dropdown: HTMLElement): void {
+        const toggle = dropdown.querySelector<HTMLButtonElement>(TOGGLE);
+        const menu = dropdown.querySelector<HTMLElement>(MENU);
+        if (!toggle || !menu || toggle.getAttribute('aria-expanded') !== 'true') return;
+        toggle.setAttribute('aria-expanded', 'false');
+        menu.hidden = true;
+      }
+
+      function closeAll(): void {
+        document.querySelectorAll<HTMLElement>(DROPDOWN).forEach(closeDropdown);
+      }
+
+      document.addEventListener('click', (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        const dropdown = target.closest<HTMLElement>(DROPDOWN);
+        closeAll();
+        if (!dropdown) return;
+        const toggle = dropdown.querySelector<HTMLButtonElement>(TOGGLE);
+        const menu = dropdown.querySelector<HTMLElement>(MENU);
+        // Clicks on menu links navigate; the dropdown is already closed above.
+        if (!toggle || !menu || !toggle.contains(target)) return;
+        const willOpen = toggle.getAttribute('aria-expanded') !== 'true';
+        toggle.setAttribute('aria-expanded', String(willOpen));
+        menu.hidden = !willOpen;
+      });
+
+      document.addEventListener('keydown', (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+
+        // ArrowDown/ArrowUp on the toggle opens the menu and moves focus into it.
+        const toggle = target.closest<HTMLButtonElement>(TOGGLE);
+        if (toggle && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
+          const dropdown = toggle.closest<HTMLElement>(DROPDOWN);
+          const menu = dropdown?.querySelector<HTMLElement>(MENU);
+          if (!dropdown || !menu) return;
+          event.preventDefault();
+          closeAll();
+          toggle.setAttribute('aria-expanded', 'true');
+          menu.hidden = false;
+          const links = menu.querySelectorAll<HTMLAnchorElement>('a[href]');
+          (event.key === 'ArrowDown' ? links[0] : links[links.length - 1])?.focus();
+          return;
+        }
+
+        // Escape closes the open dropdown and returns focus to its button.
+        if (event.key !== 'Escape') return;
+        const open = Array.from(document.querySelectorAll<HTMLElement>(DROPDOWN)).filter(
+          (dropdown) => dropdown.querySelector('[aria-expanded="true"]') !== null,
+        );
+        if (open.length === 0) return;
+        closeAll();
+        open[0]?.querySelector<HTMLButtonElement>(TOGGLE)?.focus();
+      });
+
+      // Close when keyboard focus leaves the dropdown entirely.
+      document.querySelectorAll<HTMLElement>(DROPDOWN).forEach((dropdown) => {
+        dropdown.addEventListener('focusout', (event) => {
+          const next = event.relatedTarget;
+          if (next instanceof Node && dropdown.contains(next)) return;
+          closeDropdown(dropdown);
+        });
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  /* Layout chrome, scoped to BaseLayout. All values come from tokens.css. */
+  .skip-link {
+    position: fixed;
+    top: -100%;
+    left: var(--space-4);
+    z-index: 100;
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-2);
+  }
+
+  .skip-link:focus-visible {
+    top: var(--space-4);
+  }
+
+  .site-header {
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+    max-width: 72rem;
+    margin-inline: auto;
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .site-nav__logo {
+    color: var(--color-text-primary);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .site-nav__logo:hover {
+    color: var(--color-accent);
+  }
+
+  .site-nav__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-nav__item {
+    position: relative;
+  }
+
+  .site-nav__link,
+  .site-nav__toggle {
+    display: inline-block;
+    padding: var(--space-3); /* ~48px row height: 44px touch-target floor (ux-audit §2.4) */
+    color: var(--color-text-primary);
+    font: inherit;
+    text-align: start;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .site-nav__link:hover,
+  .site-nav__toggle:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  .site-nav__link[aria-current='page'] {
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+
+  .site-nav__toggle[aria-expanded='true'] {
+    color: var(--color-accent);
+  }
+
+  .site-nav__login {
+    display: inline-block;
+    margin-left: auto;
+    padding: var(--space-2) var(--space-5);
+    color: var(--color-accent-contrast);
+    font-weight: 600;
+    text-decoration: none;
+    background: var(--color-accent);
+    border-radius: var(--radius-full);
+  }
+
+  .site-nav__login:hover {
+    text-decoration: underline;
+  }
+
+  .site-nav__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 20;
+    min-width: 12rem;
+    margin: 0;
+    padding: var(--space-2);
+    list-style: none;
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-2);
+  }
+
+  .site-nav__menu a {
+    display: block;
+    padding: var(--space-2) var(--space-3);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+  }
+
+  .site-nav__menu a:hover {
+    color: var(--color-accent);
+    background: var(--color-surface);
+  }
+
+  main {
+    max-width: 72rem;
+    margin-inline: auto;
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .site-footer {
+    padding: var(--space-5) var(--space-4);
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .site-footer__brand {
+    max-width: 72rem;
+    margin: 0 0 var(--space-3);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .site-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    max-width: 72rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-footer__legal a {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    text-decoration: underline;
+  }
+
+  .site-footer__legal a:hover {
+    color: var(--color-accent);
+  }
+</style>
