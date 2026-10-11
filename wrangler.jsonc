@@ -1,15 +1,12 @@
 // Cloudflare Workers Static Assets — assets-only deploy (no worker script).
 // `wrangler deploy` serves the Astro build output from ./dist as-is.
+// Portable by design: no account, domain, or route lives here. The deploy
+// command passes them via CLOUDFLARE_ACCOUNT_ID and --domain (see
+// .github/workflows/deploy.yml and docs/port/self-host.md).
 {
   "name": "spt-leaderboard",
   "compatibility_date": "2026-01-01",
   "assets": {
     "directory": "./dist"
-  },
-  "routes": [
-    {
-      "pattern": "rank-dev.tushonka.net",
-      "custom_domain": true
-    }
-  ]
+  }
 }

@@ -22,7 +22,12 @@ jobs:
         run: bun run build
 
       - name: Deploy to Cloudflare Workers
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        # Portable config: no domain in wrangler.jsonc. The deploy target
+        # comes from the CF_DOMAIN secret (passed as --domain, a custom
+        # domain). Forks/self-hosters set their own secrets - or run
+        # `bunx wrangler deploy --domain their.host` locally.
+        run: bunx wrangler deploy ${CF_DOMAIN:+--domain "$CF_DOMAIN"}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_DOMAIN: ${{ secrets.CF_DOMAIN }}
