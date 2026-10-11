@@ -5,6 +5,7 @@
 // §5 footer legal row. Nav dropdowns are dependency-free disclosure buttons (see <script>).
 import '../styles/global.css';
 import { ToastHost } from '../components/Toast';
+import AuthWidget from '../components/auth/AuthWidget';
 
 interface Props {
   title: string;
@@ -72,7 +73,11 @@ const ariaCurrent = (href: string) =>
             </ul>
           </li>
         </ul>
-        <a class="site-nav__login" href="/login">Log in</a>
+        <!-- FRT-19: auth island in place of the static /login placeholder.
+             Wrapper keeps the island pushed to the far end of the nav. -->
+        <div class="site-nav__auth">
+          <AuthWidget client:load />
+        </div>
       </nav>
     </header>
 
@@ -263,19 +268,8 @@ const ariaCurrent = (href: string) =>
     color: var(--color-accent);
   }
 
-  .site-nav__login {
-    display: inline-block;
-    margin-left: auto;
-    padding: var(--space-2) var(--space-5);
-    color: var(--color-accent-contrast);
-    font-weight: 600;
-    text-decoration: none;
-    background: var(--color-accent);
-    border-radius: var(--radius-full);
-  }
-
-  .site-nav__login:hover {
-    text-decoration: underline;
+  .site-nav__auth {
+    margin-left: auto; /* island host replaces the old .site-nav__login anchor */
   }
 
   .site-nav__menu {

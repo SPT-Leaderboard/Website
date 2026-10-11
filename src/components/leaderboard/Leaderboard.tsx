@@ -15,6 +15,7 @@
 import { For, Show, createMemo, createSignal, onCleanup, onMount } from 'solid-js';
 import { getCurrentSeason, getHeartbeats } from '../../api/client';
 import type { HeartbeatsMap, PlayerEntry } from '../../api/types';
+import ProfileModal from '../profile/ProfileModal';
 import {
   AUTOUPDATE_STORAGE_KEY,
   DEFAULT_SORT,
@@ -208,6 +209,8 @@ export default function Leaderboard() {
 
   return (
     <div class="leaderboard">
+      {/* FRT-13: route-driven profile modal; row openers set #id=<permaLink>. */}
+      <ProfileModal />
       <Show
         when={stats().totalPlayers > 0 || players() !== undefined}
         fallback={<StatsSkeleton />}
@@ -389,7 +392,20 @@ function LeaderboardTableRow(props: { row: LeaderboardRow; heartbeats: Heartbeat
     >
       <td class="leaderboard__td leaderboard__td--rank">{props.row.rank}</td>
       <td class="leaderboard__td leaderboard__td--player">
-        <span class="leaderboard__name">{player().name}</span>
+        {/* FRT-13 row opener (web-standards-audit KB1): a real button, so the
+            primary row action is keyboard-reachable. Setting location.hash
+            pushes a history entry, which drives the profile modal's
+            Back/Forward behavior (ux-audit §4). */}
+        <button
+          type="button"
+          class="leaderboard__profile-link"
+          aria-label={`Open ${player().name}'s profile`}
+          onClick={() => {
+            window.location.hash = `id=${player().permaLink}`;
+          }}
+        >
+          <span class="leaderboard__name">{player().name}</span>
+        </button>
         <Show when={player().teamTag !== ''}>
           <span class="leaderboard__teamtag">[{player().teamTag}]</span>
         </Show>

@@ -203,6 +203,20 @@
   font-weight: 600;
 }
 
+/* FRT-13 row opener: the name cell's button reset; hover affordance only. */
+.leaderboard__profile-link {
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.leaderboard__profile-link:hover .leaderboard__name {
+  text-decoration: underline;
+}
+
 .leaderboard__teamtag {
   margin-left: var(--space-2);
   color: var(--color-text-muted);
