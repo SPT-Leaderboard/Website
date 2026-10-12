@@ -18,10 +18,12 @@
 
 /* Summary header */
 .achievements-summary {
-  padding: var(--space-4);
-  background: var(--color-surface-raised);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  /* Prod card surface (insights.css:31-36 via tokens): gradient glass,
+     hairline border, 20px radius, 20-24px padding. */
+  padding: var(--space-5);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-card);
 }
 
 .achievements-summary__grid {
@@ -114,10 +116,11 @@
   flex-direction: column;
   gap: var(--space-3);
   margin: 0;
-  padding: var(--space-4);
-  background: var(--color-surface-raised);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  /* Prod card surface (insights.css:31-36 via tokens). */
+  padding: var(--space-5);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-card);
 }
 
 .achievements-card__header {
@@ -174,7 +177,8 @@
 
 .achievements-card__progress-fill {
   height: 100%;
-  background: var(--color-accent);
+  /* Prod progress gradient (ach.css:105-124), MODERNIZED: no glow. */
+  background: linear-gradient(90deg, var(--color-accent-2), var(--color-accent-3-soft));
 }
 
 .achievements-card__holders {
@@ -190,9 +194,14 @@
 }
 
 .achievements-card__rarity {
+  /* Prod chip formula (styles.css:6336-6382): fill and border are tints of
+     the hue each data-rarity rule puts in color. */
   padding: var(--space-1) var(--space-2);
   font-size: var(--text-xs);
-  border: 1px solid currentColor;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, currentColor 15%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
   border-radius: var(--radius-full);
 }
 

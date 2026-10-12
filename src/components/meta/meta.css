@@ -65,10 +65,12 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding: var(--space-4);
-  background: var(--color-surface-raised);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  /* Prod card surface (insights.css:31-36 via tokens): gradient glass over
+     the canvas, hairline border, 20px radius, 20-24px padding. */
+  padding: var(--space-5);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-card);
 }
 
 .meta-card__header {
@@ -115,11 +117,15 @@
   margin: var(--space-1) 0 0;
 }
 
-/* Tag tones reuse the AA-checked theme text tokens (see achievements.css). */
+/* Tag tones reuse the AA-checked theme text tokens (see achievements.css);
+   the fill/border are tints of that same hue (prod chip formula). */
 .meta-tag {
-  padding: 0 var(--space-2);
+  padding: 0.125rem var(--space-2);
   font-size: var(--text-xs);
-  border: 1px solid currentcolor;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, currentcolor 15%, transparent);
+  border: 1px solid color-mix(in srgb, currentcolor 30%, transparent);
   border-radius: var(--radius-full);
 }
 
@@ -322,7 +328,8 @@
 .meta-modal__attachment-fill {
   display: block;
   height: 100%;
-  background: var(--color-accent);
+  /* Prod progress gradient (ach.css:105-124), MODERNIZED: no glow. */
+  background: linear-gradient(90deg, var(--color-accent-2), var(--color-accent-3-soft));
   border-radius: inherit;
 }
 

@@ -9,6 +9,12 @@ files are imported only by `src/api/client.ts`, `src/api/global.ts`, and
 The one exception is `global-players.json`, which is not a snapshot but a
 derivative fixture (details in the table below).
 
+`avatar-placeholder-plugin.mjs` is the one code file here: a Vite dev/preview
+middleware (wired in `astro.config.mjs`) that answers the captured
+`/api/data/pmc_avatars/*` avatar URLs with a deterministic placeholder, so
+developer consoles stay free of the 404s the real backend will not produce
+(it serves the binaries). It serves no fixture data.
+
 | Fixture | Source (snapshot) | Trim |
 |---|---|---|
 | `season12.json` | `data/seasons/season12.json` | Kept the 25 highest-`totalScore` entries in original file order (source had 100, unsorted by score). No fields dropped; entry[0] keeps all 96 of its fields. |

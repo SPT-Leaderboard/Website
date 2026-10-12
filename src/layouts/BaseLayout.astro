@@ -35,8 +35,26 @@ const ariaCurrent = (href: string) =>
     <!-- DS5: consistent <header> landmark wrapping the nav on every page. -->
     <header class="site-header">
       <nav class="site-nav" aria-label="Main">
-        <!-- DS4 + ux-audit §2.2: logo is a real home link with an accurate accessible name. -->
-        <a class="site-nav__logo" href="/">SPT Leaderboard</a>
+        <!-- DS4 + ux-audit §2.2: logo is a real home link with an accurate accessible name.
+             Prod brand mark (index.html:71 neon triangle), recreated as an inline
+             aria-hidden SVG so no binary asset is needed. -->
+        <a class="site-nav__logo" href="/">
+          <svg
+            class="site-nav__mark"
+            aria-hidden="true"
+            focusable="false"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+          >
+            <path
+              d="M12 3 22 21 H2 Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linejoin="round"></path>
+          </svg>
+          SPT Leaderboard</a>
         <ul class="site-nav__list">
           <li>
             <a class="site-nav__link" href="/" aria-current={ariaCurrent('/')}>Leaderboard</a>
@@ -85,9 +103,45 @@ const ariaCurrent = (href: string) =>
       <slot />
     </main>
 
-    <!-- ux-audit §5: legal row present on every page. External links carry rel="noopener noreferrer" (XC6). -->
+    <!-- ux-audit §5: legal row present on every page. External links carry rel="noopener noreferrer" (XC6).
+         Prod footer content (index.html:517-524): brand mark + slogan + license lines
+         incl. the non-affiliation/trademark disclaimer (P1 legal) and the MIT license;
+         the rewrite's link set and accessible names are unchanged. -->
     <footer class="site-footer">
-      <p class="site-footer__brand">© 2026 SPT Leaderboard</p>
+      <div class="site-footer__brand">
+        <p class="site-footer__wordmark">
+          <svg
+            class="site-footer__mark"
+            aria-hidden="true"
+            focusable="false"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+          >
+            <path
+              d="M12 3 22 21 H2 Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linejoin="round"></path>
+          </svg>
+          SPT Leaderboard
+        </p>
+        <p class="site-footer__slogan">Built with passion. Powered by community.</p>
+      </div>
+      <div class="site-footer__license">
+        <p>© 2026 SPT Leaderboard. All rights reserved.</p>
+        <p>
+          This project is not affiliated with Battlestate Games or the SPTushonka project. Escape
+          From Tarkov is a registered trademark of Battlestate Games.
+        </p>
+        <p>
+          Released under the
+          <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer"
+            >MIT License</a
+          >.
+        </p>
+      </div>
       <ul class="site-footer__legal">
         <li><a href="/tos">Terms of Service</a></li>
         <li><a href="/privacy">Privacy Policy</a></li>
@@ -216,10 +270,19 @@ const ariaCurrent = (href: string) =>
   }
 
   .site-nav__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
     color: var(--color-text-primary);
     font-size: var(--text-lg);
     font-weight: 700;
     text-decoration: none;
+  }
+
+  /* Brand mark echoes prod's neon teal triangle (index.html:71). */
+  .site-nav__mark {
+    color: var(--color-accent);
+    flex: none;
   }
 
   .site-nav__logo:hover {
@@ -262,6 +325,52 @@ const ariaCurrent = (href: string) =>
   .site-nav__link[aria-current='page'] {
     color: var(--color-accent);
     font-weight: 700;
+  }
+
+  /* Desktop: prod's glass pill navbar (styles.css:385-403) — 12px radius,
+     10px blur, hairline tint border — kept in normal flow (MODERNIZE: no
+     fixed overlay clipping the page title on mobile, no ambient blur
+     elsewhere). Mobile keeps the flat bar below. */
+  @media (min-width: 64rem) {
+    .site-header {
+      background: none;
+      border-bottom: none;
+    }
+
+    .site-nav {
+      margin-top: var(--space-3);
+      padding: var(--space-2) var(--space-5);
+      background: var(--color-glass-bg);
+      border: 1px solid var(--color-glass-border);
+      border-radius: var(--radius-nav);
+      box-shadow: var(--shadow-2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    /* Links become pills inside the nav (transparent border keeps every
+       link's footprint identical whether active or not). */
+    .site-nav__link,
+    .site-nav__toggle {
+      border: 1px solid transparent;
+      border-radius: var(--radius-full);
+    }
+
+    .site-nav__link:hover,
+    .site-nav__toggle:hover {
+      text-decoration: none;
+    }
+
+    /* Active link: prod's teal tint pill (styles.css:459-466), tokenized via
+       color-mix so it tracks the theme's accent value. */
+    .site-nav__link[aria-current='page'] {
+      background: linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--color-accent) 30%, transparent),
+        color-mix(in srgb, var(--color-accent) 20%, transparent)
+      );
+      border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+    }
   }
 
   .site-nav__toggle[aria-expanded='true'] {
@@ -312,11 +421,48 @@ const ariaCurrent = (href: string) =>
     border-top: 1px solid var(--color-border);
   }
 
-  .site-footer__brand {
+  .site-footer__wordmark {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    max-width: 72rem;
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: 700;
+  }
+
+  .site-footer__mark {
+    color: var(--color-accent);
+    flex: none;
+  }
+
+  .site-footer__slogan {
     max-width: 72rem;
     margin: 0 0 var(--space-3);
     color: var(--color-text-muted);
     font-size: var(--text-sm);
+  }
+
+  /* Prod license block (index.html:521-524): copyright, non-affiliation /
+     trademark disclaimer, MIT license. */
+  .site-footer__license {
+    max-width: 72rem;
+    margin: 0 0 var(--space-3);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .site-footer__license p {
+    margin: 0 0 var(--space-1);
+  }
+
+  .site-footer__license a {
+    color: var(--color-text-muted);
+    text-decoration: underline;
+  }
+
+  .site-footer__license a:hover {
+    color: var(--color-accent);
   }
 
   .site-footer__legal {

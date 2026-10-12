@@ -164,7 +164,16 @@
   color: var(--color-text-muted);
   text-align: left;
   white-space: nowrap;
-  background: var(--color-surface-raised);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  /* Prod header band (styles.css:1033) re-hued to the indigo family. The tint
+     rides as a gradient layer over an opaque surface so the sticky Player
+     header never turns translucent while columns scroll beneath it. */
+  background-color: var(--color-surface);
+  background-image: linear-gradient(
+    color-mix(in srgb, var(--color-accent-2) 12%, transparent),
+    color-mix(in srgb, var(--color-accent-2) 12%, transparent)
+  );
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -174,7 +183,9 @@
 
 .leaderboard__sort {
   width: 100%;
-  padding: var(--space-2) var(--space-3);
+  /* Prod cell padding (styles.css:1019-1025): 10px 20px, applied to the sort
+     button because the th itself delegates its box to the button. */
+  padding: 0.625rem 1.25rem;
   color: inherit;
   font: inherit;
   text-align: inherit;
@@ -195,7 +206,8 @@
 }
 
 .leaderboard__td {
-  padding: var(--space-2) var(--space-3);
+  /* Prod row density (styles.css:1019-1025): 10px 20px. */
+  padding: 0.625rem 1.25rem;
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -208,6 +220,60 @@
   text-align: right;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+/* Prod full-row hover (styles.css:1049), re-hued to the heading blue and
+   tokenized via color-mix. */
+.leaderboard__table tr:hover {
+  background-color: color-mix(in srgb, var(--color-heading) 10%, transparent);
+}
+
+/* The sticky Player cell paints its own opaque background, so the row hover
+   needs a matching tint layer on top of it. */
+.leaderboard__table tr:hover .leaderboard__td--player {
+  background-image: linear-gradient(
+    color-mix(in srgb, var(--color-heading) 10%, transparent),
+    color-mix(in srgb, var(--color-heading) 10%, transparent)
+  );
+}
+
+/* Banned rows: prod signals the state with a red edge + tint
+   (styles.css:8301-8304) instead of bare text muting, which hides it.
+   Inset box-shadow on the first cell instead of a border-left so column
+   alignment never shifts (a tr-level shadow is unreliable under
+   border-collapse: collapse). */
+.leaderboard__row--banned {
+  background-color: color-mix(in srgb, var(--color-error) 6%, transparent);
+}
+
+.leaderboard__row--banned .leaderboard__td:first-child {
+  box-shadow: inset 2px 0 0 0 var(--color-error);
+}
+
+.leaderboard__row--banned .leaderboard__td--player {
+  background-image: linear-gradient(
+    color-mix(in srgb, var(--color-error) 6%, transparent),
+    color-mix(in srgb, var(--color-error) 6%, transparent)
+  );
+}
+
+/* Higher specificity than the plain row hover, so hovering a banned row swaps
+   the red tint for the hover blue in the row background… */
+.leaderboard__row--banned:hover {
+  background-color: color-mix(in srgb, var(--color-heading) 10%, transparent);
+}
+
+/* …while the sticky Player cell layers the hover tint over its banned tint. */
+.leaderboard__row--banned:hover .leaderboard__td--player {
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--color-heading) 10%, transparent),
+      color-mix(in srgb, var(--color-heading) 10%, transparent)
+    ),
+    linear-gradient(
+      color-mix(in srgb, var(--color-error) 6%, transparent),
+      color-mix(in srgb, var(--color-error) 6%, transparent)
+    );
 }
 
 .leaderboard__row--banned .leaderboard__td {
@@ -260,16 +326,19 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Row badges: outline style keeps text on the surface at AA contrast. */
+/* Row badges: prod's tint-fill pill formula (styles.css:6336-6382) — the hue
+   is whatever the tone class puts in color, so background = 15% tint and
+   border = 30% tint of that same audited text color. */
 .leaderboard__badge {
   display: inline-block;
   margin-left: var(--space-2);
   padding: 0 var(--space-2);
   font-size: var(--text-xs);
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  border: 1px solid currentColor;
+  background: color-mix(in srgb, currentColor 15%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
   border-radius: var(--radius-full);
 }
 
@@ -298,9 +367,24 @@
 }
 
 .leaderboard__status {
+  /* Prod presence pill (styles.css:1056-1074): tinted pill, 2px hue border,
+     dot, uppercase micro-label. The heartbeat data layer
+     (deriveOnlineStatus in src/api/leaderboard.ts) derives exactly two of
+     prod's ten states, mapped to the rewrite's audited tokens instead of
+     prod's low-contrast offline gray (#4b5563 ≈ 2.9:1). */
+  --status-hue: var(--color-text-muted);
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
+  padding: 0.125rem var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--status-hue);
+  background: color-mix(in srgb, var(--status-hue) 20%, transparent);
+  border: 2px solid var(--status-hue);
+  border-radius: var(--radius-full);
 }
 
 .leaderboard__status::before {
@@ -308,19 +392,15 @@
   inline-size: 0.5rem;
   block-size: 0.5rem;
   border-radius: var(--radius-full);
-  background: var(--color-text-muted);
+  background: var(--status-hue); /* static dot — prod's blink is deliberately not copied */
 }
 
 .leaderboard__status--online {
-  color: var(--color-success);
-}
-
-.leaderboard__status--online::before {
-  background: var(--color-success);
+  --status-hue: var(--color-success);
 }
 
 .leaderboard__status--offline {
-  color: var(--color-text-muted);
+  --status-hue: var(--color-text-muted);
 }
 
 .leaderboard__footnote {

@@ -1,25 +1,27 @@
 /* FRT-16 insights styles (companion to InsightsCharts.tsx). Tokens from styles/tokens.css;
-   the chart palette below adds the only page-specific color tokens, with WCAG-checked
-   values per theme (web-standards-audit §5 CC3: fixed palette, no random colors). */
+   the chart palette below adds the only page-specific color tokens. Order/hues are
+   prod's (insights/js/main.js:145: indigo, violet, pink, rose, orange, amber); the
+   light theme uses each hue's darker 600 step for contrast on white (web-standards-audit
+   §5 CC3: fixed palette, no random colors). */
 
 :root {
-  --chart-1: #0f766e;
-  --chart-2: #b45309;
-  --chart-3: #6d28d9;
-  --chart-4: #b91c1c;
-  --chart-5: #0369a1;
-  --chart-6: #15803d;
+  --chart-1: #4f46e5;
+  --chart-2: #7c3aed;
+  --chart-3: #db2777;
+  --chart-4: #e11d48;
+  --chart-5: #ea580c;
+  --chart-6: #d97706;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Dark values reuse the audited passing accents (tokens.css + audit §5). */
-    --chart-1: #64ffda;
-    --chart-2: #f6d25d;
-    --chart-3: #a78bfa;
-    --chart-4: #de7c8d;
-    --chart-5: #3da3cc;
-    --chart-6: #6fdf60;
+    /* Dark values = prod's palette order verbatim (insights/js/main.js:145). */
+    --chart-1: #6366f1;
+    --chart-2: #8b5cf6;
+    --chart-3: #ec4899;
+    --chart-4: #f43f5e;
+    --chart-5: #f97316;
+    --chart-6: #f59e0b;
   }
 }
 
@@ -37,10 +39,12 @@
 
 /* Summary card */
 .insights-summary {
-  padding: var(--space-4);
-  background: var(--color-surface-raised);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  /* Prod card surface (insights.css:31-36 via tokens): gradient glass,
+     hairline border, 20px radius, 20-24px padding. */
+  padding: var(--space-5);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-card);
 }
 
 .insights-summary__grid {
@@ -104,10 +108,11 @@
   flex-direction: column;
   gap: var(--space-3);
   margin: 0;
-  padding: var(--space-4);
-  background: var(--color-surface-raised);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  /* Prod card surface (insights.css:31-36 via tokens). */
+  padding: var(--space-5);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-card);
 }
 
 .chart-card__plot {

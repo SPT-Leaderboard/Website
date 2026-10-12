@@ -1,7 +1,13 @@
 /* FRT-10 global base styles. Plain CSS only — no framework, no Tailwind.
    Scope is deliberately narrow (FRT-10 contract): token import, base body styles,
-   one :focus-visible ring for every interactive element, selection color. Nothing else. */
+   one :focus-visible ring for every interactive element, selection color, plus
+   the two page-level surfaces from the prod-style alignment spec: the ambient
+   canvas wash and the shared h1 treatment (spec items 1-2; every page's h1 is
+   an unclassed element, so one rule here fixes all of them). */
 @import './tokens.css';
+/* Display face for h1 (prod styles.css:243-252 uses Orbitron). Self-hosted via
+   @fontsource so no font CDN and the family count stays at two (MODERNIZE). */
+@import '@fontsource/orbitron/700.css';
 
 body {
   margin: 0;
@@ -11,6 +17,24 @@ body {
   font-family: system-ui, sans-serif;
   font-size: var(--text-base);
   line-height: var(--leading-normal);
+  /* Ambient canvas washes (prod styles.css:232-236). Background only — text
+     areas stay flat; surfaces painted on top keep their solid tokens. */
+  background-image:
+    radial-gradient(circle at top left, rgb(99 102 241 / 0.1) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgb(114 68 239 / 0.1) 0%, transparent 20%);
+}
+
+/* Page title: prod's Orbitron 700 uppercase in heading blue (styles.css:243-252),
+   MODERNIZED — letter-spacing tightened 2px→1px and the teal glow text-shadow
+   dropped. Size keeps prod's 2.5rem. */
+h1 {
+  color: var(--color-heading);
+  font-family: 'Orbitron', 'Segoe UI', system-ui, sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  letter-spacing: 0.0625rem;
+  text-transform: uppercase;
 }
 
 /* web-standards-audit §3 FC1/FC2: one tokenized :focus-visible ring (≥3:1) applied to every
