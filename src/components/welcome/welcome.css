@@ -10,16 +10,24 @@
   display: grid;
   place-items: center;
   padding: var(--space-4);
-  /* Prod scrim rgba(10,10,18,.7→.1), adapted to the theme's overlay token. */
-  background: var(--color-surface-overlay);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
   animation: welcome-in var(--duration-base) ease-out;
 }
 
+/* The full-screen scrim (Kobalte Dialog.Overlay, finding 2): backdrop-filter
+   is the only remnant of prod's ambient blur (skip-list: no heavy wash). */
+.welcome__scrim {
+  position: fixed;
+  inset: 0;
+  /* Prod scrim rgba(10,10,18,.7→.1), adapted to the theme's overlay token. */
+  background: var(--color-surface-overlay);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+}
+
 .welcome--closing {
-  /* Prod dismissal: fade + translateY(-20px), 300 ms. */
-  animation: welcome-out 300ms ease-in forwards;
+  /* Prod dismissal: fade + translateY(-20px); duration lives in
+     --duration-base (finding 6 — no duplicate ms constant). */
+  animation: welcome-out var(--duration-base) ease-in forwards;
 }
 
 @keyframes welcome-in {
