@@ -84,7 +84,7 @@
 .welcome__heading {
   margin: 0;
   color: var(--color-heading);
-  font-family: 'Orbitron', 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--font-display);
   font-size: var(--text-2xl);
   font-weight: 700;
   letter-spacing: 0.0625rem;

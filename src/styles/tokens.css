@@ -55,6 +55,16 @@
      both surfaces, so one value for both themes. */
   --color-filter-active: #4d7ea8;
 
+  /* Prod avatar ring (styles.css:1444-1457, rgb(132 210 255/.8)); light
+     theme uses a darker sky so the ring reads on white. Decorative only. */
+  --color-avatar-ring: rgb(2 132 199 / 0.8);
+  --size-avatar: 2.5rem; /* prod ~40px row avatar (styles.css:1444-1457) */
+
+  /* Ambient canvas wash endpoints (prod styles.css:232-236); same values
+     in both themes — background-only, text sits on solid surfaces. */
+  --wash-indigo: rgb(99 102 241 / 0.18);
+  --wash-violet: rgb(114 68 239 / 0.18);
+
   /* Sticky offset for the meta filter slab: clears the desktop glass nav
      pill (margin-top + 48px mark + paddings). */
   --layout-nav-offset: 5.5rem;
@@ -91,13 +101,20 @@
   --radius-md: 0.5rem;
   --radius-lg: 1rem;
   --radius-full: 999px;
-  --radius-card: 20px; /* prod card radius (insights.css:35 24px, owner-approved 20px) */
+  --radius-card: 1.25rem; /* prod card radius (insights.css:35 24px, owner-approved 20px) */
   --radius-nav: 0.75rem; /* prod navbar pill (styles.css:57 --border-large 12px) */
 
   /* Shadow levels */
   --shadow-1: 0 1px 2px rgb(15 23 42 / 0.08);
   --shadow-2: 0 4px 12px rgb(15 23 42 / 0.12);
   --shadow-3: 0 16px 40px rgb(15 23 42 / 0.2);
+
+  /* Blur scale: backdrop-filter steps (welcome scrim, desktop glass nav). */
+  --blur-sm: 6px;
+  --blur-md: 10px;
+
+  /* Display face (prod styles.css:243-252 uses Orbitron for h1). */
+  --font-display: 'Orbitron', 'Segoe UI', system-ui, sans-serif;
 
   /* Motion durations */
   --duration-fast: 150ms;
@@ -135,6 +152,9 @@
     /* Prod rank-chip values (styles.css rank chip) verbatim in dark. */
     --color-chip-bg: rgb(255 255 255 / 0.096);
     --color-chip-border: rgb(255 255 255 / 0.23);
+
+    /* Prod avatar ring verbatim in dark. */
+    --color-avatar-ring: rgb(132 210 255 / 0.8);
 
     /* Prod CTA gradient endpoints verbatim; label is near-black for
        contrast on the bright cyan stop. */

@@ -337,10 +337,10 @@
 /* Prod row avatar (styles.css:1444-1457): ~40-45px, rounded, light-blue ring. */
 .leaderboard__avatar {
   flex: none;
-  width: 40px;
-  height: 40px;
+  width: var(--size-avatar);
+  height: var(--size-avatar);
   border-radius: var(--radius-full);
-  border: 2px solid rgb(132 210 255 / 0.8);
+  border: 2px solid var(--color-avatar-ring);
   background: var(--color-surface-raised);
   object-fit: cover;
 }
