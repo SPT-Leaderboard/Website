@@ -3,6 +3,8 @@
 *.idea*
 node_modules
 *.mjs
+# the createResource guard is build tooling, not legacy script
+!scripts/*.mjs
 !astro.config.mjs
 api/*
 .php
