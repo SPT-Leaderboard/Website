@@ -257,9 +257,11 @@ function ChartCard(props: { spec: ChartSpec }) {
     // Respect prefers-reduced-motion: no chart animations when the user asked for less motion.
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    Chart.defaults.font.family = "system-ui, sans-serif";
-    Chart.defaults.color = muted;
-
+    // Finding 12: colors/fonts go through this chart's options, never
+    // Chart.defaults — mutating global defaults would leak one card's theme
+    // into every other chart. Follow-up (not implemented): re-read tokens
+    // and rebuild when prefers-color-scheme changes; charts currently keep
+    // the palette they mounted with.
     chart = new Chart(canvas, {
       type: props.spec.type,
       data: {
@@ -282,6 +284,8 @@ function ChartCard(props: { spec: ChartSpec }) {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        color: muted, // per-chart stand-in for the removed Chart.defaults.color
+        font: { family: "system-ui, sans-serif" },
         animation: reducedMotion ? false : undefined,
         plugins: {
           legend: { display: props.spec.type === "pie", position: "bottom" },
