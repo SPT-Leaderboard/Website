@@ -59,6 +59,12 @@
      pill (margin-top + 48px mark + paddings). */
   --layout-nav-offset: 5.5rem;
 
+  /* Stacking layers, lowest → highest: sticky player column (.leaderboard
+     z-index 1) < meta filter slab (.meta-filters z-index 5) < site header
+     (BaseLayout .site-header) < nav dropdown menus (.site-nav__menu, within
+     the header's stacking context) < modal/welcome overlays (z-index 50). */
+  --layout-header-z: 10;
+
   /* Spacing scale */
   --space-1: 0.25rem;
   --space-2: 0.5rem;

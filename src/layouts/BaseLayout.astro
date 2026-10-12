@@ -239,7 +239,11 @@ const ariaCurrent = (href: string) =>
     top: var(--space-4);
   }
 
+  /* Owns a stacking context (--layout-header-z, see tokens.css layer map) so
+     the nav dropdown menus paint above the sticky meta slab and player column. */
   .site-header {
+    position: relative;
+    z-index: var(--layout-header-z);
     background: var(--color-surface);
     border-bottom: 1px solid var(--color-border);
   }
