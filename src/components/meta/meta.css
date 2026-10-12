@@ -11,10 +11,12 @@
 /* Filters: native input + selects (keyboard operable without script).
    Dossier §Weapon meta: the slab is a sticky glass card that stays available
    while the grid scrolls; the backdrop blur is the one place it earns its
-   cost (grid content passes underneath). */
+   cost (grid content passes underneath). Mobile has no floating nav, so the
+   default offset is one spacing step; the 5.5rem clearance for the desktop
+   glass nav pill applies only from the 64rem breakpoint (finding 8). */
 .meta-filters {
   position: sticky;
-  top: var(--layout-nav-offset);
+  top: var(--space-2);
   z-index: 5;
   display: flex;
   flex-wrap: wrap;
@@ -26,6 +28,13 @@
   border-radius: var(--radius-lg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+}
+
+/* Desktop: clear the floating glass nav pill (--layout-nav-offset). */
+@media (min-width: 64rem) {
+  .meta-filters {
+    top: var(--layout-nav-offset);
+  }
 }
 
 /* Dossier: filter focus uses the indigo support hue with a tinted ring
@@ -62,6 +71,7 @@
 
 .meta-filters__field input,
 .meta-filters__field select {
+  min-height: 2.75rem; /* 44px touch-target floor (finding 9) */
   padding: var(--space-2) var(--space-3);
   color: var(--color-text-primary);
   font-size: var(--text-sm);
