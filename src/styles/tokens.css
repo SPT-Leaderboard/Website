@@ -25,6 +25,9 @@
      hues for data viz. Teal (--color-accent) stays the interactive accent;
      these are the same values in both themes (large-text h1 and fills only). */
   --color-heading: #1e90ff;
+  /* Large-text-only pairing: #1e90ff is 3.3:1 on white, so it may only be
+     used for large text (h1/welcome heading) and non-text fills — never
+     body text or icons that carry meaning alone. */
   --color-accent-2: #6366f1;
   --color-accent-3: #8b5cf6;
   /* Lighter violet partner for progress-bar gradients (prod ach.css:105-124
@@ -54,6 +57,25 @@
   /* Active meta-filter border (prod weaponmeta #4d7ea8); mid-blue works on
      both surfaces, so one value for both themes. */
   --color-filter-active: #4d7ea8;
+
+  /* Chart palette — page-specific (insights), order/hues are prod's
+     (insights/js/main.js:145: indigo, violet, pink, rose, orange, amber);
+     light uses each hue's darker 600 step for contrast on white
+     (web-standards-audit §5 CC3: fixed palette, no random colors). */
+  --chart-1: #4f46e5;
+  --chart-2: #7c3aed;
+  --chart-3: #db2777;
+  --chart-4: #e11d48;
+  --chart-5: #ea580c;
+  --chart-6: #d97706;
+
+  /* Chart tooltip: prod's borderless #0b0f1a box gains a hairline indigo
+     border for separation on the card surface. Same values both themes
+     (the box is dark by design); Chart.js can't draw canvas shadows, so
+     the border carries the separation alone. */
+  --chart-tooltip-bg: #0b0f1a;
+  --chart-tooltip-text: #f8fafc;
+  --chart-tooltip-border: rgb(99 102 241 / 0.4);
 
   /* Prod avatar ring (styles.css:1444-1457, rgb(132 210 255/.8)); light
      theme uses a darker sky so the ring reads on white. Decorative only. */
@@ -148,6 +170,14 @@
     --shadow-1: 0 1px 2px rgb(0 0 0 / 0.5);
     --shadow-2: 0 4px 12px rgb(0 0 0 / 0.55);
     --shadow-3: 0 16px 40px rgb(0 0 0 / 0.6);
+
+    /* Dark values = prod's palette order verbatim (insights/js/main.js:145). */
+    --chart-1: #6366f1;
+    --chart-2: #8b5cf6;
+    --chart-3: #ec4899;
+    --chart-4: #f43f5e;
+    --chart-5: #f97316;
+    --chart-6: #f59e0b;
 
     /* Prod rank-chip values (styles.css rank chip) verbatim in dark. */
     --color-chip-bg: rgb(255 255 255 / 0.096);

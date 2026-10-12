@@ -1,39 +1,6 @@
-/* FRT-16 insights styles (companion to InsightsCharts.tsx). Tokens from styles/tokens.css;
-   the chart palette below adds the only page-specific color tokens. Order/hues are
-   prod's (insights/js/main.js:145: indigo, violet, pink, rose, orange, amber); the
-   light theme uses each hue's darker 600 step for contrast on white (web-standards-audit
-   §5 CC3: fixed palette, no random colors). */
-
-:root {
-  --chart-1: #4f46e5;
-  --chart-2: #7c3aed;
-  --chart-3: #db2777;
-  --chart-4: #e11d48;
-  --chart-5: #ea580c;
-  --chart-6: #d97706;
-}
-
-/* Dossier MODERNIZE: the prod tooltip is a borderless #0b0f1a box; the
-   rewrite adds a hairline indigo border for separation on the card surface.
-   Same values both themes (the box is dark by design). Chart.js cannot draw
-   canvas shadows, so the border carries the separation alone. */
-:root {
-  --chart-tooltip-bg: #0b0f1a;
-  --chart-tooltip-text: #f8fafc;
-  --chart-tooltip-border: rgb(99 102 241 / 0.4);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Dark values = prod's palette order verbatim (insights/js/main.js:145). */
-    --chart-1: #6366f1;
-    --chart-2: #8b5cf6;
-    --chart-3: #ec4899;
-    --chart-4: #f43f5e;
-    --chart-5: #f97316;
-    --chart-6: #f59e0b;
-  }
-}
+/* FRT-16 insights styles (companion to InsightsCharts.tsx). Tokens from
+   styles/tokens.css only — the chart palette (--chart-1…6) and tooltip
+   tokens live there with both themes' values. */
 
 .insights {
   display: flex;
