@@ -13,6 +13,7 @@
  * placeholders and skeletons are tokenized; motion is disabled under
  * prefers-reduced-motion (meta.css).
  */
+import { createAsyncResource } from "../../lib/createAsyncResource";
 import { For, Show, createMemo, createResource, createSignal, onCleanup } from "solid-js";
 import { Modal } from "../Modal";
 import {
@@ -158,13 +159,13 @@ function WeaponCard(props: {
 }
 
 export default function MetaExplorer() {
-  const [data, dataActions] = createResource<MetaData>(async () => {
+  const data = createAsyncResource(async () => {
     // getWeaponStats() already merges the category catalog (getCategories()).
     const [stats, maxPickRates] = await Promise.all([
       getWeaponStats(),
       getAttachmentMaxPickRates(),
     ]);
-    return { stats, maxPickRates };
+    return { stats, maxPickRates } satisfies MetaData;
   });
 
   // Text search: the input keeps every keystroke; the filter query updates debounced.
@@ -183,9 +184,9 @@ export default function MetaExplorer() {
   };
   onCleanup(() => clearTimeout(debounceTimer));
 
-  const stats = createMemo(() => data()?.stats ?? []);
+  const stats = createMemo(() => data.data()?.stats ?? []);
   const favorites = createMemo(() =>
-    communityFavorites(stats(), data()?.maxPickRates ?? {}),
+    communityFavorites(stats(), data.data()?.maxPickRates ?? {}),
   );
 
   // Cascading selects mirror the legacy page: changing the main category
@@ -223,7 +224,7 @@ export default function MetaExplorer() {
 
   // Analytics modal: attachments + top players load per open weapon.
   const [selected, setSelected] = createSignal<WeaponStat | null>(null);
-  const [analytics] = createResource(selected, (weapon) =>
+  const analytics = createAsyncResource(selected, (weapon: WeaponStat) =>
     Promise.all([getAttachments(weapon.templateId), getTopPlayers(weapon)]).then(
       ([attachments, topPlayers]): WeaponAnalytics => ({ attachments, topPlayers }),
     ),
@@ -240,7 +241,7 @@ export default function MetaExplorer() {
         fallback={
           <div class="meta-notice" role="alert">
             <p>Weapon stats could not be loaded.</p>
-            <button type="button" class="meta-notice__retry" onClick={() => dataActions.refetch()}>
+            <button type="button" class="meta-notice__retry" onClick={() => data.refetch()}>
               Try again
             </button>
           </div>
@@ -354,7 +355,7 @@ export default function MetaExplorer() {
               <section class="meta-modal__section" aria-label="Attachment pick rates">
                 <h3 class="meta-modal__heading">Attachment pick rates</h3>
                 <Show
-                  when={analytics()}
+                  when={analytics.data()}
                   keyed
                   fallback={<p class="meta-modal__note" role="status">Loading analytics…</p>}
                 >
@@ -404,7 +405,7 @@ export default function MetaExplorer() {
               <section class="meta-modal__section" aria-label="Top players">
                 <h3 class="meta-modal__heading">Top players</h3>
                 <Show
-                  when={analytics()}
+                  when={analytics.data()}
                   keyed
                   fallback={<p class="meta-modal__note" role="status">Loading analytics…</p>}
                 >

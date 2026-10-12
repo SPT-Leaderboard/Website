@@ -20,6 +20,7 @@
  * All values derive from `src/mocks/achievement-catalog.json` and the
  * `achievement-counters.json` snapshot via `src/api/achievements.ts`.
  */
+import { createAsyncResource } from '../../lib/createAsyncResource';
 import { For, Show, createMemo, createResource, createSignal } from "solid-js";
 import {
   RARITY_ORDER,
@@ -81,8 +82,8 @@ function AchievementCard(props: { entry: AchievementRate }) {
 }
 
 export default function AchievementRates() {
-  const [catalog, catalogActions] = createResource(getAchievementCatalog);
-  const [counters, counterActions] = createResource(getAchievementCounters);
+  const catalog = createAsyncResource(getAchievementCatalog);
+  const counters = createAsyncResource(getAchievementCounters);
   const [rarity, setRarity] = createSignal<RarityFilter>("All");
   const [minPercent, setMinPercent] = createSignal(0);
 
@@ -93,8 +94,8 @@ export default function AchievementRates() {
   const failed = () => Boolean(catalog.error) || Boolean(counters.error);
 
   const rates = createMemo(() => {
-    const entries = catalog();
-    const snapshot = counters();
+    const entries = catalog.data();
+    const snapshot = counters.data();
     if (!entries || !snapshot) return null;
     return withCompletionRates(entries, snapshot);
   });
@@ -142,8 +143,8 @@ export default function AchievementRates() {
               type="button"
               class="achievements-notice__retry"
               onClick={() => {
-                catalogActions.refetch();
-                counterActions.refetch();
+                catalog.refetch();
+                counters.refetch();
               }}
             >
               Try again

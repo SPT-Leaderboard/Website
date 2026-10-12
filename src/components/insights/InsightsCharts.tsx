@@ -7,6 +7,7 @@
  * tokenized palette in `insights.css`. All values derive from the season archives
  * and global counters fixtures via `src/api/insights.ts`.
  */
+import { createAsyncResource } from '../../lib/createAsyncResource';
 import Chart from "chart.js/auto";
 import { For, Show, createMemo, createResource, createSignal, onCleanup, onMount } from "solid-js";
 import { getGlobalCounters, getSeasonArchives, type SeasonArchive } from "../../api/insights";
@@ -327,17 +328,17 @@ type TabId = (typeof TAB_IDS)[number];
 const TAB_LABELS: Record<TabId, string> = { general: "General", maps: "Maps" };
 
 export default function InsightsCharts() {
-  const [archives, archiveActions] = createResource(getSeasonArchives);
-  const [counters, counterActions] = createResource(getGlobalCounters);
+  const archives = createAsyncResource(getSeasonArchives);
+  const counters = createAsyncResource(getGlobalCounters);
   const [activeTab, setActiveTab] = createSignal<TabId>("general");
   let tabRefs: HTMLButtonElement[] = [];
 
   const loading = () => archives.loading || counters.loading;
   const failed = () => Boolean(archives.error) || Boolean(counters.error);
-  const empty = () => (archives()?.length ?? 1) === 0;
+  const empty = () => (archives.data()?.length ?? 1) === 0;
   const report = createMemo(() => {
-    const archivedSeasons = archives();
-    const globalCounters = counters();
+    const archivedSeasons = archives.data();
+    const globalCounters = counters.data();
     if (!archivedSeasons || !globalCounters) return null;
     return buildReport(archivedSeasons, globalCounters);
   });
@@ -367,8 +368,8 @@ export default function InsightsCharts() {
               type="button"
               class="insights-notice__retry"
               onClick={() => {
-                archiveActions.refetch();
-                counterActions.refetch();
+                archives.refetch();
+                counters.refetch();
               }}
             >
               Try again

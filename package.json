@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "astro check"
+    "test": "node scripts/check-no-create-resource.mjs && astro check",
+    "lint:create-resource": "node scripts/check-no-create-resource.mjs"
   },
   "dependencies": {
     "@astrojs/solid-js": "^5.0.0",
