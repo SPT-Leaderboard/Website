@@ -123,6 +123,21 @@
   border-radius: var(--radius-card);
 }
 
+/* Dossier §Achievements: per-rarity inline card border tint (prod common
+   #d1d1d1 / rare #1565c0 / legendary #ff8f00, re-hued to the audited theme
+   tokens the rarity chip already uses). Common keeps the default border. */
+.achievements-card[data-rarity='rare'] {
+  border-color: color-mix(in srgb, var(--color-info) 45%, transparent);
+}
+
+.achievements-card[data-rarity='epic'] {
+  border-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
+}
+
+.achievements-card[data-rarity='legendary'] {
+  border-color: color-mix(in srgb, var(--color-warning) 55%, transparent);
+}
+
 .achievements-card__header {
   display: flex;
   align-items: center;
@@ -219,6 +234,18 @@
 
 .achievements-card__rarity[data-rarity='legendary'] {
   color: var(--color-warning);
+}
+
+/* Rarity chip escalation (dossier: opacity/border escalation per rarity) —
+   weight steps, no glow. Radius stays --radius-full (consistent with every
+   other chip in the system; prod's 20px is the same intent). */
+.achievements-card__rarity[data-rarity='epic'],
+.achievements-card__rarity[data-rarity='legendary'] {
+  font-weight: 600;
+}
+
+.achievements-card__rarity[data-rarity='legendary'] {
+  border-color: currentColor;
 }
 
 /* Loading skeleton (audit §7 LB3: status is announced). */

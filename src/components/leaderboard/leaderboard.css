@@ -217,6 +217,20 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Dossier rank chip: prod rgba(255,255,255,.096) fill + hairline border,
+   tokenized as --color-chip-* (light/dark variants in tokens.css). */
+.leaderboard__rank-chip {
+  display: inline-block;
+  min-width: 2ch;
+  padding: 0.125rem var(--space-2);
+  text-align: center;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  background: var(--color-chip-bg);
+  border: 1px solid var(--color-chip-border);
+  border-radius: var(--radius-md);
+}
+
 .leaderboard__td--numeric {
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -333,6 +347,26 @@
 
 .leaderboard__profile-link:hover .leaderboard__name {
   text-decoration: underline;
+}
+
+/* Dossier §Tables: avatar hover scale (prod 1.08, dossier-tuned 1.06);
+   disabled under reduced motion (audit §9 XC1). */
+.leaderboard__avatar {
+  transition: transform var(--duration-fast) ease;
+}
+
+.leaderboard__profile-link:hover .leaderboard__avatar {
+  transform: scale(1.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leaderboard__avatar {
+    transition: none;
+  }
+
+  .leaderboard__profile-link:hover .leaderboard__avatar {
+    transform: none;
+  }
 }
 
 .leaderboard__teamtag {

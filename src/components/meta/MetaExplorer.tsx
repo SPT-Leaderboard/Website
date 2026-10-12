@@ -272,7 +272,7 @@ export default function MetaExplorer() {
             </label>
             <label class="meta-filters__field">
               <span class="meta-filters__label">Main category</span>
-              <select value={main()} onChange={onMainChange}>
+              <select value={main()} data-active={main() !== ALL} onChange={onMainChange}>
                 <option value={ALL}>All main categories</option>
                 <For each={mainOptions()}>{(option) => <option value={option}>{option}</option>}</For>
               </select>
@@ -281,6 +281,7 @@ export default function MetaExplorer() {
               <span class="meta-filters__label">Subcategory</span>
               <select
                 value={sub()}
+                data-active={sub() !== ALL}
                 onChange={(event) =>
                   setSub((event.currentTarget as HTMLSelectElement).value)
                 }
@@ -294,6 +295,7 @@ export default function MetaExplorer() {
               <span class="meta-filters__label">Caliber</span>
               <select
                 value={caliber()}
+                data-active={caliber() !== ALL}
                 onChange={(event) =>
                   setCaliber((event.currentTarget as HTMLSelectElement).value)
                 }

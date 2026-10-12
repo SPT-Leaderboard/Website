@@ -6,13 +6,16 @@
 // aggregate stats, and the 8 s live data flow.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Leaderboard from '../components/leaderboard/Leaderboard';
+import WelcomeOverlay from '../components/welcome/WelcomeOverlay';
 ---
 
 <BaseLayout
   title="SPT Leaderboard"
   description="Current SPT (Single Player Tarkov) season rankings: scores, levels, K/D, survival rates, raids, and live online status, with sortable columns, search, and an 8-second live data flow."
 >
-  <h1>SPT Leaderboard</h1>
+  <h1 tabindex="-1">SPT Leaderboard</h1>
   <p>Current season player rankings, updated live.</p>
   <Leaderboard client:load />
+  <!-- Dossier §Welcome gate: dismissible non-blocking first-visit overlay. -->
+  <WelcomeOverlay client:load />
 </BaseLayout>

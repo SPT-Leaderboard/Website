@@ -44,7 +44,9 @@ const MIN_PERCENT_STEP = 5;
 function AchievementCard(props: { entry: AchievementRate }) {
   const entry = () => props.entry;
   return (
-    <article class="achievements-card">
+    // Dossier §Achievements: rarity is double-encoded — chip + inline card
+    // border tint (same hue, tokenized via the chip's data-rarity rules).
+    <article class="achievements-card" data-rarity={entry().rarity.toLowerCase()}>
       <header class="achievements-card__header">
         <img
           class="achievements-card__icon"

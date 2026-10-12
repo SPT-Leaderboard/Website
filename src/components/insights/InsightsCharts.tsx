@@ -249,6 +249,11 @@ function ChartCard(props: { spec: ChartSpec }) {
     const palette = CHART_TOKENS.map((token) => styles.getPropertyValue(token).trim());
     const muted = styles.getPropertyValue("--color-text-muted").trim();
     const border = styles.getPropertyValue("--color-border").trim();
+    // Dossier MODERNIZE: prod's borderless tooltip gets a hairline indigo
+    // border + shadow for separation (tokens in insights.css).
+    const tooltipBg = styles.getPropertyValue("--chart-tooltip-bg").trim();
+    const tooltipText = styles.getPropertyValue("--chart-tooltip-text").trim();
+    const tooltipBorder = styles.getPropertyValue("--chart-tooltip-border").trim();
     // Respect prefers-reduced-motion: no chart animations when the user asked for less motion.
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -280,6 +285,15 @@ function ChartCard(props: { spec: ChartSpec }) {
         animation: reducedMotion ? false : undefined,
         plugins: {
           legend: { display: props.spec.type === "pie", position: "bottom" },
+          tooltip: {
+            backgroundColor: tooltipBg,
+            titleColor: tooltipText,
+            bodyColor: tooltipText,
+            borderColor: tooltipBorder,
+            borderWidth: 1,
+            cornerRadius: 6,
+            padding: 10,
+          },
         },
         scales:
           props.spec.type === "bar"

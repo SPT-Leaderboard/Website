@@ -397,7 +397,11 @@ function LeaderboardTableRow(props: { row: LeaderboardRow; heartbeats: Heartbeat
     <tr
       class={`leaderboard__row${player().banned ? ' leaderboard__row--banned' : ''}`}
     >
-      <td class="leaderboard__td leaderboard__td--rank">{props.row.rank}</td>
+      <td class="leaderboard__td leaderboard__td--rank">
+        {/* Dossier §Tables: numeric rank in a subtle chip instead of a bare
+            number (prod rgba chip, tokenized as --color-chip-*). */}
+        <span class="leaderboard__rank-chip">{props.row.rank}</span>
+      </td>
       <td class="leaderboard__td leaderboard__td--player">
         {/* FRT-13 row opener (web-standards-audit KB1): a real button, so the
             primary row action is keyboard-reachable. Setting location.hash

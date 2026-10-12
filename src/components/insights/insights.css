@@ -13,6 +13,16 @@
   --chart-6: #d97706;
 }
 
+/* Dossier MODERNIZE: the prod tooltip is a borderless #0b0f1a box; the
+   rewrite adds a hairline indigo border for separation on the card surface.
+   Same values both themes (the box is dark by design). Chart.js cannot draw
+   canvas shadows, so the border carries the separation alone. */
+:root {
+  --chart-tooltip-bg: #0b0f1a;
+  --chart-tooltip-text: #f8fafc;
+  --chart-tooltip-border: rgb(99 102 241 / 0.4);
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     /* Dark values = prod's palette order verbatim (insights/js/main.js:145). */

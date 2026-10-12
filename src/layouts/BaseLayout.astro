@@ -307,6 +307,18 @@ const ariaCurrent = (href: string) =>
     text-decoration: underline;
   }
 
+  /* Dossier §Nav dropdown trigger: caret marker on disclosure buttons. */
+  .site-nav__toggle::after {
+    content: '▾';
+    margin-left: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+  }
+
+  .site-nav__toggle:hover::after {
+    color: var(--color-accent);
+  }
+
   .site-nav__link[aria-current='page'] {
     color: var(--color-accent);
     font-weight: 700;
@@ -344,6 +356,9 @@ const ariaCurrent = (href: string) =>
     .site-nav__link:hover,
     .site-nav__toggle:hover {
       text-decoration: none;
+      /* Prod pill hover (styles.css ~rgba(255,255,255,.05)), tokenized via
+         color-mix of the theme's text color so it tracks both themes. */
+      background: color-mix(in srgb, var(--color-text-primary) 8%, transparent);
     }
 
     /* Active link: prod's teal tint pill (styles.css:459-466), tokenized via

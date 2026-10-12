@@ -1,0 +1,173 @@
+/* Prod-design-dossier §Welcome gate, tokenized. Prod's full-screen video
+   scrim is dropped (skip-list: no blocking gate, no heavy ambient blur);
+   what remains is a light backdrop-filter on the scrim only while the
+   overlay is up, plus the gate's glass secondary buttons and gradient CTA. */
+
+.welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  /* Prod scrim rgba(10,10,18,.7→.1), adapted to the theme's overlay token. */
+  background: var(--color-surface-overlay);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: welcome-in var(--duration-base) ease-out;
+}
+
+.welcome--closing {
+  /* Prod dismissal: fade + translateY(-20px), 300 ms. */
+  animation: welcome-out 300ms ease-in forwards;
+}
+
+@keyframes welcome-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes welcome-out {
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+.welcome__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  max-width: 34rem;
+  padding: var(--space-6);
+  text-align: center;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-3);
+}
+
+.welcome__close {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  display: grid;
+  place-items: center;
+  min-width: 2.75rem; /* 44px touch-target floor (ux-audit §2.4) */
+  min-height: 2.75rem;
+  color: var(--color-text-muted);
+  font-size: var(--text-xl);
+  line-height: 1;
+  background: none;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.welcome__close:hover {
+  color: var(--color-text-primary);
+}
+
+/* Prod h1 "WELCOME TO SPTLB" ~36px cyan #38bdf8; the page already owns the
+   h1, so the overlay heading is an h2 with the display face + heading token. */
+.welcome__heading {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: 'Orbitron', 'Segoe UI', system-ui, sans-serif;
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  letter-spacing: 0.0625rem;
+  text-transform: uppercase;
+}
+
+.welcome__subtitle {
+  min-height: 1.5em; /* phrase swaps never shift the layout */
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.welcome__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Prod CTA: gradient 135deg, dark text, 14px 32px, min-width 280px, radius
+   8px, uppercase, hover scale 1.01 / active 0.98. Endpoints + label color
+   are tokens (tokens.css, both themes). */
+.welcome__cta {
+  min-width: min(17.5rem, 100%);
+  min-height: 2.75rem; /* 44px touch-target floor */
+  margin-inline: auto;
+  padding: 0.875rem 2rem;
+  color: var(--color-cta-text);
+  font-size: var(--text-base);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, var(--color-cta-from), var(--color-cta-to));
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform var(--duration-fast) ease;
+}
+
+.welcome__cta:hover {
+  transform: scale(1.01);
+}
+
+.welcome__cta:active {
+  transform: scale(0.98);
+}
+
+/* Prod glass secondaries (blur(10px), 1px glass border, 10px 20px, hover
+   rgba(255,255,255,.12)) via the glass tokens. */
+.welcome__secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem; /* 44px touch-target floor */
+  padding: 0.625rem 1.25rem;
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-md);
+}
+
+.welcome__secondary:hover {
+  background: color-mix(in srgb, var(--color-text-primary) 10%, transparent);
+}
+
+/* audit §9 XC1: no entrance/exit motion or hover scaling under reduced
+   motion — dismissal is still instant and the overlay just disappears. */
+@media (prefers-reduced-motion: reduce) {
+  .welcome,
+  .welcome--closing {
+    animation: none;
+  }
+
+  .welcome--closing {
+    opacity: 0;
+  }
+
+  .welcome__cta {
+    transition: none;
+  }
+
+  .welcome__cta:hover,
+  .welcome__cta:active {
+    transform: none;
+  }
+}

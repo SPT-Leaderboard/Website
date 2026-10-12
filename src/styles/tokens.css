@@ -40,6 +40,25 @@
   --color-glass-bg: linear-gradient(135deg, rgb(15 23 42 / 0.04), rgb(15 23 42 / 0.02));
   --color-glass-border: rgb(15 23 42 / 0.1);
 
+  /* Subtle rank chip (prod rgba(255,255,255,.096) fill + #ffffff3b border;
+     light theme inverts to dark-based tints of the same strengths). */
+  --color-chip-bg: rgb(15 23 42 / 0.096);
+  --color-chip-border: rgb(15 23 42 / 0.23);
+
+  /* Welcome CTA gradient endpoints (prod 135deg #00e1ff→#0077ff). Light theme
+     uses darker 600-steps so white label text keeps ≥4.5:1 on both stops. */
+  --color-cta-from: #0891b2;
+  --color-cta-to: #1d4ed8;
+  --color-cta-text: #ffffff;
+
+  /* Active meta-filter border (prod weaponmeta #4d7ea8); mid-blue works on
+     both surfaces, so one value for both themes. */
+  --color-filter-active: #4d7ea8;
+
+  /* Sticky offset for the meta filter slab: clears the desktop glass nav
+     pill (margin-top + 48px mark + paddings). */
+  --layout-nav-offset: 5.5rem;
+
   /* Spacing scale */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -106,5 +125,15 @@
     --shadow-1: 0 1px 2px rgb(0 0 0 / 0.5);
     --shadow-2: 0 4px 12px rgb(0 0 0 / 0.55);
     --shadow-3: 0 16px 40px rgb(0 0 0 / 0.6);
+
+    /* Prod rank-chip values (styles.css rank chip) verbatim in dark. */
+    --color-chip-bg: rgb(255 255 255 / 0.096);
+    --color-chip-border: rgb(255 255 255 / 0.23);
+
+    /* Prod CTA gradient endpoints verbatim; label is near-black for
+       contrast on the bright cyan stop. */
+    --color-cta-from: #00e1ff;
+    --color-cta-to: #0077ff;
+    --color-cta-text: #06121f;
   }
 }
