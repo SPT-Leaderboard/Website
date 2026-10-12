@@ -108,7 +108,7 @@ export default function WelcomeOverlay() {
 
   return (
     <Show when={open()}>
-      <Dialog.Root
+      <Dialog
         open={open()}
         onOpenChange={(next) => {
           if (!next) dismiss();
@@ -144,7 +144,7 @@ export default function WelcomeOverlay() {
             </Dialog.Content>
           </div>
         </Portal>
-      </Dialog.Root>
+      </Dialog>
     </Show>
   );
 }
