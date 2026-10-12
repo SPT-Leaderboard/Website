@@ -13,7 +13,7 @@
 //   XC3     — loading strings end with the "…" character;
 //   XC8     — Intl.NumberFormat for every displayed number.
 import { For, Show, createMemo, createSignal, onCleanup, onMount } from 'solid-js';
-import { getCurrentSeason, getHeartbeats } from '../../api/client';
+import { getCurrentSeason, getHeartbeats, REAL_API_ENABLED } from '../../api/client';
 import type { HeartbeatsMap, PlayerEntry } from '../../api/types';
 import { wireScrollCue } from '../../lib/scrollCue';
 import ProfileModal from '../profile/ProfileModal';
@@ -56,10 +56,10 @@ const BADGES = [
 ] as const;
 
 // web-standards-audit §8 ES4 keeps the inline error state + Retry affordance.
-// Unreachable while the page is mock-backed (getCurrentSeason never rejects),
-// so the branch is gated behind a flag that is never true until the real
-// season client replaces src/api/client.ts.
-const ERROR_STATE_REACHABLE = false;
+// Reachable only in real-API mode (PUBLIC_API_BASE_URL set — a fetch can
+// fail); mock-backed getCurrentSeason never rejects, so the fixtures default
+// keeps the branch gated off exactly as before.
+const ERROR_STATE_REACHABLE = REAL_API_ENABLED;
 
 export default function Leaderboard() {
   const [players, setPlayers] = createSignal<PlayerEntry[] | undefined>(undefined);

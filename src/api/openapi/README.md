@@ -12,17 +12,20 @@ calls the API through openapi-fetch (runtime dependency). Where a page keeps a
 stub return type, `openapi/types.ts` re-exports the matching domain type from
 `src/api/types.ts`; the client casts at the parse boundary (see deviations).
 
-**Not consumed yet.** The seven pages, the profile modal, the auth widget and
-the mock layer still run on `src/api/client.ts` and the page-mock resolvers.
-Rewiring the pages is a later task, after the backend ships. This module must
+**Consumed through the stub switch (FRT-20 first slice).** The seven pages, the
+profile modal, the auth widget and the page-mock resolvers still run on
+`src/api/client.ts`; that module now calls THIS module's season/status/counter
+operations when `PUBLIC_API_BASE_URL` is set (see `.env.example` at the repo
+root) and serves the fixtures otherwise. The profile resolvers and heartbeats
+stay on fixtures in both modes until their pages rewire. This module must
 compile (`bun run check`) and pass its unit tests (`bun test
-tests/openapi.test.ts`); nothing imports it from the UI.
+tests/openapi.test.ts`).
 
 ## Files
 
 | file | role |
 | --- | --- |
-| `base.ts` | `API_BASE` — from `import.meta.env.PUBLIC_API_BASE`, empty-string default (same origin); trailing slashes stripped. |
+| `base.ts` | `API_BASE` — from `import.meta.env.PUBLIC_API_BASE_URL`, empty-string default; trailing slashes stripped. Also `REAL_API_ENABLED` — the mock/real switch of the stub client. |
 | `schema.d.ts` | **Generated** — openapi-typescript output from the backend yaml. Do not edit; regenerate (command below). |
 | `types.ts` | Page-facing aliases derived from `schema.d.ts`, re-exports of the matching `src/api/types.ts` domain types, and the two shapes the schema does not cover (the normalized `PlayerSettings` view, the bare `FriendStatus` union). |
 | `client.ts` | One function per operation the pages use, on openapi-fetch; `ApiError`; the ETag cache. |
