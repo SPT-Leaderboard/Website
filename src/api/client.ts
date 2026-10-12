@@ -252,7 +252,16 @@ export async function getCurrentSeason(): Promise<SeasonData> {
   // never see undefined.
   return {
     ...season,
-    leaderboard: season.leaderboard.map((entry) => ({ ...entry, teamTag: entry.teamTag ?? '' })),
+    leaderboard: season.leaderboard.map((entry) => ({
+      ...entry,
+      teamTag: entry.teamTag ?? '',
+      // Mock mode has no /api/data/* routes in a static deploy (the avatar
+      // middleware is dev-only), so point fixture avatars at the bundled
+      // default picture instead of 404ing on every row.
+      profilePicture: entry.profilePicture?.startsWith('/api/data/')
+        ? '/media/default_avatar.png'
+        : entry.profilePicture,
+    })),
   };
 }
 

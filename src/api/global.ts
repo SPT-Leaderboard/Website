@@ -39,5 +39,14 @@ function delay(): Promise<void> {
 
 export async function getGlobalPlayers(): Promise<GlobalPlayer[]> {
   await delay();
-  return globalPlayersFixture as GlobalPlayer[];
+  // Mock mode has no /api/data/* routes in a static deploy (the avatar
+  // middleware is dev-only) — swap fixture avatar URLs for the bundled default
+  // so the deployed site loads without 404 noise. GlobalTable's onerror
+  // initials fallback stays as the second line of defense.
+  return (globalPlayersFixture as GlobalPlayer[]).map((player) => ({
+    ...player,
+    avatar: player.avatar.startsWith('/api/data/')
+      ? '/media/default_avatar.png'
+      : player.avatar,
+  }));
 }
