@@ -27,17 +27,15 @@ export function Modal(props: ModalProps) {
     >
       <Portal>
         <Dialog.Overlay class="modal-overlay" />
-        <div class="modal-layer">
-          <Dialog.Content class="modal">
-            <div class="modal__header">
-              <Dialog.Title class="modal__title">{props.title}</Dialog.Title>
-              <Dialog.CloseButton class="modal__close" aria-label="Close dialog">
-                ×
-              </Dialog.CloseButton>
-            </div>
-            <div class="modal__body">{props.children}</div>
-          </Dialog.Content>
-        </div>
+        <Dialog.Content class="modal">
+          <div class="modal__header">
+            <Dialog.Title class="modal__title">{props.title}</Dialog.Title>
+            <Dialog.CloseButton class="modal__close" aria-label="Close dialog">
+              ×
+            </Dialog.CloseButton>
+          </div>
+          <div class="modal__body">{props.children}</div>
+        </Dialog.Content>
       </Portal>
     </Dialog>
   );

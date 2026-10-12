@@ -20,6 +20,7 @@ import { Modal } from "../Modal";
 import { showToast } from "../Toast";
 import { deriveOnlineStatus, playerKills } from "../../api/leaderboard";
 import { getHeartbeats } from "../../api/client";
+import { wireScrollCue } from "../../lib/scrollCue";
 import {
   FRIEND_BUTTON_VIEWS,
   canDeleteComment,
@@ -268,7 +269,12 @@ function ProfileTabs(props: { player: PlayerEntry; data: ProfileData }) {
         ))}
       </p>
 
-      <div class="profile-tablist" role="tablist" aria-label="Profile sections">
+      <div
+        class="profile-tablist"
+        role="tablist"
+        aria-label="Profile sections"
+        ref={(el) => onCleanup(wireScrollCue(el))}
+      >
         {TAB_IDS.map((id, index) => (
           <button
             type="button"

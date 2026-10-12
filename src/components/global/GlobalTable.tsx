@@ -10,6 +10,7 @@
 //   XC8    — Intl.NumberFormat / Intl.RelativeTimeFormat for numbers and dates.
 import { For, Show, createMemo, createSignal, onCleanup, onMount } from 'solid-js';
 import { getGlobalPlayers, type GlobalPlayer } from '../../api/global';
+import { wireScrollCue } from '../../lib/scrollCue';
 import './global-table.css';
 
 /** Every displayed column except Rank is sortable; Rank follows the active sort. */
@@ -224,7 +225,10 @@ export default function GlobalTable() {
         when={showError()}
         fallback={
           <Show when={players() !== undefined} fallback={<TableSkeleton />}>
-            <div class="global-leaderboard__table-wrap">
+            <div
+              class="global-leaderboard__table-wrap"
+              ref={(el) => onCleanup(wireScrollCue(el))}
+            >
               <table class="global-leaderboard__table">
                 <caption class="global-leaderboard__visually-hidden">
                   All-time global leaderboard. Column headers are sortable buttons.
@@ -242,7 +246,7 @@ export default function GlobalTable() {
                             scope="col"
                             class={`global-leaderboard__th${
                               column.numeric ? ' global-leaderboard__th--numeric' : ''
-                            }`}
+                            }${column.key === 'name' ? ' global-leaderboard__th--player' : ''}`}
                             aria-sort={active() ? sortDir() : undefined}
                           >
                             <button
@@ -297,15 +301,7 @@ export default function GlobalTable() {
                                 window.location.hash = `id=${player.permaLink}`;
                               }}
                             >
-                              <img
-                                class="global-leaderboard__avatar"
-                                src={player.avatar}
-                                alt=""
-                                width="40"
-                                height="40"
-                                loading="lazy"
-                                decoding="async"
-                              />
+                              <PlayerAvatar player={player} />
                               <span class="global-leaderboard__name">{player.name}</span>
                             </button>
                           </td>
@@ -357,6 +353,37 @@ export default function GlobalTable() {
         </div>
       </Show>
     </div>
+  );
+}
+
+/** Avatar with an initials fallback (mirrors AuthWidget): dev serves no
+    /api/data/pmc_avatars assets, so a broken image must swap to a letter
+    tile instead of tearing the row and spamming console errors. */
+function PlayerAvatar(props: { player: GlobalPlayer }) {
+  const [failed, setFailed] = createSignal(false);
+  return (
+    <Show
+      when={!failed()}
+      fallback={
+        <span
+          class="global-leaderboard__avatar global-leaderboard__avatar--initial"
+          aria-hidden="true"
+        >
+          {props.player.name.charAt(0).toUpperCase()}
+        </span>
+      }
+    >
+      <img
+        class="global-leaderboard__avatar"
+        src={props.player.avatar}
+        alt=""
+        width="40"
+        height="40"
+        loading="lazy"
+        decoding="async"
+        onError={() => setFailed(true)}
+      />
+    </Show>
   );
 }
 

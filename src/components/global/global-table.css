@@ -36,6 +36,12 @@
   border-color: var(--color-text-muted);
 }
 
+/* The custom Clear button handles clearing; the native webkit search cancel
+   button would duplicate it (two clear affordances on one input). */
+.global-leaderboard__search input::-webkit-search-cancel-button {
+  display: none;
+}
+
 .global-leaderboard__clear {
   padding: var(--space-2) var(--space-3);
   color: var(--color-text-primary);
@@ -74,6 +80,14 @@
 
 .global-leaderboard__table-wrap {
   overflow-x: auto; /* narrow viewports scroll the table instead of clipping it */
+}
+
+/* Scroll affordance: fade the right edge only while columns are still
+   clipped; wireScrollCue (GlobalTable.tsx) drives the attributes, so the
+   fade disappears once everything is scrolled into view. Mask stops are
+   luminance values, not design colors. */
+.global-leaderboard__table-wrap[data-scrollable]:not([data-at-scroll-end]) {
+  mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
 }
 
 .global-leaderboard__table {
@@ -137,6 +151,19 @@
   white-space: nowrap;
 }
 
+/* Keep identity visible while the table scrolls: the Player column sticks to
+   the left edge and paints over passing columns (th and td together). */
+.global-leaderboard__th--player,
+.global-leaderboard__td--player {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.global-leaderboard__td--player {
+  background: var(--color-surface);
+}
+
 .global-leaderboard__player {
   display: flex;
   align-items: center;
@@ -178,6 +205,19 @@
   flex: none;
   border-radius: var(--radius-full);
   background: var(--color-surface-raised);
+}
+
+/* Initial-letter fallback tile when the avatar image fails to load; same
+   footprint as the 40px image it replaces. */
+.global-leaderboard__avatar--initial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-weight: 700;
 }
 
 .global-leaderboard__empty {

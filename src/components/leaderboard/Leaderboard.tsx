@@ -15,6 +15,7 @@
 import { For, Show, createMemo, createSignal, onCleanup, onMount } from 'solid-js';
 import { getCurrentSeason, getHeartbeats } from '../../api/client';
 import type { HeartbeatsMap, PlayerEntry } from '../../api/types';
+import { wireScrollCue } from '../../lib/scrollCue';
 import ProfileModal from '../profile/ProfileModal';
 import {
   AUTOUPDATE_STORAGE_KEY,
@@ -289,7 +290,10 @@ export default function Leaderboard() {
         when={showError()}
         fallback={
           <Show when={rankedRows() !== undefined} fallback={<TableSkeleton />}>
-            <div class="leaderboard__table-wrap">
+            <div
+              class="leaderboard__table-wrap"
+              ref={(el) => onCleanup(wireScrollCue(el))}
+            >
               <table class="leaderboard__table">
                 <caption class="leaderboard__visually-hidden">
                   Current season leaderboard. Column headers are sortable buttons; banned
@@ -305,7 +309,7 @@ export default function Leaderboard() {
                             scope="col"
                             class={`leaderboard__th${
                               column.numeric ? ' leaderboard__th--numeric' : ''
-                            }`}
+                            }${column.key === 'name' ? ' leaderboard__th--player' : ''}`}
                             aria-sort={active() ? sort().dir : undefined}
                           >
                             <button
@@ -361,11 +365,14 @@ export default function Leaderboard() {
                   </Show>
                 </tbody>
               </table>
-              <p class="leaderboard__footnote">
-                Status is derived from heartbeats ({ONLINE_THRESHOLD_SECONDS} s threshold); ranks
-                follow the season order.
-              </p>
             </div>
+            {/* The footnote stays out of the scroll container: it must not
+                scroll sideways with the table, and the wrap's edge fade
+                (mask-image) must not clip its text. */}
+            <p class="leaderboard__footnote">
+              Status is derived from heartbeats ({ONLINE_THRESHOLD_SECONDS} s threshold); ranks
+              follow the season order.
+            </p>
           </Show>
         }
       >

@@ -9,7 +9,7 @@
   /* Color — light theme */
   --color-surface: #ffffff;
   --color-surface-raised: #f1f5f9;
-  --color-surface-overlay: rgb(15 23 42 / 0.55); /* modal backdrop */
+  --color-surface-overlay: rgb(15 23 42 / 0.7); /* modal backdrop */
   --color-border: #cbd5e1;
   --color-text-primary: #0f172a;
   --color-text-muted: #475569;
@@ -63,7 +63,7 @@
   :root {
     --color-surface: #0f172a;
     --color-surface-raised: #1e293b;
-    --color-surface-overlay: rgb(0 0 0 / 0.6);
+    --color-surface-overlay: rgb(0 0 0 / 0.75);
     --color-border: #334155;
     --color-text-primary: #c9c9c9;
     --color-text-muted: #8892b0;

@@ -1,7 +1,8 @@
 /* FRT-10 modal styles (companion to Modal.tsx). Tokens from styles/tokens.css. */
 
-/* Kobalte renders Overlay and Content as portal siblings: the overlay carries
-   only the backdrop; the layer centers the content. */
+/* Kobalte renders Overlay and Content as portal siblings; both unmount when the
+   dialog closes (an always-mounted wrapper div here once blocked all page
+   clicks). The content centers itself. */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -9,19 +10,18 @@
   background: var(--color-surface-overlay);
 }
 
-.modal-layer {
+.modal {
   position: fixed;
   inset: 0;
+  margin: auto;
+  /* fit-content is required: with inset top/bottom 0 and height auto the
+     absolutely positioned box would stretch to fill the viewport (margin:
+     auto then has nothing to distribute), recreating the fixed-80vh panel. */
+  height: fit-content;
   z-index: 50;
-  display: grid;
-  place-items: center;
-  padding: var(--space-4);
-}
-
-.modal {
   display: flex;
   flex-direction: column;
-  width: min(36rem, 100%);
+  width: min(36rem, calc(100vw - 2 * var(--space-4)));
   max-height: min(80vh, 100%);
   overflow: auto;
   overscroll-behavior: contain; /* web-standards-audit §9 XC9 scroll containment */

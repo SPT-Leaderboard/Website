@@ -10,7 +10,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   title="Privacy Policy"
   description="How SPT Leaderboard collects, uses, shares, and keeps data: public game statistics from the mod, optional account features, cookies, retention, and your choices."
 >
-  <h1>Privacy Policy</h1>
+  <article class="privacy">
+    <h1>Privacy Policy</h1>
   <p><strong>Last updated: October 11, 2026</strong></p>
   <p>
     This page explains what data the SPT Leaderboard website and service handle, why we handle
@@ -303,9 +304,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     Discord:
     <a href="https://discord.gg/UrRkqwdgnd" target="_blank" rel="noopener noreferrer">SPT Leaderboard Discord</a>.
   </p>
+  </article>
 </BaseLayout>
 
 <style>
+  /* Reading width for long-form prose, same measure as tos.astro .terms. */
+  .privacy {
+    max-width: 46rem;
+  }
+
   /* Privacy table styles. Tokens from styles/tokens.css only. */
   .privacy-table {
     width: 100%;

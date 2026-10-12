@@ -53,12 +53,22 @@
 }
 
 /* Tabs (web-standards-audit DS7, same pattern as the insights tablist).
-   Selected state keys off aria-selected, not a class. */
+   Selected state keys off aria-selected, not a class. On narrow viewports the
+   five tabs don't fit, so the strip scrolls horizontally instead of clipping
+   the last tab (e.g. Friends). */
 .profile-tablist {
   display: flex;
   gap: var(--space-2);
   margin-bottom: var(--space-4);
+  overflow-x: auto;
   border-bottom: 1px solid var(--color-border);
+}
+
+/* Scroll affordance: fade the right edge only while tabs are still hidden;
+   wireScrollCue (ProfileModal.tsx) drives the attributes. Mask stops are
+   luminance values, not design colors. */
+.profile-tablist[data-scrollable]:not([data-at-scroll-end]) {
+  mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
 }
 
 .profile-tab {

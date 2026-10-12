@@ -44,7 +44,15 @@ function delay(): Promise<void> {
 
 export async function getCurrentSeason(): Promise<SeasonData> {
   await delay();
-  return seasonFixture as unknown as SeasonData;
+  const season = seasonFixture as unknown as SeasonData;
+  // Trimmed production snapshots omit teamTag on players without a team, but
+  // the domain type says string (the cast above lets that slip). Normalize
+  // once at ingest so search (toLowerCase) and the Player-cell tag render
+  // never see undefined.
+  return {
+    ...season,
+    leaderboard: season.leaderboard.map((entry) => ({ ...entry, teamTag: entry.teamTag ?? '' })),
+  };
 }
 
 /** Serves the single fixture player's index; `permaLink` is unused for now. */
