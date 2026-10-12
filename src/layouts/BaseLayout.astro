@@ -198,6 +198,29 @@ const ariaCurrent = (href: string) =>
           return;
         }
 
+        // Roving focus between the open menu's links (finding 10):
+        // ArrowDown/ArrowUp move by one, Home/End jump to the ends, wrapping.
+        const menu = target.closest<HTMLElement>(MENU);
+        if (
+          menu &&
+          (event.key === 'ArrowDown' ||
+            event.key === 'ArrowUp' ||
+            event.key === 'Home' ||
+            event.key === 'End')
+        ) {
+          const links = Array.from(menu.querySelectorAll<HTMLAnchorElement>('a[href]'));
+          const currentIndex = links.findIndex((link) => link === target);
+          if (currentIndex === -1 || links.length === 0) return;
+          event.preventDefault();
+          let nextIndex: number;
+          if (event.key === 'Home') nextIndex = 0;
+          else if (event.key === 'End') nextIndex = links.length - 1;
+          else nextIndex = currentIndex + (event.key === 'ArrowDown' ? 1 : -1);
+          nextIndex = (nextIndex + links.length) % links.length;
+          links[nextIndex]?.focus();
+          return;
+        }
+
         // Escape closes the open dropdown and returns focus to its button.
         if (event.key !== 'Escape') return;
         const open = Array.from(document.querySelectorAll<HTMLElement>(DROPDOWN)).filter(
