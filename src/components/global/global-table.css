@@ -144,6 +144,30 @@
   min-width: 0;
 }
 
+/* Profile opener (owner feedback 2026-10-12): the name cell is a real button,
+   44px-min touch target, hover affordance on the name. */
+.global-leaderboard__profile-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  min-height: 44px;
+  padding: var(--space-1);
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.global-leaderboard__profile-link:hover .global-leaderboard__name,
+.global-leaderboard__profile-link:focus-visible .global-leaderboard__name {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
 .global-leaderboard__name {
   overflow: hidden;
   text-overflow: ellipsis;

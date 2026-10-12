@@ -1,13 +1,21 @@
 /* FRT-10 modal styles (companion to Modal.tsx). Tokens from styles/tokens.css. */
 
+/* Kobalte renders Overlay and Content as portal siblings: the overlay carries
+   only the backdrop; the layer centers the content. */
 .modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: var(--color-surface-overlay);
+}
+
+.modal-layer {
   position: fixed;
   inset: 0;
   z-index: 50;
   display: grid;
   place-items: center;
   padding: var(--space-4);
-  background: var(--color-surface-overlay);
 }
 
 .modal {

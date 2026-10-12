@@ -285,18 +285,29 @@ export default function GlobalTable() {
                             {index() + 1}
                           </td>
                           <td class="global-leaderboard__td global-leaderboard__td--player">
-                            <span class="global-leaderboard__player">
+                            {/* Owner feedback 2026-10-12: global rows must open the
+                                profile modal like the season leaderboard. Same hash
+                                deep-link mechanism (Back/Forward wired via the
+                                ProfileModal island this page now mounts). */}
+                            <button
+                              type="button"
+                              class="global-leaderboard__profile-link"
+                              aria-label={`Open ${player.name}'s profile`}
+                              onClick={() => {
+                                window.location.hash = `id=${player.permaLink}`;
+                              }}
+                            >
                               <img
                                 class="global-leaderboard__avatar"
                                 src={player.avatar}
-                                alt={`${player.name} avatar`}
+                                alt=""
                                 width="40"
                                 height="40"
                                 loading="lazy"
                                 decoding="async"
                               />
                               <span class="global-leaderboard__name">{player.name}</span>
-                            </span>
+                            </button>
                           </td>
                           <td class="global-leaderboard__td global-leaderboard__td--team">
                             {player.teamTag !== '' ? `[${player.teamTag}]` : '—'}

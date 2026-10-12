@@ -4,6 +4,7 @@
 // DS6 requires a unique, descriptive title per page.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import GlobalTable from '../components/global/GlobalTable';
+import ProfileModal from '../components/profile/ProfileModal';
 ---
 
 <BaseLayout
@@ -13,4 +14,7 @@ import GlobalTable from '../components/global/GlobalTable';
   <h1>Global Leaderboard</h1>
   <p>All-time player rankings across every season.</p>
   <GlobalTable client:load />
+  {/* Owner feedback 2026-10-12: profile opens as an overlay here, not a redirect
+      to the home page — the modal island listens for the same #id= deep links. */}
+  <ProfileModal client:load />
 </BaseLayout>
