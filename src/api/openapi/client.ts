@@ -246,11 +246,16 @@ export async function getPlayerSettings(permaLink: string): Promise<PlayerSettin
       params: { path: { permaLink } },
     }),
   );
+  // Field is marked @deprecated in the generated schema (legacy alias) but is
+  // still the compat fallback until the backend drops it — route the access
+  // through an index view so the deprecation hint doesn't fire.
+  const legacySettings = raw.settings as Record<string, unknown>;
   const settings = {
     ...raw.settings,
     usePrestigeStyling: normalizeFlag(raw.settings.usePrestigeStyling),
     catReward: normalizeText(raw.settings.catReward),
-    discord: raw.settings.discordUser ?? raw.settings.discord_user,
+    discord:
+      raw.settings.discordUser ?? (legacySettings["discord_user"] as string | undefined),
   } as PlayerSettings["settings"];
   delete (settings as { discordUser?: unknown }).discordUser;
   delete (settings as { discord_user?: unknown }).discord_user;

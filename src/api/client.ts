@@ -55,20 +55,20 @@ export async function getCurrentSeason(): Promise<SeasonData> {
   };
 }
 
-/** Serves the single fixture player's index; `permaLink` is unused for now. */
-export async function getPlayerRaids(permaLink: string): Promise<RaidIndex> {
+/** Serves the single fixture player's index; kept for interface parity; the `_` prefix marks it intentionally unused. */
+export async function getPlayerRaids(_permaLink: string): Promise<RaidIndex> {
   await delay();
   return raidsIndexFixture as RaidIndex;
 }
 
-/** Serves the single fixture player's equipment; `playerId` is unused for now. */
-export async function getPlayerEquipment(playerId: string): Promise<Equipment> {
+/** Serves the single fixture player's equipment; kept for interface parity; the `_` prefix marks it intentionally unused. */
+export async function getPlayerEquipment(_playerId: string): Promise<Equipment> {
   await delay();
   return equipmentFixture as Equipment;
 }
 
-/** Serves the single fixture player's comments; `permaLink` is unused for now. */
-export async function getPlayerComments(permaLink: string): Promise<CommentsFile> {
+/** Serves the single fixture player's comments; kept for interface parity; the `_` prefix marks it intentionally unused. */
+export async function getPlayerComments(_permaLink: string): Promise<CommentsFile> {
   await delay();
   return commentsFixture as CommentsFile;
 }
