@@ -309,12 +309,26 @@
 
 /* FRT-13 row opener: the name cell's button reset; hover affordance only. */
 .leaderboard__profile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   padding: 0;
   color: inherit;
   font: inherit;
   background: none;
   border: none;
   cursor: pointer;
+}
+
+/* Prod row avatar (styles.css:1444-1457): ~40-45px, rounded, light-blue ring. */
+.leaderboard__avatar {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: 2px solid rgb(132 210 255 / 0.8);
+  background: var(--color-surface-raised);
+  object-fit: cover;
 }
 
 .leaderboard__profile-link:hover .leaderboard__name {

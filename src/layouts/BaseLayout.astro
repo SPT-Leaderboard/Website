@@ -36,24 +36,16 @@ const ariaCurrent = (href: string) =>
     <header class="site-header">
       <nav class="site-nav" aria-label="Main">
         <!-- DS4 + ux-audit §2.2: logo is a real home link with an accurate accessible name.
-             Prod brand mark (index.html:71 neon triangle), recreated as an inline
-             aria-hidden SVG so no binary asset is needed. -->
+             Prod brand mark: the real media/icon_transparent.png asset (owner correction:
+             use the backup asset, do not recreate it). -->
         <a class="site-nav__logo" href="/">
-          <svg
+          <img
             class="site-nav__mark"
-            aria-hidden="true"
-            focusable="false"
-            viewBox="0 0 24 24"
-            width="24"
-            height="24"
-          >
-            <path
-              d="M12 3 22 21 H2 Z"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linejoin="round"></path>
-          </svg>
+            src="/media/icon_transparent.png"
+            alt=""
+            width="32"
+            height="32"
+          />
           SPT Leaderboard</a>
         <ul class="site-nav__list">
           <li>
@@ -111,21 +103,13 @@ const ariaCurrent = (href: string) =>
     <footer class="site-footer">
       <div class="site-footer__brand">
         <p class="site-footer__wordmark">
-          <svg
+          <img
             class="site-footer__mark"
-            aria-hidden="true"
-            focusable="false"
-            viewBox="0 0 24 24"
+            src="/media/icon_transparent.png"
+            alt=""
             width="24"
             height="24"
-          >
-            <path
-              d="M12 3 22 21 H2 Z"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linejoin="round"></path>
-          </svg>
+          />
           SPT Leaderboard
         </p>
         <p class="site-footer__slogan">Built with passion. Powered by community.</p>

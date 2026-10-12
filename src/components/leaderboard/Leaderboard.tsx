@@ -411,6 +411,17 @@ function LeaderboardTableRow(props: { row: LeaderboardRow; heartbeats: Heartbeat
             window.location.hash = `id=${player().permaLink}`;
           }}
         >
+          {/* Owner note 2026-10-12: the main leaderboard shows profile pictures,
+              like prod (45px ringed avatar). Alt is empty — the name follows. */}
+          <img
+            class="leaderboard__avatar"
+            src={player().profilePicture}
+            alt=""
+            width="40"
+            height="40"
+            loading="lazy"
+            decoding="async"
+          />
           <span class="leaderboard__name">{player().name}</span>
         </button>
         <Show when={player().teamTag !== ''}>

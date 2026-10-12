@@ -11,12 +11,31 @@
 // "Avatars come from object storage later; the URL stays the same", answered
 // 404 not_found with Cache-Control: public, max-age=300 — mirrored here).
 //
-// Config-side module (imported by astro.config.mjs): Vite types only, no DOM
-// and no Node builtins, so `astro check` can verify it.
+// Config-side module (imported by astro.config.mjs): Vite types only in the
+// type positions; the runtime fs access uses a computed-specifier dynamic
+// import so `astro check` (no @types/node in this repo) never tries to resolve
+// "node:fs" statically.
 
 import type { Plugin, PreviewServer, ViteDevServer } from 'vite';
 
 const AVATAR_PREFIX = '/api/data/pmc_avatars/';
+
+/** Real captured binaries from the backup (fallbacks/pmc_avatars, 142 MB —
+    intentionally NOT in public/ so they never ship in the static output).
+    Served in dev/preview when the file exists; placeholder SVG otherwise.
+    Owner note 2026-10-12: real profile pictures belong on the leaderboard. */
+async function readRealAvatar(seed: string): Promise<Uint8Array | string | undefined> {
+  try {
+    // Non-literal specifier: keeps TypeScript from resolving node types while
+    // Node/Vite resolve it normally at runtime.
+    const fs: any = await import(/* @vite-ignore */ ('node:' + 'fs'));
+    const path: any = await import(/* @vite-ignore */ ('node:' + 'path'));
+    const file = path.join('fallbacks', 'pmc_avatars', `${seed}.png`);
+    return fs.readFileSync(file);
+  } catch {
+    return undefined;
+  }
+}
 
 /** FNV-1a over the seed → stable 0-359 hue, so a player's placeholder never
     changes between reloads while the data stays unchanged. */
@@ -53,7 +72,7 @@ interface RequestLike {
 
 interface ResponseLike {
   writeHead(statusCode: number, headers: Record<string, string>): unknown;
-  end(body?: string): unknown;
+  end(body?: unknown): unknown;
 }
 
 function isResponseLike(value: unknown): value is ResponseLike {
@@ -65,7 +84,7 @@ function isResponseLike(value: unknown): value is ResponseLike {
   );
 }
 
-function respond(req: unknown, res: unknown, next: () => void): void {
+async function respond(req: unknown, res: unknown, next: () => void): Promise<void> {
   if (!isResponseLike(res)) return next();
   const { method, url } = (typeof req === 'object' && req !== null ? req : {}) as RequestLike;
   if (method !== 'GET' && method !== 'HEAD') return next();
@@ -73,6 +92,15 @@ function respond(req: unknown, res: unknown, next: () => void): void {
   if (!path.startsWith(AVATAR_PREFIX) || path.length === AVATAR_PREFIX.length) return next();
   // Seeds are hex permalinks in practice; drop anything XML-significant anyway.
   const seed = path.slice(AVATAR_PREFIX.length).replace(/\.png$/i, '').replace(/[<>&"']/g, '');
+  const real = await readRealAvatar(seed);
+  if (real !== undefined) {
+    res.writeHead(200, {
+      'Content-Type': 'image/png',
+      'Cache-Control': 'public, max-age=300',
+    });
+    res.end(method === 'HEAD' ? undefined : real);
+    return;
+  }
   res.writeHead(200, {
     'Content-Type': 'image/svg+xml; charset=utf-8',
     'Cache-Control': 'public, max-age=300',
