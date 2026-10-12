@@ -1,9 +1,14 @@
 name: Deploy
 
+# Production deploys from main; the rewrite branch auto-deploys to the dev
+# target (FRT-26/27, owner decision 2026-10-12: rank-dev must track
+# rewrite/astro-solid so the owner can re-test after every push).
 on:
   push:
     branches:
       - main
+      - rewrite/astro-solid
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -21,13 +26,33 @@ jobs:
       - name: Build
         run: bun run build
 
+      - name: Resolve deploy target
+        id: target
+        run: |
+          if [ -n "$CF_DOMAIN" ]; then
+            echo "domain=$CF_DOMAIN" >> "$GITHUB_OUTPUT"
+          elif [ "${GITHUB_REF_NAME}" = "rewrite/astro-solid" ] && [ -n "$CF_DEV_DOMAIN" ]; then
+            echo "domain=$CF_DEV_DOMAIN" >> "$GITHUB_OUTPUT"
+          else
+            echo "domain=" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          CF_DOMAIN: ${{ secrets.CF_DOMAIN }}
+          CF_DEV_DOMAIN: ${{ secrets.CF_DEV_DOMAIN }}
+
+      - name: Skip (secrets not configured)
+        if: steps.target.outputs.domain == ''
+        run: |
+          echo "::notice::No CF_DOMAIN (main) / CF_DEV_DOMAIN (rewrite/astro-solid) secret set - deploy skipped."
+          echo "Configure the secrets on the repo to enable deploys."
+
       - name: Deploy to Cloudflare Workers
+        if: steps.target.outputs.domain != ''
         # Portable config: no domain in wrangler.jsonc. The deploy target
-        # comes from the CF_DOMAIN secret (passed as --domain, a custom
-        # domain). Forks/self-hosters set their own secrets - or run
+        # comes from a secret (passed as --domain, a custom domain).
+        # Forks/self-hosters set their own secrets - or run
         # `bunx wrangler deploy --domain their.host` locally.
-        run: bunx wrangler deploy ${CF_DOMAIN:+--domain "$CF_DOMAIN"}
+        run: bunx wrangler deploy --domain "${{ steps.target.outputs.domain }}"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CF_DOMAIN: ${{ secrets.CF_DOMAIN }}
