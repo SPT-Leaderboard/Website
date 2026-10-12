@@ -13,6 +13,7 @@
 //   XC3     — loading strings end with the "…" character;
 //   XC8     — Intl.NumberFormat for every displayed number.
 import { For, Show, createMemo, createSignal, onCleanup, onMount } from 'solid-js';
+import { openProfile } from '../../lib/profileRoute';
 import { getCurrentSeason, getHeartbeats, REAL_API_ENABLED } from '../../api/client';
 import type { HeartbeatsMap, PlayerEntry } from '../../api/types';
 import { wireScrollCue } from '../../lib/scrollCue';
@@ -411,9 +412,7 @@ function LeaderboardTableRow(props: { row: LeaderboardRow; heartbeats: Heartbeat
           type="button"
           class="leaderboard__profile-link"
           aria-label={`Open ${player().name}'s profile`}
-          onClick={() => {
-            window.location.hash = `id=${player().permaLink}`;
-          }}
+          onClick={() => openProfile(player().permaLink)}
         >
           {/* Owner note 2026-10-12: the main leaderboard shows profile pictures,
               like prod (45px ringed avatar). Alt is empty — the name follows. */}

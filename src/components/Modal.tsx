@@ -6,7 +6,7 @@
 // Styling stays in modal.css on the same token classes.
 import { Dialog } from '@kobalte/core/dialog';
 import { Portal } from 'solid-js/web';
-import { type JSX } from 'solid-js';
+import { createEffect, type JSX } from 'solid-js';
 import './modal.css';
 
 export interface ModalProps {
@@ -17,6 +17,20 @@ export interface ModalProps {
 }
 
 export function Modal(props: ModalProps) {
+  // Kobalte's scroll lock flips overflow:hidden on the root element, which
+  // makes Chromium discard the document scroll offset (owner report
+  // 2026-10-12: opening a profile "re-rendered" the page — the scroll was
+  // gone when the modal closed). Save before the lock, restore after unlock.
+  // props.open is controlled, so this runs on every transition regardless of
+  // whether the change came from inside the dialog or the parent.
+  let scrollBeforeOpen = 0;
+  createEffect(() => {
+    if (props.open) {
+      scrollBeforeOpen = window.scrollY;
+    } else if (typeof window !== "undefined" && scrollBeforeOpen !== 0) {
+      requestAnimationFrame(() => window.scrollTo(0, scrollBeforeOpen));
+    }
+  });
   return (
     <Dialog
       open={props.open}

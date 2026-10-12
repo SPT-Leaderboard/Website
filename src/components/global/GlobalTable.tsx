@@ -9,6 +9,7 @@
 //   XC3    — UI strings end with the "…" character;
 //   XC8    — Intl.NumberFormat / Intl.RelativeTimeFormat for numbers and dates.
 import { For, Show, createMemo, createSignal, onCleanup, onMount } from 'solid-js';
+import { openProfile } from '../../lib/profileRoute';
 import { getGlobalPlayers, type GlobalPlayer } from '../../api/global';
 import { wireScrollCue } from '../../lib/scrollCue';
 import './global-table.css';
@@ -297,9 +298,7 @@ export default function GlobalTable() {
                               type="button"
                               class="global-leaderboard__profile-link"
                               aria-label={`Open ${player.name}'s profile`}
-                              onClick={() => {
-                                window.location.hash = `id=${player.permaLink}`;
-                              }}
+                              onClick={() => openProfile(player.permaLink)}
                             >
                               <PlayerAvatar player={player} />
                               <span class="global-leaderboard__name">{player.name}</span>
