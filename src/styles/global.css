@@ -20,8 +20,8 @@ body {
   /* Ambient canvas washes (prod styles.css:232-236). Background only — text
      areas stay flat; surfaces painted on top keep their solid tokens. */
   background-image:
-    radial-gradient(circle at top left, rgb(99 102 241 / 0.1) 0%, transparent 20%),
-    radial-gradient(circle at 90% 80%, rgb(114 68 239 / 0.1) 0%, transparent 20%);
+    radial-gradient(circle at top left, rgb(99 102 241 / 0.18) 0%, transparent 32%),
+    radial-gradient(circle at 90% 80%, rgb(114 68 239 / 0.18) 0%, transparent 32%);
 }
 
 /* Page title: prod's Orbitron 700 uppercase in heading blue (styles.css:243-252),

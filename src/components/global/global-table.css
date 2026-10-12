@@ -124,6 +124,7 @@
 }
 
 .global-leaderboard__sort {
+  text-transform: inherit;
   width: 100%;
   /* Prod cell padding (styles.css:1019-1025): 10px 20px. */
   padding: 0.625rem 1.25rem;

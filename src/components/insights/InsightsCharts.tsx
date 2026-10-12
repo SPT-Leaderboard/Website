@@ -247,7 +247,6 @@ function ChartCard(props: { spec: ChartSpec }) {
     if (!canvas) return;
     const styles = getComputedStyle(document.documentElement);
     const palette = CHART_TOKENS.map((token) => styles.getPropertyValue(token).trim());
-    const accent = styles.getPropertyValue("--color-accent").trim();
     const muted = styles.getPropertyValue("--color-text-muted").trim();
     const border = styles.getPropertyValue("--color-border").trim();
     // Respect prefers-reduced-motion: no chart animations when the user asked for less motion.
@@ -267,7 +266,9 @@ function ChartCard(props: { spec: ChartSpec }) {
             backgroundColor:
               props.spec.type === "pie"
                 ? props.spec.labels.map((_, index) => palette[index % palette.length])
-                : accent,
+                : // Bar/line charts follow the prod indigo/violet family, not the
+                  // teal interactive accent (style-delta spec item 9).
+                  palette[0],
             borderColor: border,
             borderWidth: 1,
           },

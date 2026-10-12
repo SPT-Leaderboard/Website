@@ -182,6 +182,7 @@
 }
 
 .leaderboard__sort {
+  text-transform: inherit;
   width: 100%;
   /* Prod cell padding (styles.css:1019-1025): 10px 20px, applied to the sort
      button because the th itself delegates its box to the button. */
