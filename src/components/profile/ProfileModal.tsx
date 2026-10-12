@@ -15,7 +15,7 @@
  * Data comes from src/api/profile.ts fixtures; the Summary header stats
  * resolve the season entry via getCurrentSeason().
  */
-import { For, Show, createResource, createSignal, onCleanup, onMount } from "solid-js";
+import { For, Show, createEffect, createResource, createSignal, onCleanup, onMount } from "solid-js";
 import { Modal } from "../Modal";
 import { showToast } from "../Toast";
 import { deriveOnlineStatus, playerKills } from "../../api/leaderboard";
@@ -33,8 +33,9 @@ import {
   replyComment,
   sendFriendRequest,
   type FriendRow,
+  type FriendStatus,
 } from "../../api/community";
-import { getSession } from "../../api/auth";
+import { getSession, type Session } from "../../api/auth";
 import {
   getComments,
   getCustomization,
@@ -50,6 +51,7 @@ import type {
   Equipment,
   EquipmentItem,
   EquipmentSlot,
+  HeartbeatsMap,
   PlayerComment,
   PlayerEntry,
   RaidRecord,
@@ -161,7 +163,33 @@ function raidStatusTone(raid: RaidRecord): "success" | "error" | "muted" {
 
 export default function ProfileModal() {
   const [permaLink, setPermaLink] = createSignal<string | undefined>(undefined);
-  const [profile] = createResource(permaLink, loadProfile);
+
+  // Deliberately a signal-based loader, NOT createResource: Astro wraps every
+  // island in a Suspense boundary, so a resource entering its loading state
+  // SUSPENDS the whole island — the leaderboard was unmounted and restored on
+  // every profile open (owner report 2026-10-12). Plain signals keep the
+  // fetch outside Suspense.
+  const [profile, setProfile] = createSignal<ProfileData | undefined>(undefined);
+  const [profileError, setProfileError] = createSignal(false);
+  let loadSeq = 0;
+  createEffect(() => {
+    const id = permaLink();
+    if (id === undefined) {
+      setProfile(undefined);
+      setProfileError(false);
+      return;
+    }
+    const seq = ++loadSeq;
+    loadProfile(id)
+      .then((data) => {
+        if (seq !== loadSeq) return; // a newer open superseded this one
+        setProfile(data);
+      })
+      .catch(() => {
+        if (seq !== loadSeq) return;
+        setProfileError(true);
+      });
+  });
 
   // Single source of truth: the URL. pushState/replaceState don't fire these
   // events, so close() updates the signal directly; every other transition
@@ -188,13 +216,13 @@ export default function ProfileModal() {
     setPermaLink(undefined);
   };
 
-  const modalTitle = () => profile.latest?.player?.name ?? "Player profile";
+  const modalTitle = () => profile()?.player?.name ?? "Player profile";
 
   return (
     <Modal open={permaLink() !== undefined} onClose={close} title={modalTitle()}>
       <Show when={permaLink()}>
         <Show
-          when={!profile.error}
+          when={!profileError()}
           fallback={
             <p class="profile-state" role="alert">
               Failed to load this profile. Close it and try again.
@@ -460,10 +488,30 @@ function EquipmentTab(props: { equipment: Equipment }) {
     removal shows a toast only (legacy removeFriend was a client-side stub,
     js/user-community.js), and the request button calls sendFriendRequest. */
 function FriendsTab(props: { player: PlayerEntry }) {
-  const [friends] = createResource(getFriends);
-  const [status] = createResource(() => getFriendStatus(props.player.permaLink));
-  const [heartbeats] = createResource(getHeartbeats);
+  // Signal-based loaders (see ProfileModal top comment): createResource would
+  // suspend the whole island inside Astro's Suspense boundary.
+  const [friends, setFriends] = createSignal<FriendRow[]>([]);
+  const [friendsError, setFriendsError] = createSignal(false);
+  const [status, setStatus] = createSignal<FriendStatus | undefined>(undefined);
+  const [statusError, setStatusError] = createSignal(false);
+  const [heartbeats, setHeartbeats] = createSignal<HeartbeatsMap>({});
   const [sending, setSending] = createSignal(false);
+
+  createEffect(() => {
+    let alive = true;
+    getFriends()
+      .then((rows) => alive && setFriends(rows))
+      .catch(() => alive && setFriendsError(true));
+    getFriendStatus(props.player.permaLink)
+      .then((s) => alive && setStatus(s))
+      .catch(() => alive && setStatusError(true));
+    getHeartbeats()
+      .then((hb) => alive && setHeartbeats(hb))
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  });
 
   /** Online = a heartbeat fresher than 300 s (legacy system-heartbeat.js),
       same helper as the leaderboard status column. */
@@ -492,7 +540,7 @@ function FriendsTab(props: { player: PlayerEntry }) {
         keyed
         fallback={
           <Show
-            when={!status.error}
+            when={!statusError()}
             fallback={
               <p class="profile-state" role="alert">
                 Could not load the friend status for this player.
@@ -529,7 +577,7 @@ function FriendsTab(props: { player: PlayerEntry }) {
         keyed
         fallback={
           <Show
-            when={!friends.error}
+            when={!friendsError()}
             fallback={
               <p class="profile-state" role="alert">
                 Could not load the friend list.
@@ -599,7 +647,16 @@ function CommentsTab(props: { comments: PlayerComment[]; permaLink: string }) {
   const [replyDraft, setReplyDraft] = createSignal("");
   // Delete visibility follows the mock session (legacy: author or role > 5;
   // mock simplification: author-name match, see canDeleteComment).
-  const [session] = createResource(getSession);
+  const [session, setSession] = createSignal<Session | undefined>(undefined);
+  createEffect(() => {
+    let alive = true;
+    getSession()
+      .then((s) => alive && setSession(s))
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  });
   const current = () => paginateComments(props.comments, page());
   const visible = () => current().items.filter((comment) => !deletedIds().has(comment.id));
   const isLiked = (comment: PlayerComment) => likedIds().has(comment.id);
