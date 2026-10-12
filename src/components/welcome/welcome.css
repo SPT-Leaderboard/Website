@@ -89,6 +89,9 @@
   font-weight: 700;
   letter-spacing: 0.0625rem;
   text-transform: uppercase;
+  /* Long rotating phrases must wrap, never clip at the panel edge. */
+  overflow-wrap: anywhere;
+  padding-inline-end: var(--space-2);
 }
 
 .welcome__subtitle {
